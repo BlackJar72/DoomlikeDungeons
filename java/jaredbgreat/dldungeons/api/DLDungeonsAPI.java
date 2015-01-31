@@ -12,18 +12,13 @@ import net.minecraft.world.World;
 
 /**
 This modification (mod) and API are free software: 
-you can redistribute it and/or modify it under the terms of the 
-GNU General Public License as published by the Free Software 
-Foundation, either version 3 of the License, or (at your option) 
-any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+This API is not under GPL, and may be included in other mods which are not
+open source.  This is different from the mod itself, which is GPL.
 
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+However, as with the GPL'ed material, This API is distributed WITHOUT ANY 
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+FOR A PARTICULAR PURPOSE.
 */	
 public class DLDungeonsAPI { 
 

@@ -1,28 +1,12 @@
 package jaredbgreat.dldungeons.rooms;
 
-
-/*
- * I need logic to do the following:
+/* 
+ * This mod is the creation and copyright (c) 2015 
+ * of Jared Blackburn (JaredBGreat).
  * 
- * 1. Assign / store rotation and inversion data that fits with any whole room patterns.
- * 2. Assign a connection pattern fitting the rooms symmetry or full room pattern.
- * 3. Determine node-to-node targets (two closest nodes to each?) and try to grow toward them.
- * 4. Generate non-nodal intermediate and sub-rooms.
- * 5. Vector toward targets by closest currently available connections (doors); make paths between nodes this way?
- * 6. Fill in non-target rooms (sub-rooms here), eliminated excess doors if needed.
- * 7. Solve the problem if meeting at the correct Y value.
- * 8. Work on stairs / ladders, spawners, chests, and entrances / exits
- * 
- * Also:
- * 		A. Depressions
- * 		B. Island subrooms
- * 		C. Pillars
- * 		D. Implement consistency and dungeon versus room block selctions
- * 
- * Also, other things not related to room creation and connections, such as theme reading from files, 
- * but that goes elsewhere. 
- */
-
+ * It is licensed under the creative commons 4.0 attribution license: * 
+ * https://creativecommons.org/licenses/by/4.0/legalcode
+*/	
 
 import jaredbgreat.dldungeons.ConfigHandler;
 import jaredbgreat.dldungeons.Difficulty;

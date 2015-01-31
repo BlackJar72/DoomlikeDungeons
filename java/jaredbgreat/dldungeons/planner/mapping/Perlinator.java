@@ -1,5 +1,20 @@
 package jaredbgreat.dldungeons.planner.mapping;
 
+/* 
+ * This mod is the creation and copyright (c) 2015 
+ * of Jared Blackburn (JaredBGreat).
+ * 
+ * It is licensed under the creative commons 4.0 attribution license: * 
+ * https://creativecommons.org/licenses/by/4.0/legalcode
+*/	
+
+/**
+ * This generates Perlin noise as a possible way to create variable base
+ * heights for room by simulating an invisible terrain underneath them.
+ * It is a bit expensive compared to other options and may or many not 
+ * ever be used.
+ */
+
 import java.util.Random;
 
 public class Perlinator {

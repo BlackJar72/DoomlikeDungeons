@@ -1,5 +1,13 @@
 package jaredbgreat.dldungeons.rooms;
 
+/* 
+ * This mod is the creation and copyright (c) 2015 
+ * of Jared Blackburn (JaredBGreat).
+ * 
+ * It is licensed under the creative commons 4.0 attribution license: * 
+ * https://creativecommons.org/licenses/by/4.0/legalcode
+*/	
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -74,13 +82,13 @@ public class RoomList implements List<Room>, Iterator<Room> {
 
 	@Override
 	public boolean containsAll(Collection<?> c) {
-		boolean shit = true;
+		boolean out = true;
 		if(c.getClass() != this.getClass()) return false;
-		RoomList fuck = (RoomList) c;
-		for(Room next : fuck) {
-			if(!contains(next)) shit = false;
+		RoomList other = (RoomList) c;
+		for(Room next : other) {
+			if(!contains(next)) out = false;
 		}
-		return shit;
+		return out;
 	}
 
 
