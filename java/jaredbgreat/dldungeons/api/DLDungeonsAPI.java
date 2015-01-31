@@ -10,16 +10,14 @@ import java.util.Random;
 import net.minecraft.world.World;
 
 
-/**
-This modification (mod) and API are free software: 
+/* 
+ * This API is the creation and copyright (c) 2015 
+ * of Jared Blackburn (JaredBGreat).
+ * 
+ * It is licensed under the creative commons 4.0 attribution license: * 
+ * https://creativecommons.org/licenses/by/4.0/legalcode
+*/
 
-This API is not under GPL, and may be included in other mods which are not
-open source.  This is different from the mod itself, which is GPL.
-
-However, as with the GPL'ed material, This API is distributed WITHOUT ANY 
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
-FOR A PARTICULAR PURPOSE.
-*/	
 public class DLDungeonsAPI { 
 
 	private static final boolean dldloaded = cpw.mods.fml.common.Loader.isModLoaded("DLDungeonsJBG");
