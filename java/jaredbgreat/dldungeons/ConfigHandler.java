@@ -38,7 +38,7 @@ public class ConfigHandler {
 	private static File listsDir;
 	protected static File configDir;
 	
-	private static final int DEFAULT_SCALE  = 6;
+	private static final int DEFAULT_SCALE  = 8;
 	private static final int DEFAULT_MINXZ  = 16;
 	private static final int DEFAULT_DIF    = 3;
 	
