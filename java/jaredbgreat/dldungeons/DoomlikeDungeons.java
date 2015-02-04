@@ -33,8 +33,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
 
-//Temporary stand in names, not for release
-@Mod(modid=Info.ID, name=Info.NAME, version=Info.VERSION) 
+@Mod(modid=Info.ID, name=Info.NAME, version=Info.VERSION, acceptableRemoteVersions="*") 
 //Server-side world-gen mod; no new blocks/items/mobs
 //@NetworkMod(clientSideRequired=false, serverSideRequired=false)       
 public class DoomlikeDungeons {
