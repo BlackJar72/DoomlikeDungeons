@@ -63,14 +63,6 @@ public class DoomlikeDungeons {
     	ConfigHandler.generateLists();
     	ThemeReader.readThemes(); 
     	ThemeType.SyncMobLists();
-    	
-		System.out.println();
-		System.out.println("OUTPUT OF MOBS BY THEME:");
-//    	for(Theme theme : Theme.themes) {
-//    		System.out.println();
-//    		theme.mobsOut();
-//    		System.out.println();
-//    	}
     }
     
     @EventHandler
