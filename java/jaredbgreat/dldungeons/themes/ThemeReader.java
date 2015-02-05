@@ -276,7 +276,7 @@ public class ThemeReader {
 				for(ThemeType type : theme.type) {
 					type.addThemeToType(theme, type);
 				}
-				if(!(theme.version > 1.4f)) {
+				if(!(theme.version < 1.5f)) {
 					if(theme.type.contains(ThemeType.WATER)) theme.flags.add(ThemeFlags.WATER);
 					if(theme.type.contains(ThemeType.SWAMP)) theme.flags.add(ThemeFlags.SWAMPY);
 				}
