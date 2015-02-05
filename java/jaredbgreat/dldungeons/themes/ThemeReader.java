@@ -286,7 +286,11 @@ public class ThemeReader {
 				continue;
 			} if(token.equals("version")) {
 				theme.version = floatParser(theme.version, tokens);
-				if(theme.version > 1.6f) delimeters = " ,;\t\n\r\f=";
+				if(theme.version > 1.6f) {
+					delimeters = " ,;\t\n\r\f=";
+				} else {
+					delimeters = " ,:;\t\n\r\f=";
+				}
 				continue;
 			} if(token.equals("minigame")) {
 				if(booleanParser(true, tokens)) BiomeLists.registerWithMinigame(theme);
