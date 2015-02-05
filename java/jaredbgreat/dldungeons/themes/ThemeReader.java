@@ -180,12 +180,12 @@ public class ThemeReader {
 		StringTokenizer tokens = null;
 		String line = null;
 		String token;
+		String delimeters = " ,:;\t\n\r\f=";
 		while((line = instream.readLine()) != null) {
 			//System.out.println(line);
 			if(line.length() < 2) continue;
 			if(line.charAt(0) == '#') continue;
-			tokens = new StringTokenizer(line, " ,;:\t\n\r\f=");
-			if(!tokens.hasMoreTokens()) continue;
+			tokens = new StringTokenizer(line, delimeters);
 			token = tokens.nextToken().toLowerCase();
 			if(token.equals("miny")) {
 				theme.minY = intParser(theme.minY, tokens);
@@ -286,6 +286,7 @@ public class ThemeReader {
 				continue;
 			} if(token.equals("version")) {
 				theme.version = floatParser(theme.version, tokens);
+				if(theme.version > 1.6f) delimeters = " ,;\t\n\r\f=";
 				continue;
 			} if(token.equals("minigame")) {
 				if(booleanParser(true, tokens)) BiomeLists.registerWithMinigame(theme);
