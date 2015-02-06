@@ -15,6 +15,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class DBlock {
 	String id;   // The name
@@ -36,8 +37,10 @@ public class DBlock {
 	public DBlock(String id) {
 		this.id = id;
 		meta  = 0;
-		StringTokenizer nums = new StringTokenizer(id, "({[]})");
-		block = (Block)Block.getBlockFromName(nums.nextToken());
+		StringTokenizer nums = new StringTokenizer(id, ":({[]})");
+		//block = (Block)Block.getBlockFromName(nums.nextToken());
+		//System.out.println("Block name: " + id);
+		block = GameRegistry.findBlock(nums.nextToken(), nums.nextToken());
 		if(nums.hasMoreElements()) meta = Integer.parseInt(nums.nextToken());
 	}
 	

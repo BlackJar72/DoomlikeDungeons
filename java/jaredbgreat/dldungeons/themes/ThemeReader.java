@@ -276,7 +276,7 @@ public class ThemeReader {
 				for(ThemeType type : theme.type) {
 					type.addThemeToType(theme, type);
 				}
-				if(!(theme.version < 1.5f)) {
+				if(!(theme.version > 1.5f)) {
 					if(theme.type.contains(ThemeType.WATER)) theme.flags.add(ThemeFlags.WATER);
 					if(theme.type.contains(ThemeType.SWAMP)) theme.flags.add(ThemeFlags.SWAMPY);
 				}
@@ -286,7 +286,7 @@ public class ThemeReader {
 				continue;
 			} if(token.equals("version")) {
 				theme.version = floatParser(theme.version, tokens);
-				if(theme.version > 1.6f) {
+				if(theme.version < 1.6f) {
 					delimeters = " ,;\t\n\r\f=";
 				} else {
 					delimeters = " ,:;\t\n\r\f=";
