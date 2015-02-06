@@ -50,9 +50,11 @@ public class Builder {
 									  world, chunkX, chunkZ);
 		
 		System.out.println("[DLDUNGONS] Running Builder.buildDungeon; building dungeon");
-		if(debugPole) debuggingPole(world, chunkX, chunkZ, dungeon);
-		buildDungeon(dungeon);
-		System.out.println("[DLDUNGONS] Dungeon should be built now!");
+		if(dungeon.theme != null) {
+			if(debugPole) debuggingPole(world, chunkX, chunkZ, dungeon);
+			buildDungeon(dungeon);
+			System.out.println("[DLDUNGONS] Dungeon should be built now!");
+		}
 		dungeon.finalize();
 		dungeon = null;
 		DoomlikeDungeons.profiler.endTask("Create Dungeons");
@@ -61,7 +63,7 @@ public class Builder {
 	
 	public static void buildDungeon(Dungeon dungeon /*TODO: Parameters*/) {
 		//System.out.println("[DLDUNGONS] Inside Builder.placeDungeon; building dungeon");
-		dungeon.map.build(dungeon);
+		if(dungeon.theme != null) dungeon.map.build(dungeon);
 	}
 	
 	

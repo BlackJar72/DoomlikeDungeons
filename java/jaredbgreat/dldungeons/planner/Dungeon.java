@@ -86,9 +86,11 @@ public class Dungeon {
 	
 	@Override
 	public void finalize() throws Throwable {
-		for(int i = 0; i < nodes.length; i++) nodes[i] = null;
-		for(Room room: rooms) room.finalize();
-		rooms.clear();
+		if(theme != null) {
+			for(int i = 0; i < nodes.length; i++) nodes[i] = null;
+			for(Room room: rooms) room.finalize();
+			rooms.clear();
+		}
 		rooms = null;
 		planter = grower = null;
 		nodes = null;
@@ -120,6 +122,8 @@ public class Dungeon {
 		this.random = new Random(random.nextLong());
 		this.biome = biome;
 		theme = BiomeLists.getTheme(biome, random);
+		if(theme == null) return;
+		
 		applyTheme();
 		entrancePref = random.nextInt(3);		
 		

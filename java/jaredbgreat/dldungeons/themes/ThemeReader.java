@@ -84,7 +84,6 @@ public class ThemeReader {
 
 	
 	public static void readThemes() {
-		Theme.addDefaultTheme();
 		int num = findFiles();
 		System.out.println("[DLDUNGEONS] Found " + num + " themes.");
 		for(File file : files) readTheme(file);
@@ -409,8 +408,8 @@ public class ThemeReader {
 				values.add(String.valueOf(DBlock.add(nums)));
 			}
 		}
-		int[] out = new int[values.size()];
-		for(int i = 0; i < out.length; i++) {
+		int[] out = new int[values.size() + el.length];
+		for(int i = el.length; i < out.length; i++) {
 			//System.out.println("Adding DBlock " + values.get(i));
 			out[i] = Integer.parseInt(values.get(i));
 		}
@@ -420,7 +419,12 @@ public class ThemeReader {
 	
 	
 	private static ArrayList<String> parseMobs(ArrayList<String> el, StringTokenizer tokens) {
-		ArrayList<String> mobs = new ArrayList<String>();
+		ArrayList<String> mobs;
+		if(el != null && !el.isEmpty()) {
+			mobs = el;
+		} else {
+			mobs = new ArrayList<String>();
+		}
 		while(tokens.hasMoreTokens()) {
 			String nextMob = tokens.nextToken();
 			mobs.add(nextMob);

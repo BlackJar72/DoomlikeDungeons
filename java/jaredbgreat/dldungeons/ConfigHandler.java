@@ -175,7 +175,6 @@ public class ConfigHandler {
 		
 		
 		// Saving it all
-		Theme.addDefaultTheme();
 		openThemesDir();
 		config.save();
 	}

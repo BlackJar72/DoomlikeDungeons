@@ -523,10 +523,7 @@ public class BiomeLists {
 		}
 		
     	if(set.isEmpty()) {
-			System.out.println("[DLDUNGEONS] Theme list is empty, using a default.");
-    		if(biome == BiomeGenBase.hell) return Theme.nether;
-    		if(biome == BiomeGenBase.sky) return Theme.end;
-    		else return Theme.classic;
+    		return null;
     	}
     	use.addAll(set);
     	Theme theme = use.get((random.nextInt(use.size())));

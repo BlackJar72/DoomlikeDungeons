@@ -23,10 +23,6 @@ public class Theme {
 	public String name;
 	public float version = 0f;
 	
-	public static Theme classic;
-	public static Theme nether;
-	public static Theme end;
-	
 	public EnumSet<Type> biomes = EnumSet.noneOf(Type.class);
 	public EnumSet<Type> notIn  = EnumSet.noneOf(Type.class);
 	
@@ -84,100 +80,18 @@ public class Theme {
 		verticle = new Element(5,  10, 25, 20, 10,  0);
 		entrances = new Element(2,   5, 25, 50, 15,  3);
 		fences = new Element(15, 25, 55, 15,  0, 0);
-		walls = makeBlockList(new String[]{"stonebrick", "cobblestone", "sandstone", "brick_block"});
-		floors = makeBlockList(new String[]{"stonebrick", "cobblestone", "dirt", "stone"});
-		ceilings = makeBlockList(new String[]{"stonebrick", "cobblestone", "planks", "double_stone_slab"});
-		fencing = makeBlockList(new String[]{"cobblestone_wall", "fence"});
-		liquid = makeBlockList(new String[]{"water", "lava"});
-		pillarBlock = makeBlockList(new String[]{"stonebrick", "cobblestone", "sandstone", "planks", "double_stone_slab"});
-		String[] mobs  = new String[]{"Zombie", "Skeleton", "Spider"};
-		String[] hard  = new String[]{"Creeper", "Enderman", "CaveSpider"};
-		String[] brute = new String[]{"Witch"};
+		walls = makeBlockList(new String[]{});
+		floors = makeBlockList(new String[]{});
+		ceilings = makeBlockList(new String[]{});
+		fencing = makeBlockList(new String[]{});
+		liquid = makeBlockList(new String[]{});
+		pillarBlock = makeBlockList(new String[]{});
+		String[] mobs  = new String[]{};
+		String[] hard  = new String[]{};
+		String[] brute = new String[]{};
 		String[] elite = new String[]{};
 		String[] boss = new String[]{};
-		commonMobs = new ArrayList<String>(mobs.length);
-		hardMobs = new ArrayList<String>(hard.length);
-		bruteMobs = new ArrayList<String>(brute.length);
-		eliteMobs = new ArrayList<String>(0);
-		bossMobs = new ArrayList<String>(0);
-		for(int i = 0; i < mobs.length; i++) {
-			this.commonMobs.add(mobs[i]);
-		} for(int i = 0; i < hard.length; i++) {
-			this.hardMobs.add(hard[i]);
-		}
-		bruteMobs.add("Witch");
 		fixMobs();
-	}
-	
-	
-	/*--------------------------------------*
-	 * 			ADD THEMES                   *
-	 ---------------------------------------*/
-	
-	
-	public static void addDefaultTheme() {
-		String[] mobs;
-		String[] hard;
-		
-		classic = new Theme();
-		classic.type.add(ThemeType.DUNGEON);
-		classic.type.add(ThemeType.URBAN);
-		classic.type.add(ThemeType.TECH);
-		
-		nether = new Theme();
-		nether.minY = 32;
-		nether.maxY = 64;
-		nether.buildFoundation = true;
-		nether.walls = new int[]{112};
-		nether.floors = new int[]{112};
-		nether.ceilings = new int[]{112};
-		nether.liquid = new int[]{11};
-		nether.pillarBlock = new int[]{112, 49, 112, 49, 155};		
-		nether.walls = makeBlockList(new String[]{"nether_brick"});
-		nether.floors = makeBlockList(new String[]{"nether_brick"});
-		nether.ceilings = makeBlockList(new String[]{"nether_brick"});
-		nether.liquid = makeBlockList(new String[]{"lava"});
-		nether.pillarBlock = makeBlockList(new String[]{"nether_brick", "obsidian", "nether_brick", "obsidian", "quartz_block"});
-		nether.fencing = makeBlockList(new String[]{"nether_brick_fence"});
-		mobs = new String[]{"Blaze", "LavaSlime", "PigZombie"};
-		hard = new String[]{"Blaze", "Skeleton"};
-		nether.commonMobs = new ArrayList<String>(mobs.length);
-		nether.hardMobs = new ArrayList<String>(hard.length);
-		for(int i = 0; i < mobs.length; i++) {
-			nether.commonMobs.add(mobs[i]);
-		} for(int i = 0; i < hard.length; i++) {
-			nether.hardMobs.add(hard[i]);
-		}
-		nether.bossMobs.add("WitherBoss");
-		nether.type.add(ThemeType.NETHER);
-		nether.type.add(ThemeType.TECH);
-		nether.fixMobs();
-		
-		end = new Theme();
-		end.minY = 30;
-		end.maxY = 60;
-		end.walls = new int[]{121};
-		end.floors = new int[]{121};
-		end.ceilings = new int[]{121};
-		end.liquid = new int[]{0};
-		end.pillarBlock = new int[]{121, 49, 49, 49, 89};
-		end.liquids = new Element(5, 0, 0, 0, 0, 0);
-		end.verticle = new Element(0, 0, 5, 55, 15, 0);
-		end.outside = new Element(5, 10, 15, 5, 0, 0);
-		end.pillars = new Element(0, 5, 15, 10, 5, 0);
-		end.degeneracy = new Element(10, 0, 0, 0, 0, 0);
-		end.entrances = new Element(10, 0, 0, 0, 0, 0);
-		end.commonMobs = new ArrayList<String>(mobs.length);
-		end.hardMobs = new ArrayList<String>(hard.length);
-		end.bruteMobs = new ArrayList<String>(hard.length);
-		end.eliteMobs = new ArrayList<String>(hard.length);
-		end.commonMobs.add("Enderman");
-		end.hardMobs.add("Enderman");
-		end.bruteMobs.add("Enderman");
-		end.bossMobs.add("WitherBoss");
-		end.type.add(ThemeType.END);
-		end.type.add(ThemeType.TECH);
-		end.fixMobs();
 	}
 	
 	
