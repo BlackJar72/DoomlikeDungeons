@@ -180,12 +180,12 @@ public class ThemeReader {
 		StringTokenizer tokens = null;
 		String line = null;
 		String token;
-		String delimeters = " ,:;\t\n\r\f=";
 		while((line = instream.readLine()) != null) {
 			//System.out.println(line);
 			if(line.length() < 2) continue;
 			if(line.charAt(0) == '#') continue;
-			tokens = new StringTokenizer(line, delimeters);
+			tokens = new StringTokenizer(line, " ,;:\t\n\r\f=");
+			if(!tokens.hasMoreTokens()) continue;
 			token = tokens.nextToken().toLowerCase();
 			if(token.equals("miny")) {
 				theme.minY = intParser(theme.minY, tokens);
@@ -276,7 +276,7 @@ public class ThemeReader {
 				for(ThemeType type : theme.type) {
 					type.addThemeToType(theme, type);
 				}
-				if(!(theme.version > 1.5f)) {
+				if(!(theme.version > 1.4f)) {
 					if(theme.type.contains(ThemeType.WATER)) theme.flags.add(ThemeFlags.WATER);
 					if(theme.type.contains(ThemeType.SWAMP)) theme.flags.add(ThemeFlags.SWAMPY);
 				}
@@ -286,11 +286,6 @@ public class ThemeReader {
 				continue;
 			} if(token.equals("version")) {
 				theme.version = floatParser(theme.version, tokens);
-				if(theme.version < 1.6f) {
-					delimeters = " ,;\t\n\r\f=";
-				} else {
-					delimeters = " ,:;\t\n\r\f=";
-				}
 				continue;
 			} if(token.equals("minigame")) {
 				if(booleanParser(true, tokens)) BiomeLists.registerWithMinigame(theme);
