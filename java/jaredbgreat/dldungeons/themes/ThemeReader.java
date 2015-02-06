@@ -180,11 +180,12 @@ public class ThemeReader {
 		StringTokenizer tokens = null;
 		String line = null;
 		String token;
+		String delimeters = " ,;\t\n\r\f=";
 		while((line = instream.readLine()) != null) {
 			//System.out.println(line);
 			if(line.length() < 2) continue;
 			if(line.charAt(0) == '#') continue;
-			tokens = new StringTokenizer(line, " ,;:\t\n\r\f=");
+			tokens = new StringTokenizer(line, delimeters);
 			if(!tokens.hasMoreTokens()) continue;
 			token = tokens.nextToken().toLowerCase();
 			if(token.equals("miny")) {
@@ -233,22 +234,22 @@ public class ThemeReader {
 				theme.entrances = elementParser(theme.entrances, tokens);
 				continue;
 			} if(token.equals("walls")) {
-				theme.walls = blockParser(theme.walls, tokens);
+				theme.walls = blockParser(theme.walls, tokens, theme.version);
 				continue;
 			} if(token.equals("floors")) {
-				theme.floors = blockParser(theme.floors, tokens);
+				theme.floors = blockParser(theme.floors, tokens, theme.version);
 				continue;
 			} if(token.equals("ceilings")) {
-				theme.ceilings = blockParser(theme.ceilings, tokens);
+				theme.ceilings = blockParser(theme.ceilings, tokens, theme.version);
 				continue;
 			} if(token.equals("fencing")) {
-				theme.fencing = blockParser(theme.fencing, tokens);
+				theme.fencing = blockParser(theme.fencing, tokens, theme.version);
 				continue;
 			} if(token.equals("liquid")) {
-				theme.liquid = blockParser(theme.liquid, tokens);
+				theme.liquid = blockParser(theme.liquid, tokens, theme.version);
 				continue;
 			} if(token.equals("pillarblock")) {
-				theme.pillarBlock = blockParser(theme.pillarBlock, tokens);
+				theme.pillarBlock = blockParser(theme.pillarBlock, tokens, theme.version);
 				continue;
 			} if(token.equals("commonmobs")) {
 				theme.commonMobs = parseMobs(theme.commonMobs, tokens);
@@ -286,6 +287,13 @@ public class ThemeReader {
 				continue;
 			} if(token.equals("version")) {
 				theme.version = floatParser(theme.version, tokens);
+				//System.out.println("[DLDUNGEONS] Theme is vesion " + theme.version);
+				if(theme.version > 1.6) {
+					delimeters = " ,;\t\n\r\f=";
+				} else {
+					delimeters = " ,;:\t\n\r\f=";
+				}
+				//System.out.println("[DLDUNGEONS] Delimeters are " + delimeters);
 				continue;
 			} if(token.equals("minigame")) {
 				if(booleanParser(true, tokens)) BiomeLists.registerWithMinigame(theme);
@@ -347,7 +355,6 @@ public class ThemeReader {
 	
 	
 	private static float floatParser(float el, StringTokenizer tokens) {
-		boolean valid = false;
 		float value = 0f;
 		String num;
 		try {
@@ -359,8 +366,7 @@ public class ThemeReader {
 			System.err.println("[DLDUNGEONS] ThemeReader.floatParser(float el, StringTokenizer tokens) tried to read non-number as float");
 			return el;
 		}
-		if(valid) return value;
-		else return el;
+		return value;
 	}
 	
 	
@@ -390,14 +396,18 @@ public class ThemeReader {
 	}
 	
 	
-	private static int[] blockParser(int[] el, StringTokenizer tokens) {
+	private static int[] blockParser(int[] el, StringTokenizer tokens, float version) {
 		//DoomlikeDungeons.profiler.startTask("Parsing blocks");
 		ArrayList<String> values = new ArrayList<String>();
 		String nums;
 		while(tokens.hasMoreTokens()) {
 			nums = tokens.nextToken();
 			//System.out.println("Read MC block " + nums);
-			values.add(String.valueOf(DBlock.add(nums)));			
+			if(version > 1.6) {
+				values.add(String.valueOf(DBlock.add(nums, version)));
+			} else {
+				values.add(String.valueOf(DBlock.add(nums)));
+			}
 		}
 		int[] out = new int[values.size()];
 		for(int i = 0; i < out.length; i++) {

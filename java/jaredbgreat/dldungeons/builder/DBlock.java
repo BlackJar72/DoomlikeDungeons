@@ -11,6 +11,7 @@ package jaredbgreat.dldungeons.builder;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntityMobSpawner;
@@ -39,6 +40,21 @@ public class DBlock {
 		StringTokenizer nums = new StringTokenizer(id, "({[]})");
 		block = (Block)Block.getBlockFromName(nums.nextToken());
 		if(nums.hasMoreElements()) meta = Integer.parseInt(nums.nextToken());
+	}
+	
+	
+	public DBlock(String id, float version) {
+		this.id = id;
+		meta  = 0;
+		if(version < 1.7) {
+			StringTokenizer nums = new StringTokenizer(id, "({[]})");
+			block = (Block)Block.getBlockFromName(nums.nextToken());
+			if(nums.hasMoreElements()) meta = Integer.parseInt(nums.nextToken());
+		} else {
+			StringTokenizer nums = new StringTokenizer(id, ":({[]})");
+			block = GameRegistry.findBlock(nums.nextToken(), nums.nextToken());
+			if(nums.hasMoreElements()) meta = Integer.parseInt(nums.nextToken());			
+		}
 	}
 	
 	
@@ -72,9 +88,24 @@ public class DBlock {
 	
 	public static int add(String id) {
 		DBlock block = new DBlock(id);
-		if(!registry.contains(block)) registry.add(block);
+		if(!registry.contains(block)) {
+			registry.add(block);
+//			System.out.println("[DLDUNGEONS] Adding block " + id 
+//					+ " to registry as number " + registry.indexOf(block));
+		}
 		return registry.indexOf(block);
 	}	
+	
+	
+	public static int add(String id, float version) {
+		DBlock block = new DBlock(id, version);
+		if(!registry.contains(block)) {
+			registry.add(block);
+//			System.out.println("[DLDUNGEONS] Adding block " + id 
+//					+ " to registry as number " + registry.indexOf(block));
+		}
+		return registry.indexOf(block);
+	}
 
 	
 	public static void placeBlock(World world, int x, int y, int z, Block block) {
