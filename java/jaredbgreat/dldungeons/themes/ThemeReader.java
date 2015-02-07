@@ -10,6 +10,7 @@ package jaredbgreat.dldungeons.themes;
 */	
 
 
+import jaredbgreat.dldungeons.DoomlikeDungeons;
 import jaredbgreat.dldungeons.builder.DBlock;
 import jaredbgreat.dldungeons.pieces.chests.LootItem;
 import jaredbgreat.dldungeons.pieces.chests.LootList;
@@ -22,7 +23,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
+
+import com.google.common.io.Files;
 
 import net.minecraft.block.Block;
 import net.minecraftforge.common.BiomeDictionary.Type;
@@ -168,12 +172,55 @@ public class ThemeReader {
 		} catch (IOException e) {
 			//DoomlikeDungeons.profiler.endTask("Loading theme " + file);
 			e.printStackTrace();
+		} catch (NoSuchElementException e) {
+			if(instream != null) {
+				try {
+					instream.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+			System.err.println("[DLDUNGEONS] Theme " + file.toString() 
+					+ " contained a fatal error!");
+			e.printStackTrace();
+			File broken = new File(themesDir.toString() 
+					+ File.separator + file.toString());
+			File errorFile;
+			File errorDir = new File(themesDir.toString() 
+					+ File.separator + "errors");
+			if(!errorDir.exists()) {
+				errorDir.mkdir();
+			}
+			int i = 0;
+			do {
+				errorFile = new File(errorDir.toString() + File.separator 
+						+ file.toString() + ".err" + i++);
+			} while (errorFile.exists());
+			try {
+				if(!broken.renameTo(errorFile)) {
+					Files.move(broken, errorFile);
+				} 
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}			
+			if(errorFile.exists()) {
+				System.err.println("[DLDUNGEONS] Theme " + errorFile
+					+ " was renamed to prevent "
+					+ " further reading attempts; please fix it.");
+				 
+			} else {
+				System.err.println("[DLDUNGEONS] Theme " + errorFile
+						+ " was NOT renamed to prevent "
+						+ " further reading attempts (please fix it);"
+						+ " something went wrong!");					 
+				}
 		}
 	}
 	
 	
-	public static void parseTheme(BufferedReader instream, String name) throws IOException {
-		//DoomlikeDungeons.profiler.startTask("Parsing theme " + name);
+	public static void parseTheme(BufferedReader instream, String name) 
+			throws IOException, NoSuchElementException {
+		//DoomlikeDungeons.profiler.startTask("Parsing theme " + name);		
 		Theme theme = new Theme();
 		theme.name = name;
 		StringTokenizer tokens = null;
@@ -395,7 +442,8 @@ public class ThemeReader {
 	}
 	
 	
-	private static int[] blockParser(int[] el, StringTokenizer tokens, float version) {
+	private static int[] blockParser(int[] el, 
+			StringTokenizer tokens, float version) throws NoSuchElementException {
 		//DoomlikeDungeons.profiler.startTask("Parsing blocks");
 		ArrayList<String> values = new ArrayList<String>();
 		String nums;
@@ -409,9 +457,9 @@ public class ThemeReader {
 			}
 		}
 		int[] out = new int[values.size() + el.length];
-		for(int i = el.length; i < out.length; i++) {
+		for(int i = el.length; i < values.size(); i++) {
 			//System.out.println("Adding DBlock " + values.get(i));
-			out[i] = Integer.parseInt(values.get(i));
+			out[i] = Integer.parseInt(values.get(i + el.length));
 		}
 		//DoomlikeDungeons.profiler.startTask("Parsing blocks");
 		return out;

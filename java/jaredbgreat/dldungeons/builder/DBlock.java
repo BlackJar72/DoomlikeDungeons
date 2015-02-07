@@ -9,6 +9,7 @@ package jaredbgreat.dldungeons.builder;
 */	
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -43,7 +44,8 @@ public class DBlock {
 	}
 	
 	
-	public DBlock(String id, float version) {
+	public DBlock(String id, float version) throws NoSuchElementException {
+		//System.out.println("[DLDUNGEONS] Loading block " + id + " as " + version);
 		this.id = id;
 		meta  = 0;
 		if(version < 1.7) {
@@ -90,19 +92,15 @@ public class DBlock {
 		DBlock block = new DBlock(id);
 		if(!registry.contains(block)) {
 			registry.add(block);
-//			System.out.println("[DLDUNGEONS] Adding block " + id 
-//					+ " to registry as number " + registry.indexOf(block));
 		}
 		return registry.indexOf(block);
 	}	
 	
 	
-	public static int add(String id, float version) {
+	public static int add(String id, float version) throws NoSuchElementException {
 		DBlock block = new DBlock(id, version);
 		if(!registry.contains(block)) {
 			registry.add(block);
-//			System.out.println("[DLDUNGEONS] Adding block " + id 
-//					+ " to registry as number " + registry.indexOf(block));
 		}
 		return registry.indexOf(block);
 	}
