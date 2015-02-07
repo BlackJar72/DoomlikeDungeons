@@ -272,59 +272,59 @@ public class BiomeLists {
 		}
 		if(theme.notIn.contains(Type.HOT))     {
 			nhot.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to hot.");
+			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from hot.");
 		}
 		if(theme.notIn.contains(Type.COLD))     {
 			ncold.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to cold.");
+			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from cold.");
 		}
 		if(theme.notIn.contains(Type.SPARSE))     {
 			nsparse.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to sparce.");
+			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from sparce.");
 		}
 		if(theme.notIn.contains(Type.DENSE))     {
 			ndense.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to dense.");
+			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from dense.");
 		}
 		if(theme.notIn.contains(Type.WET))     {
 			nwet.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to wet.");
+			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from wet.");
 		}
 		if(theme.notIn.contains(Type.DRY))     {
 			ndry.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to dry.");
+			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from dry.");
 		}
 		if(theme.notIn.contains(Type.SAVANNA))     {
 			nsavanna.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to savanna.");
+			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from savanna.");
 		}
 		if(theme.notIn.contains(Type.CONIFEROUS))     {
 			nconiferous.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to coniferous.");
+			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from coniferous.");
 		}
 		if(theme.notIn.contains(Type.SPOOKY))     {
 			nspooky.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to spooky.");
+			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from spooky.");
 		}
 		if(theme.notIn.contains(Type.DEAD))     {
 			ndead.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to dead.");
+			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from dead.");
 		}
 		if(theme.notIn.contains(Type.LUSH))     {
 			nlush.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to lush.");
+			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from lush.");
 		}
 		if(theme.notIn.contains(Type.CONIFEROUS))     {
 			nconiferous.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to coniferous.");
+			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from coniferous.");
 		}
 		if(theme.notIn.contains(Type.MESA))     {
 			nmesa.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to mesa.");
+			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from mesa.");
 		}
 		if(theme.notIn.contains(Type.SANDY))     {
 			nsandy.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to sandy.");
+			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from sandy.");
 		}
     }
     
@@ -524,11 +524,16 @@ public class BiomeLists {
 		
     	if(set.isEmpty()) {
     		return null;
+    	} else {
+    		use.addAll(set);
+			System.out.println("[DLDUNGEONS] The following themes are avalable for " + biome.biomeName + ":");
+    		for(Theme theme : use) {
+    			System.out.println("[DLDUNGEONS] " + theme.name);
+    		}
+    		Theme theme = use.get((random.nextInt(use.size())));
+    		System.out.println("[DLDUNGEONS] Selected and returning " + theme +".");
+    		return theme;
     	}
-    	use.addAll(set);
-    	Theme theme = use.get((random.nextInt(use.size())));
-		System.out.println("[DLDUNGEONS] Selected and returning " + theme +".");
-    	return theme;    	
     }
     
     

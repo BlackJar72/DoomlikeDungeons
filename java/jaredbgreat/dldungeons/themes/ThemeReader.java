@@ -341,9 +341,7 @@ public class ThemeReader {
 				}
 				//System.out.println("[DLDUNGEONS] Delimeters are " + delimeters);
 				continue;
-			} if(token.equals("minigame")) {
-				if(booleanParser(true, tokens)) BiomeLists.registerWithMinigame(theme);
-			}
+			} 
 		}
 		theme.fixMobs();
 		theme.biomeRegister();
@@ -449,7 +447,7 @@ public class ThemeReader {
 		String nums;
 		while(tokens.hasMoreTokens()) {
 			nums = tokens.nextToken();
-			//System.out.println("Read MC block " + nums);
+			System.out.println("Read MC block " + nums);
 			if(version > 1.6) {
 				values.add(String.valueOf(DBlock.add(nums, version)));
 			} else {
@@ -457,9 +455,13 @@ public class ThemeReader {
 			}
 		}
 		int[] out = new int[values.size() + el.length];
-		for(int i = el.length; i < values.size(); i++) {
-			//System.out.println("Adding DBlock " + values.get(i));
-			out[i] = Integer.parseInt(values.get(i + el.length));
+		for(int i = 0; i < el.length; i++) {
+			System.out.println("Adding DBlock " + el[i]);
+			out[i] = el[i];
+		}
+		for(int i = 0; i < values.size(); i++) {
+			System.out.println("Adding DBlock " + values.get(i));
+			out[i + el.length] = Integer.parseInt(values.get(i));
 		}
 		//DoomlikeDungeons.profiler.startTask("Parsing blocks");
 		return out;

@@ -187,13 +187,13 @@ public class DBlock {
 	@Override
 	public boolean equals(Object other) {
 		if(!(other instanceof DBlock)) return false; 
-		return ((id == ((DBlock)other).id) && (meta == ((DBlock)other).meta));
+		return ((id.hashCode() == ((DBlock)other).id.hashCode()));
 	}
 	
 	
 	@Override
 	public int hashCode() {
 		// Not sure this would work much less what really would!
-		return (block.hashCode() << 4) + meta;
+		return id.hashCode();
 	}
 }
