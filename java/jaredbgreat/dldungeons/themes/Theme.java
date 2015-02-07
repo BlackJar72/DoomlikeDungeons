@@ -86,11 +86,6 @@ public class Theme {
 		fencing = makeBlockList(new String[]{});
 		liquid = makeBlockList(new String[]{});
 		pillarBlock = makeBlockList(new String[]{});
-		String[] mobs  = new String[]{};
-		String[] hard  = new String[]{};
-		String[] brute = new String[]{};
-		String[] elite = new String[]{};
-		String[] boss = new String[]{};
 		fixMobs();
 	}
 	

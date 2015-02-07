@@ -470,7 +470,7 @@ public class ThemeReader {
 	
 	private static ArrayList<String> parseMobs(ArrayList<String> el, StringTokenizer tokens) {
 		ArrayList<String> mobs;
-		if(el != null && !el.isEmpty()) {
+		if(el != null) {
 			mobs = el;
 		} else {
 			mobs = new ArrayList<String>();
