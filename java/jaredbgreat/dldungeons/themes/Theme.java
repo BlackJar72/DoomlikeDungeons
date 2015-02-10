@@ -55,11 +55,11 @@ public class Theme {
 	public int[] liquid;
 	public int[] pillarBlock;
 	
-	public ArrayList<String> commonMobs;
-	public ArrayList<String> hardMobs;
-	public ArrayList<String> bruteMobs;
-	public ArrayList<String> eliteMobs;
-	public ArrayList<String> bossMobs;
+	public ArrayList<String> commonMobs = new ArrayList<String>();
+	public ArrayList<String> hardMobs = new ArrayList<String>();
+	public ArrayList<String> bruteMobs = new ArrayList<String>();
+	public ArrayList<String> eliteMobs = new ArrayList<String>();
+	public ArrayList<String> bossMobs = new ArrayList<String>();
 	public ArrayList<String>[] allMobs;
 	
 	
@@ -86,6 +86,7 @@ public class Theme {
 		fencing = makeBlockList(new String[]{});
 		liquid = makeBlockList(new String[]{});
 		pillarBlock = makeBlockList(new String[]{});
+		
 		fixMobs();
 	}
 	
