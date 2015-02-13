@@ -134,13 +134,11 @@ public class AStar {
 	protected void getEdgeStep(Step src) {
 		Step nextEdge;
 		int x, z;
-		// Below should probably be a method call, but stingy with overhead
-		// FIXME: Is edge relaxation helpful (need to work out the logic)
-		//        (It should be pointless in Dijkstra's but less sure with A*) 
+		// Below should probably be a method call, but stingy with overhead 
 		x = src.x - 1; z = src.z;
 		if(x >= x1 && x <= x2) {
 			nextEdge = new Step(x, z, src, end, dungeon);
-			if((spt[x][z] == null) || (spt[x][z].value > nextEdge.value)) {
+			if(spt[x][z] == null) {
 				spt[x][z] = nextEdge;
 				edges.add(nextEdge);
 			}
@@ -148,7 +146,7 @@ public class AStar {
 		x = src.x + 1; z = src.z;
 		if(x >= x1 && x <= x2)  {
 			nextEdge = new Step(x, z, src, end, dungeon);
-			if((spt[x][z] == null) || (spt[x][z].value > nextEdge.value)) {
+			if(spt[x][z] == null) {
 				spt[x][z] = nextEdge;
 				edges.add(nextEdge);
 			}
@@ -156,7 +154,7 @@ public class AStar {
 		x = src.x; z = src.z - 1;
 		if(z >= z1 && z <= z2) {
 			nextEdge = new Step(x, z, src, end, dungeon);
-			if((spt[x][z] == null) || (spt[x][z].value > nextEdge.value)) {
+			if(spt[x][z] == null) {
 				spt[x][z] = nextEdge;
 				edges.add(nextEdge);
 			}
@@ -164,7 +162,7 @@ public class AStar {
 		x = src.x; z = src.z + 1;
 		if(z >= z1 && z <= z2)  {
 			nextEdge = new Step(x, z, src, end, dungeon);
-			if((spt[x][z] == null) || (spt[x][z].value > nextEdge.value)) {
+			if(spt[x][z] == null) {
 				spt[x][z] = nextEdge;
 				edges.add(nextEdge);
 			}
