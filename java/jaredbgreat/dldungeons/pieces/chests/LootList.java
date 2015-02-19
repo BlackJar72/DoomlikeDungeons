@@ -250,8 +250,6 @@ public class LootList extends ArrayList<LootItem>{
 		loot7.add(eyeOfEnder);
 		loot7.add(goldApple);
 		
-		special.add(disc13);
-		special.add(discCat);
 		special.add(discBlocks);
 		special.add(discChirp);
 		special.add(discFar);

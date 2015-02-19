@@ -45,17 +45,17 @@ public class LootCategory {
 		if(level < 0) level = 0;
 		switch(type) {
 		case GEAR:
-			if(level > 7) level = 7;
+			if(level > 6) level = 6;
 			return gear.levels[level].getLoot(random);
 		case HEAL:
-			if(level > 7) level = 7;
+			if(level > 6) level = 6;
 			return heal.levels[level].getLoot(random);
 		case LOOT:
-			if(level > 7) {
+			if(level > 6) {
 				if(random.nextBoolean()) {
 					return LootList.special.getLoot(random);
 				} else {
-					level = 7;
+					level = 6;
 				}
 			}
 			return gear.levels[level].getLoot(random);
