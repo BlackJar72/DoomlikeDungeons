@@ -19,7 +19,7 @@ import static jaredbgreat.dldungeons.pieces.chests.LootItem.*;
 
 
 public class LootList extends ArrayList<LootItem>{
-	ArrayList<LootItem> dummy = new ArrayList<>();
+	ArrayList<LootItem> dummy = new ArrayList<LootItem>();
 	
 	public void add(Item item, int min, int max, int prob) {
 		add(new LootItem(item, min, max));
