@@ -35,6 +35,7 @@ public class LootList extends ArrayList<LootItem>{
 		LootItem out;
 		if(isEmpty()) return null;
 		if(dummy.isEmpty() || random.nextInt(size()) > dummy.size()) {
+			dummy.clear();
 			dummy.addAll(this);
 		}
 		int which = random.nextInt(dummy.size());
