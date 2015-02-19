@@ -45,14 +45,14 @@ public class TreasureChest extends BasicChest {
 		int num;
 		num = random.nextInt(2 + (level / 3)) + 2;
 		for(int i = 0; i < num; i++) {
-			treasure = LootCategory.heal.levels[level].getLoot(random).getStack(random);
+			treasure = LootCategory.getLoot(LootType.HEAL, level, random).getStack(random);
 			if(contents.getStackInSlot(slot) != null) slot++;
 			contents.setInventorySlotContents(slots.get(slot++).intValue(), treasure);
 			if(slot > 25) return;  // This should not happen, but better safe than sorry
 		}
 		num = random.nextInt(2 + (level / 3)) + 2;
 		for(int i = 0; i < num; i++) {
-			treasure = LootCategory.gear.levels[level].getLoot(random).getStack(random);
+			treasure = LootCategory.getLoot(LootType.GEAR, level, random).getStack(random);
 			if(contents.getStackInSlot(slot) != null) slot++;
 			contents.setInventorySlotContents(slots.get(slot++).intValue(), treasure);
 			if(slot > 25) return;  // This should not happen, but better safe than sorry
@@ -60,7 +60,7 @@ public class TreasureChest extends BasicChest {
 		if(ConfigHandler.stingyLoot) num = random.nextInt(2 + (level / 3)) + 2;
 		else num = random.nextInt(3 + (level / 2)) + 2;
 		for(int i = 0; i < num; i++) {
-			treasure = LootCategory.loot.levels[level].getLoot(random).getStack(random);
+			treasure = LootCategory.getLoot(LootType.LOOT, level, random).getStack(random);
 			if(contents.getStackInSlot(slot) != null) slot++;
 			contents.setInventorySlotContents(slots.get(slot++).intValue(), treasure);
 			if(slot > 25) return;  // This should not happen, but better safe than sorry

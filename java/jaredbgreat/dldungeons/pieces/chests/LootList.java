@@ -19,6 +19,7 @@ import static jaredbgreat.dldungeons.pieces.chests.LootItem.*;
 
 
 public class LootList extends ArrayList<LootItem>{
+	ArrayList<LootItem> dummy = new ArrayList<>();
 	
 	public void add(Item item, int min, int max, int prob) {
 		add(new LootItem(item, min, max));
@@ -31,8 +32,15 @@ public class LootList extends ArrayList<LootItem>{
 	
 	
 	public LootItem getLoot(Random random) {
+		LootItem out;
 		if(isEmpty()) return null;
-		return get(random.nextInt(size()));
+		if(dummy.isEmpty() || random.nextInt(size()) > dummy.size()) {
+			dummy.addAll(this);
+		}
+		int which = random.nextInt(dummy.size());
+		out = dummy.get(which);
+		dummy.remove(which);
+		return out;
 	}
 	
 	

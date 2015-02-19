@@ -46,10 +46,10 @@ public class BasicChest {
 		int which = random.nextInt(2);
 		switch (which) {
 		case 0:
-			fillChest(contents, LootCategory.gear, random);
+			fillChest(contents, LootType.HEAL, random);
 			break;
 		case 1:
-			fillChest(contents, LootCategory.heal, random);
+			fillChest(contents, LootType.GEAR, random);
 			break;
 		}
 	}
@@ -84,16 +84,16 @@ public class BasicChest {
 	}
 	
 	
-	protected void fillChest(TileEntityChest chest, LootCategory kind, Random random) {		
+	protected void fillChest(TileEntityChest chest, LootType kind, Random random) {		
 		int num;
 		if(ConfigHandler.stingyLoot) num = random.nextInt(2 + (level / 2)) + 1;
 		else num = random.nextInt(3 + (level / 2)) + 2;
 		for(int i = 0; i < num; i++) {
-			ItemStack treasure = kind.levels[level].getLoot(random).getStack(random);
+			ItemStack treasure = LootCategory.getLoot(kind, level, random).getStack(random);
 			if(treasure != null) chest.setInventorySlotContents(random.nextInt(27), treasure);
 		}
 		if(!ConfigHandler.vanillaLoot) {
-			ItemStack treasure = LootCategory.loot.levels[level].getLoot(random).getStack(random);
+			ItemStack treasure = LootCategory.getLoot(LootType.HEAL, level, random).getStack(random);
 			if(treasure != null) chest.setInventorySlotContents(random.nextInt(27), treasure);
 		}
 	}

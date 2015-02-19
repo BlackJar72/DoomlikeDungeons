@@ -11,6 +11,9 @@ package jaredbgreat.dldungeons.pieces.chests;
 
 
 import static jaredbgreat.dldungeons.pieces.chests.LootList.*;
+import static jaredbgreat.dldungeons.pieces.chests.LootType.*;
+
+import java.util.Random;
 
 
 public class LootCategory {
@@ -34,5 +37,39 @@ public class LootCategory {
 	
 	public static LootCategory loot = new LootCategory(new 
 			LootList[]{loot1, loot2, loot3, loot4, loot5, loot6, loot7});
+	
+	
+	public static LootItem getLoot(LootType type, int level, Random random) {
+		level += random.nextInt(2);
+		level -= random.nextInt(2);
+		if(level < 0) level = 0;
+		switch(type) {
+		case GEAR:
+			if(level > 7) level = 7;
+			return gear.levels[level].getLoot(random);
+		case HEAL:
+			if(level > 7) level = 7;
+			return heal.levels[level].getLoot(random);
+		case LOOT:
+			if(level > 7) {
+				if(random.nextBoolean()) {
+					return LootList.special.getLoot(random);
+				} else {
+					level = 7;
+				}
+			}
+			return gear.levels[level].getLoot(random);
+		default:
+			switch(random.nextInt(3)) {
+				case 0:
+					return getLoot(GEAR, level, random);
+				case 1:
+					return getLoot(HEAL, level, random);
+				case 2:
+				default:	
+					return getLoot(LOOT, level, random);
+			}		
+		}
+	}
 	
 }

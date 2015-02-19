@@ -37,11 +37,11 @@ public class WeakChest extends BasicChest {
 	        		chinf.getItems(random), contents, chinf.getCount(random));
 		}
 		if(ConfigHandler.stingyLoot) {
-			if(random.nextBoolean()) fillChest(contents, LootCategory.gear, random);
-			else fillChest(contents, LootCategory.heal, random);
+			if(random.nextBoolean()) fillChest(contents, LootType.GEAR, random);
+			else fillChest(contents, LootType.HEAL, random);
 		} else {
-			fillChest(contents, LootCategory.gear, random);
-			fillChest(contents, LootCategory.heal, random);
+			fillChest(contents, LootType.GEAR, random);
+			fillChest(contents, LootType.HEAL, random);
 		}
 	}
 
