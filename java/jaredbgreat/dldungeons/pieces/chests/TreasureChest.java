@@ -65,8 +65,9 @@ public class TreasureChest extends BasicChest {
 			contents.setInventorySlotContents(slots.get(slot++).intValue(), treasure);
 			if(slot > 25) return;  // This should not happen, but better safe than sorry
 		}
-		if(random.nextInt(8) < level) {
+		if(random.nextInt(7) < level) {
 			if(level >= 7) treasure = LootList.special.getLoot(random).getStack(random);
+			else if((level == 6) && random.nextBoolean()) treasure = LootList.special.getLoot(random).getStack(random);
 			else treasure = LootList.discs.getLoot(random).getStack(random);
 			if(contents.getStackInSlot(slot) != null) slot++;
 			contents.setInventorySlotContents(slots.get(slot++).intValue(), treasure);
