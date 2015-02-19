@@ -34,6 +34,7 @@ public class LootList extends ArrayList<LootItem>{
 	public LootItem getLoot(Random random) {
 		LootItem out;
 		if(isEmpty()) return null;
+		// Done with removal now to somewhat increase randomness
 		if(dummy.isEmpty() || random.nextInt(size()) > dummy.size()) {
 			dummy.clear();
 			dummy.addAll(this);
