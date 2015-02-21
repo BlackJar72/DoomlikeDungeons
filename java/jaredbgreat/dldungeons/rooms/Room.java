@@ -87,7 +87,12 @@ public class Room extends AbstractRoom {
 		isNode = (previous == null);
 		hasEntrance = (isNode && dungeon.entrances.use(dungeon.random));
 		if(hasEntrance) dungeon.numEntrances++;
-		if(isNode) degenerateFloors = false;
+		if(isNode) {
+			degenerateFloors = false;
+			doors.add(new Doorway(beginX + ((endX - beginX) / 2), 
+					              beginZ + ((endZ - beginZ) / 2), 
+					              dungeon.random.nextBoolean()));
+		}
 		hasSpawners = false;		
 		
 		sym = Symmetry.getSymmetry(dungeon);		

@@ -59,6 +59,7 @@ public class LootCategory {
 				}
 			}
 			return loot.levels[level].getLoot(random);
+		case RANDOM:
 		default:
 			switch(random.nextInt(3)) {
 				case 0:

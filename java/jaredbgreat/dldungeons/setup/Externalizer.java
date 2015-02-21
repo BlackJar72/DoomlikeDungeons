@@ -34,8 +34,7 @@ public class Externalizer {
 	private static         String outDirectory;
 	
 	private static final String[] themes 
-			= new String[]{"classic.cfg",
-				           "common.cfg",
+			= new String[]{"common.cfg",
 				           "continentalShelf.cfg",
 				           "dank.cfg",
 				           "desert.cfg",
