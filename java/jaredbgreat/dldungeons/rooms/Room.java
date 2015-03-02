@@ -169,18 +169,21 @@ public class Room extends AbstractRoom {
 	
 	
 	private void assignEdge(Dungeon dungeon, int x, int z) {
-		if(dungeon.map.room[x][z] == 0) dungeon.map.room[x][z] = id;
+		if((dungeon.map.room[x][z] == 0) 
+				|| (dungeon.rooms.get(dungeon.map.room[x][z]).sky && !sky)) {
+			dungeon.map.room[x][z] = id;
+			if(!sky) dungeon.map.ceiling[x][z] = cielingBlock;
+			dungeon.map.floor[x][z] = floorBlock;
+			dungeon.map.wall[x][z] = wallBlock1;	
+			dungeon.map.hasLiquid[x][z] = false;
+			dungeon.map.isWall[x][z] = !sky;
+			dungeon.map.isFence[x][z] = fenced;
+		}
 		if(dungeon.map.ceilY[x][z] < (byte)ceilY)  dungeon.map.ceilY[x][z] = (byte)ceilY;
 		if(dungeon.map.nCeilY[x][z] < (byte)ceilY) dungeon.map.nCeilY[x][z] = (byte)ceilY;
 		if(dungeon.map.floorY[x][z] < (byte)floorY) dungeon.map.floorY[x][z] = (byte)floorY;
 		if((dungeon.map.nFloorY[x][z] > (byte)nFloorY) || (dungeon.map.nFloorY[x][z] == 0)) 
-			dungeon.map.nFloorY[x][z] = (byte)floorY;
-		if(!sky) dungeon.map.ceiling[x][z] = cielingBlock;
-		dungeon.map.floor[x][z] = floorBlock;
-		dungeon.map.wall[x][z] = wallBlock1;	
-		dungeon.map.hasLiquid[x][z] = false;
-		dungeon.map.isWall[x][z] = !sky;
-		dungeon.map.isFence[x][z] = fenced;				
+			dungeon.map.nFloorY[x][z] = (byte)floorY;				
 	}
 	
 	
