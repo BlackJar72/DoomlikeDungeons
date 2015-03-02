@@ -111,7 +111,6 @@ public class Room extends AbstractRoom {
 		
 		if(parent != null) {
 			sky = (sky && !dungeon.outside.use(dungeon.random));
-//			floorY = parent.floorY;  // There is much more to this than that, but not yet needed
 		}
 		
 		realX = (((float)(endX - beginX)) / 2.0f) + (float)beginX + 1.0f;
@@ -135,9 +134,6 @@ public class Room extends AbstractRoom {
 			assignEdge(dungeon, beginX, i);
 			assignEdge(dungeon, endX, i);
 		}
-
-		//wallPlatform(dungeon);
-		// TODO Add room feature -- probably using helper methods.
 		if(!dungeon.complexity.use(dungeon.random) && !isNode) {
 			hasWholePattern = true;
 			if(dungeon.liquids.use(dungeon.random)) {				
@@ -152,10 +148,6 @@ public class Room extends AbstractRoom {
 			addSpawners(dungeon);
 			addChests(dungeon);
 		} 
-//			else if(!parent.hasSpawners && dungeon.random.nextBoolean()) {
-//			addSpawners(dungeon);
-//			addChests(dungeon);
-//		}
 		if(hasEntrance) {
 			for(int i = (int)realX -2; i < ((int)realX + 2); i++)
 					for(int j = (int)realZ - 2; j < ((int)realZ + 2); j++) {
@@ -164,7 +156,6 @@ public class Room extends AbstractRoom {
 						dungeon.map.isWall[i][j] = false;
 					}
 		}
-		//DoomlikeDungeons.profiler.endTask("Creating a Room");
 	}
 	
 	
