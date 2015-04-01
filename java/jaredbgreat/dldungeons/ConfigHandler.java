@@ -347,10 +347,8 @@ public class ConfigHandler {
 		
 		if(!out.exists()) {
 			System.err.println("[DLDUNGEONS] ERROR: Could not create config directory");
-			System.exit(1);
 		} else if(!out.isDirectory()) {
 			System.err.println("[DLDUNGEONS] ERROR: Config directory is not a directory!");
-			System.exit(1);
 		} else {
 			configDir = out;
 			ThemeReader.setConfigDir(out);
