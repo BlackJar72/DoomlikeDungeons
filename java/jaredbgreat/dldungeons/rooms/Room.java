@@ -56,6 +56,7 @@ public class Room extends AbstractRoom {
 	public ArrayList<BasicChest> chests;
 	public ArrayList<Doorway> doors;
 	public ArrayList<DoorQueue> connections;
+	public ArrayList<Doorway> topDoors;
 	
 	private Room() {id = 0;}
 	
@@ -77,7 +78,7 @@ public class Room extends AbstractRoom {
 		super(dungeon, previous);		
 		//DoomlikeDungeons.profiler.startTask("Creating a Room");
 		dungeon.rooms.add(this);
-		id = dungeon.rooms.size();
+		id = dungeon.rooms.realSize();
 		childSeeds = new ArrayList<PlaceSeed>();
 		spawners = new ArrayList<Spawner>();
 		chests   = new ArrayList<BasicChest>();
@@ -1004,7 +1005,7 @@ public class Room extends AbstractRoom {
 	public boolean plantChildren(Dungeon dungeon) {
 		boolean result = false;
 		for(PlaceSeed planted : childSeeds) {
-			if(dungeon.rooms.size() >= dungeon.size.maxRooms) return false;
+			if(dungeon.rooms.realSize() >= dungeon.size.maxRooms) return false;
 				int height = dungeon.baseHeight;
 				int x = dungeon.random.nextInt(dungeon.size.width);
 				int z = dungeon.random.nextInt(dungeon.size.width);

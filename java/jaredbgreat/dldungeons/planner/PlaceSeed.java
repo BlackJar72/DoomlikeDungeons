@@ -46,7 +46,7 @@ public class PlaceSeed {
 	
 	public Room growRoom(int xdim, int zdim, int height, 
 						 Dungeon dungeon, Room parent, Room previous) {
-		if(dungeon.rooms.size() >= dungeon.size.maxRooms) return null;
+		if(dungeon.rooms.realSize() >= dungeon.size.maxRooms) return null;
 		if(dungeon.random.nextBoolean()) 
 			return growRoomX(xdim, zdim, height, dungeon, parent, previous);
 		else return growRoomZ(xdim, zdim, height, dungeon, parent, previous);
