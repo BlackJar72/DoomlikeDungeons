@@ -110,7 +110,7 @@ public class Room extends AbstractRoom {
 		this.ceilY = ceilY;
 		level = 0;
 		
-		if(parent != null) {
+		if(parent != null && parent.sky) {
 			sky = (sky && !dungeon.outside.use(dungeon.random));
 		}
 		
