@@ -67,7 +67,7 @@ public class Route {
 		int limit = dungeon.size.maxRooms;
 		while(!complete && (limit > 0)) {
 			limit--;
-			if(dungeon.rooms.size() >= dungeon.size.maxRooms) break;
+			if(dungeon.rooms.realSize() >= dungeon.size.maxRooms) break;
 			drawConnection(dungeon);			
 			if(complete || (limit < 0)) break;
 		}
