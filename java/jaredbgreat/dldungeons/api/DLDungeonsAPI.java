@@ -1,10 +1,8 @@
 package jaredbgreat.dldungeons.api;
 
 import jaredbgreat.dldungeons.ReadAPI;
-import jaredbgreat.dldungeons.themes.Theme;
 import jaredbgreat.dldungeons.themes.ThemeType;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import net.minecraft.world.World;
@@ -20,7 +18,7 @@ import net.minecraft.world.World;
 
 public class DLDungeonsAPI { 
 
-	private static final boolean dldloaded = cpw.mods.fml.common.Loader.isModLoaded("DLDungeonsJBG");
+	private static final boolean dldloaded = net.minecraftforge.fml.common.Loader.isModLoaded("DLDungeonsJBG");
 	
 	
 	
@@ -37,7 +35,7 @@ public class DLDungeonsAPI {
 	 * @return boolean true if Doomlike Dungeons has been loaded by FML, false if not.
 	 */
 	public static boolean isLoaded() {
-		return cpw.mods.fml.common.Loader.isModLoaded("DLDungeonsJBG");
+		return net.minecraftforge.fml.common.Loader.isModLoaded("DLDungeonsJBG");
 	}
 	
 	

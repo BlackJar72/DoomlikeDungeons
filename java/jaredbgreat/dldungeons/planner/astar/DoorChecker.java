@@ -140,7 +140,7 @@ public class DoorChecker {
 	
 	
 	/**
-	 * This will run A* on exits to ensure all can be reached. I will also
+	 * This will run A* on exits to ensure all can be reached. It will also
 	 * ensure the same door is used in connected rooms by giving a negative
 	 * value and passing it to the connected rooms DoorQueue.	 * 
 	 * 
@@ -157,10 +157,6 @@ public class DoorChecker {
 			connected.add(next = exits.remove(exits.size() - 1));
 			new AStar(room, dungeon, current, next).seek();			
 			Collections.shuffle(connected, dungeon.random);
-		}
-		for(Doorway exit : connected) {
-			exit.priority = -16;
-			dungeon.rooms.get(getOtherRoom(exit, room, dungeon)).addToConnections(exit);
 		}
 	}
 	
@@ -226,22 +222,26 @@ public class DoorChecker {
 	public static void checkConnectivity(Dungeon dungeon) {		
 		ArrayList<ArrayList<Room>> sections = new RoomBFS(dungeon).check();
 		while(sections.size() > 1) {
-//			System.out.println("[DLDUNGEONS] Merging two sections.");
 			Collections.sort(sections, c);
 			new AStar2(dungeon, sections.get(0).get(0), 
 					sections.get(1).get(0)).seek();
 			sections.get(1).addAll(sections.get(0));
 			sections.remove(0);
-//			System.out.println("[DLDUNGEONS] Dungeon has " + sections.size()
-//					+ " sections.");
-//			if(sections.size() > 1) System.out.println("[DLDUNGEONS] Dungeon "
-//					+ "is not connected!");
 		}
 	}
 	
 	
 	public static void processDoors2(Dungeon dungeon, Room room) {
-		checkConnections(makeConnectionList(room, dungeon.random), room, dungeon);
+		room.topDoors = makeConnectionList(room, dungeon.random);
+		for(Doorway exit : room.topDoors) {
+			exit.priority = -16;
+			dungeon.rooms.get(getOtherRoom(exit, room, dungeon)).addToConnections(exit);
+		}
+	}
+	
+		
+	public static void processDoors3(Dungeon dungeon, Room room) {
+		checkConnections(room.topDoors, room, dungeon);
 		retestDoors(dungeon, room);
 	}
 }

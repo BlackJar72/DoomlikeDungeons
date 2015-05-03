@@ -192,7 +192,7 @@ public class Dungeon {
 				other = nodes[j];
 				if(other == null) continue;
 				if(other.hubRoom == null) continue;
-				if(rooms.size() >= size.maxRooms) {
+				if(rooms.realSize() >= size.maxRooms) {
 					//DoomlikeDungeons.profiler.endTask("Connecting Nodes");
 					return;
 				}				
@@ -207,7 +207,7 @@ public class Dungeon {
 	
 	void makeMoreRooms() {		
 		//DoomlikeDungeons.profiler.startTask("Adding Extra Rooms (old)");
-		while(rooms.size() < size.maxRooms) {
+		while(rooms.realSize() < size.maxRooms) {
 				Room made;
 				int height = baseHeight;
 				int x = random.nextInt(size.width);
@@ -236,7 +236,7 @@ public class Dungeon {
 			Collections.shuffle(grower, random);
 			planter = new ArrayList<Room>();
 			for(Room room : grower) {
-				if(rooms.size() >= size.maxRooms) {
+				if(rooms.realSize() >= size.maxRooms) {
 					return;
 				}
 				if(room.plantChildren(this)) {
@@ -251,8 +251,13 @@ public class Dungeon {
 	
 	public void fixRoomContents() {
 		for(Room room : rooms) {	
-			DoorChecker.processDoors1(this, room);	
-			DoorChecker.processDoors2(this, room);
+			DoorChecker.processDoors1(this, room);
+		}
+		for(Room room : rooms) {	
+			DoorChecker.processDoors2(this, room);	
+		}
+		for(Room room : rooms) {
+			DoorChecker.processDoors3(this, room);
 			addSpawners(room);	
 		}
 		DoorChecker.checkConnectivity(this);

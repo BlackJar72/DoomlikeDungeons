@@ -17,6 +17,7 @@ import jaredbgreat.dldungeons.planner.astar.Step;
 import jaredbgreat.dldungeons.rooms.Room;
 import jaredbgreat.dldungeons.themes.ThemeFlags;
 import net.minecraft.block.Block;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 // More data intensive but perhaps simpler
@@ -164,7 +165,7 @@ public class MapMatrix {
 					 // Liquids
 					 //DoomlikeDungeons.profiler.startTask("Building Pool");
 					 if(hasLiquid[i][j] && (!isWall[i][j] && !isDoor[i][j])
-							 && !world.isAirBlock(shiftX + i, floorY[i][j] - 1, shiftZ + j)) 
+							 && !isAirBlock(world, shiftX + i, floorY[i][j] - 1, shiftZ + j)) 
 						 DBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, theRoom.liquidBlock);
 					 //DoomlikeDungeons.profiler.endTask("Building Pool");
 					 //System.out.println("One column of the dungeon should be built!");
@@ -180,13 +181,13 @@ public class MapMatrix {
 	
 	
 	private boolean noHighDegenerate(Room theRoom, int x, int y, int z) {
-		return !(theRoom.degenerate && world.isAirBlock(x, y, z));
+		return !(theRoom.degenerate && isAirBlock(world, x, y, z));
 	}
 	
 	
 	private boolean noLowDegenerate(Room theRoom, int x, int y, int z, int i, int j) {
 		return !(theRoom.degenerateFloors 
-				&& world.isAirBlock(x, y, z)
+				&& isAirBlock(world, x, y, z)
 				&& !astared[i][j]);
 	}
 	
@@ -195,6 +196,12 @@ public class MapMatrix {
 		int b = floorY[i][j];
 		if(isWall[i][j] && !isDoor[i][j]) b--;
 		return b;		
+	}
+	
+	
+	private boolean isAirBlock(World world, int x, int y, int z) {
+		// Trying stuff, may not work!
+		return world.isAirBlock(new BlockPos(x, y, z));
 	}
 	
 	

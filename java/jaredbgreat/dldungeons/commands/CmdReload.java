@@ -36,7 +36,7 @@ public class CmdReload extends ForgeCommand {
 
 	
 	@Override
-	public String getCommandName() {
+	public String getName() {
 		return "dldreload";
 	}
 
@@ -48,17 +48,17 @@ public class CmdReload extends ForgeCommand {
 
 	
 	@Override
-	public List getCommandAliases() {
+	public List getAliases() {
 		return aliases;
 	}
 
 	
 	@Override
-	public void processCommand(ICommandSender icommandsender, String[] astring) {		
-			System.out.println("[DLDUNGEONS] " + icommandsender.getCommandSenderName()
+	public void execute(ICommandSender icommandsender, String[] astring) {		
+			System.out.println("[DLDUNGEONS] " + icommandsender.getName()
 					+ " Used /dldreload command; Reloading config file now.");
 			ReadAPI.reloadConfig();
-			if(ConfigHandler.announceCommands) icommandsender.addChatMessage(new ChatComponentText("[DLDUNGEONS] " + icommandsender.getCommandSenderName()
+			if(ConfigHandler.announceCommands) icommandsender.addChatMessage(new ChatComponentText("[DLDUNGEONS] " + icommandsender.getName()
 					+ " Used /dldreload command; Reloading config file now."));
 	}
 	
@@ -68,14 +68,6 @@ public class CmdReload extends ForgeCommand {
     {
         return 2;
     }
-
-	
-	@Override
-	public List addTabCompletionOptions(ICommandSender icommandsender,
-			String[] astring) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	
 	@Override

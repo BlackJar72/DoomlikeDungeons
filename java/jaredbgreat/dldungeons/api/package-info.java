@@ -1,5 +1,5 @@
 @API(owner = "DLDungeonsJBG", apiVersion = "1.1", provides = "DLDungeonsAPI")
 package jaredbgreat.dldungeons.api;
 
-import cpw.mods.fml.common.API;
+import net.minecraftforge.fml.common.API;
 

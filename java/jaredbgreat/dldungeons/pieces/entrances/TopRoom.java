@@ -28,7 +28,7 @@ public class TopRoom extends AbstractEntrance {
 		wx = x + (dungeon.map.chunkX * 16) - (dungeon.map.room.length / 2) + 8;
 		wz = z + (dungeon.map.chunkZ * 16) - (dungeon.map.room.length / 2) + 8;
 		bottom = dungeon.map.floorY[x][z];
-		top = world.getHeightValue(wx, wz);
+		top = world.getActualHeight();
 		while(!DBlock.isGroundBlock(world, wx, top, wz)) top--;
 		xdim = dungeon.random.nextInt(7) + 6;
 		zdim = dungeon.random.nextInt(7) + 6;

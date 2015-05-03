@@ -56,6 +56,7 @@ public class Room extends AbstractRoom {
 	public ArrayList<BasicChest> chests;
 	public ArrayList<Doorway> doors;
 	public ArrayList<DoorQueue> connections;
+	public ArrayList<Doorway> topDoors;
 	
 	private Room() {id = 0;}
 	
@@ -77,7 +78,7 @@ public class Room extends AbstractRoom {
 		super(dungeon, previous);		
 		//DoomlikeDungeons.profiler.startTask("Creating a Room");
 		dungeon.rooms.add(this);
-		id = dungeon.rooms.size();
+		id = dungeon.rooms.realSize();
 		childSeeds = new ArrayList<PlaceSeed>();
 		spawners = new ArrayList<Spawner>();
 		chests   = new ArrayList<BasicChest>();
@@ -109,9 +110,8 @@ public class Room extends AbstractRoom {
 		this.ceilY = ceilY;
 		level = 0;
 		
-		if(parent != null) {
+		if(parent != null  && parent.sky) {
 			sky = (sky && !dungeon.outside.use(dungeon.random));
-//			floorY = parent.floorY;  // There is much more to this than that, but not yet needed
 		}
 		
 		realX = (((float)(endX - beginX)) / 2.0f) + (float)beginX + 1.0f;
@@ -135,9 +135,6 @@ public class Room extends AbstractRoom {
 			assignEdge(dungeon, beginX, i);
 			assignEdge(dungeon, endX, i);
 		}
-
-		//wallPlatform(dungeon);
-		// TODO Add room feature -- probably using helper methods.
 		if(!dungeon.complexity.use(dungeon.random) && !isNode) {
 			hasWholePattern = true;
 			if(dungeon.liquids.use(dungeon.random)) {				
@@ -152,10 +149,6 @@ public class Room extends AbstractRoom {
 			addSpawners(dungeon);
 			addChests(dungeon);
 		} 
-//			else if(!parent.hasSpawners && dungeon.random.nextBoolean()) {
-//			addSpawners(dungeon);
-//			addChests(dungeon);
-//		}
 		if(hasEntrance) {
 			for(int i = (int)realX -2; i < ((int)realX + 2); i++)
 					for(int j = (int)realZ - 2; j < ((int)realZ + 2); j++) {
@@ -164,23 +157,25 @@ public class Room extends AbstractRoom {
 						dungeon.map.isWall[i][j] = false;
 					}
 		}
-		//DoomlikeDungeons.profiler.endTask("Creating a Room");
 	}
 	
 	
 	private void assignEdge(Dungeon dungeon, int x, int z) {
-		if(dungeon.map.room[x][z] == 0) dungeon.map.room[x][z] = id;
+		if((dungeon.map.room[x][z] == 0) 
+				|| (dungeon.rooms.get(dungeon.map.room[x][z]).sky && !sky)) {
+			dungeon.map.room[x][z] = id;
+			if(!sky) dungeon.map.ceiling[x][z] = cielingBlock;
+			dungeon.map.floor[x][z] = floorBlock;
+			dungeon.map.wall[x][z] = wallBlock1;	
+			dungeon.map.hasLiquid[x][z] = false;
+			dungeon.map.isWall[x][z] = !sky;
+			dungeon.map.isFence[x][z] = fenced;
+		}
 		if(dungeon.map.ceilY[x][z] < (byte)ceilY)  dungeon.map.ceilY[x][z] = (byte)ceilY;
 		if(dungeon.map.nCeilY[x][z] < (byte)ceilY) dungeon.map.nCeilY[x][z] = (byte)ceilY;
 		if(dungeon.map.floorY[x][z] < (byte)floorY) dungeon.map.floorY[x][z] = (byte)floorY;
 		if((dungeon.map.nFloorY[x][z] > (byte)nFloorY) || (dungeon.map.nFloorY[x][z] == 0)) 
-			dungeon.map.nFloorY[x][z] = (byte)floorY;
-		if(!sky) dungeon.map.ceiling[x][z] = cielingBlock;
-		dungeon.map.floor[x][z] = floorBlock;
-		dungeon.map.wall[x][z] = wallBlock1;	
-		dungeon.map.hasLiquid[x][z] = false;
-		dungeon.map.isWall[x][z] = !sky;
-		dungeon.map.isFence[x][z] = fenced;				
+			dungeon.map.nFloorY[x][z] = (byte)floorY;				
 	}
 	
 	
@@ -1010,7 +1005,7 @@ public class Room extends AbstractRoom {
 	public boolean plantChildren(Dungeon dungeon) {
 		boolean result = false;
 		for(PlaceSeed planted : childSeeds) {
-			if(dungeon.rooms.size() >= dungeon.size.maxRooms) return false;
+			if(dungeon.rooms.realSize() >= dungeon.size.maxRooms) return false;
 				int height = dungeon.baseHeight;
 				int x = dungeon.random.nextInt(dungeon.size.width);
 				int z = dungeon.random.nextInt(dungeon.size.width);

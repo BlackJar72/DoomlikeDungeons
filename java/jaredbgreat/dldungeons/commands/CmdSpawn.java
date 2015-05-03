@@ -18,8 +18,8 @@ import java.util.Random;
 
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 import net.minecraftforge.server.command.ForgeCommand;
 
@@ -41,7 +41,7 @@ public class CmdSpawn extends ForgeCommand {
 
 	
 	@Override
-	public String getCommandName() {
+	public String getName() {
 		return "dldspawn";
 	}
 
@@ -53,28 +53,28 @@ public class CmdSpawn extends ForgeCommand {
 
 	
 	@Override
-	public List getCommandAliases() {
+	public List getAliases() {
 		return aliases;
 	}
 
 	
 	@Override
-	public void processCommand(ICommandSender icommandsender, String[] astring) {
+	public void execute(ICommandSender icommandsender, String[] astring) {
 		World world =  icommandsender.getEntityWorld();
-		ChunkCoordinates location = icommandsender.getPlayerCoordinates();
+		BlockPos location = icommandsender.getPosition();
 		try {
 			placeDungeon(new Random(), 
-					location.posX / 16, 
-					location.posZ / 16, 
+					location.getX() / 16, 
+					location.getZ() / 16, 
 					world);
 		} catch (Throwable e) {
 			System.err.println("[DLDUNGEONS] Danger!  Failed to finalize a dungeon after building!");
 			e.printStackTrace();
 		}
 		if(ConfigHandler.announceCommands) icommandsender.addChatMessage(new ChatComponentText("[DLDUNGEONS] " 
-				+ icommandsender.getCommandSenderName() 
-				+ " just spawned a dungeon at X=" + location.posX 
-				+ ", Z=" + location.posZ));
+				+ icommandsender.getName() 
+				+ " just spawned a dungeon at X=" + location.getX() 
+				+ ", Z=" + location.getZ()));
 	}
 	
 	
@@ -83,14 +83,6 @@ public class CmdSpawn extends ForgeCommand {
     {
         return 2;
     }
-
-	
-	@Override
-	public List addTabCompletionOptions(ICommandSender icommandsender,
-			String[] astring) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	
 	@Override

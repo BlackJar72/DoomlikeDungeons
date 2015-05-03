@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ChestGenHooks;
@@ -33,14 +33,15 @@ public class TreasureChest extends BasicChest {
 	
 	@Override
 	public void place(World world, int x, int y, int z, Random random) {
+		BlockPos pos = new BlockPos(x, y, z);
 		Collections.shuffle(slots, random);
 		slot = 0;
 		level += random.nextInt(2);
 		if(level >= LootCategory.LEVELS) level = LootCategory.LEVELS - 1;
 		ItemStack treasure;
 		DBlock.placeChest(world, x, y, z);
-		if(world.getBlock(x, y, z) != DBlock.chest) return;
-		TileEntityChest contents = (TileEntityChest)world.getTileEntity(x, y, z);
+		if(world.getChunkFromChunkCoords(x / 16, z / 16).getBlock(pos) != DBlock.chest) return;
+		TileEntityChest contents = (TileEntityChest)world.getTileEntity(pos);
 		if(ConfigHandler.vanillaLoot) vanillaChest(contents, random);
 		int num;
 		num = random.nextInt(2 + (level / 3)) + 2;

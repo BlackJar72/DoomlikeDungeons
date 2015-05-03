@@ -35,7 +35,7 @@ public class CmdDimID extends ForgeCommand {
 
 	
 	@Override
-	public String getCommandName() {
+	public String getName() {
 		return "dlddimid";
 	}
 
@@ -47,17 +47,17 @@ public class CmdDimID extends ForgeCommand {
 
 	
 	@Override
-	public List getCommandAliases() {
+	public List getAliases() {
 		return aliases;
 	}
-
 	
+
 	@Override
-	public void processCommand(ICommandSender icommandsender, String[] astring) {
-		int dim =  icommandsender.getEntityWorld().provider.dimensionId;
+	public void execute(ICommandSender icommandsender, String[] astring) {
+		int dim =  icommandsender.getEntityWorld().provider.getDimensionId();
 		System.out.println(dim);
 		icommandsender.addChatMessage(new ChatComponentText("[DLDUNGEONS] " 
-				+ icommandsender.getCommandSenderName() 
+				+ icommandsender.getName() 
 				+ " is in dimension " + dim));
 //		..setColor(EnumChatFormatting.DARK_PURPLE).setItalic(true));
 	}
@@ -68,14 +68,6 @@ public class CmdDimID extends ForgeCommand {
     {
         return 2;
     }
-
-	
-	@Override
-	public List addTabCompletionOptions(ICommandSender icommandsender,
-			String[] astring) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	
 	@Override

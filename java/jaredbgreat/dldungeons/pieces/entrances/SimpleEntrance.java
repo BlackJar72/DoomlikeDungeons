@@ -10,10 +10,8 @@ package jaredbgreat.dldungeons.pieces.entrances;
 */	
 
 
-import jaredbgreat.dldungeons.builder.Builder;
 import jaredbgreat.dldungeons.builder.DBlock;
 import jaredbgreat.dldungeons.planner.Dungeon;
-import net.minecraft.block.Block;
 import net.minecraft.world.World;
 
 public class SimpleEntrance extends AbstractEntrance {
@@ -27,7 +25,7 @@ public class SimpleEntrance extends AbstractEntrance {
 		int wx = x + (dungeon.map.chunkX * 16) - (dungeon.map.room.length / 2) + 8;
 		int wz = z + (dungeon.map.chunkZ * 16) - (dungeon.map.room.length / 2) + 8;
 		int bottom = dungeon.map.floorY[x][z];
-		int top = world.getHeightValue(wx, wz);
+		int top = world.getActualHeight();
 		while(!DBlock.isGroundBlock(world, wx, top, wz)) top--;
 		top++;
 		int side = dungeon.random.nextInt(4);

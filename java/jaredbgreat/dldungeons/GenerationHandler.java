@@ -15,13 +15,13 @@ import static jaredbgreat.dldungeons.builder.Builder.placeDungeon;
 import java.util.HashSet;
 import java.util.Random;
 
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
-import cpw.mods.fml.common.IWorldGenerator;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.IWorldGenerator;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 
 public class GenerationHandler implements IWorldGenerator {
@@ -46,20 +46,20 @@ public class GenerationHandler implements IWorldGenerator {
 				|| !ConfigHandler.naturalSpawn) return;  // Second part is redundant for safety
 //		if((world.getBiomeGenForCoords(chunkX * 16, chunkZ * 16) == BiomeGenBase.sky) && noEnd) return;
 		boolean blockedBiome = false;
-		Type[] types = BiomeDictionary.getTypesForBiome((world.getBiomeGenForCoords(chunkX * 16, chunkZ * 16)));
+		Type[] types = BiomeDictionary.getTypesForBiome((world.getBiomeGenForCoords(new BlockPos(chunkX * 16, 63, chunkZ * 16))));
 		for(Type type : types) {			
 			blockedBiome = ConfigHandler.biomeExclusions.contains(type) || blockedBiome;
 			//System.out.println("[DLDUNGONS] biome type " + type.toString() +", blockedBiome = " + blockedBiome);
 		}
 		if(blockedBiome) return;
-		if((dimensions.contains(Integer.valueOf(world.provider.dimensionId)) != ConfigHandler.positiveDims)) return;
-		if((Math.abs(chunkX - (world.getSpawnPoint().posX / 16)) < minXZ) 
-				|| (Math.abs(chunkZ - (world.getSpawnPoint().posZ / 16)) < minXZ)) return;
+		if((dimensions.contains(Integer.valueOf(world.provider.getDimensionId())) != ConfigHandler.positiveDims)) return;
+		if((Math.abs(chunkX - (world.getSpawnPoint().getX() / 16)) < minXZ) 
+				|| (Math.abs(chunkZ - (world.getSpawnPoint().getZ() / 16)) < minXZ)) return;
 		
 		//Get some numbers		
 		//DoomlikeDungeons.profiler.startTask("Checking for Dungeon");
-		int xseed = (int)(world.getSeed()  % (1 << 31)) + world.provider.dimensionId;
-		int zseed = (int)(world.getSeed()  / (1 << 31)) + world.provider.dimensionId;
+		int xseed = (int)(world.getSeed()  % (1 << 31)) + world.provider.getDimensionId();
+		int zseed = (int)(world.getSeed()  / (1 << 31)) + world.provider.getDimensionId();
 		//mrand = new Random(xseed + zseed + (2027 * (long)(chunkX / factor)) + (1987 * (long)(chunkZ / factor)));
 		mrand = new Random(xseed 
 				+ (2027 * (long)(chunkX / factor)) 

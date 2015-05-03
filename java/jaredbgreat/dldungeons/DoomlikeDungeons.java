@@ -14,6 +14,11 @@ package jaredbgreat.dldungeons;
 */	
 
 
+//import jaredbgreat.dldungeons.commands.CmdDimID;
+//import jaredbgreat.dldungeons.commands.CmdForceInstallThemes;
+//import jaredbgreat.dldungeons.commands.CmdInstallThemes;
+//import jaredbgreat.dldungeons.commands.CmdReload;
+//import jaredbgreat.dldungeons.commands.CmdSpawn;
 import jaredbgreat.dldungeons.commands.CmdDimID;
 import jaredbgreat.dldungeons.commands.CmdForceInstallThemes;
 import jaredbgreat.dldungeons.commands.CmdInstallThemes;
@@ -24,13 +29,13 @@ import jaredbgreat.dldungeons.debug.DoNothing;
 import jaredbgreat.dldungeons.debug.IProfiler;
 import jaredbgreat.dldungeons.themes.ThemeReader;
 import jaredbgreat.dldungeons.themes.ThemeType;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 
 @Mod(modid=Info.ID, name=Info.NAME, version=Info.VERSION, acceptableRemoteVersions="*") 
@@ -63,14 +68,6 @@ public class DoomlikeDungeons {
     	ConfigHandler.generateLists();
     	ThemeReader.readThemes(); 
     	ThemeType.SyncMobLists();
-    	
-		System.out.println();
-		System.out.println("OUTPUT OF MOBS BY THEME:");
-//    	for(Theme theme : Theme.themes) {
-//    		System.out.println();
-//    		theme.mobsOut();
-//    		System.out.println();
-//    	}
     }
     
     @EventHandler

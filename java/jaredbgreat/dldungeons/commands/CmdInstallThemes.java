@@ -19,7 +19,6 @@ import java.util.List;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.server.command.ForgeCommand;
 
 public class CmdInstallThemes extends ForgeCommand {
@@ -39,7 +38,7 @@ public class CmdInstallThemes extends ForgeCommand {
 
 	
 	@Override
-	public String getCommandName() {
+	public String getName() {
 		return "dldInstallThemes";
 	}
 
@@ -51,20 +50,20 @@ public class CmdInstallThemes extends ForgeCommand {
 
 	
 	@Override
-	public List getCommandAliases() {
+	public List getAliases() {
 		return aliases;
 	}
 
 	
 	@Override
-	public void processCommand(ICommandSender icommandsender, String[] astring) {
+	public void execute(ICommandSender icommandsender, String[] astring) {
 		if(!ConfigHandler.installCmd) return; // Should never happen, but a failsafe
 		Externalizer exporter = new Externalizer(ThemeReader.getThemesDir());
 		exporter.makeThemes();
 		exporter = new Externalizer(ConfigHandler.getConfigDir());
 		exporter.makeChestCfg();
 		icommandsender.addChatMessage(new ChatComponentText("[DLDUNGEONS] " 
-				+ icommandsender.getCommandSenderName() 
+				+ icommandsender.getName() 
 				+ " has reinstalled default themes (nothing will be overwritten)"));
 //		..setColor(EnumChatFormatting.DARK_PURPLE).setItalic(true));
 		BiomeLists.reset();
@@ -76,14 +75,6 @@ public class CmdInstallThemes extends ForgeCommand {
     {
         return 2;
     }
-
-	
-	@Override
-	public List addTabCompletionOptions(ICommandSender icommandsender,
-			String[] astring) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	
 	@Override

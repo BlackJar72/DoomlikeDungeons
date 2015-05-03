@@ -16,7 +16,7 @@ import java.util.StringTokenizer;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 
 public class LootItem {
@@ -29,8 +29,11 @@ public class LootItem {
 		metaParse(id);
 		if(min > max) min = max;
 		this.min = min;
-		this.max = max;
-		//System.out.println("Data: min=" + min + ", max=" + max + ", meta=" + meta + "; item = " + ((Item)item).toString());
+		this.max = max;		
+		if(item == null) {
+			System.err.println("Creating loot item from: " + id);
+			System.err.println("Data: min=" + min + ", max=" + max + ", meta=" + meta + "; item = " + ((Item)item).toString());		
+		}
 	}
 	
 	

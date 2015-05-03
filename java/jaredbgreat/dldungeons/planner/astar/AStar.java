@@ -72,8 +72,19 @@ public class AStar {
 	 */
 	public void makeRoute(Step end) {
 		//TODO: Handle symmetries (or not...?)
-		Step child = end.parent, parent = end;
-		if(child == null) return;
+		Step parent = end.parent, child = end;
+		if(parent == null) return;
+		
+		dungeon.map.astared[parent.x][parent.z] = true;
+		if(dungeon.map.isWall[parent.x][parent.z] ||
+					dungeon.map.isFence[parent.x][parent.z]) 
+				dungeon.map.isDoor[parent.x][parent.z] = true;
+		if(dungeon.map.hasLiquid[parent.x][parent.z]) {
+			dungeon.map.hasLiquid[parent.x][parent.z] = false;
+			dungeon.map.floorY[parent.x][parent.z] = 
+					(byte) dungeon.rooms.get(room).floorY;
+		}
+		
 		do {
 			dungeon.map.astared[child.x][child.z] = true;
 			if(dungeon.map.isWall[child.x][child.z] ||
@@ -86,6 +97,7 @@ public class AStar {
 			child = parent;
 			parent = child.parent;
 		} while (parent != null);
+		
 		dungeon.map.astared[child.x][child.z] = true;
 		if(dungeon.map.isWall[child.x][child.z] ||
 					dungeon.map.isFence[child.x][child.z]) 

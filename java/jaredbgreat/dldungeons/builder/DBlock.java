@@ -12,11 +12,14 @@ import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntityMobSpawner;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class DBlock {
 	String id;   // The name
@@ -32,6 +35,11 @@ public class DBlock {
 	public static final Block water   = (Block)Block.getBlockFromName("water");
 	public static final Block air     = (Block)Block.getBlockFromName("air");
 	
+	public static final int chestid = Block.getIdFromBlock(chest);	
+	public static final int spawnerid = Block.getIdFromBlock(spawner);	
+	public static final int portal1id = Block.getIdFromBlock(portal1);	
+	public static final int portal2id = Block.getIdFromBlock(portal2);
+	
 	public static final ArrayList<DBlock> registry = new ArrayList<DBlock>();
 	
 	
@@ -41,6 +49,7 @@ public class DBlock {
 		StringTokenizer nums = new StringTokenizer(id, "({[]})");
 		block = (Block)Block.getBlockFromName(nums.nextToken());
 		if(nums.hasMoreElements()) meta = Integer.parseInt(nums.nextToken());
+		//System.out.println("[DLD] Contructed Block " + block + " from "  + id);
 	}
 	
 	
@@ -54,9 +63,16 @@ public class DBlock {
 			if(nums.hasMoreElements()) meta = Integer.parseInt(nums.nextToken());
 		} else {
 			StringTokenizer nums = new StringTokenizer(id, ":({[]})");
-			block = GameRegistry.findBlock(nums.nextToken(), nums.nextToken());
-			if(nums.hasMoreElements()) meta = Integer.parseInt(nums.nextToken());			
+			String modid = nums.nextToken();
+			if(modid.toLowerCase().equals("minecraft") || modid.toLowerCase().equals("vanilla")) {
+				block = (Block)Block.getBlockFromName(nums.nextToken());
+				if(nums.hasMoreElements()) meta = Integer.parseInt(nums.nextToken());
+			} else {
+				block = Block.getBlockFromItem(GameRegistry.findItem(modid, nums.nextToken()));
+				if(nums.hasMoreElements()) meta = Integer.parseInt(nums.nextToken());	
+			}			
 		}
+		//System.out.println("[DLD] Contructed Block " + block + " from "  + id);
 	}
 	
 	
@@ -64,8 +80,9 @@ public class DBlock {
 		// This wrapper is a protection against possible changes in block representation,
 		// e.g., abandoning the ID system, allowing any needed changes to be made here
 		// instead of elsewhere. 
+		System.out.println(block);
 		if(!isProtectedBlock(world, x, y, z)) 
-			world.setBlock(x, y, z, block);
+			world.setBlockState(new BlockPos(x, y, z), block.getDefaultState());
 	}
 	
 	
@@ -73,8 +90,8 @@ public class DBlock {
 		// This wrapper is a protection against possible changes in block representation,
 		// e.g., abandoning the ID system, allowing any needed changes to be made here
 		// instead of elsewhere. 
-		if(!isProtectedBlock(world, x, y, z)) 
-			world.setBlock(x, y, z, block, meta, 2);
+		if(!isProtectedBlock(world, x, y, z))
+			world.setBlockState(new BlockPos(x, y, z), block.getStateFromMeta(meta));
 	}
 	
 	
@@ -93,6 +110,7 @@ public class DBlock {
 		if(!registry.contains(block)) {
 			registry.add(block);
 		}
+		//System.out.println("[DLD] Adding Block " + block + " from "  + id);
 		return registry.indexOf(block);
 	}	
 	
@@ -110,8 +128,8 @@ public class DBlock {
 		// This wrapper is a protection against possible changes in block representation,
 		// e.g., abandoning the ID system, allowing any needed changes to be made here
 		// instead of elsewhere. 
-		if(isProtectedBlock(world, x, y, z)) return; 
-		world.setBlock(x, y, z, block);
+		if(isProtectedBlock(world, x, y, z)) return;
+		world.setBlockState(new BlockPos(x, y, z), block.getDefaultState());
 	}
 	
 	
@@ -120,7 +138,7 @@ public class DBlock {
 		// e.g., abandoning the ID system, allowing any needed changes to be made here
 		// instead of elsewhere.
 		if(isProtectedBlock(world, x, y, z)) return; 
-		world.setBlock(x, y, z, block, a, b);
+		world.setBlockState(new BlockPos(x, y, z), block.getStateFromMeta(a));
 	}
 	
 	
@@ -130,7 +148,7 @@ public class DBlock {
 		// instead of elsewere. 
 		// world.setBlock(x, y, z, 0);
 		if(isProtectedBlock(world, x, y, z)) return;
-		world.setBlockToAir(x, y, z);
+		world.setBlockToAir(new BlockPos(x, y, z));
 	}
 	
 	
@@ -140,28 +158,29 @@ public class DBlock {
 		// instead of elsewere. 
 		// world.setBlock(x, y, z, 0);
 		if(isProtectedBlock(world, x, y, z)) return;
-		if(flooded) world.setBlock(x, y, z, water); 
-		else world.setBlockToAir(x, y, z);
+		if(flooded) placeBlock(world, x, y, z, water); 
+		else world.setBlockToAir(new BlockPos(x, y, z));
 	}
 	
 	
 	public static void placeChest(World world, int x, int y, int z) {
 		if(!isProtectedBlock(world, x, y, z))
-			world.setBlock(x, y, z, chest, 0, 2);		
+			placeBlock(world, x, y, z, chest);		
 	}
 	
 	
 	public static void placeSpawner(World world, int x, int y, int z, String mob) {
+		BlockPos pos = new BlockPos(x, y, z);
 		if(isProtectedBlock(world, x, y, z)) return;
 		placeBlock(world, x, y, z, spawner);
-		TileEntityMobSpawner theSpawner = (TileEntityMobSpawner)world.getTileEntity(x, y, z);
-		theSpawner.func_145881_a().setEntityName(mob);
-		//world.setBlockMetadataWithNotify(x, y, z, 15, 7);
+		TileEntityMobSpawner theSpawner = (TileEntityMobSpawner)world.getTileEntity(pos);
+		MobSpawnerBaseLogic logic = theSpawner.getSpawnerBaseLogic();
+		logic.setEntityName(mob);
 	}
 	
 	
 	public static boolean isGroundBlock(World world, int x, int y, int z) {
-		Material mat = ((Block)world.getBlock(x, y, z)).getMaterial();
+		Material mat = ((Block)world.getChunkFromChunkCoords(x / 16, z / 16).getBlock(x, y, z)).getMaterial();
 		return 	   (mat == Material.grass) 
 				|| (mat == Material.iron) 
 				|| (mat == Material.ground) 
@@ -173,9 +192,9 @@ public class DBlock {
 	
 	
 	public static boolean isProtectedBlock(World world, int x, int y, int z) {
-		Block block = world.getBlock(x, y, z);
-		return (block == chest || block == spawner  
-				|| block == portal1 || block == portal2);
+		int block = Block.getIdFromBlock(world.getBlockState(new BlockPos(x, y, z)).getBlock());
+		return (block == chestid || block == spawnerid  
+				|| block == portal1id || block == portal2id);
 	}
 	
 	

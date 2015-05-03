@@ -10,15 +10,17 @@ package jaredbgreat.dldungeons.builder;
 */	
 
 
+import static jaredbgreat.dldungeons.builder.DBlock.lapis;
+import static jaredbgreat.dldungeons.builder.DBlock.placeBlock;
+import static jaredbgreat.dldungeons.builder.DBlock.quartz;
 import jaredbgreat.dldungeons.DoomlikeDungeons;
 import jaredbgreat.dldungeons.planner.Dungeon;
+
 import java.util.Random;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.tileentity.TileEntityMobSpawner;
+
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
-import static jaredbgreat.dldungeons.builder.DBlock.*;
 
 
 public class Builder {
@@ -29,7 +31,7 @@ public class Builder {
 	public static void placeDungeon(Random random, int chunkX, int chunkZ, World world) throws Throwable {	
 		if(world.isRemote) return; // Do not perform world-gen on the client!z
 		DoomlikeDungeons.profiler.startTask("Create Dungeons");
-		Dungeon dungeon = new Dungeon(random, world.getBiomeGenForCoords((chunkX * 16), (chunkZ * 16)), 
+		Dungeon dungeon = new Dungeon(random, world.getBiomeGenForCoords(new BlockPos((chunkX * 16), 64, (chunkZ * 16))), 
 									  world, chunkX, chunkZ);
 
 		System.out.println("[DLDUNGONS] Running Builder.buildDungeon; building dungeon");
@@ -46,7 +48,7 @@ public class Builder {
 						IChunkProvider chunkGenerator, IChunkProvider chunkProvider) throws Throwable {	
 		if(world.isRemote) return; // Do not perform world-gen on the client!
 		DoomlikeDungeons.profiler.startTask("Create Dungeons");
-		Dungeon dungeon = new Dungeon(random, world.getBiomeGenForCoords((chunkX * 16), (chunkZ * 16)), 
+		Dungeon dungeon = new Dungeon(random, world.getBiomeGenForCoords(new BlockPos((chunkX * 16), 64, (chunkZ * 16))), 
 									  world, chunkX, chunkZ);
 		
 		System.out.println("[DLDUNGONS] Running Builder.buildDungeon; building dungeon");

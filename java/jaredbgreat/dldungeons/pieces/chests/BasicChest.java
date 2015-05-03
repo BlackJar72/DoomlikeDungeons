@@ -15,9 +15,9 @@ import jaredbgreat.dldungeons.builder.DBlock;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ChestGenHooks;
@@ -36,11 +36,12 @@ public class BasicChest {
 	
 		
 	public void place(World world, int x, int y, int z, Random random) {
+		BlockPos pos = new BlockPos(x, y, z);
 		level += random.nextInt(2);
 		if(level >= LootCategory.LEVELS) level = LootCategory.LEVELS - 1;
 		DBlock.placeChest(world, x, y, z);
-		if(world.getBlock(x, y, z) != DBlock.chest) return;
-		TileEntityChest contents = (TileEntityChest)world.getTileEntity(x, y, z);
+		if(world.getChunkFromChunkCoords(x / 16, z / 16).getBlock(pos) != DBlock.chest) return;
+		TileEntityChest contents = (TileEntityChest)world.getTileEntity(pos);
 		if(ConfigHandler.vanillaLoot && (!ConfigHandler.stingyLoot || random.nextBoolean())) 
 			vanillaChest(contents, random);
 		int which = random.nextInt(2);
