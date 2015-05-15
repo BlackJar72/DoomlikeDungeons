@@ -89,7 +89,7 @@ public class ConfigHandler {
 	
 	public static void init() {
 		File file = new File(ConfigHandler.configDir.toString() 
-			+ File.separator + Info.ID  + ".cfg");
+			+ File.separator + Info.OLD_ID  + ".cfg");
 		Configuration config = new Configuration(file);
 		config.load();
 		
@@ -342,7 +342,7 @@ public class ConfigHandler {
 	
 	
 	public static File findConfigDir(File fd) {
-		File out = new File(fd.toString() + File.separator + Info.ID);
+		File out = new File(fd.toString() + File.separator + Info.OLD_ID);
 		if(!out.exists()) out.mkdir();
 		
 		if(!out.exists()) {

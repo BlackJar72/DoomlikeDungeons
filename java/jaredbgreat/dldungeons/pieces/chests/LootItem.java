@@ -10,8 +10,11 @@ package jaredbgreat.dldungeons.pieces.chests;
 */		
 
 
+import jaredbgreat.dldungeons.debug.Logging;
+
 import java.util.Random;
 import java.util.StringTokenizer;
+import java.util.logging.Logger;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -55,6 +58,10 @@ public class LootItem {
 		String modid = nums.nextToken();
 		String name  = nums.nextToken();
 		item = GameRegistry.findItem(modid, name);
+		if(item == null) {
+			Logging.LogError("[DLDUNGEONS] ERROR! Item read as \"" + in 
+					+ "\" was was not in registry (returned null).");
+		}
 		if(nums.hasMoreElements()) meta = Integer.parseInt(nums.nextToken());
 	}
 	

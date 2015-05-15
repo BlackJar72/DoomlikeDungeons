@@ -8,9 +8,12 @@ package jaredbgreat.dldungeons.builder;
  * https://creativecommons.org/licenses/by/4.0/legalcode
 */	
 
+import jaredbgreat.dldungeons.debug.Logging;
+
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
+import java.util.logging.Logger;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
@@ -40,6 +43,10 @@ public class DBlock {
 		meta  = 0;
 		StringTokenizer nums = new StringTokenizer(id, "({[]})");
 		block = (Block)Block.getBlockFromName(nums.nextToken());
+		if(block == null) {
+			Logging.LogError("[DLDUNGEONS] ERROR! Block read as \"" + id 
+					+ "\" was was not in registry (returned null).");
+		}
 		if(nums.hasMoreElements()) meta = Integer.parseInt(nums.nextToken());
 	}
 	
@@ -56,6 +63,12 @@ public class DBlock {
 			StringTokenizer nums = new StringTokenizer(id, ":({[]})");
 			block = GameRegistry.findBlock(nums.nextToken(), nums.nextToken());
 			if(nums.hasMoreElements()) meta = Integer.parseInt(nums.nextToken());			
+		}
+		if(block == null) {
+			String error = "[DLDUNGEONS] ERROR! Block read as \"" + id 
+					+ "\" was was not in registry (returned null).";
+			Logging.LogError(error);
+			throw new NoSuchElementException(error);
 		}
 	}
 	
