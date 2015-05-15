@@ -10,6 +10,8 @@ package jaredbgreat.dldungeons.pieces.chests;
 */		
 
 
+import jaredbgreat.dldungeons.debug.Logging;
+
 import java.util.Random;
 import java.util.StringTokenizer;
 
@@ -29,10 +31,10 @@ public class LootItem {
 		metaParse(id);
 		if(min > max) min = max;
 		this.min = min;
-		this.max = max;		
+		this.max = max;
 		if(item == null) {
-			System.err.println("Creating loot item from: " + id);
-			System.err.println("Data: min=" + min + ", max=" + max + ", meta=" + meta + "; item = " + ((Item)item).toString());		
+			Logging.LogError("[DLDUNGEONS] ERROR! Item read as \"" + id 
+					+ "\" was was not in registry (returned null).");
 		}
 	}
 	

@@ -1,6 +1,6 @@
 [
 {
-  "modid": "DLDungeonsJBG",
+  "modid": "dldungeonsjbg",
   "name": "Doomlike Dungeons",
   "description": "Algorithmically generates multiroom dungeons resembling Doom levels into the world.",
   "version": "1.7.5",
