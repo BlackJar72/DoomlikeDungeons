@@ -11,7 +11,9 @@ package jaredbgreat.dldungeons.planner;
 
 
 import jaredbgreat.dldungeons.pieces.Shape;
+import jaredbgreat.dldungeons.rooms.AbstractRoom;
 import jaredbgreat.dldungeons.rooms.Room;
+import jaredbgreat.dldungeons.rooms.RoomType;
 
 /* 
  * These seeds represent a potential Room, Shape, or decoraction.
@@ -121,7 +123,7 @@ public class PlaceSeed {
 		else {
 			dungeon.roomCount++;
 			//System.out.println("Room grown.");	
-			return new Room(beginX, endX, beginZ, endZ, y, y + height, dungeon, parent, previous);	
+			return AbstractRoom.makeRoom(beginX, endX, beginZ, endZ, y, y + height, dungeon, parent, previous);	
 		}
 	}
 	
@@ -193,8 +195,8 @@ public class PlaceSeed {
 		}
 		else {
 			dungeon.roomCount++;
-			//System.out.println("Room grown.");
-			return new Room(beginX, endX, beginZ, endZ, y, y + height, dungeon, parent, previous);		
+			//System.out.println("Room grown.");	
+			return AbstractRoom.makeRoom(beginX, endX, beginZ, endZ, y, y + height, dungeon, parent, previous);		
 		}
 	}
 	

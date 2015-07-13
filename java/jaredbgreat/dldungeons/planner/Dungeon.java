@@ -72,6 +72,7 @@ public class Dungeon {
 	public Degrees verticle;	// How many height change and how much height change
 	public Degrees entrances;	// Ways in and outS
 	public Degrees bigRooms;
+	public Degrees naturals;
 	
 	// Default blocks
 	public int wallBlock1;
@@ -84,11 +85,13 @@ public class Dungeon {
 	public int liquidBlock;
 	
 	
-	@Override
-	public void finalize() throws Throwable {
+	public void preFinalize() {
 		if(theme != null) {
 			for(int i = 0; i < nodes.length; i++) nodes[i] = null;
-			for(Room room: rooms) room.finalize();
+			for(Room room: rooms) {
+				room.preFinalize();
+				room = null;
+			}
 			rooms.clear();
 		}
 		rooms = null;
@@ -111,7 +114,7 @@ public class Dungeon {
 		verticle = null;
 		entrances = null;
 		bigRooms = null;
-		super.finalize();
+		naturals = null;
 	}
 
 	
@@ -165,6 +168,7 @@ public class Dungeon {
 		verticle	= theme.verticle.select(random);
 		entrances	= theme.entrances.select(random);
 		fences		= theme.fences.select(random);
+		naturals    = theme.naturals.select(random);
 		baseHeight  = random.nextInt(theme.maxY - theme.minY) + theme.minY;
 	}
 	

@@ -9,6 +9,7 @@ package jaredbgreat.dldungeons.rooms;
 */	
 
 import jaredbgreat.dldungeons.planner.Dungeon;
+import jaredbgreat.dldungeons.rooms.naturals.DldCave;
 
 import java.util.Random;
 
@@ -95,4 +96,44 @@ public abstract class AbstractRoom /*extends Shape*/ {
 		else fenced = false;
 	}
 	
+	
+	public static Room makeRoom(int beginX, int endX, int beginZ, int endZ, int floorY, int ceilY, 
+			Dungeon dungeon, Room parent, Room previous) {		
+		RoomType type = RoomType.ROOM;
+//		if(dungeon.naturals.use(dungeon.random)) {
+//			type = RoomType.CAVE;
+//		}
+		switch(type) {
+		case CAVE: {
+			DldCave base = new DldCave(beginX, endX, beginZ, endZ, floorY, ceilY, 
+					dungeon, parent, previous);
+			return base.plan(dungeon, parent);
+		}
+		case ROOM:
+		default: {
+			Room base = new Room(beginX, endX, beginZ, endZ, floorY, ceilY, 
+				dungeon, parent, previous);
+			return base.plan(dungeon, parent);
+		}
+		}
+	}
+	
+	
+	public static Room makeRoom(int beginX, int endX, int beginZ, int endZ, int floorY, int ceilY, 
+			Dungeon dungeon, Room parent, Room previous, RoomType type) {		
+		type = RoomType.CAVE;
+		switch(type) {
+		case CAVE: {
+			DldCave base = new DldCave(beginX, endX, beginZ, endZ, floorY, ceilY, 
+					dungeon, parent, previous);
+			return base.plan(dungeon, parent);
+		}
+		case ROOM:
+		default: {
+			Room base = new Room(beginX, endX, beginZ, endZ, floorY, ceilY, 
+				dungeon, parent, previous);
+			return base.plan(dungeon, parent);
+		}
+		}
+	}
 }

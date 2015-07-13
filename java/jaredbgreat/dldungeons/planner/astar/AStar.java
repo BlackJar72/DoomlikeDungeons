@@ -35,13 +35,40 @@ public class AStar {
 		x1 = room.beginX;
 		x2 = room.endX;
 		z1 = room.beginZ;
-		z2 = room.endZ;
+		z2 = room.endZ;		
 		spt = dungeon.map.nodedge;
 		for(int i = x1; i <= x2; i++)
 			for(int j = z1; j <= z2; j++)
 				spt[i][j] = null;
-		end = finish;
+		
+		end = finish;		
+		if(end.x < x1) {
+			x1 = end.x;
+		}
+		if (end.x > x2) {
+			x2 = end.x;
+		}
+		if(end.z < z1) {
+			z1 = end.z;
+		} 
+		if (end.z > z2) {
+			z2 = end.z;
+		}
+		
 		root = Step.firstFromDoorway(start, finish);
+		if(root.x < x1) {
+			x1 = root.x;
+		}		
+		if (root.x > x2) {
+			x2 = root.x;
+		}
+		if(root.z < z1) {
+			z1 = root.z;
+		}
+		if (root.z > z2) {
+			z2 = root.z;
+		}
+		
 		spt[root.x][root.z] = root;
 		edges = new PriorityQueue<Step>();
 		edges.add(root);
@@ -59,7 +86,6 @@ public class AStar {
 			current = edges.poll();
 			getEdgeStep(current);
 		} while(!current.equals(end) && !edges.isEmpty());
-		// FIXME:  edges should never be empty before finding route!!
 		makeRoute(current);
 	}
 	
@@ -99,15 +125,17 @@ public class AStar {
 	
 	
 	protected void addDoor(Step from, Step to) {
-		if(from.x != to.x) { 
-			if(DoorChecker.validateDoor(dungeon, 
-					new Doorway(to.x, to.z, true)))
-				dungeon.map.isDoor[to.x][to.z] = true;
-		} else { 
-			if(DoorChecker.validateDoor(dungeon, 
-					new Doorway(to.x, to.z, false)))
-				dungeon.map.isDoor[to.x][to.z] = true;
-		}		
+		dungeon.map.isDoor[to.x][to.z] = true;
+		dungeon.map.isDoor[from.x][from.z] = true;
+//		if(from.x != to.x) { 
+//			if(DoorChecker.validateDoor(dungeon, 
+//					new Doorway(to.x, to.z, true)))
+//				dungeon.map.isDoor[to.x][to.z] = true;
+//		} else { 
+//			if(DoorChecker.validateDoor(dungeon, 
+//					new Doorway(to.x, to.z, false)))
+//				dungeon.map.isDoor[to.x][to.z] = true;
+//		}		
 	}
 	
 	
@@ -138,7 +166,7 @@ public class AStar {
 		x = src.x - 1; z = src.z;
 		if(x >= x1 && x <= x2) {
 			nextEdge = new Step(x, z, src, end, dungeon);
-			if(spt[x][z] == null) {
+			if((spt[x][z] == null) || (nextEdge.value < spt[x][z].value)) {
 				spt[x][z] = nextEdge;
 				edges.add(nextEdge);
 			}
@@ -146,7 +174,7 @@ public class AStar {
 		x = src.x + 1; z = src.z;
 		if(x >= x1 && x <= x2)  {
 			nextEdge = new Step(x, z, src, end, dungeon);
-			if(spt[x][z] == null) {
+			if((spt[x][z] == null) || (nextEdge.value < spt[x][z].value)) {
 				spt[x][z] = nextEdge;
 				edges.add(nextEdge);
 			}
@@ -154,7 +182,7 @@ public class AStar {
 		x = src.x; z = src.z - 1;
 		if(z >= z1 && z <= z2) {
 			nextEdge = new Step(x, z, src, end, dungeon);
-			if(spt[x][z] == null) {
+			if((spt[x][z] == null) || (nextEdge.value < spt[x][z].value)) {
 				spt[x][z] = nextEdge;
 				edges.add(nextEdge);
 			}
@@ -162,7 +190,7 @@ public class AStar {
 		x = src.x; z = src.z + 1;
 		if(z >= z1 && z <= z2)  {
 			nextEdge = new Step(x, z, src, end, dungeon);
-			if(spt[x][z] == null) {
+			if((spt[x][z] == null) || (nextEdge.value < spt[x][z].value)) {
 				spt[x][z] = nextEdge;
 				edges.add(nextEdge);
 			}

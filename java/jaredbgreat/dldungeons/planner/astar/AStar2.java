@@ -30,8 +30,34 @@ public class AStar2 extends AStar {
 		for(int i = x1; i <= x2; i++)
 			for(int j = z1; j <= z2; j++)
 				spt[i][j] = null;
-		end = new Tile((int)finish.realX, (int)finish.realZ);
+		
+		end = new Tile((int)finish.realX, (int)finish.realZ);		
+		if(end.x < x1) {
+			x1 = end.x;
+		}
+		if (end.x > x2) {
+			x2 = end.x;
+		}
+		if(end.z < z1) {
+			z1 = end.z;
+		} 
+		if (end.z > z2) {
+			z2 = end.z;
+		}
 		root = Step2.firstFromDoorway(new Tile((int)start.realX, (int)start.realZ), end);
+		if(root.x < x1) {
+			x1 = root.x;
+		}		
+		if (root.x > x2) {
+			x2 = root.x;
+		}
+		if(root.z < z1) {
+			z1 = root.z;
+		}
+		if (root.z > z2) {
+			z2 = root.z;
+		}
+		
 		spt[root.x][root.z] = root;
 		edges = new PriorityQueue<Step2>();
 		edges.add(root);

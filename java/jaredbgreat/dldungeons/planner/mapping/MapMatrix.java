@@ -158,6 +158,7 @@ public class MapMatrix {
 					 if(isDoor[i][j]) {
 						 DBlock.deleteBlock(world, shiftX + i, floorY[i][j],     shiftZ + j, flooded);
 						 DBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 1, shiftZ + j, flooded);
+						 DBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 2, shiftZ + j, flooded);
 					 }
 					 //DoomlikeDungeons.profiler.endTask("Building Doorway");
 					 

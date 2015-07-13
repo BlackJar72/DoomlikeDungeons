@@ -21,12 +21,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
-
-import com.google.common.io.Files;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import net.minecraft.block.Block;
 import net.minecraftforge.common.BiomeDictionary.Type;
@@ -38,6 +39,7 @@ public class ThemeReader {
 	private static File themesDir;
 	private static ArrayList<File> files;
 	
+	private static final String ESTRING = "";
 	
 	public static void setThemesDir(File dir) {
 		System.out.println("[DLDUNGEONS] themesdir is " + dir);
@@ -196,13 +198,13 @@ public class ThemeReader {
 				errorFile = new File(errorDir.toString() + File.separator 
 						+ file.toString() + ".err" + i++);
 			} while (errorFile.exists());
-			try {
-				if(!broken.renameTo(errorFile)) {
-					Files.move(broken, errorFile);
-				} 
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}			
+                        if(!broken.renameTo(errorFile)) {
+                            try {
+                                Files.move(broken.toPath(), errorFile.toPath());
+                            } catch (IOException ex) {
+                                Logger.getLogger(ThemeReader.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }			
 			if(errorFile.exists()) {
 				System.err.println("[DLDUNGEONS] Theme " + errorFile
 					+ " was renamed to prevent "
@@ -382,7 +384,7 @@ public class ThemeReader {
 	private static int intParser(int el, StringTokenizer tokens) {
 		boolean valid = false;
 		int value = 0;
-		String num;
+		String num = ESTRING;
 		try {
 			if(tokens.hasMoreTokens()) {
 				num = tokens.nextToken();
@@ -391,6 +393,8 @@ public class ThemeReader {
 			}
 		} catch(Exception e) {
 			System.err.println("[DLDUNGEONS] ThemeReader.intParser(int el, StringTokenizer tokens) tried to read non-number as integer");
+			System.err.println("[DLDUNGEONS] Value passed as and integer was: " + num);
+			e.printStackTrace();
 			return el;
 		}
 		if(valid) return value;
@@ -400,7 +404,7 @@ public class ThemeReader {
 	
 	private static float floatParser(float el, StringTokenizer tokens) {
 		float value = 0f;
-		String num;
+		String num = ESTRING;
 		try {
 			if(tokens.hasMoreTokens()) {
 				num = tokens.nextToken();
@@ -408,6 +412,7 @@ public class ThemeReader {
 			}
 		} catch(Exception e) {
 			System.err.println("[DLDUNGEONS] ThemeReader.floatParser(float el, StringTokenizer tokens) tried to read non-number as float");
+			System.err.println("[DLDUNGEONS] Value passed as and foat was: " + num);
 			return el;
 		}
 		return value;
@@ -416,7 +421,7 @@ public class ThemeReader {
 	
 	private static int intParser(StringTokenizer tokens) {
 		int value = 0;
-		String num;
+		String num = ESTRING;
 		try {
 			if(tokens.hasMoreTokens()) {
 				num = tokens.nextToken();
@@ -424,6 +429,7 @@ public class ThemeReader {
 			}
 		} catch(Exception e) {
 			System.err.println("[DLDUNGEONS] ThemeReader.intParser(StringTokenizer tokens) tried to read non-number as integer");
+			System.err.println("[DLDUNGEONS] Value passed as and integer was: " + num);
 			return -1;
 		}
 		return value;

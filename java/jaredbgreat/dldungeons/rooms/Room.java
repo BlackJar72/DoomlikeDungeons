@@ -50,6 +50,8 @@ public class Room extends AbstractRoom {
 	public Shapes shape = Shapes.X;
 	public ArrayList<PlaceSeed> childSeeds;
 	public boolean isNode;
+	public boolean isSubroom;
+	public boolean mustHaveWalls;
 	public boolean hasEntrance;
 	public boolean hasSpawners;
 	public ArrayList<Spawner> spawners;
@@ -58,10 +60,11 @@ public class Room extends AbstractRoom {
 	public ArrayList<DoorQueue> connections;
 	public ArrayList<Doorway> topDoors;
 	
-	private Room() {id = 0;}
 	
-	@Override
-	public void finalize() throws Throwable {
+	private Room() {id = 0;}	
+	
+	
+	public void preFinalize() {
 		childSeeds.clear();
 		childSeeds = null;
 		spawners.clear();
@@ -69,7 +72,6 @@ public class Room extends AbstractRoom {
 		spawners = null;
 		chests = null;
 		doors = null;
-		super.finalize();
 	}
 	
 	
@@ -86,6 +88,7 @@ public class Room extends AbstractRoom {
 		connections = new ArrayList<DoorQueue>();
 		dungeon.planter.add(this);
 		isNode = (previous == null);
+		isSubroom = (parent != null);
 		hasEntrance = (isNode && dungeon.entrances.use(dungeon.random));
 		if(hasEntrance) dungeon.numEntrances++;
 		if(isNode) {
@@ -110,12 +113,13 @@ public class Room extends AbstractRoom {
 		this.ceilY = ceilY;
 		level = 0;
 		
-		if(parent != null && parent.sky) {
-			sky = (sky && !dungeon.outside.use(dungeon.random));
-		}
-		
 		realX = (((float)(endX - beginX)) / 2.0f) + (float)beginX + 1.0f;
 		realZ = (((float)(endZ - beginZ)) / 2.0f) + (float)beginZ + 1.0f;
+		
+		if(isSubroom && parent.sky) {
+			sky = (sky && !dungeon.outside.use(dungeon.random));
+			mustHaveWalls = !(sky && parent.sky);
+		}
 		for(int i = beginX + 1; i < endX; i++)
 			for(int j = beginZ + 1; j < endZ; j++) {
 				if(dungeon.map.room[i][j] == 0) dungeon.map.room[i][j] = id;
@@ -135,6 +139,11 @@ public class Room extends AbstractRoom {
 			assignEdge(dungeon, beginX, i);
 			assignEdge(dungeon, endX, i);
 		}
+		doorways(dungeon);
+	}
+	
+	
+	public Room plan(Dungeon dungeon, Room parent) {
 		if(!dungeon.complexity.use(dungeon.random) && !isNode) {
 			hasWholePattern = true;
 			if(dungeon.liquids.use(dungeon.random)) {				
@@ -143,12 +152,7 @@ public class Room extends AbstractRoom {
 					|| dungeon.symmetry.use(dungeon.random))) {
 				cutin(dungeon);
 			}			
-		} else addFeatures(dungeon);
-		doorways(dungeon);
-		if(parent == null) {
-			addSpawners(dungeon);
-			addChests(dungeon);
-		} 
+		} else addFeatures(dungeon); 
 		if(hasEntrance) {
 			for(int i = (int)realX -2; i < ((int)realX + 2); i++)
 					for(int j = (int)realZ - 2; j < ((int)realZ + 2); j++) {
@@ -157,12 +161,18 @@ public class Room extends AbstractRoom {
 						dungeon.map.isWall[i][j] = false;
 					}
 		}
+		if(parent == null) {
+			addSpawners(dungeon);
+			addChests(dungeon);
+		}
+		return this;
 	}
 	
 	
 	private void assignEdge(Dungeon dungeon, int x, int z) {
 		if((dungeon.map.room[x][z] == 0) 
-				|| (dungeon.rooms.get(dungeon.map.room[x][z]).sky && !sky)) {
+				|| (dungeon.rooms.get(dungeon.map.room[x][z]).sky && !sky)
+				|| (mustHaveWalls)) {
 			dungeon.map.room[x][z] = id;
 			if(!sky) dungeon.map.ceiling[x][z] = cielingBlock;
 			dungeon.map.floor[x][z] = floorBlock;
