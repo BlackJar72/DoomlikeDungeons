@@ -9,7 +9,6 @@ package jaredbgreat.dldungeons.rooms;
 */	
 
 import jaredbgreat.dldungeons.planner.Dungeon;
-import jaredbgreat.dldungeons.rooms.naturals.DldCave;
 
 import java.util.Random;
 
@@ -105,7 +104,7 @@ public abstract class AbstractRoom /*extends Shape*/ {
 		}
 		switch(type) {
 		case CAVE: {
-			DldCave base = new DldCave(beginX, endX, beginZ, endZ, floorY, ceilY, 
+			Cave base = new Cave(beginX, endX, beginZ, endZ, floorY, ceilY, 
 					dungeon, parent, previous);
 			return base.plan(dungeon, parent);
 		}
@@ -123,7 +122,7 @@ public abstract class AbstractRoom /*extends Shape*/ {
 			Dungeon dungeon, Room parent, Room previous, RoomType type) {	
 		switch(type) {
 		case CAVE: {
-			DldCave base = new DldCave(beginX, endX, beginZ, endZ, floorY, ceilY, 
+			Cave base = new Cave(beginX, endX, beginZ, endZ, floorY, ceilY, 
 					dungeon, parent, previous);
 			return base.plan(dungeon, parent);
 		}

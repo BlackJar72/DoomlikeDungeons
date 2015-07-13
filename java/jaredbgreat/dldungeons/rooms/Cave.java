@@ -1,4 +1,4 @@
-package jaredbgreat.dldungeons.rooms.naturals;
+package jaredbgreat.dldungeons.rooms;
 
 /* 
  * This mod is the creation and copyright (c) 2015 
@@ -12,7 +12,6 @@ package jaredbgreat.dldungeons.rooms.naturals;
 import jaredbgreat.dldungeons.pieces.Doorway;
 import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.planner.astar.AStar;
-import jaredbgreat.dldungeons.rooms.Room;
 
 
 /**
@@ -27,7 +26,7 @@ import jaredbgreat.dldungeons.rooms.Room;
  * 
  * @author Jared Blackburn (JaredBGreat)
  */
-public class DldCave extends Room {
+public class Cave extends Room {
 	private int xSize, zSize, layers;
 	private int[][][] cells;	
 	private int[][]   scratchpad;
@@ -35,7 +34,7 @@ public class DldCave extends Room {
 	private int sum;
 	
 	
-	public DldCave(int beginX, int endX, int beginZ, int endZ, int floorY,
+	public Cave(int beginX, int endX, int beginZ, int endZ, int floorY,
 			int ceilY, Dungeon dungeon, Room parent, Room previous) {
 		super(beginX, endX, beginZ, endZ, floorY, ceilY, dungeon, previous, previous);
 	}

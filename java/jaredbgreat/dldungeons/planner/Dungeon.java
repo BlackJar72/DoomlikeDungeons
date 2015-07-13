@@ -20,9 +20,9 @@ import jaredbgreat.dldungeons.pieces.entrances.SpiralStair;
 import jaredbgreat.dldungeons.pieces.entrances.TopRoom;
 import jaredbgreat.dldungeons.planner.astar.DoorChecker;
 import jaredbgreat.dldungeons.planner.mapping.MapMatrix;
+import jaredbgreat.dldungeons.rooms.Cave;
 import jaredbgreat.dldungeons.rooms.Room;
 import jaredbgreat.dldungeons.rooms.RoomList;
-import jaredbgreat.dldungeons.rooms.naturals.DldCave;
 import jaredbgreat.dldungeons.themes.BiomeLists;
 import jaredbgreat.dldungeons.themes.Degrees;
 import jaredbgreat.dldungeons.themes.Sizes;
@@ -263,7 +263,7 @@ public class Dungeon {
 		}
 		for(Room room : rooms) {
 			DoorChecker.processDoors3(this, room);
-			if(room instanceof DldCave) DoorChecker.caveConnector(this, room);
+			if(room instanceof Cave) DoorChecker.caveConnector(this, room);
 			addSpawners(room);	
 		}
 		DoorChecker.checkConnectivity(this);

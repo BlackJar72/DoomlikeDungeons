@@ -97,7 +97,8 @@ public class DBlock {
 	
 	
 	public static void place(World world, int x, int y, int z, int block) {
-		registry.get(block).place(world, x, y, z);
+		if(!isProtectedBlock(world, x, y, z)) 
+				registry.get(block).place(world, x, y, z);
 	}
 	
 	
@@ -123,8 +124,8 @@ public class DBlock {
 		// This wrapper is a protection against possible changes in block representation,
 		// e.g., abandoning the ID system, allowing any needed changes to be made here
 		// instead of elsewhere. 
-		if(isProtectedBlock(world, x, y, z)) return; 
-		world.setBlock(x, y, z, block);
+		if(!isProtectedBlock(world, x, y, z)) 
+				world.setBlock(x, y, z, block);
 	}
 	
 	
@@ -132,8 +133,8 @@ public class DBlock {
 		// This wrapper is a protection against possible changes in block representation,
 		// e.g., abandoning the ID system, allowing any needed changes to be made here
 		// instead of elsewhere.
-		if(isProtectedBlock(world, x, y, z)) return; 
-		world.setBlock(x, y, z, block, a, b);
+		if(!isProtectedBlock(world, x, y, z)) 
+				world.setBlock(x, y, z, block, a, b);
 	}
 	
 	
@@ -142,8 +143,8 @@ public class DBlock {
 		// e.g., abandoning the ID system, allowing any needed changes to be made here
 		// instead of elsewere. 
 		// world.setBlock(x, y, z, 0);
-		if(isProtectedBlock(world, x, y, z)) return;
-		world.setBlockToAir(x, y, z);
+		if(!isProtectedBlock(world, x, y, z)) 
+				world.setBlockToAir(x, y, z);
 	}
 	
 	
@@ -187,8 +188,11 @@ public class DBlock {
 	
 	public static boolean isProtectedBlock(World world, int x, int y, int z) {
 		Block block = world.getBlock(x, y, z);
-		return (block == chest || block == spawner  
-				|| block == portal1 || block == portal2);
+		return (block == chest || block == spawner || 
+				block == portal1 || block == portal2 || 
+				block instanceof net.minecraft.block.BlockChest ||
+				block instanceof net.minecraft.block.BlockEndPortalFrame ||
+				block instanceof net.minecraft.block.BlockMobSpawner);
 	}
 	
 	

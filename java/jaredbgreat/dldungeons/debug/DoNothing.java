@@ -16,4 +16,7 @@ public class DoNothing implements IProfiler {
 	@Override
 	public void endTask(String name) {/*Do Nothing!*/}
 
+	@Override
+	public void infoOut(String info) {/*Do Nothing!*/}
+
 }
