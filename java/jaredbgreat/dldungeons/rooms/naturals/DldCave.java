@@ -37,10 +37,7 @@ public class DldCave extends Room {
 	
 	public DldCave(int beginX, int endX, int beginZ, int endZ, int floorY,
 			int ceilY, Dungeon dungeon, Room parent, Room previous) {
-		super(beginX, endX, beginZ, endZ, floorY, ceilY, dungeon, previous, previous);		
-//		this.wallBlock1 = dungeon.theme.caveWalls[dungeon.random.nextInt(dungeon.theme.caveWalls.length)];
-//		this.cielingBlock = wallBlock1;
-//		this.floorBlock = wallBlock1;
+		super(beginX, endX, beginZ, endZ, floorY, ceilY, dungeon, previous, previous);
 	}
 	
 	
@@ -61,7 +58,7 @@ public class DldCave extends Room {
 				}
 			}
 		}
-		cells[0] = layerConvert1(cells[0], 5);
+		cells[0] = layerConvert1(cells[0], 5 + dungeon.random.nextInt(2));
 		for(int i = 0; i < xSize; i++) {
 			for(int j = 0; j < zSize; j++) {
 				if(cells[0][i][j] == 1) {
@@ -71,21 +68,9 @@ public class DldCave extends Room {
 		}
 		int tmpFY = floorY;
 		int tmpCY = ceilY;
-		boolean tmpLiquids = false;
 		for(int k = 1; k < layers; k++) {
-			cells[k] = layerConvert2(cells[k], k-1, 5 - dungeon.random.nextInt(2));
-			if(dungeon.liquids.use(dungeon.random)) {
-				tmpLiquids = !tmpLiquids;
-				if(tmpLiquids) {
-					tmpFY -= dungeon.random.nextInt(2);
-					
-				} else {
-					tmpFY += dungeon.random.nextInt(2);
-				}
-			} else {
-				tmpLiquids = false;
-				tmpFY += (dungeon.random.nextInt(3) - 1);				
-			}
+			cells[k] = layerConvert2(cells[k], k-1, 4 + dungeon.random.nextInt(3));
+			tmpFY += (dungeon.random.nextInt(3) - 1);
 			tmpCY += (dungeon.random.nextInt(3) - 1);
 			if((tmpCY - tmpFY) < 3) {
 					tmpCY = tmpFY + 3;
@@ -96,9 +81,7 @@ public class DldCave extends Room {
 						dungeon.map.floorY[i + beginX][j  + beginZ] = (byte)tmpFY;
 						dungeon.map.nFloorY[i + beginX][j  + beginZ] = (byte)tmpFY;
 						dungeon.map.ceilY[i + beginX][j  + beginZ] = (byte)tmpCY;
-						dungeon.map.nFloorY[i + beginX][j  + beginZ] = (byte)tmpCY;
-						// FIXME: The commented out like puts lava over the surrounding floor height!
-						//dungeon.map.hasLiquid[i + beginX][j  + beginZ] = tmpLiquids;
+						dungeon.map.nCeilY[i + beginX][j  + beginZ] = (byte)tmpCY;
 					}
 				}
 			}
