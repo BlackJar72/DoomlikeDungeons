@@ -1,13 +1,29 @@
 package jaredbgreat.dldungeons.rooms.naturals;
 
+/* 
+ * This mod is the creation and copyright (c) 2015 
+ * of Jared Blackburn (JaredBGreat).
+ * 
+ * It is licensed under the creative commons 4.0 attribution license: * 
+ * https://creativecommons.org/licenses/by/4.0/legalcode
+*/	
 
+
+import jaredbgreat.dldungeons.pieces.Doorway;
 import jaredbgreat.dldungeons.planner.Dungeon;
-import jaredbgreat.dldungeons.rooms.AbstractRoom;
+import jaredbgreat.dldungeons.planner.astar.AStar;
 import jaredbgreat.dldungeons.rooms.Room;
+
 
 /**
  * This class represents alternative caves created by cellular automata 
- * with a "2 1/2 D" architecture (similar to those created by Oblige).
+ * with a "2 1/2 D" architecture.
+ * 
+ * The algorithm uses is based on one originally created for Rogue-like games
+ * and a variation is also use by the Oblige level generator for creating 
+ * "natural" areas in Doom levels.
+ * 
+ *  Googling "cellular automata caves" will produce many relevant results.
  * 
  * @author Jared Blackburn (JaredBGreat)
  */
@@ -21,7 +37,10 @@ public class DldCave extends Room {
 	
 	public DldCave(int beginX, int endX, int beginZ, int endZ, int floorY,
 			int ceilY, Dungeon dungeon, Room parent, Room previous) {
-		super(beginX, endX, beginZ, endZ, floorY, ceilY, dungeon, previous, previous);
+		super(beginX, endX, beginZ, endZ, floorY, ceilY, dungeon, previous, previous);		
+//		this.wallBlock1 = dungeon.theme.caveWalls[dungeon.random.nextInt(dungeon.theme.caveWalls.length)];
+//		this.cielingBlock = wallBlock1;
+//		this.floorBlock = wallBlock1;
 	}
 	
 	
@@ -52,9 +71,21 @@ public class DldCave extends Room {
 		}
 		int tmpFY = floorY;
 		int tmpCY = ceilY;
+		boolean tmpLiquids = false;
 		for(int k = 1; k < layers; k++) {
 			cells[k] = layerConvert2(cells[k], k-1, 5 - dungeon.random.nextInt(2));
-			tmpFY += (dungeon.random.nextInt(3) - 1);
+			if(dungeon.liquids.use(dungeon.random)) {
+				tmpLiquids = !tmpLiquids;
+				if(tmpLiquids) {
+					tmpFY -= dungeon.random.nextInt(2);
+					
+				} else {
+					tmpFY += dungeon.random.nextInt(2);
+				}
+			} else {
+				tmpLiquids = false;
+				tmpFY += (dungeon.random.nextInt(3) - 1);				
+			}
 			tmpCY += (dungeon.random.nextInt(3) - 1);
 			if((tmpCY - tmpFY) < 3) {
 					tmpCY = tmpFY + 3;
@@ -66,6 +97,8 @@ public class DldCave extends Room {
 						dungeon.map.nFloorY[i + beginX][j  + beginZ] = (byte)tmpFY;
 						dungeon.map.ceilY[i + beginX][j  + beginZ] = (byte)tmpCY;
 						dungeon.map.nFloorY[i + beginX][j  + beginZ] = (byte)tmpCY;
+						// FIXME: The commented out like puts lava over the surrounding floor height!
+						//dungeon.map.hasLiquid[i + beginX][j  + beginZ] = tmpLiquids;
 					}
 				}
 			}

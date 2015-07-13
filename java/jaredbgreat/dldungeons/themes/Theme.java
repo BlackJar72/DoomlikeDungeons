@@ -50,6 +50,7 @@ public class Theme {
 	public Element naturals;    // An alternative cave done in 2 1/2 D
 	
 	public int[] walls;
+	public int[] caveWalls;
 	public int[] floors;
 	public int[] ceilings;
 	public int[] fencing;
@@ -83,6 +84,7 @@ public class Theme {
 		fences = new Element(15, 25, 55, 15,  0, 0);
 		naturals = new Element(25, 5, 20, 10,  0, 0);
 		walls = makeBlockList(new String[]{});
+		caveWalls = makeBlockList(new String[]{});
 		floors = makeBlockList(new String[]{});
 		ceilings = makeBlockList(new String[]{});
 		fencing = makeBlockList(new String[]{});

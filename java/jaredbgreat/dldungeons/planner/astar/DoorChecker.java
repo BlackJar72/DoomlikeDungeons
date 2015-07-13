@@ -244,4 +244,11 @@ public class DoorChecker {
 		checkConnections(room.topDoors, room, dungeon);
 		retestDoors(dungeon, room);
 	}
+	
+	
+	public static void caveConnector(Dungeon dungeon, Room cave) {
+		for(Doorway door : cave.doors) {
+			new AStar(cave, dungeon, cave.midpoint, dungeon.rooms.get(door.otherside).midpoint).seek();
+		}
+	}
 }

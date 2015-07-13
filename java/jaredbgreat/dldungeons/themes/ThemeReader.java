@@ -278,11 +278,17 @@ public class ThemeReader {
 			} if(token.equals("verticle")) {
 				theme.verticle = elementParser(theme.verticle, tokens);
 				continue;
+			} if(token.equals("naturals")) {
+				theme.naturals = elementParser(theme.naturals, tokens);
+				continue;
 			} if(token.equals("entrances")) {
 				theme.entrances = elementParser(theme.entrances, tokens);
 				continue;
 			} if(token.equals("walls")) {
 				theme.walls = blockParser(theme.walls, tokens, theme.version);
+				continue;
+			} if(token.equals("caveblock")) {
+				theme.caveWalls = blockParser(theme.caveWalls, tokens, theme.version);
 				continue;
 			} if(token.equals("floors")) {
 				theme.floors = blockParser(theme.floors, tokens, theme.version);
@@ -347,6 +353,9 @@ public class ThemeReader {
 		}
 		theme.fixMobs();
 		theme.biomeRegister();
+		if(theme.caveWalls.length < 1) {
+			theme.caveWalls = theme.walls;
+		}
 		//DoomlikeDungeons.profiler.endTask("Parsing theme " + name);
 	}
 

@@ -22,6 +22,7 @@ import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.planner.PlaceSeed;
 import jaredbgreat.dldungeons.planner.Route;
 import jaredbgreat.dldungeons.planner.Symmetry;
+import jaredbgreat.dldungeons.planner.astar.AStar;
 import jaredbgreat.dldungeons.planner.astar.DoorQueue;
 import jaredbgreat.dldungeons.planner.features.Cutout;
 import jaredbgreat.dldungeons.planner.features.Depression;
@@ -41,7 +42,7 @@ public class Room extends AbstractRoom {
 	
 	public int id;	// Should be equal to the index in Dungeon.rooms ArrayList.
 	public static final Room roomNull = new Room(); // Areas outside the dungeon (index 0)
-	public int beginX, endX, beginZ, endZ, floorY, nFloorY, ceilY, nCeilY, y, level;
+	public int beginX, midX, endX, beginZ, midZ, endZ, floorY, nFloorY, ceilY, nCeilY, y, level;
 	public float realX, realZ;
 	public boolean hasWholePattern;
 	public Symmetry sym;
@@ -51,7 +52,6 @@ public class Room extends AbstractRoom {
 	public ArrayList<PlaceSeed> childSeeds;
 	public boolean isNode;
 	public boolean isSubroom;
-	public boolean mustHaveWalls;
 	public boolean hasEntrance;
 	public boolean hasSpawners;
 	public ArrayList<Spawner> spawners;
@@ -59,6 +59,7 @@ public class Room extends AbstractRoom {
 	public ArrayList<Doorway> doors;
 	public ArrayList<DoorQueue> connections;
 	public ArrayList<Doorway> topDoors;
+	public Doorway midpoint; // not really a door but used as one at times
 	
 	
 	private Room() {id = 0;}	
@@ -118,7 +119,6 @@ public class Room extends AbstractRoom {
 		
 		if(isSubroom && parent.sky) {
 			sky = (sky && !dungeon.outside.use(dungeon.random));
-			mustHaveWalls = !(sky && parent.sky);
 		}
 		for(int i = beginX + 1; i < endX; i++)
 			for(int j = beginZ + 1; j < endZ; j++) {
@@ -140,6 +140,9 @@ public class Room extends AbstractRoom {
 			assignEdge(dungeon, endX, i);
 		}
 		doorways(dungeon);
+		midX = beginX + ((endX - beginX) / 2);
+		midZ = beginZ + ((endZ - beginZ) / 2);
+		midpoint = new Doorway(beginX, beginZ, dungeon.random.nextBoolean());
 	}
 	
 	
@@ -172,7 +175,7 @@ public class Room extends AbstractRoom {
 	private void assignEdge(Dungeon dungeon, int x, int z) {
 		if((dungeon.map.room[x][z] == 0) 
 				|| (dungeon.rooms.get(dungeon.map.room[x][z]).sky && !sky)
-				|| (mustHaveWalls)) {
+				|| (isSubroom)) {
 			dungeon.map.room[x][z] = id;
 			if(!sky) dungeon.map.ceiling[x][z] = cielingBlock;
 			dungeon.map.floor[x][z] = floorBlock;

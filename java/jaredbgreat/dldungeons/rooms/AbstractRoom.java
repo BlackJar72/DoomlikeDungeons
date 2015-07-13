@@ -100,9 +100,9 @@ public abstract class AbstractRoom /*extends Shape*/ {
 	public static Room makeRoom(int beginX, int endX, int beginZ, int endZ, int floorY, int ceilY, 
 			Dungeon dungeon, Room parent, Room previous) {		
 		RoomType type = RoomType.ROOM;
-//		if(dungeon.naturals.use(dungeon.random)) {
-//			type = RoomType.CAVE;
-//		}
+		if(dungeon.naturals.use(dungeon.random)) {
+			type = RoomType.CAVE;
+		}
 		switch(type) {
 		case CAVE: {
 			DldCave base = new DldCave(beginX, endX, beginZ, endZ, floorY, ceilY, 
@@ -120,8 +120,7 @@ public abstract class AbstractRoom /*extends Shape*/ {
 	
 	
 	public static Room makeRoom(int beginX, int endX, int beginZ, int endZ, int floorY, int ceilY, 
-			Dungeon dungeon, Room parent, Room previous, RoomType type) {		
-		type = RoomType.CAVE;
+			Dungeon dungeon, Room parent, Room previous, RoomType type) {	
 		switch(type) {
 		case CAVE: {
 			DldCave base = new DldCave(beginX, endX, beginZ, endZ, floorY, ceilY, 
