@@ -16,10 +16,10 @@ import net.minecraft.world.World;
  * https://creativecommons.org/licenses/by/4.0/legalcode
 */
 
-public class DLDungeonsAPI { 
-
-	private static final boolean dldloaded = net.minecraftforge.fml.common.Loader.isModLoaded("DLDungeonsJBG");
-	
+public class DLDungeonsAPI {
+	// This has been updated to deal with the change to all lower case for the modid.
+	private static final boolean dldloaded = cpw.mods.fml.common.Loader.isModLoaded("DLDungeonsJBG") 
+										  || cpw.mods.fml.common.Loader.isModLoaded("dldungeonsjbg");	
 	
 	
 	/**
@@ -151,6 +151,7 @@ public class DLDungeonsAPI {
 	 * used with caution, since players may have set it to act as a whitelist
 	 * for reason dealing with mods other than the one calling the method.
 	 */
+	@Deprecated
 	public static void blacklistThemes() {
 		if(!isLoaded()) return;
 		ReadAPI.blacklistDimensions();

@@ -26,6 +26,7 @@ public class MapMatrix {
 	private static Block lapis = Block.getBlockFromName("lapis_block");
 	private static Block slab  = Block.getBlockFromName("double_stone_slab");
 	private static Block glow  = Block.getBlockFromName("glowstone");
+	private static Block glass = Block.getBlockFromName("glass");
 	
 	public World world;
 	public int chunkX, chunkZ, origenX, origenZ;
@@ -103,6 +104,8 @@ public class MapMatrix {
 //						 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, lapis);
 //					 } else if(isDoor[i][j]) {
 //						 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, slab);
+//					 } else if(isWall[i][j]) {
+//						 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, glass);
 //					 } else {
 //						 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, glow);
 //					 }
@@ -159,6 +162,7 @@ public class MapMatrix {
 					 if(isDoor[i][j]) {
 						 DBlock.deleteBlock(world, shiftX + i, floorY[i][j],     shiftZ + j, flooded);
 						 DBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 1, shiftZ + j, flooded);
+						 DBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 2, shiftZ + j, flooded);
 					 }
 					 //DoomlikeDungeons.profiler.endTask("Building Doorway");
 					 

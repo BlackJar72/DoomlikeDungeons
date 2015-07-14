@@ -38,7 +38,7 @@ public class Builder {
 		buildDungeon(dungeon);
 		System.out.println("[DLDUNGONS] Dungeon should be built now!");
 		//if(true) debuggingPole(world, chunkX, chunkZ, dungeon);
-		dungeon.finalize();
+		dungeon.preFinalize();
 		dungeon = null;
 		DoomlikeDungeons.profiler.endTask("Create Dungeons");
 	}
@@ -57,7 +57,7 @@ public class Builder {
 			buildDungeon(dungeon);
 			System.out.println("[DLDUNGONS] Dungeon should be built now!");
 		}
-		dungeon.finalize();
+		dungeon.preFinalize();
 		dungeon = null;
 		DoomlikeDungeons.profiler.endTask("Create Dungeons");
 	}

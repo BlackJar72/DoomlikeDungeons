@@ -31,6 +31,6 @@ public class Tile {
 
 	@Override
 	public int hashCode() {
-		return x + (z << 8);
+		return x + (z << 8) + (z << 16) + (x << 24);
 	}
 }

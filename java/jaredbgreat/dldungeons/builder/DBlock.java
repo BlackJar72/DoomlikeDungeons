@@ -13,6 +13,7 @@ import jaredbgreat.dldungeons.debug.Logging;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
+import java.util.logging.Logger;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -84,6 +85,12 @@ public class DBlock {
 			Logging.LogError(error);
 			throw new NoSuchElementException(error);
 		}
+		if(block == null) {
+			String error = "[DLDUNGEONS] ERROR! Block read as \"" + id 
+					+ "\" was was not in registry (returned null).";
+			Logging.LogError(error);
+			throw new NoSuchElementException(error);
+		}
 	}
 	
 	
@@ -112,7 +119,8 @@ public class DBlock {
 	
 	
 	public static void place(World world, int x, int y, int z, int block) {
-		registry.get(block).place(world, x, y, z);
+		if(!isProtectedBlock(world, x, y, z)) 
+				registry.get(block).place(world, x, y, z);
 	}
 	
 	
@@ -147,7 +155,6 @@ public class DBlock {
 	public static void placeBlock(World world, int x, int y, int z, Block block, int a, int b) {
 		// This wrapper is a protection against possible changes in block representation,
 		// e.g., abandoning the ID system, allowing any needed changes to be made here
-		// instead of elsewhere.
 		if(isProtectedBlock(world, x, y, z)) return; 
 		world.setBlockState(new BlockPos(x, y, z), block.getStateFromMeta(a));
 	}
@@ -206,6 +213,12 @@ public class DBlock {
 		int block = Block.getIdFromBlock(world.getBlockState(new BlockPos(x, y, z)).getBlock());
 		return (block == chestid || block == spawnerid  
 				|| block == portal1id || block == portal2id);
+
+//		Block block = world.getBlock(x, y, z);
+//		return (block == chest || block == spawner || 
+//				block == portal1 || block == portal2 || 
+//				block instanceof net.minecraft.block.BlockEndPortalFrame ||
+//				block instanceof net.minecraft.block.BlockMobSpawner);
 	}
 	
 	

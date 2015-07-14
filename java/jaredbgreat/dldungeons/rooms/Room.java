@@ -22,6 +22,7 @@ import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.planner.PlaceSeed;
 import jaredbgreat.dldungeons.planner.Route;
 import jaredbgreat.dldungeons.planner.Symmetry;
+import jaredbgreat.dldungeons.planner.astar.AStar;
 import jaredbgreat.dldungeons.planner.astar.DoorQueue;
 import jaredbgreat.dldungeons.planner.features.Cutout;
 import jaredbgreat.dldungeons.planner.features.Depression;
@@ -41,7 +42,7 @@ public class Room extends AbstractRoom {
 	
 	public int id;	// Should be equal to the index in Dungeon.rooms ArrayList.
 	public static final Room roomNull = new Room(); // Areas outside the dungeon (index 0)
-	public int beginX, endX, beginZ, endZ, floorY, nFloorY, ceilY, nCeilY, y, level;
+	public int beginX, midX, endX, beginZ, midZ, endZ, floorY, nFloorY, ceilY, nCeilY, y, level;
 	public float realX, realZ;
 	public boolean hasWholePattern;
 	public Symmetry sym;
@@ -50,6 +51,7 @@ public class Room extends AbstractRoom {
 	public Shapes shape = Shapes.X;
 	public ArrayList<PlaceSeed> childSeeds;
 	public boolean isNode;
+	public boolean isSubroom;
 	public boolean hasEntrance;
 	public boolean hasSpawners;
 	public ArrayList<Spawner> spawners;
@@ -57,11 +59,13 @@ public class Room extends AbstractRoom {
 	public ArrayList<Doorway> doors;
 	public ArrayList<DoorQueue> connections;
 	public ArrayList<Doorway> topDoors;
+	public Doorway midpoint; // not really a door but used as one at times
 	
-	private Room() {id = 0;}
 	
-	@Override
-	public void finalize() throws Throwable {
+	private Room() {id = 0;}	
+	
+	
+	public void preFinalize() {
 		childSeeds.clear();
 		childSeeds = null;
 		spawners.clear();
@@ -69,7 +73,6 @@ public class Room extends AbstractRoom {
 		spawners = null;
 		chests = null;
 		doors = null;
-		super.finalize();
 	}
 	
 	
@@ -86,6 +89,7 @@ public class Room extends AbstractRoom {
 		connections = new ArrayList<DoorQueue>();
 		dungeon.planter.add(this);
 		isNode = (previous == null);
+		isSubroom = (parent != null);
 		hasEntrance = (isNode && dungeon.entrances.use(dungeon.random));
 		if(hasEntrance) dungeon.numEntrances++;
 		if(isNode) {
@@ -110,12 +114,12 @@ public class Room extends AbstractRoom {
 		this.ceilY = ceilY;
 		level = 0;
 		
-		if(parent != null  && parent.sky) {
-			sky = (sky && !dungeon.outside.use(dungeon.random));
-		}
-		
 		realX = (((float)(endX - beginX)) / 2.0f) + (float)beginX + 1.0f;
 		realZ = (((float)(endZ - beginZ)) / 2.0f) + (float)beginZ + 1.0f;
+		
+		if(isSubroom && parent.sky) {
+			sky = (sky && !dungeon.outside.use(dungeon.random));
+		}
 		for(int i = beginX + 1; i < endX; i++)
 			for(int j = beginZ + 1; j < endZ; j++) {
 				if(dungeon.map.room[i][j] == 0) dungeon.map.room[i][j] = id;
@@ -135,6 +139,14 @@ public class Room extends AbstractRoom {
 			assignEdge(dungeon, beginX, i);
 			assignEdge(dungeon, endX, i);
 		}
+		doorways(dungeon);
+		midX = beginX + ((endX - beginX) / 2);
+		midZ = beginZ + ((endZ - beginZ) / 2);
+		midpoint = new Doorway(beginX, beginZ, dungeon.random.nextBoolean());
+	}
+	
+	
+	public Room plan(Dungeon dungeon, Room parent) {
 		if(!dungeon.complexity.use(dungeon.random) && !isNode) {
 			hasWholePattern = true;
 			if(dungeon.liquids.use(dungeon.random)) {				
@@ -143,12 +155,7 @@ public class Room extends AbstractRoom {
 					|| dungeon.symmetry.use(dungeon.random))) {
 				cutin(dungeon);
 			}			
-		} else addFeatures(dungeon);
-		doorways(dungeon);
-		if(parent == null) {
-			addSpawners(dungeon);
-			addChests(dungeon);
-		} 
+		} else addFeatures(dungeon); 
 		if(hasEntrance) {
 			for(int i = (int)realX -2; i < ((int)realX + 2); i++)
 					for(int j = (int)realZ - 2; j < ((int)realZ + 2); j++) {
@@ -157,12 +164,18 @@ public class Room extends AbstractRoom {
 						dungeon.map.isWall[i][j] = false;
 					}
 		}
+		if(parent == null) {
+			addSpawners(dungeon);
+			addChests(dungeon);
+		}
+		return this;
 	}
 	
 	
 	private void assignEdge(Dungeon dungeon, int x, int z) {
 		if((dungeon.map.room[x][z] == 0) 
-				|| (dungeon.rooms.get(dungeon.map.room[x][z]).sky && !sky)) {
+				|| (dungeon.rooms.get(dungeon.map.room[x][z]).sky && !sky)
+				|| (isSubroom)) {
 			dungeon.map.room[x][z] = id;
 			if(!sky) dungeon.map.ceiling[x][z] = cielingBlock;
 			dungeon.map.floor[x][z] = floorBlock;

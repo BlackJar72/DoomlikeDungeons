@@ -20,6 +20,7 @@ import jaredbgreat.dldungeons.pieces.entrances.SpiralStair;
 import jaredbgreat.dldungeons.pieces.entrances.TopRoom;
 import jaredbgreat.dldungeons.planner.astar.DoorChecker;
 import jaredbgreat.dldungeons.planner.mapping.MapMatrix;
+import jaredbgreat.dldungeons.rooms.Cave;
 import jaredbgreat.dldungeons.rooms.Room;
 import jaredbgreat.dldungeons.rooms.RoomList;
 import jaredbgreat.dldungeons.themes.BiomeLists;
@@ -72,6 +73,7 @@ public class Dungeon {
 	public Degrees verticle;	// How many height change and how much height change
 	public Degrees entrances;	// Ways in and outS
 	public Degrees bigRooms;
+	public Degrees naturals;
 	
 	// Default blocks
 	public int wallBlock1;
@@ -82,13 +84,16 @@ public class Dungeon {
 	public int fenceBlock;
 	public int cornerBlock;
 	public int liquidBlock;
+	public int caveBlock;
 	
 	
-	@Override
-	public void finalize() throws Throwable {
+	public void preFinalize() {
 		if(theme != null) {
 			for(int i = 0; i < nodes.length; i++) nodes[i] = null;
-			for(Room room: rooms) room.finalize();
+			for(Room room: rooms) {
+				room.preFinalize();
+				room = null;
+			}
 			rooms.clear();
 		}
 		rooms = null;
@@ -111,7 +116,7 @@ public class Dungeon {
 		verticle = null;
 		entrances = null;
 		bigRooms = null;
-		super.finalize();
+		naturals = null;
 	}
 
 	
@@ -127,12 +132,13 @@ public class Dungeon {
 		applyTheme();
 		entrancePref = random.nextInt(3);		
 		
-		wallBlock1 = theme.walls[random.nextInt(theme.walls.length)];
-		floorBlock = theme.floors[random.nextInt(theme.floors.length)];
+		wallBlock1   = theme.walls[random.nextInt(theme.walls.length)];
+		floorBlock   = theme.floors[random.nextInt(theme.floors.length)];
 		cielingBlock = theme.ceilings[random.nextInt(theme.ceilings.length)];
-		fenceBlock = theme.fencing[random.nextInt(theme.fencing.length)];
-		cornerBlock = theme.pillarBlock[random.nextInt(theme.pillarBlock.length)];
-		liquidBlock = theme.liquid[random.nextInt(theme.liquid.length)];
+		fenceBlock   = theme.fencing[random.nextInt(theme.fencing.length)];
+		cornerBlock  = theme.pillarBlock[random.nextInt(theme.pillarBlock.length)];
+		liquidBlock  = theme.liquid[random.nextInt(theme.liquid.length)];
+		caveBlock    = theme.caveWalls[random.nextInt(theme.caveWalls.length)];
 		
 		rooms = new RoomList(size.maxRooms + 1);
 		planter = new ArrayList<Room>();
@@ -165,6 +171,7 @@ public class Dungeon {
 		verticle	= theme.verticle.select(random);
 		entrances	= theme.entrances.select(random);
 		fences		= theme.fences.select(random);
+		naturals    = theme.naturals.select(random);
 		baseHeight  = random.nextInt(theme.maxY - theme.minY) + theme.minY;
 	}
 	
@@ -258,6 +265,7 @@ public class Dungeon {
 		}
 		for(Room room : rooms) {
 			DoorChecker.processDoors3(this, room);
+			if(room instanceof Cave) DoorChecker.caveConnector(this, room);
 			addSpawners(room);	
 		}
 		DoorChecker.checkConnectivity(this);

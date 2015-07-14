@@ -47,8 +47,10 @@ public class Theme {
 	public Element complexity;	// Basically how many shape primitives to add
 	public Element verticle;	// How many height change and how much height change
 	public Element entrances;	// Ways in and out / number of entrance/exit nodes (others are destination / treasure nodes)
+	public Element naturals;    // An alternative cave done in 2 1/2 D
 	
 	public int[] walls;
+	public int[] caveWalls;
 	public int[] floors;
 	public int[] ceilings;
 	public int[] fencing;
@@ -80,7 +82,9 @@ public class Theme {
 		verticle = new Element(5,  10, 25, 20, 10,  0);
 		entrances = new Element(2,   5, 25, 50, 15,  3);
 		fences = new Element(15, 25, 55, 15,  0, 0);
+		naturals = new Element(25, 5, 20, 10,  0, 0);
 		walls = makeBlockList(new String[]{});
+		caveWalls = makeBlockList(new String[]{});
 		floors = makeBlockList(new String[]{});
 		ceilings = makeBlockList(new String[]{});
 		fencing = makeBlockList(new String[]{});

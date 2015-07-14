@@ -67,4 +67,14 @@ public class DLDProfile implements IProfiler {
 			e.printStackTrace();
 		}				
 	}
+	
+	public void infoOut(String info) {
+		try {
+			save.write(info);
+			save.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
