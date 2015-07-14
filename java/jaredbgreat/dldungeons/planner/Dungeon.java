@@ -84,6 +84,7 @@ public class Dungeon {
 	public int fenceBlock;
 	public int cornerBlock;
 	public int liquidBlock;
+	public int caveBlock;
 	
 	
 	public void preFinalize() {
@@ -131,12 +132,13 @@ public class Dungeon {
 		applyTheme();
 		entrancePref = random.nextInt(3);		
 		
-		wallBlock1 = theme.walls[random.nextInt(theme.walls.length)];
-		floorBlock = theme.floors[random.nextInt(theme.floors.length)];
+		wallBlock1   = theme.walls[random.nextInt(theme.walls.length)];
+		floorBlock   = theme.floors[random.nextInt(theme.floors.length)];
 		cielingBlock = theme.ceilings[random.nextInt(theme.ceilings.length)];
-		fenceBlock = theme.fencing[random.nextInt(theme.fencing.length)];
-		cornerBlock = theme.pillarBlock[random.nextInt(theme.pillarBlock.length)];
-		liquidBlock = theme.liquid[random.nextInt(theme.liquid.length)];
+		fenceBlock   = theme.fencing[random.nextInt(theme.fencing.length)];
+		cornerBlock  = theme.pillarBlock[random.nextInt(theme.pillarBlock.length)];
+		liquidBlock  = theme.liquid[random.nextInt(theme.liquid.length)];
+		caveBlock    = theme.caveWalls[random.nextInt(theme.caveWalls.length)];
 		
 		rooms = new RoomList(size.maxRooms + 1);
 		planter = new ArrayList<Room>();

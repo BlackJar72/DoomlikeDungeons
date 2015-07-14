@@ -23,6 +23,7 @@ public abstract class AbstractRoom /*extends Shape*/ {
 	public int fenceBlock;
 	public int pillarBlock;
 	public int liquidBlock;
+	public int caveBlock;
 	
 	public boolean degenerate;			// Leave air blocks in walls / ceiling/
 	public boolean degenerateFloors;	// Even leave air blocks in floor?!?
@@ -48,6 +49,7 @@ public abstract class AbstractRoom /*extends Shape*/ {
 			fenceBlock   = previous.fenceBlock;
 			pillarBlock  = previous.pillarBlock;
 			liquidBlock  = previous.liquidBlock;
+			caveBlock    = previous.caveBlock;
 		} else if(dungeon.variability.use(dungeon.random)) {
 			if(dungeon.variability.use(dungeon.random)) {
 				wallBlock1 = dungeon.theme.walls[dungeon.random.nextInt(dungeon.theme.walls.length)];
@@ -56,6 +58,7 @@ public abstract class AbstractRoom /*extends Shape*/ {
 				fenceBlock = dungeon.theme.fencing[dungeon.random.nextInt(dungeon.theme.fencing.length)];
 				pillarBlock = dungeon.theme.pillarBlock[dungeon.random.nextInt(dungeon.theme.pillarBlock.length)];
 				liquidBlock = dungeon.theme.liquid[dungeon.random.nextInt(dungeon.theme.liquid.length)];
+				caveBlock   = dungeon.theme.caveWalls[dungeon.random.nextInt(dungeon.theme.caveWalls.length)];
 			} else {
 				if(!dungeon.variability.use(dungeon.random)) 
 					wallBlock1 = dungeon.wallBlock1;
@@ -75,6 +78,9 @@ public abstract class AbstractRoom /*extends Shape*/ {
 				if(!dungeon.variability.use(dungeon.random)) 
 					liquidBlock = dungeon.liquidBlock;
 				else liquidBlock = dungeon.theme.liquid[dungeon.random.nextInt(dungeon.theme.liquid.length)];
+				if(!dungeon.variability.use(dungeon.random)) 
+					caveBlock = dungeon.caveBlock;
+				else caveBlock = dungeon.theme.caveWalls[dungeon.random.nextInt(dungeon.theme.caveWalls.length)];
 			}
 		} else {
 			wallBlock1   = dungeon.wallBlock1;
@@ -83,6 +89,7 @@ public abstract class AbstractRoom /*extends Shape*/ {
 			fenceBlock   = dungeon.fenceBlock;
 			pillarBlock  = dungeon.cornerBlock;
 			liquidBlock  = dungeon.liquidBlock;
+			caveBlock    = dungeon.caveBlock;
 		}
 		if(dungeon.outside.value > 0)
 			sky = dungeon.outside.use(dungeon.random);

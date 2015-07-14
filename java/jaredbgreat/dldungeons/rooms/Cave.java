@@ -97,6 +97,15 @@ public class Cave extends Room {
 			addSpawners(dungeon);
 			addChests(dungeon);
 		}
+		if(dungeon.naturals.use(dungeon.random) || !dungeon.variability.use(dungeon.random)) {
+			for(int i = beginX; i < endX; i++) {
+				for(int j = beginZ; j < endZ; j++) {				
+					dungeon.map.wall[i][j] = caveBlock;				
+					dungeon.map.floor[i][j] = caveBlock;				
+					dungeon.map.ceiling[i][j] = caveBlock;
+				}
+			}
+		}
 		return this;
 	}
 	
