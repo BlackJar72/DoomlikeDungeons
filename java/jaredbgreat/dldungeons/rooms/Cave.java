@@ -37,6 +37,7 @@ public class Cave extends Room {
 	public Cave(int beginX, int endX, int beginZ, int endZ, int floorY,
 			int ceilY, Dungeon dungeon, Room parent, Room previous) {
 		super(beginX, endX, beginZ, endZ, floorY, ceilY, dungeon, previous, previous);
+		this.degenerate = true;
 	}
 	
 	
