@@ -27,9 +27,11 @@ import jaredbgreat.dldungeons.themes.BiomeLists;
 import jaredbgreat.dldungeons.themes.Degrees;
 import jaredbgreat.dldungeons.themes.Sizes;
 import jaredbgreat.dldungeons.themes.Theme;
+import jaredbgreat.dldungeons.themes.ThemeFlags;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Random;
 
 import net.minecraft.world.World;

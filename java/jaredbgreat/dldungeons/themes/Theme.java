@@ -11,8 +11,6 @@ package jaredbgreat.dldungeons.themes;
 
 
 
-import jaredbgreat.dldungeons.builder.DBlock;
-
 import java.util.ArrayList;
 import java.util.EnumSet;
 
@@ -21,12 +19,12 @@ import net.minecraftforge.common.BiomeDictionary.Type;
 public class Theme {
 	
 	public String name;
-	public float version = 0f;
+	public float version = 1.0f;
 	
 	public EnumSet<Type> biomes = EnumSet.noneOf(Type.class);
 	public EnumSet<Type> notIn  = EnumSet.noneOf(Type.class);
 	
-	public EnumSet<ThemeType> type  = EnumSet.noneOf(ThemeType.class);
+	public EnumSet<ThemeType>  type  = EnumSet.noneOf(ThemeType.class);
 	public EnumSet<ThemeFlags> flags = EnumSet.noneOf(ThemeFlags.class);
 	
 	public int minY;
@@ -89,8 +87,7 @@ public class Theme {
 		ceilings = makeBlockList(new String[]{});
 		fencing = makeBlockList(new String[]{});
 		liquid = makeBlockList(new String[]{});
-		pillarBlock = makeBlockList(new String[]{});
-		
+		pillarBlock = makeBlockList(new String[]{});		
 		fixMobs();
 	}
 	
@@ -159,19 +156,6 @@ public class Theme {
 	public String toString() {
 		if(name == null) return "null";
 		return name;
-	}
-	
-	
-	private static int makeDBlock(String block) {
-		return DBlock.add(block);
-	}
-	
-	
-	private static int[] makeBlockList(String[] in) {
-		int[] out = new int[in.length];
-		for(int i = 0; i < in.length; i++) 
-			out[i] = makeDBlock(in[i]);
-		return out;
 	}
 	
 }

@@ -1,13 +1,12 @@
 package jaredbgreat.dldungeons.pieces.chests;
 
-
 /* 
  * This mod is the creation and copyright (c) 2015 
  * of Jared Blackburn (JaredBGreat).
  * 
  * It is licensed under the creative commons 4.0 attribution license: * 
  * https://creativecommons.org/licenses/by/4.0/legalcode
-*/	
+ */	
 
 
 import jaredbgreat.dldungeons.ConfigHandler;
@@ -39,10 +38,10 @@ public class BasicChest {
 		level += random.nextInt(2);
 		if(level >= LootCategory.LEVELS) level = LootCategory.LEVELS - 1;
 		DBlock.placeChest(world, x, y, z);
-		if(world.getBlock(x, y, z) != DBlock.chest) return;
-		TileEntityChest contents = (TileEntityChest)world.getTileEntity(x, y, z);
+		if(world.getBlockId(x, y, z) != Block.chest.blockID) return;
+		TileEntityChest chest = (TileEntityChest)world.getBlockTileEntity(x, y, z);
 		if(ConfigHandler.vanillaLoot && (!ConfigHandler.stingyLoot || random.nextBoolean())) 
-			vanillaChest(contents, random);
+					vanillaChest(chest, random);
 		int which = random.nextInt(2);
 		switch (which) {
 		case 0:

@@ -13,6 +13,8 @@ package jaredbgreat.dldungeons.pieces.chests;
 import java.util.ArrayList;
 import java.util.Random;
 
+import cpw.mods.fml.common.registry.GameRegistry;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import static jaredbgreat.dldungeons.pieces.chests.LootItem.*;
@@ -20,6 +22,7 @@ import static jaredbgreat.dldungeons.pieces.chests.LootItem.*;
 
 public class LootList extends ArrayList<LootItem>{
 	ArrayList<LootItem> dummy = new ArrayList<LootItem>();
+	
 	
 	public void add(Item item, int min, int max, int prob) {
 		add(new LootItem(item, min, max));
@@ -263,10 +266,10 @@ public class LootList extends ArrayList<LootItem>{
 		special.add(discWait);
 		special.add(netherstar);
 		special.add(goldApples);
-		
-		addDiscs();
-		TreasureChest.initSlots();
 	}
+	
+	
+	//public addSpecialLoots
 	
 	
 	public static void addDiscs() {		
@@ -280,7 +283,37 @@ public class LootList extends ArrayList<LootItem>{
 		discs.add(discStrad);
 		discs.add(discWard);
 		discs.add(disc11);
-		discs.add(discWait);		
+		discs.add(discWait);
+	}
+	
+	
+	public static void clearVanilla() {
+		 gear1 = new LootList();
+		 gear2 = new LootList();
+		 gear3 = new LootList();
+		 gear4 = new LootList();
+		 gear5 = new LootList();
+		 gear6 = new LootList();
+		 gear7 = new LootList();
+		
+		 heal1 = new LootList();
+		 heal2 = new LootList();
+		 heal3 = new LootList();
+		 heal4 = new LootList();
+		 heal5 = new LootList();
+		 heal6 = new LootList();
+		 heal7 = new LootList();
+		
+		 loot1 = new LootList();
+		 loot2 = new LootList();
+		 loot3 = new LootList();
+		 loot4 = new LootList();
+		 loot5 = new LootList();
+		 loot6 = new LootList();
+		 loot7 = new LootList();
+		
+		 discs = new LootList();
+		 special = new LootList();
 	}
 	
 	
@@ -373,5 +406,13 @@ public class LootList extends ArrayList<LootItem>{
 	}
 	
 	
+	public void addLootItem(String type, int level, String mod, String name, int min, int max) {
+		addItem(new LootItem(GameRegistry.findItem(mod, name), min, max), type, level);
+	}
+	
+	
+	public void addLootBlock(String type, int level, String mod, String name, int min, int max) {
+		addItem(new LootItem(GameRegistry.findBlock(mod, name), min, max), type, level);
+	}
 	
 }

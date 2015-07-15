@@ -11,15 +11,9 @@ package jaredbgreat.dldungeons.pieces.entrances;
 
 
 import jaredbgreat.dldungeons.planner.Dungeon;
-import net.minecraft.block.Block;
 import net.minecraft.world.World;
 
 public abstract class AbstractEntrance {
-	
-	protected static final Block ladder 
-			= (Block)Block.getBlockFromName("ladder");
-	protected static final Block stairSlab 
-			= (Block)Block.getBlockFromName("stone_slab");	
 	
 	int x, y, z;
 	

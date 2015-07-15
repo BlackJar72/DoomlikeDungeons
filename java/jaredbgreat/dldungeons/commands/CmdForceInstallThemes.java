@@ -18,7 +18,7 @@ import java.util.List;
 
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.server.command.ForgeCommand;
 
@@ -63,11 +63,10 @@ public class CmdForceInstallThemes extends ForgeCommand {
 		exporter.forceThemes();
 		exporter = new Externalizer(ConfigHandler.getConfigDir());
 		exporter.forceChestCfg();
-		icommandsender.addChatMessage(new ChatComponentText("[DLDUNGEONS] " 
+		icommandsender.sendChatToPlayer(ChatMessageComponent.createFromText("[DLDUNGEONS] " 
 				+ icommandsender.getCommandSenderName() 
-				+ " has forced reinstalled default themes (existing themes will be overwritten!)"));
-//		..setColor(EnumChatFormatting.DARK_PURPLE).setItalic(true));
-		BiomeLists.reset();
+				+ " has forced reinstalled default themes (existing themes will be overwritten!)")
+				.setColor(EnumChatFormatting.DARK_PURPLE).setItalic(true));
 	}
 	
 	

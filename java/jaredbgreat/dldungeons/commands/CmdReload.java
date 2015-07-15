@@ -14,12 +14,14 @@ import jaredbgreat.dldungeons.ReadAPI;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatMessageComponent;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.server.command.ForgeCommand;
 
-public class CmdReload extends ForgeCommand {
+public class CmdReload extends ForgeCommand  {
 
     public CmdReload(MinecraftServer server) {
 		super(server);
@@ -57,9 +59,13 @@ public class CmdReload extends ForgeCommand {
 	public void processCommand(ICommandSender icommandsender, String[] astring) {		
 			System.out.println("[DLDUNGEONS] " + icommandsender.getCommandSenderName()
 					+ " Used /dldreload command; Reloading config file now.");
+			
+			if(ConfigHandler.announceCommands) icommandsender.sendChatToPlayer(ChatMessageComponent
+					.createFromText("[DLDUNGEONS] " + icommandsender.getCommandSenderName()
+							+ " Used /dldreload command; Reloading config file now.")
+							.setColor(EnumChatFormatting.DARK_PURPLE).setItalic(true));
+				
 			ReadAPI.reloadConfig();
-			if(ConfigHandler.announceCommands) icommandsender.addChatMessage(new ChatComponentText("[DLDUNGEONS] " + icommandsender.getCommandSenderName()
-					+ " Used /dldreload command; Reloading config file now."));
 	}
 	
 	

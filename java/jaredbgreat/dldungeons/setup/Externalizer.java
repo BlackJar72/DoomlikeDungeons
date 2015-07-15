@@ -40,7 +40,6 @@ public class Externalizer {
 				           "desert.cfg",
 				           "frozen.cfg",
 				           "jungle.cfg",
-				           "mesa.cfg",
 				           "nether.cfg",
 				           "oceanic.cfg",
 				           "template.cfg",

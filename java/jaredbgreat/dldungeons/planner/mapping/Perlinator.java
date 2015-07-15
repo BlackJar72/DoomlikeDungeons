@@ -1,5 +1,8 @@
 package jaredbgreat.dldungeons.planner.mapping;
 
+<<<<<<< HEAD
+import jaredbgreat.dldungeons.DoomlikeDungeons;
+=======
 /* 
  * This mod is the creation and copyright (c) 2015 
  * of Jared Blackburn (JaredBGreat).
@@ -14,6 +17,7 @@ package jaredbgreat.dldungeons.planner.mapping;
  * It is a bit expensive compared to other options and may or many not 
  * ever be used.
  */
+>>>>>>> origin/master
 
 import java.util.Random;
 
@@ -28,6 +32,7 @@ public class Perlinator {
 	
 	
 	public Perlinator(int width, Random random) {
+		DoomlikeDungeons.profiler.startTask("Creating Perlinator");
 		w1 = (width / 16) + 1;
 		w2 = (width /  8) + 1;
 		w3 = (width /  4) + 1;
@@ -39,6 +44,7 @@ public class Perlinator {
 		three = makeTable(w3, random);
 		four  = makeTable(w4, random);
 		five  = makeTable(w5, random);
+		DoomlikeDungeons.profiler.endTask("Creating Perlinator");
 	}
 	
 	
@@ -53,7 +59,9 @@ public class Perlinator {
 	
 	
 	public byte[][] getIntTable(int scale) {
+		DoomlikeDungeons.profiler.startTask("Creating Perlin Noise Table");
 		byte[][] out = new byte[w5][w5];
+		float fscale = (float)Math.sqrt(((float)scale));
 		for(int i = 0; i < w5; i++)
 			for(int j = 0; j < w5; j++) {
 				float tmp = 0;
@@ -74,9 +82,9 @@ public class Perlinator {
 					+  (four[(i/2) + 1][j/2]        / (2 +  (i % 2) - (j % 2)))
 					+  (four[i/2][(j/2) + 1]        / (2 -  (i % 2) + (j % 2))) / 8);
 				tmp += five[i][j] / 16;
-				tmp /= 1.5;
-				out[i][j] = (byte)((float)tmp * scale);
+				out[i][j] = (byte)((float)tmp * fscale);
 			}
+		DoomlikeDungeons.profiler.endTask("Creating Perlin Noise Table");
 		return out;
 	}
 	

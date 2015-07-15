@@ -24,7 +24,7 @@ import net.minecraftforge.common.ChestGenHooks;
 
 public class TreasureChest extends BasicChest {
 	
-	static ArrayList<Integer> slots = new ArrayList();	
+	static ArrayList<Integer> slots = new ArrayList(27);	
 	int slot;
 	
 	public TreasureChest(int x, int y, int z, int level) {
@@ -39,9 +39,9 @@ public class TreasureChest extends BasicChest {
 		if(level >= LootCategory.LEVELS) level = LootCategory.LEVELS - 1;
 		ItemStack treasure;
 		DBlock.placeChest(world, x, y, z);
-		if(world.getBlock(x, y, z) != DBlock.chest) return;
-		TileEntityChest contents = (TileEntityChest)world.getTileEntity(x, y, z);
-		if(ConfigHandler.vanillaLoot) vanillaChest(contents, random);
+		if(world.getBlockId(x, y, z) != Block.chest.blockID) return;
+		TileEntityChest chest = (TileEntityChest)world.getBlockTileEntity(x, y, z);
+		if(ConfigHandler.vanillaLoot) vanillaChest(chest, random);
 		int num;
 		num = random.nextInt(2 + (level / 3)) + 2;
 		for(int i = 0; i < num; i++) {

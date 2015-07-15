@@ -142,22 +142,15 @@ public class ThemeReader {
 			if(!tokens.hasMoreTokens()) continue;
 			level = intParser(tokens);
 			if(!tokens.hasMoreTokens() || (level == 0)) continue;
-			modid = tokens.nextToken();
-			if(modid.toLowerCase().equals("item") 
-					|| modid.toLowerCase().equals("block")
-					|| modid.toLowerCase().equals("minecraft"))
-				modid = "minecraft";
-			if(!tokens.hasMoreTokens()) continue;
-			name = tokens.nextToken();
+			item = tokens.nextToken();
 			if(!tokens.hasMoreTokens()) continue;
 			min = intParser(tokens);
-			if(!tokens.hasMoreTokens() || (min < 1)) continue;
+			if(!tokens.hasMoreTokens() || (min == 0)) continue;
 			max = intParser(tokens);
-			item = modid + ":" + name;
+			if(max == 0) continue;
 			loot = new LootItem(item, min, max);
 			if(item != null && loot != null) LootList.addItem(loot, type, level);
 		}
-		LootList.addDiscs();
 	}			
 		
 	
@@ -482,6 +475,16 @@ public class ThemeReader {
 		return out;
 	}
 	
+	private static int metaParse(String num) {
+		//DoomlikeDungeons.profiler.startTask("Running metaParse(String numn)");
+		int id = 0, meta = 0;
+		StringTokenizer nums = new StringTokenizer(num, "({[]})");
+		id = Integer.parseInt(nums.nextToken());
+		if(nums.hasMoreElements()) meta = Integer.parseInt(nums.nextToken());
+		//DoomlikeDungeons.profiler.endTask("Running metaParse(String num)");
+		return DBlock.add(id, meta);
+	}
+	
 	
 	private static ArrayList<String> parseMobs(ArrayList<String> el, StringTokenizer tokens) {
 		ArrayList<String> mobs;
@@ -503,9 +506,7 @@ public class ThemeReader {
 		String name;
 		EnumSet<Type> biomes = EnumSet.noneOf(Type.class);
 		while(tokens.hasMoreTokens()) {
-			// Note: This should probably use the Enum.valueOf(String)			
 			name = tokens.nextToken().toUpperCase();
-			// Old biome types
 			if(name.equals("FOREST")) biomes.add(Type.FOREST);
 			else if(name.equals("PLAINS")) biomes.add(Type.PLAINS);
 			else if(name.equals("MOUNTAINS")) biomes.add(Type.MOUNTAIN);
@@ -521,28 +522,12 @@ public class ThemeReader {
 			else if(name.equals("END")) biomes.add(Type.END);
 			else if(name.equals("MUSHROOM")) biomes.add(Type.MUSHROOM);
 			else if(name.equals("MAGICAL")) biomes.add(Type.MAGICAL);
-			// New biome types
-			else if(name.equals("HOT")) biomes.add(Type.HOT);
-			else if(name.equals("COLD")) biomes.add(Type.COLD);
-			else if(name.equals("DENSE")) biomes.add(Type.DENSE);
-			else if(name.equals("SPARSE")) biomes.add(Type.SPARSE);
-			else if(name.equals("WET")) biomes.add(Type.WET);
-			else if(name.equals("DRY")) biomes.add(Type.DRY);
-			else if(name.equals("SAVANNA")) biomes.add(Type.SAVANNA);
-			else if(name.equals("CONIFEROUS")) biomes.add(Type.CONIFEROUS);
-			else if(name.equals("SPOOKY")) biomes.add(Type.SPOOKY);
-			else if(name.equals("DEAD")) biomes.add(Type.DEAD);
-			else if(name.equals("LUSH")) biomes.add(Type.LUSH);
-			else if(name.equals("MESA")) biomes.add(Type.MESA);
-			else if(name.equals("SANDY")) biomes.add(Type.SANDY);
-			else if(name.equals("SNOWY")) biomes.add(Type.SNOWY);			
 		}
 		return biomes;
 	}
 	
 	
 	private static EnumSet<ThemeType> typeParser(StringTokenizer tokens) {
-		// Note: This should probably use the Enum.valueOf(String)
 		String name;
 		EnumSet<ThemeType> types = EnumSet.noneOf(ThemeType.class);
 		while(tokens.hasMoreTokens()) {
@@ -565,7 +550,6 @@ public class ThemeReader {
 			else if(name.equals("NECRO")) types.add(ThemeType.NECRO);
 			else if(name.equals("FIERY")) types.add(ThemeType.FIERY);
 			else if(name.equals("SHADOW")) types.add(ThemeType.SHADOW);
-			else if(name.equals("TECH")) types.add(ThemeType.TECH);
 			else if(name.equals("PARADISE")) types.add(ThemeType.PARADISE);
 		}
 		return types;

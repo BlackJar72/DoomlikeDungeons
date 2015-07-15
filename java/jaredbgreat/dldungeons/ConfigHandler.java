@@ -29,7 +29,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.BiomeDictionary.Type;
-import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.Configuration;
 
 public class ConfigHandler {
 	
@@ -44,7 +44,7 @@ public class ConfigHandler {
 	
 	private static final int[] DEFAULT_DIMS = {0, -1};
 	
-//	private static final boolean DEFAULT_NODEND = true;
+	private static final boolean DEFAULT_NODEND = true;
 	private static final boolean DEFAULT_WRITE_LISTS = false;
 	private static final boolean DEFAULT_NATURAL_SPAWN = true;
 	private static final boolean DEFAULT_OBEY_RULE = true;
@@ -57,12 +57,12 @@ public class ConfigHandler {
 	private static final boolean DISABLE_API = false;
 	private static final boolean NO_MOB_CHANGES = false;
 	
-	public static boolean disableAPI = DISABLE_API;
-	public static boolean noMobChanges = NO_MOB_CHANGES;
-	
 	private static final String[] NEVER_IN_BIOMES = new String[]{"END"};
 	private static       String[] neverInBiomes   = NEVER_IN_BIOMES;
 	public  static EnumSet<Type>  biomeExclusions = EnumSet.noneOf(Type.class);
+	
+	public static boolean disableAPI = DISABLE_API;
+	public static boolean noMobChanges = NO_MOB_CHANGES;
 	
 	protected static boolean writeLists = DEFAULT_WRITE_LISTS;	
 	protected static boolean naturalSpawn = DEFAULT_NATURAL_SPAWN;	
@@ -117,6 +117,7 @@ public class ConfigHandler {
 		
 //		boolean noEnd = config.get("General", "NotInEnd", DEFAULT_NODEND).getBoolean(true);
 //		GenerationHandler.setEnd(noEnd);
+//		if(noEnd) biomeExclusions.add(Type.END);
 //		System.out.println("[DLDUNGEONS] NoEnd set to: " + noEnd);
 		
 		naturalSpawn = config.get("General", "SpawnWithWordgen", DEFAULT_NATURAL_SPAWN).getBoolean(true);
@@ -185,6 +186,22 @@ public class ConfigHandler {
 	}
 	
 	
+	private static void processBiomeExclusions(String[] array) {
+		for(String str : array) {
+			str = str.toUpperCase();
+			System.out.println("[DLDUNGEONS] adding " + str + " to excusion list");
+			try { 
+				Type value = Type.valueOf(str);
+				if(value != null) {
+					biomeExclusions.add(value);
+				}
+			} catch(Exception e) {
+				System.err.println("[DLDUNGEONS] Error in config! " + str + " is not valid biome dictionary type!");
+			}
+		}
+	}
+	
+	
 	public static void generateLists() {
 		if(!writeLists) return;
 		listsDir = new File(configDir.toString() + File.separator + "lists");
@@ -241,21 +258,17 @@ public class ConfigHandler {
 		try {
 			outstream = new BufferedWriter(new 
 					FileWriter(itemlist.toString()));
-			
-			if(outstream == null) throw new IOException();
-			
-			for(Object item : Item.itemRegistry){ 
-				String name = Item.itemRegistry.getNameForObject(item);
-				if(true) {
-					//System.out.println("[DLDUNGEONS] Found item " + name);
-					outstream.write(name);
+
+			for(int i = 0; i < Item.itemsList.length; i++) {
+				if(Item.itemsList[i] != null) {
+					outstream.write(Item.itemsList[i].getUnlocalizedName() 
+							+ ", ID = " + i);
 					outstream.newLine();
 				}
 			}
 			
 			if(outstream != null) outstream.close();
 		} catch (IOException e) {
-			System.err.println("[DLDUNGEONS] Error: Could not write file items.txt");
 			e.printStackTrace();
 		}		
 	}
@@ -268,21 +281,18 @@ public class ConfigHandler {
 		try {
 			outstream = new BufferedWriter(new 
 					FileWriter(itemlist.toString()));
-			
-			if(outstream == null) throw new IOException();	
-			
-			for(Object block : Block.blockRegistry){ 
-				String name = Block.blockRegistry.getNameForObject(block);
-				if(true) {
-					//System.out.println("[DLDUNGEONS] Found item " + name);
-					outstream.write(name);
-					outstream.newLine();
+
+			for(int i = 0; i < Block.blocksList.length; i++) {
+				if(Block.blocksList[i] != null) 
+					if(!Block.blocksList[i].getUnlocalizedName().equals("tile.ForgeFiller")) {
+						outstream.write(Block.blocksList[i].getUnlocalizedName() 
+								+ ", ID = " + i);
+						outstream.newLine();
 				}
 			}
 			
 			if(outstream != null) outstream.close();
 		} catch (IOException e) {
-			System.err.println("[DLDUNGEONS] Error: Could not write file blocks.txt");
 			e.printStackTrace();
 		}		
 	}

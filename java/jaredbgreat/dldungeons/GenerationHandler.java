@@ -34,7 +34,7 @@ public class GenerationHandler implements IWorldGenerator {
 	private static HashSet<Integer> dimensions;
 	
 	public GenerationHandler() {
-		GameRegistry.registerWorldGenerator(this, 100);
+		GameRegistry.registerWorldGenerator(this);
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class GenerationHandler implements IWorldGenerator {
 		if(world.isRemote) return; // Do not perform world-gen on the client!
 		if((ConfigHandler.obeyRule && !world.getWorldInfo().isMapFeaturesEnabled())
 				|| !ConfigHandler.naturalSpawn) return;  // Second part is redundant for safety
-//		if((world.getBiomeGenForCoords(chunkX * 16, chunkZ * 16) == BiomeGenBase.sky) && noEnd) return;
+		//if((world.getBiomeGenForCoords(chunkX * 16, chunkZ * 16) == BiomeGenBase.sky) && noEnd) return;
 		boolean blockedBiome = false;
 		Type[] types = BiomeDictionary.getTypesForBiome((world.getBiomeGenForCoords(chunkX * 16, chunkZ * 16)));
 		for(Type type : types) {			

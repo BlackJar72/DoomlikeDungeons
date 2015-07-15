@@ -199,11 +199,4 @@ public class PlaceSeed {
 			return AbstractRoom.makeRoom(beginX, endX, beginZ, endZ, y, y + height, dungeon, parent, previous);		
 		}
 	}
-	
-	
-	
-	
-	
-	//TODO:  Create classes for other content
-
 }

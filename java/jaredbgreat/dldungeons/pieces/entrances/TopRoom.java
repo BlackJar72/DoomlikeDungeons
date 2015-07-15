@@ -210,25 +210,25 @@ public class TopRoom extends AbstractEntrance {
 			case 0:
 				for(int i = bottom; i <= top; i++) {
 					DBlock.place(world, wx, i, wz, dungeon.wallBlock1);
-					DBlock.placeBlock(world, wx + 1, i, wz, ladder, 5, 3);
+					DBlock.placeBlock(world, wx + 1, i, wz, Block.ladder.blockID, 5, 3);
 				}
 				break;
 			case 1:
 				for(int i = bottom; i <= top; i++) {
 					DBlock.place(world, wx, i, wz, dungeon.wallBlock1);
-					DBlock.placeBlock(world, wx, i, wz + 1, ladder, 3, 3);
+					DBlock.placeBlock(world, wx, i, wz + 1, Block.ladder.blockID, 3, 3);
 				}
 				break;
 			case 2:
 				for(int i = bottom; i <= top; i++) {
 					DBlock.place(world, wx, i, wz, dungeon.wallBlock1);
-					DBlock.placeBlock(world, wx - 1, i, wz, ladder, 4, 3);
+					DBlock.placeBlock(world, wx - 1, i, wz, Block.ladder.blockID, 4, 3);
 				}
 				break;
 			case 3:
 				for(int i = bottom; i <= top; i++) {
 					DBlock.place(world, wx, i, wz, dungeon.wallBlock1);
-					DBlock.placeBlock(world, wx, i, wz - 1, ladder, 2, 3);
+					DBlock.placeBlock(world, wx, i, wz - 1, Block.ladder.blockID, 2, 3);
 				}
 				break;
 		}	
@@ -245,8 +245,8 @@ public class TopRoom extends AbstractEntrance {
 			DBlock.place(world, wx, i, wz, dungeon.wallBlock1);
 			switch (side) {
 			case 0:
-				DBlock.placeBlock(world, wx+1, i, wz,   stairSlab, 0, 3);
-				DBlock.placeBlock(world, wx+1, i, wz+1, stairSlab, 8, 3);
+				DBlock.placeBlock(world, wx+1, i, wz,   Block.stoneSingleSlab.blockID, 0, 3);
+				DBlock.placeBlock(world, wx+1, i, wz+1, Block.stoneSingleSlab.blockID, 8, 3);
 				// Empty space
 				DBlock.deleteBlock(world, wx,    i, wz+1);
 				DBlock.deleteBlock(world, wx-1,  i, wz+1);
@@ -256,8 +256,8 @@ public class TopRoom extends AbstractEntrance {
 				DBlock.deleteBlock(world, wx+1,  i, wz-1);
 				break;
 			case 1:
-				DBlock.placeBlock(world, wx,   i, wz+1, stairSlab, 0, 3);
-				DBlock.placeBlock(world, wx-1, i, wz+1, stairSlab, 8, 3);
+				DBlock.placeBlock(world, wx,   i, wz+1, Block.stoneSingleSlab.blockID, 0, 3);
+				DBlock.placeBlock(world, wx-1, i, wz+1, Block.stoneSingleSlab.blockID, 8, 3);
 				// Empty space
 				DBlock.deleteBlock(world, wx+1, i,   wz);
 				DBlock.deleteBlock(world, wx+1, i, wz+1);
@@ -267,8 +267,8 @@ public class TopRoom extends AbstractEntrance {
 				DBlock.deleteBlock(world, wx+1, i, wz-1);
 				break;
 			case 2:
-				DBlock.placeBlock(world, wx-1, i, wz,   stairSlab, 0, 3);
-				DBlock.placeBlock(world, wx-1, i, wz-1, stairSlab, 8, 3);
+				DBlock.placeBlock(world, wx-1, i, wz,   Block.stoneSingleSlab.blockID, 0, 3);
+				DBlock.placeBlock(world, wx-1, i, wz-1, Block.stoneSingleSlab.blockID, 8, 3);
 				// Empty space
 				DBlock.deleteBlock(world, wx+1, i,   wz);
 				DBlock.deleteBlock(world, wx+1, i, wz+1);
@@ -278,8 +278,8 @@ public class TopRoom extends AbstractEntrance {
 				DBlock.deleteBlock(world, wx+1, i, wz-1);
 				break;
 			case 3:
-				DBlock.placeBlock(world, wx,   i, wz-1, stairSlab, 0, 3);
-				DBlock.placeBlock(world, wx+1, i, wz-1, stairSlab, 8, 3);
+				DBlock.placeBlock(world, wx,   i, wz-1, Block.stoneSingleSlab.blockID, 0, 3);
+				DBlock.placeBlock(world, wx+1, i, wz-1, Block.stoneSingleSlab.blockID, 8, 3);
 				// Empty space
 				DBlock.deleteBlock(world, wx+1, i,   wz);
 				DBlock.deleteBlock(world, wx+1, i, wz+1);

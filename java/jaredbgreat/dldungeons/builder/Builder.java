@@ -22,13 +22,12 @@ import static jaredbgreat.dldungeons.builder.DBlock.*;
 
 
 public class Builder {
+	private static boolean debugPole;
 	
-	private static boolean debugPole = false;
 	
-
 	public static void placeDungeon(Random random, int chunkX, int chunkZ, World world) throws Throwable {	
-		if(world.isRemote) return; // Do not perform world-gen on the client!z
-		DoomlikeDungeons.profiler.startTask("Create Dungeons");
+		if(world.isRemote) return; // Do not perform world-gen on the client!
+		DoomlikeDungeons.profiler.startTask("Creating a Dungeons");
 		Dungeon dungeon = new Dungeon(random, world.getBiomeGenForCoords((chunkX * 16), (chunkZ * 16)), 
 									  world, chunkX, chunkZ);
 
@@ -38,17 +37,18 @@ public class Builder {
 		//if(true) debuggingPole(world, chunkX, chunkZ, dungeon);
 		dungeon.preFinalize();
 		dungeon = null;
-		DoomlikeDungeons.profiler.endTask("Create Dungeons");
+		DoomlikeDungeons.profiler.endTask("Creating a Dungeons");
 	}
 	
 
 	public static void placeDungeon(Random random, int chunkX, int chunkZ, World world,
 						IChunkProvider chunkGenerator, IChunkProvider chunkProvider) throws Throwable {	
-		if(world.isRemote) return; // Do not perform world-gen on the client!
-		DoomlikeDungeons.profiler.startTask("Create Dungeons");
+		if(world.isRemote) return; 
+		DoomlikeDungeons.profiler.startTask("Creating a Dungeons");
+		
 		Dungeon dungeon = new Dungeon(random, world.getBiomeGenForCoords((chunkX * 16), (chunkZ * 16)), 
 									  world, chunkX, chunkZ);
-		
+
 		System.out.println("[DLDUNGONS] Running Builder.buildDungeon; building dungeon");
 		if(dungeon.theme != null) {
 			if(debugPole) debuggingPole(world, chunkX, chunkZ, dungeon);
@@ -57,7 +57,7 @@ public class Builder {
 		}
 		dungeon.preFinalize();
 		dungeon = null;
-		DoomlikeDungeons.profiler.endTask("Create Dungeons");
+		DoomlikeDungeons.profiler.endTask("Creating a Dungeons");
 	}
 	
 	
@@ -71,12 +71,12 @@ public class Builder {
 		//Pointless stand-in for generation testing, and to help find dungeons later
 		int x = (chunkX * 16) + 8;
 		int z = (chunkZ * 16) + 8;
-		for(int y = -16; y <= 241; y++) placeBlock(world, x, y, z, quartz);
+		for(int y = -5; y <= 250; y++) placeBlock(world, x, y, z, Block.blockNetherQuartz.blockID);
 		for(int i = -dungeon.size.radius; i <= dungeon.size.radius; i++) {
-			placeBlock(world, x - dungeon.size.radius, 80, z + i, lapis);
-			placeBlock(world, x + dungeon.size.radius, 80, z + i, lapis);
-			placeBlock(world, x + i, 80, z - dungeon.size.radius, lapis);
-			placeBlock(world, x + i, 80, z + dungeon.size.radius, lapis);
+			placeBlock(world, x - dungeon.size.radius, 80, z + i, Block.blockLapis.blockID);
+			placeBlock(world, x + dungeon.size.radius, 80, z + i, Block.blockLapis.blockID);
+			placeBlock(world, x + i, 80, z - dungeon.size.radius, Block.blockLapis.blockID);
+			placeBlock(world, x + i, 80, z + dungeon.size.radius, Block.blockLapis.blockID);
 		}		
 	}
 	
