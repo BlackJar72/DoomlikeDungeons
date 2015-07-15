@@ -97,7 +97,18 @@ public class AStar {
 	 */
 	public void makeRoute(Step end) {
 		Step child = end, parent = end.parent;
-		if(parent == null) return;
+		if(parent == null) return;		
+
+		dungeon.map.astared[end.x][end.z] = true;
+		if(dungeon.map.isWall[end.x][end.z] ||
+					dungeon.map.isFence[end.x][end.z]) 
+				dungeon.map.isDoor[end.x][end.z] = true;
+		if(dungeon.map.hasLiquid[end.x][end.z]) {
+			dungeon.map.hasLiquid[end.x][end.z] = false;
+			dungeon.map.floorY[end.x][end.z] = 
+					(byte) dungeon.rooms.get(room).floorY;
+		}
+		
 		do {
 			dungeon.map.astared[child.x][child.z] = true;
 			if(dungeon.map.isWall[child.x][child.z] ||
@@ -110,6 +121,7 @@ public class AStar {
 			child = parent;
 			parent = child.parent;
 		} while (parent != null);
+		
 		dungeon.map.astared[child.x][child.z] = true;
 		if(dungeon.map.isWall[child.x][child.z] ||
 					dungeon.map.isFence[child.x][child.z]) 
