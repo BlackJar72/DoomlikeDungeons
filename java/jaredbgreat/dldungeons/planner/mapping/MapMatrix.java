@@ -24,7 +24,7 @@ import net.minecraft.world.World;
 public class MapMatrix {
 	private static Block lapis = Block.getBlockFromName("lapis_block");
 	private static Block slab  = Block.getBlockFromName("double_stone_slab");
-	private static Block glow  = Block.getBlockFromName("glowstone");
+	private static Block glow  = Block.getBlockFromName("gold_block");
 	private static Block glass = Block.getBlockFromName("glass");
 	
 	public World world;
@@ -99,15 +99,15 @@ public class MapMatrix {
 					 //DoomlikeDungeons.profiler.startTask("Building Room " + room[i][j] + " column " + i + ", " +j);
 					 Room theRoom = dungeon.rooms.get(room[i][j]);
 					 
-//					 if(astared[i][j]) {
-//						 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, lapis);
-//					 } else if(isDoor[i][j]) {
-//						 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, slab);
-//					 } else if(isWall[i][j]) {
-//						 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, glass);
-//					 } else {
-//						 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, glow);
-//					 }
+					 if(astared[i][j]) {
+						 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, lapis);
+					 } else if(isDoor[i][j]) {
+						 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, slab);
+					 } else if(isWall[i][j]) {
+						 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, glass);
+					 } else {
+						 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, glow);
+					 }
 					 
 					 // Lower parts of the room
 

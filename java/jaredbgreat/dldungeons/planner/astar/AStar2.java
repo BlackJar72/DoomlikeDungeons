@@ -26,10 +26,6 @@ public class AStar2 extends AStar {
 		x2 = dungeon.size.width - 3;
 		z1 = 1;
 		z2 = dungeon.size.width - 2;
-		spt = dungeon.map.nodedge;
-		for(int i = x1; i <= x2; i++)
-			for(int j = z1; j <= z2; j++)
-				spt[i][j] = null;
 		
 		end = new Tile((int)finish.realX, (int)finish.realZ);		
 		if(end.x < x1) {
@@ -58,6 +54,11 @@ public class AStar2 extends AStar {
 			z2 = root.z;
 		}
 		
+		spt = dungeon.map.nodedge;
+		for(int i = x1; i <= x2; i++)
+			for(int j = z1; j <= z2; j++)
+				spt[i][j] = null;
+		
 		spt[root.x][root.z] = root;
 		edges = new PriorityQueue<Step2>();
 		edges.add(root);
@@ -65,7 +66,7 @@ public class AStar2 extends AStar {
 	
 	
 	/**
-	 * This uses the data froom AStar to make useful changes to the 
+	 * This uses the data from AStar to make useful changes to the 
 	 * dungeon.
 	 * 
 	 * @param end
@@ -76,8 +77,8 @@ public class AStar2 extends AStar {
 		byte floory = dungeon.map.floorY[end.x][end.z];
 		byte ceily  = (byte)(dungeon.baseHeight + 2);
 		int size = dungeon.random.nextInt(2) + 1;
-		Step child = end.parent, parent = end;
-		if(child == null) return;
+		Step child = end, parent = end.parent;
+		if(parent == null) return;
 		do {
 			if(dungeon.map.room[child.x][child.z] != 0) {
 				roomid = dungeon.map.room[child.x][child.z];
@@ -133,13 +134,10 @@ public class AStar2 extends AStar {
 	@Override
 	public void seek() {
 		Step2 current;
-		int count = 0;
 		do {
-			count++;
 			current = edges.poll();
 			getEdgeStep(current);
-		} while(!current.equals(end) && !edges.isEmpty());
-		// FIXME:  edges should never be empty before finding route!!
+		} while(!current.equals(end));
 		makeRoute(current);
 	}
 	

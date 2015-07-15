@@ -154,7 +154,7 @@ public class DoorChecker {
 		connected.add(exits.remove(exits.size() - 1));
 		while(!exits.isEmpty()) {
 			current = connected.get(0);
-			connected.add(next = exits.remove(exits.size() - 1));
+			connected.add((next = exits.remove(exits.size() - 1)));
 			new AStar(room, dungeon, current, next).seek();			
 			Collections.shuffle(connected, dungeon.random);
 		}
