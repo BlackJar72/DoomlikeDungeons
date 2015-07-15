@@ -248,7 +248,8 @@ public class DoorChecker {
 	
 	public static void caveConnector(Dungeon dungeon, Room cave) {
 		for(Doorway door : cave.doors) {
-			new AStar(cave, dungeon, cave.midpoint, dungeon.rooms.get(door.otherside).midpoint).seek();
+			//new AStar(cave, dungeon, cave.midpoint, dungeon.rooms.get(door.otherside).midpoint).seek();
+			new AStar2(dungeon, cave, dungeon.rooms.get(door.otherside)).seek();
 		}
 	}
 }

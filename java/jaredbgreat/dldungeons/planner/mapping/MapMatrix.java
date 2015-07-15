@@ -99,15 +99,15 @@ public class MapMatrix {
 					 //DoomlikeDungeons.profiler.startTask("Building Room " + room[i][j] + " column " + i + ", " +j);
 					 Room theRoom = dungeon.rooms.get(room[i][j]);
 					 
-					 if(astared[i][j]) {
-						 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, lapis);
-					 } else if(isDoor[i][j]) {
-						 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, slab);
-					 } else if(isWall[i][j]) {
-						 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, glass);
-					 } else {
-						 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, glow);
-					 }
+//					 if(astared[i][j]) {
+//						 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, lapis);
+//					 } else if(isDoor[i][j]) {
+//						 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, slab);
+//					 } else if(isWall[i][j]) {
+//						 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, glass);
+//					 } else {
+//						 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, glow);
+//					 }
 					 
 					 // Lower parts of the room
 
