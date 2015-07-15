@@ -29,12 +29,12 @@ public class WeakChest extends BasicChest {
 	@Override
 	public void place(World world, int x, int y, int z, Random random) {
 		DBlock.placeChest(world, x, y, z);	
-		TileEntityChest chest = (TileEntityChest)world.getBlockTileEntity(x, y, z);
+		TileEntityChest contents = (TileEntityChest)world.getBlockTileEntity(x, y, z);
 		if(world.getBlockId(x, y, z) != Block.chest.blockID) return;
 		if(ConfigHandler.vanillaLoot && (!ConfigHandler.stingyLoot) && random.nextBoolean()) {
 			ChestGenHooks chinf = ChestGenHooks.getInfo(ChestGenHooks.BONUS_CHEST);
 	        WeightedRandomChestContent.generateChestContents(random, 
-	        		chinf.getItems(random), chest, chinf.getCount(random));
+	        		chinf.getItems(random), contents, chinf.getCount(random));
 		}
 		if(ConfigHandler.stingyLoot) {
 			if(random.nextBoolean()) fillChest(contents, LootType.GEAR, random);

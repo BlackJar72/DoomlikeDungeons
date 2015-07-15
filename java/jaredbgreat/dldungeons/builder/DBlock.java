@@ -13,12 +13,12 @@ import jaredbgreat.dldungeons.debug.Logging;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
-import java.util.logging.Logger;
-import cpw.mods.fml.common.registry.GameRegistry;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class DBlock {
 	int id; 	// The Minecraft block ID
@@ -35,28 +35,6 @@ public class DBlock {
 	public DBlock(int id, int meta) {
 		this.id = id;
 		this.meta = meta;
-	}
-	
-	
-	public DBlock(String id, float version) throws NoSuchElementException {
-		//System.out.println("[DLDUNGEONS] Loading block " + id + " as " + version);
-		this.id = id;
-		meta  = 0;
-		if(version < 1.7) {
-			StringTokenizer nums = new StringTokenizer(id, "({[]})");
-			block = (Block)Block.getBlockFromName(nums.nextToken());
-			if(nums.hasMoreElements()) meta = Integer.parseInt(nums.nextToken());
-		} else {
-			StringTokenizer nums = new StringTokenizer(id, ":({[]})");
-			block = GameRegistry.findBlock(nums.nextToken(), nums.nextToken());
-			if(nums.hasMoreElements()) meta = Integer.parseInt(nums.nextToken());			
-		}
-		if(block == null) {
-			String error = "[DLDUNGEONS] ERROR! Block read as \"" + id 
-					+ "\" was was not in registry (returned null).";
-			Logging.LogError(error);
-			throw new NoSuchElementException(error);
-		}
 	}
 	
 	
@@ -93,15 +71,6 @@ public class DBlock {
 		DBlock block = new DBlock(id, meta);
 		if(!registry.contains(block)) registry.add(block);
 		return registry.indexOf(block);
-	}	
-	
-	
-	public static int add(int id, float version) throws NoSuchElementException {
-		DBlock block = new DBlock(id, version);
-		if(!registry.contains(block)) {
-			registry.add(block);
-		}
-		return registry.indexOf(block);
 	}
 	
 	public static void placeBlock(World world, int x, int y, int z, int block) {
@@ -110,6 +79,7 @@ public class DBlock {
 		// instead of elsewhere. 
 		if(!isProtectedBlock(world, x, y, z)) 
 			world.setBlock(x, y, z, block);
+	}
 	
 	
 	public static void placeBlock(World world, int x, int y, int z, int block, int a, int b) {
@@ -181,7 +151,7 @@ public class DBlock {
 	@Override
 	public boolean equals(Object other) {
 		if(!(other instanceof DBlock)) return false; 
-		return ((id.hashCode() == ((DBlock)other).id.hashCode()));
+		return ((hashCode() == ((DBlock)other).hashCode()));
 	}
 	
 	

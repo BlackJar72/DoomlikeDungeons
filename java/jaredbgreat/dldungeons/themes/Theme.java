@@ -11,6 +11,8 @@ package jaredbgreat.dldungeons.themes;
 
 
 
+import jaredbgreat.dldungeons.builder.DBlock;
+
 import java.util.ArrayList;
 import java.util.EnumSet;
 
@@ -81,13 +83,12 @@ public class Theme {
 		entrances = new Element(2,   5, 25, 50, 15,  3);
 		fences = new Element(15, 25, 55, 15,  0, 0);
 		naturals = new Element(25, 5, 20, 10,  0, 0);
-		walls = makeBlockList(new String[]{});
-		caveWalls = makeBlockList(new String[]{});
-		floors = makeBlockList(new String[]{});
-		ceilings = makeBlockList(new String[]{});
-		fencing = makeBlockList(new String[]{});
-		liquid = makeBlockList(new String[]{});
-		pillarBlock = makeBlockList(new String[]{});		
+		walls = new int[]{};
+		caveWalls = new int[]{};
+		floors = new int[]{};
+		ceilings = new int[]{};
+		fencing = new int[]{};	
+		liquid = new int[]{};
 		fixMobs();
 	}
 	

@@ -157,7 +157,7 @@ public class ConfigHandler {
 		
 		
 		neverInBiomes = config.get("General", "NeverInBiomeTypes", NEVER_IN_BIOMES).getStringList();
-		processBiomeExclusions(neverInBiomes);
+		processBiomeExclusions1(neverInBiomes);
 		
 		
 		// API Stuff
@@ -186,7 +186,7 @@ public class ConfigHandler {
 	}
 	
 	
-	private static void processBiomeExclusions(String[] array) {
+	private static void processBiomeExclusions1(String[] array) {
 		for(String str : array) {
 			str = str.toUpperCase();
 			System.out.println("[DLDUNGEONS] adding " + str + " to excusion list");

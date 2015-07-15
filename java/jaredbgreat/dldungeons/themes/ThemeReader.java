@@ -99,6 +99,7 @@ public class ThemeReader {
 	
 	
 	public static void openLoot() {
+		LootList.addDiscs();
 		BufferedReader instream = null;
 		File chests = new File(configDir.toString() + File.separator + "chests.cfg");
 		if(chests.exists()) try {
@@ -278,25 +279,25 @@ public class ThemeReader {
 				theme.entrances = elementParser(theme.entrances, tokens);
 				continue;
 			} if(token.equals("walls")) {
-				theme.walls = blockParser(theme.walls, tokens, theme.version);
+				theme.walls = blockParser(theme.walls, tokens);
 				continue;
 			} if(token.equals("caveblock")) {
-				theme.caveWalls = blockParser(theme.caveWalls, tokens, theme.version);
+				theme.caveWalls = blockParser(theme.caveWalls, tokens);
 				continue;
 			} if(token.equals("floors")) {
-				theme.floors = blockParser(theme.floors, tokens, theme.version);
+				theme.floors = blockParser(theme.floors, tokens);
 				continue;
 			} if(token.equals("ceilings")) {
-				theme.ceilings = blockParser(theme.ceilings, tokens, theme.version);
+				theme.ceilings = blockParser(theme.ceilings, tokens);
 				continue;
 			} if(token.equals("fencing")) {
-				theme.fencing = blockParser(theme.fencing, tokens, theme.version);
+				theme.fencing = blockParser(theme.fencing, tokens);
 				continue;
 			} if(token.equals("liquid")) {
-				theme.liquid = blockParser(theme.liquid, tokens, theme.version);
+				theme.liquid = blockParser(theme.liquid, tokens);
 				continue;
 			} if(token.equals("pillarblock")) {
-				theme.pillarBlock = blockParser(theme.pillarBlock, tokens, theme.version);
+				theme.pillarBlock = blockParser(theme.pillarBlock, tokens);
 				continue;
 			} if(token.equals("commonmobs")) {
 				theme.commonMobs = parseMobs(theme.commonMobs, tokens);
@@ -448,32 +449,24 @@ public class ThemeReader {
 	}
 	
 	
-	private static int[] blockParser(int[] el, 
-			StringTokenizer tokens, float version) throws NoSuchElementException {
+	private static int[] blockParser(int[] el, StringTokenizer tokens) {
 		//DoomlikeDungeons.profiler.startTask("Parsing blocks");
 		ArrayList<String> values = new ArrayList<String>();
 		String nums;
 		while(tokens.hasMoreTokens()) {
 			nums = tokens.nextToken();
 			//System.out.println("Read MC block " + nums);
-			if(version > 1.6) {
-				values.add(String.valueOf(DBlock.add(nums, version)));
-			} else {
-				values.add(String.valueOf(DBlock.add(nums)));
-			}
+			values.add(String.valueOf(metaParse(nums)));			
 		}
-		int[] out = new int[values.size() + el.length];
-		for(int i = 0; i < el.length; i++) {
-			//System.out.println("Adding DBlock " + el[i]);
-			out[i] = el[i];
-		}
-		for(int i = 0; i < values.size(); i++) {
+		int[] out = new int[values.size()];
+		for(int i = 0; i < out.length; i++) {
 			//System.out.println("Adding DBlock " + values.get(i));
-			out[i + el.length] = Integer.parseInt(values.get(i));
+			out[i] = Integer.parseInt(values.get(i));
 		}
 		//DoomlikeDungeons.profiler.startTask("Parsing blocks");
 		return out;
 	}
+	
 	
 	private static int metaParse(String num) {
 		//DoomlikeDungeons.profiler.startTask("Running metaParse(String numn)");

@@ -10,13 +10,13 @@ package jaredbgreat.dldungeons.pieces.chests;
 
 
 import jaredbgreat.dldungeons.debug.Logging;
-
 import jaredbgreat.dldungeons.builder.DBlock;
 
 import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -57,19 +57,14 @@ public class LootItem {
 	
 	
 	private void metaParse(String in) {
-<<<<<<< HEAD
 		StringTokenizer nums = new StringTokenizer(in, "({[:]})");
-		item = Item.itemsList[Integer.parseInt(nums.nextToken())];
-=======
-		StringTokenizer nums = new StringTokenizer(in, "({[:]})");
-		String modid = nums.nextToken();
-		String name  = nums.nextToken();
-		item = GameRegistry.findItem(modid, name);
-		if(item == null) {
-			Logging.LogError("[DLDUNGEONS] ERROR! Item read as \"" + in 
-					+ "\" was was not in registry (returned null).");
+		try{
+			item = Item.itemsList[Integer.parseInt(nums.nextToken())];
+		} catch (NumberFormatException ex) {
+			String modid = nums.nextToken();
+			String name  = nums.nextToken();
+			item = GameRegistry.findItem(modid, name);
 		}
->>>>>>> origin/master
 		if(nums.hasMoreElements()) meta = Integer.parseInt(nums.nextToken());
 	}
 	

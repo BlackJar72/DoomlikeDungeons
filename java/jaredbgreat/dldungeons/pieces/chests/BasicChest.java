@@ -39,9 +39,9 @@ public class BasicChest {
 		if(level >= LootCategory.LEVELS) level = LootCategory.LEVELS - 1;
 		DBlock.placeChest(world, x, y, z);
 		if(world.getBlockId(x, y, z) != Block.chest.blockID) return;
-		TileEntityChest chest = (TileEntityChest)world.getBlockTileEntity(x, y, z);
+		TileEntityChest contents = (TileEntityChest)world.getBlockTileEntity(x, y, z);
 		if(ConfigHandler.vanillaLoot && (!ConfigHandler.stingyLoot || random.nextBoolean())) 
-					vanillaChest(chest, random);
+					vanillaChest(contents, random);
 		int which = random.nextInt(2);
 		switch (which) {
 		case 0:

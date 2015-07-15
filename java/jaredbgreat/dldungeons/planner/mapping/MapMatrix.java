@@ -22,10 +22,6 @@ import net.minecraft.world.World;
 // More data intensive but perhaps simpler
 
 public class MapMatrix {
-	private static Block lapis = Block.getBlockFromName("lapis_block");
-	private static Block slab  = Block.getBlockFromName("double_stone_slab");
-	private static Block glow  = Block.getBlockFromName("gold_block");
-	private static Block glass = Block.getBlockFromName("glass");
 	
 	public World world;
 	public int chunkX, chunkZ, origenX, origenZ;

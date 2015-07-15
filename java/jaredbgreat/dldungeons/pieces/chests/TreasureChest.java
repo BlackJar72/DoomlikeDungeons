@@ -40,8 +40,8 @@ public class TreasureChest extends BasicChest {
 		ItemStack treasure;
 		DBlock.placeChest(world, x, y, z);
 		if(world.getBlockId(x, y, z) != Block.chest.blockID) return;
-		TileEntityChest chest = (TileEntityChest)world.getBlockTileEntity(x, y, z);
-		if(ConfigHandler.vanillaLoot) vanillaChest(chest, random);
+		TileEntityChest contents = (TileEntityChest)world.getBlockTileEntity(x, y, z);
+		if(ConfigHandler.vanillaLoot) vanillaChest(contents, random);
 		int num;
 		num = random.nextInt(2 + (level / 3)) + 2;
 		for(int i = 0; i < num; i++) {
