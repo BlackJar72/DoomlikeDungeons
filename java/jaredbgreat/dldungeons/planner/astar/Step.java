@@ -36,38 +36,13 @@ public class Step extends Tile implements Comparable<Step> {
 	
 	Step parent;
 	
-	private static enum Relation {
-		P,  // Parent		
-		C,  // Child
-		N;  // None 
-	}
 	
-	private static enum Move {
-		A ( 0, -1),
-		B (-1,  0), 
-		C ( 0,  1),
-		D ( 1,  0);
-		public final int dx, dz;
-		Move(int dx, int dz) {
-			this.dx = dx;
-			this.dz = dz;
-		}
-	}
-	
-	EnumMap<Move, Relation> neighbors;
-	
-	
-	public Step(int x, int z, int traversed, int changes, Tile destination) {
+	Step(int x, int z, int traversed, int changes, Tile destination) {
 		super(x, z);
 		distance = traversed;
 		this.changes = changes;
 		heuristic = Math.abs(x - destination.x) + Math.abs(z - destination.z);
 		value = (changes * 16) + distance + heuristic; 
-		neighbors = new EnumMap(Move.class);
-		neighbors.put(Move.A, Relation.N);
-		neighbors.put(Move.B, Relation.N);
-		neighbors.put(Move.C, Relation.N);
-		neighbors.put(Move.D, Relation.N);
 		parent = null;
 	}
 	
@@ -84,42 +59,6 @@ public class Step extends Tile implements Comparable<Step> {
 		if(Math.abs(dungeon.map.floorY[x][z] 
 				- dungeon.map.floorY[previous.x][previous.z]) > 1) changes++;
 		value = (changes * 16) + distance + heuristic;
-		neighbors = new EnumMap(Move.class);
-		int pdx = previous.x - x;
-		int pdz = previous.z - z;
-		switch(pdx) {
-			case -1:
-				neighbors.put(Move.A, Relation.N);
-				neighbors.put(Move.B, Relation.P);
-				neighbors.put(Move.C, Relation.N);
-				neighbors.put(Move.D, Relation.N);				
-				break;
-			case  1:
-				neighbors.put(Move.A, Relation.N);
-				neighbors.put(Move.B, Relation.N);
-				neighbors.put(Move.C, Relation.N);
-				neighbors.put(Move.D, Relation.P);
-				break;
-			default:
-				switch(pdz){
-					case -1:
-						neighbors.put(Move.A, Relation.P);
-						neighbors.put(Move.B, Relation.N);
-						neighbors.put(Move.C, Relation.N);
-						neighbors.put(Move.D, Relation.N);
-						break;
-					case  1: 
-						neighbors.put(Move.A, Relation.N);
-						neighbors.put(Move.B, Relation.N);
-						neighbors.put(Move.C, Relation.P);
-						neighbors.put(Move.D, Relation.N);
-						break;
-					default:
-						System.err.println("[DLDUNGEONS] Error! " 
-								+ "AStar.Step given invalid parent " 
-								+ "in constructor!");
-				}
-		}
 		parent = previous;		
 	}
 	

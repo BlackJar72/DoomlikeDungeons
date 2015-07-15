@@ -154,7 +154,7 @@ public class DoorChecker {
 		connected.add(exits.remove(exits.size() - 1));
 		while(!exits.isEmpty()) {
 			current = connected.get(0);
-			connected.add(next = exits.remove(exits.size() - 1));
+			connected.add((next = exits.remove(exits.size() - 1)));
 			new AStar(room, dungeon, current, next).seek();			
 			Collections.shuffle(connected, dungeon.random);
 		}
@@ -248,7 +248,8 @@ public class DoorChecker {
 	
 	public static void caveConnector(Dungeon dungeon, Room cave) {
 		for(Doorway door : cave.doors) {
-			new AStar(cave, dungeon, cave.midpoint, dungeon.rooms.get(door.otherside).midpoint).seek();
+			//new AStar(cave, dungeon, cave.midpoint, dungeon.rooms.get(door.otherside).midpoint).seek();
+			new AStar2(dungeon, cave, dungeon.rooms.get(door.otherside)).seek();
 		}
 	}
 }

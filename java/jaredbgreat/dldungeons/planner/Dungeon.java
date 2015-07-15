@@ -327,7 +327,7 @@ public class Dungeon {
 	
 	public void addAnEntrance() {
 		if(theme.entrances.never()) return;
-		int which = random.nextInt(numNodes);
+		int which = random.nextInt(nodes.length);
 		Room it   = nodes[which].hubRoom;
 		it.chests.clear();
 		it.spawners.clear();
