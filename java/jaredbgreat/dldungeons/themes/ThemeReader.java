@@ -219,10 +219,11 @@ public class ThemeReader {
 		//DoomlikeDungeons.profiler.startTask("Parsing theme " + name);		
 		Theme theme = new Theme();
 		theme.name = name;
+		theme.version = 1.0f; // Assume old version until a newer version number is detected
 		StringTokenizer tokens = null;
 		String line = null;
 		String token;
-		String delimeters = " ,;\t\n\r\f=";
+		String delimeters = " ,:;\t\n\r\f="; // Assume old version until a newer version number is detected
 		while((line = instream.readLine()) != null) {
 			//System.out.println(line);
 			if(line.length() < 2) continue;

@@ -92,7 +92,7 @@ public class BasicChest {
 			if(treasure != null) chest.setInventorySlotContents(random.nextInt(27), treasure);
 		}
 		if(!ConfigHandler.vanillaLoot) {
-			ItemStack treasure = LootCategory.getLoot(LootType.HEAL, level, random).getStack(random);
+			ItemStack treasure = LootCategory.getLoot(LootType.LOOT, level, random).getStack(random);
 			if(treasure != null) chest.setInventorySlotContents(random.nextInt(27), treasure);
 		}
 	}
