@@ -29,7 +29,7 @@ public class WeakChest extends BasicChest {
 	@Override
 	public void place(World world, int x, int y, int z, Random random) {
 		BlockPos pos = new BlockPos(x, y, z);
-		DBlock.placeChest(world, x, y, z);
+		//DBlock.placeChest(world, x, y, z);
 		if(world.getChunkFromChunkCoords(x / 16, z / 16).getBlock(pos) != DBlock.chest) return;
 		TileEntityChest contents = (TileEntityChest)world.getTileEntity(pos);
 		if(ConfigHandler.vanillaLoot && (!ConfigHandler.stingyLoot) && random.nextBoolean()) {

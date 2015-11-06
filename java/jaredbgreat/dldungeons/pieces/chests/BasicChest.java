@@ -39,7 +39,7 @@ public class BasicChest {
 		BlockPos pos = new BlockPos(x, y, z);
 		level += random.nextInt(2);
 		if(level >= LootCategory.LEVELS) level = LootCategory.LEVELS - 1;
-		DBlock.placeChest(world, x, y, z);
+		//DBlock.placeChest(world, x, y, z);
 		if(world.getChunkFromChunkCoords(x / 16, z / 16).getBlock(pos) != DBlock.chest) return;
 		TileEntityChest contents = (TileEntityChest)world.getTileEntity(pos);
 		if(ConfigHandler.vanillaLoot && (!ConfigHandler.stingyLoot || random.nextBoolean())) 

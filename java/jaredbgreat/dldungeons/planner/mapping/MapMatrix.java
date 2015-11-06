@@ -178,7 +178,7 @@ public class MapMatrix {
 				//DoomlikeDungeons.profiler.endTask("Looking at Column " + i +  ", " + j);
 			}	
 		DoomlikeDungeons.profiler.endTask("Building Dungeon architecture");
-		//dungeon.addSpawners();	
+		dungeon.addTileEntities();	
 		dungeon.addEntrances();
 		DoomlikeDungeons.profiler.endTask("Building Dungeon in World");
 	}

@@ -86,6 +86,9 @@ public class Dungeon {
 	public int liquidBlock;
 	public int caveBlock;
 	
+	int shiftX;
+	int shiftZ;
+	
 	
 	public void preFinalize() {
 		if(theme != null) {
@@ -145,6 +148,10 @@ public class Dungeon {
 		map = new MapMatrix(size.width, world, chunkX, chunkZ);
 		numNodes = random.nextInt(size.maxNodes - size.minNodes + 1) + size.minNodes + 1;
 		nodes = new Node[numNodes];
+		
+		shiftX = (map.chunkX * 16) - (map.room.length / 2) + 8;
+		shiftZ = (map.chunkZ * 16) - (map.room.length / 2) + 8;
+		
 		makeNodes();
 		if((numEntrances < 1) && ConfigHandler.easyFind) addAnEntrance();
 		connectNodes();
@@ -257,7 +264,8 @@ public class Dungeon {
 	
 	
 	public void fixRoomContents() {
-		for(Room room : rooms) {	
+		for(Room room : rooms) {
+			addChestBlocks(room);
 			DoorChecker.processDoors1(this, room);
 		}
 		for(Room room : rooms) {	
@@ -266,27 +274,34 @@ public class Dungeon {
 		for(Room room : rooms) {
 			DoorChecker.processDoors3(this, room);
 			if(room instanceof Cave) DoorChecker.caveConnector(this, room);
-			addSpawners(room);	
 		}
 		DoorChecker.checkConnectivity(this);
 	}
 	
 	
-	public void addSpawners(Room room) {
-		// TODO: Separate methods for chests and entrances
-		int shiftX = (map.chunkX * 16) - (map.room.length / 2) + 8;
-		int shiftZ = (map.chunkZ * 16) - (map.room.length / 2) + 8;
-		//for(Room room : rooms) {			
-			//DoomlikeDungeons.profiler.startTask("Adding to room " + room.id);
+	public void addTileEntities() {
+		for(Room room : rooms) {
+			addTileEntitesToRom(room);
+		}
+	}
+	
+	
+	public void addTileEntitesToRom(Room room) {
 			for(Spawner  spawner : room.spawners) {
 					DBlock.placeSpawner(map.world, shiftX + spawner.x, spawner.y, shiftZ + spawner.z, spawner.mob);
 			}
 			for(BasicChest  chest : room.chests) {
 				chest.place(map.world, shiftX + chest.mx, chest.my, shiftZ + chest.mz, random);
 			}
-			//DoomlikeDungeons.profiler.endTask("Adding to room " + room.id);
-		//}	
 	}
+	
+	
+	public void addChestBlocks(Room room) {
+		for(BasicChest  chest : room.chests) {
+			DBlock.placeChest(map.world, shiftX + chest.mx, chest.my, shiftZ + chest.mz);
+		}		
+	}
+	
 	
 	public void addEntrances() {
 		for(Room room : nodeRooms) {
