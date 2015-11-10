@@ -40,7 +40,11 @@ public class TreasureChest extends BasicChest {
 		if(level >= LootCategory.LEVELS) level = LootCategory.LEVELS - 1;
 		ItemStack treasure;
 		//DBlock.placeChest(world, x, y, z);
-		if(world.getChunkFromChunkCoords(x / 16, z / 16).getBlock(pos) != DBlock.chest) return;
+		if(world.getBlockState(pos).getBlock() != DBlock.chest) {
+			System.err.println("[DLDUNGEONS] ERROR! Trying to put loot into non-chest at " 
+					+ x + ", " + y + ", " + z + " (treasure chest).");
+			return;
+		}
 		TileEntityChest contents = (TileEntityChest)world.getTileEntity(pos);
 		if(ConfigHandler.vanillaLoot) vanillaChest(contents, random);
 		int num;

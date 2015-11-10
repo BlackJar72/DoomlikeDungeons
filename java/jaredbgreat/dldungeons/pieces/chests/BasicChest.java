@@ -40,7 +40,11 @@ public class BasicChest {
 		level += random.nextInt(2);
 		if(level >= LootCategory.LEVELS) level = LootCategory.LEVELS - 1;
 		//DBlock.placeChest(world, x, y, z);
-		if(world.getChunkFromChunkCoords(x / 16, z / 16).getBlock(pos) != DBlock.chest) return;
+		if(world.getBlockState(pos).getBlock() != DBlock.chest) {
+			System.err.println("[DLDUNGEONS] ERROR! Trying to put loot into non-chest at " 
+									+ x + ", " + y + ", " + z + " (basic chest).");
+			return;
+		}
 		TileEntityChest contents = (TileEntityChest)world.getTileEntity(pos);
 		if(ConfigHandler.vanillaLoot && (!ConfigHandler.stingyLoot || random.nextBoolean())) 
 			vanillaChest(contents, random);

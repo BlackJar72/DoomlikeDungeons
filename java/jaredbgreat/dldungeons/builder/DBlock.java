@@ -182,8 +182,7 @@ public class DBlock {
 	
 	
 	public static void placeChest(World world, int x, int y, int z) {
-		if(!isProtectedBlock(world, x, y, z))
-			placeBlock(world, x, y, z, chest);		
+		placeBlock(world, x, y, z, chest);		
 	}
 	
 	
