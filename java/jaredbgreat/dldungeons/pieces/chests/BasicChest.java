@@ -46,15 +46,17 @@ public class BasicChest {
 			return;
 		}
 		TileEntityChest contents = (TileEntityChest)world.getTileEntity(pos);
-		if(ConfigHandler.vanillaLoot && (!ConfigHandler.stingyLoot || random.nextBoolean())) 
-			vanillaChest(contents, random);
-		int which = random.nextInt(2);
+		if(addVanillaLoot(random)) vanillaChest(contents, random);
+		int which = random.nextInt(3);
 		switch (which) {
 		case 0:
 			fillChest(contents, LootType.HEAL, random);
 			break;
 		case 1:
 			fillChest(contents, LootType.GEAR, random);
+			break;
+		case 2:
+			fillChest(contents, LootType.RANDOM, random);
 			break;
 		}
 	}
@@ -101,5 +103,16 @@ public class BasicChest {
 			ItemStack treasure = LootCategory.getLoot(LootType.HEAL, level, random).getStack(random);
 			if(treasure != null) chest.setInventorySlotContents(random.nextInt(27), treasure);
 		}
+	}
+	
+	
+	protected boolean addVanillaLoot(Random random) {
+		boolean out;
+		if(ConfigHandler.stingyLoot) {
+			out = (random.nextInt(LootCategory.LEVELS * 3) < (level * 2));
+		} else {
+			out = (random.nextInt(LootCategory.LEVELS * 2) < (level + LootCategory.LEVELS));
+		}
+		return (out && ConfigHandler.vanillaLoot);
 	}
 }
