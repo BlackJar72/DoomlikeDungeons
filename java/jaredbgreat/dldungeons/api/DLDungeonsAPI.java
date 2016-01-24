@@ -21,8 +21,7 @@ import net.minecraft.world.World;
 public class DLDungeonsAPI { 
 	
 	// This has been updated to deal with the change to all lower case for the modid.
-	private static final boolean dldloaded = cpw.mods.fml.common.Loader.isModLoaded("DLDungeonsJBG") 
-										  || cpw.mods.fml.common.Loader.isModLoaded("dldungeonsjbg");
+	private static final boolean dldloaded = isLoaded();
 	
 	
 	
@@ -39,7 +38,8 @@ public class DLDungeonsAPI {
 	 * @return boolean true if Doomlike Dungeons has been loaded by FML, false if not.
 	 */
 	public static boolean isLoaded() {
-		return cpw.mods.fml.common.Loader.isModLoaded("DLDungeonsJBG");
+		return cpw.mods.fml.common.Loader.isModLoaded("DLDungeonsJBG") 
+				  || cpw.mods.fml.common.Loader.isModLoaded("dldungeonsjbg");
 	}
 	
 	

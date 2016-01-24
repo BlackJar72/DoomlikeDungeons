@@ -171,7 +171,9 @@ public class DoorChecker {
 		}
 		for(Doorway door : room.doors) {
 			//System.out.println("[DLDUNGEONS] Testing a door");
-			//if(dungeon.map.astared[door.x][door.z]) continue;
+			if(dungeon.map.astared[door.x][door.z]) {
+			        continue;
+			}
 			if(door.xOriented) {
 				if(dungeon.map.isWall[door.x+1][door.z] || 
 						dungeon.map.isWall[door.x-1][door.z])
