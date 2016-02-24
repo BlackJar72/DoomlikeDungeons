@@ -24,10 +24,10 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class DBlock {
-	String id;   // The name
-	Block block; // The Minecraft block
-	int meta;	 // The blocks meta-data	
+public final class DBlock {
+	private final String id;   // The name
+	private final Block block; // The Minecraft block
+	private final int meta;	 // The blocks meta-data
 	
 	public static final Block spawner = (Block)Block.getBlockFromName("mob_spawner");
 	public static final Block chest   = (Block)Block.getBlockFromName("chest");
@@ -46,9 +46,8 @@ public class DBlock {
 	public static final ArrayList<DBlock> registry = new ArrayList<DBlock>();
 	
 	
-	public DBlock(String id) {
+	private DBlock(String id) {
 		this.id = id;
-		meta  = 0;
 		StringTokenizer nums = new StringTokenizer(id, "({[]})");
 		block = (Block)Block.getBlockFromName(nums.nextToken());
 		if(block == null) {
@@ -56,27 +55,30 @@ public class DBlock {
 					+ "\" was was not in registry (returned null).");
 		}
 		if(nums.hasMoreElements()) meta = Integer.parseInt(nums.nextToken());
+		else meta = 0;
 		//System.out.println("[DLD] Contructed Block " + block + " from "  + id);
 	}
 	
 	
-	public DBlock(String id, float version) throws NoSuchElementException {
+	private DBlock(String id, float version) throws NoSuchElementException {
 		//System.out.println("[DLDUNGEONS] Loading block " + id + " as " + version);
 		this.id = id;
-		meta  = 0;
 		if(version < 1.7) {
 			StringTokenizer nums = new StringTokenizer(id, "({[]})");
 			block = (Block)Block.getBlockFromName(nums.nextToken());
 			if(nums.hasMoreElements()) meta = Integer.parseInt(nums.nextToken());
+			else meta = 0;
 		} else {
 			StringTokenizer nums = new StringTokenizer(id, ":({[]})");
 			String modid = nums.nextToken();
 			if(modid.toLowerCase().equals("minecraft") || modid.toLowerCase().equals("vanilla")) {
 				block = (Block)Block.getBlockFromName(nums.nextToken());
 				if(nums.hasMoreElements()) meta = Integer.parseInt(nums.nextToken());
+				else meta = 0;
 			} else {
 				block = Block.getBlockFromItem(GameRegistry.findItem(modid, nums.nextToken()));
-				if(nums.hasMoreElements()) meta = Integer.parseInt(nums.nextToken());	
+				if(nums.hasMoreElements()) meta = Integer.parseInt(nums.nextToken());
+				else meta = 0;	
 			}			
 		}
 		if(block == null) {
@@ -235,7 +237,9 @@ public class DBlock {
 	
 	@Override
 	public int hashCode() {
-		// Not sure this would work much less what really would!
-		return id.hashCode();
+		int a = Block.getIdFromBlock(block);
+		a = (a << 4) + meta;
+		a += (a << 16);
+		return a;
 	}
 }
