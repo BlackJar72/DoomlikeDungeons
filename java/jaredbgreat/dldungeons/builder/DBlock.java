@@ -20,9 +20,9 @@ import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-public class DBlock {
-	int id; 	// The Minecraft block ID
-	int meta;	// The blocks meta-data	
+public final class DBlock {
+	private final int id; 	// The Minecraft block ID
+	private final int meta;	// The blocks meta-data	
 
 	public static final int chest    = Block.chest.blockID;
 	public static final int spawner  = Block.mobSpawner.blockID;
@@ -157,6 +157,7 @@ public class DBlock {
 	
 	@Override
 	public int hashCode() {
-		return (id << 4) + meta;
+		int a = (id << 4) + meta; 
+		return a + (a << 16);
 	}
 }
