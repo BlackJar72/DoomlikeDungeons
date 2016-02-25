@@ -97,6 +97,6 @@ public class TreasureChest extends BasicChest {
 	
 	
 	public static void initSlots() {
-		for(int i = 0; i < 27; i++) slots.add(new Integer(i));
+		for(int i = 1; i < 25; i++) slots.add(new Integer(i));
 	}
 }
