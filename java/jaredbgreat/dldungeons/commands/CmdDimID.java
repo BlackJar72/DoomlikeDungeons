@@ -12,30 +12,25 @@ package jaredbgreat.dldungeons.commands;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.server.command.ForgeCommand;
 
 
-public class CmdDimID extends ForgeCommand {
+public class CmdDimID extends CommandBase {
 
-    public CmdDimID(MinecraftServer server) {
-		super(server);
+    public CmdDimID() {
+		super();
 	}
 
 
 	private List aliases = new ArrayList<String>();
-	
-    
-	@Override
-	public int compareTo(Object o) {
-		return 0;
-	}
 
 	
 	@Override
-	public String getName() {
+	public String getCommandName() {
 		return "dlddimid";
 	}
 
@@ -44,20 +39,14 @@ public class CmdDimID extends ForgeCommand {
 	public String getCommandUsage(ICommandSender icommandsender) {
 		return "/dlddimid";
 	}
-
-	
-	@Override
-	public List getAliases() {
-		return aliases;
-	}
 	
 
 	@Override
-	public void execute(ICommandSender icommandsender, String[] astring) {
-		int dim =  icommandsender.getEntityWorld().provider.getDimensionId();
+	public void processCommand(ICommandSender sender, String[] args) {
+		int dim =  sender.getEntityWorld().provider.getDimensionId();
 		System.out.println(dim);
-		icommandsender.addChatMessage(new ChatComponentText("[DLDUNGEONS] " 
-				+ icommandsender.getName() 
+		sender.addChatMessage(new ChatComponentText("[DLDUNGEONS] " 
+				+ sender.getDisplayName().getFormattedText() 
 				+ " is in dimension " + dim));
 //		..setColor(EnumChatFormatting.DARK_PURPLE).setItalic(true));
 	}

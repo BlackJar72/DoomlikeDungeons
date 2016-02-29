@@ -73,12 +73,12 @@ public class DoomlikeDungeons {
     @EventHandler
     public void serverLoad(FMLServerStartingEvent event)
     {
-    	event.registerServerCommand(new CmdSpawn(event.getServer()));
-    	event.registerServerCommand(new CmdReload(event.getServer()));
-    	event.registerServerCommand(new CmdDimID(event.getServer()));
+    	event.registerServerCommand(new CmdSpawn());
+    	event.registerServerCommand(new CmdReload());
+    	event.registerServerCommand(new CmdDimID());
     	if(ConfigHandler.installCmd) {
-    		event.registerServerCommand(new CmdInstallThemes(event.getServer()));
-    		event.registerServerCommand(new CmdForceInstallThemes(event.getServer()));
+    		event.registerServerCommand(new CmdInstallThemes());
+    		event.registerServerCommand(new CmdForceInstallThemes());
     	}
     	//ConfigHandler.reload();
     }

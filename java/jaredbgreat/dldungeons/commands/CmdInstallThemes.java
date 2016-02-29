@@ -16,29 +16,21 @@ import jaredbgreat.dldungeons.themes.ThemeReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.server.command.ForgeCommand;
 
-public class CmdInstallThemes extends ForgeCommand {
+public class CmdInstallThemes extends CommandBase {
 
-	public CmdInstallThemes(MinecraftServer server) {
-		super(server);
-	}
-
-
-	private List aliases = new ArrayList<String>();
-	
-    
-	@Override
-	public int compareTo(Object o) {
-		return 0;
+	public CmdInstallThemes() {
+		super();
 	}
 
 	
 	@Override
-	public String getName() {
+	public String getCommandName() {
 		return "dldInstallThemes";
 	}
 
@@ -50,20 +42,14 @@ public class CmdInstallThemes extends ForgeCommand {
 
 	
 	@Override
-	public List getAliases() {
-		return aliases;
-	}
-
-	
-	@Override
-	public void execute(ICommandSender icommandsender, String[] astring) {
+	public void processCommand(ICommandSender icommandsender, String[] astring) {
 		if(!ConfigHandler.installCmd) return; // Should never happen, but a failsafe
 		Externalizer exporter = new Externalizer(ThemeReader.getThemesDir());
 		exporter.makeThemes();
 		exporter = new Externalizer(ConfigHandler.getConfigDir());
 		exporter.makeChestCfg();
 		icommandsender.addChatMessage(new ChatComponentText("[DLDUNGEONS] " 
-				+ icommandsender.getName() 
+				+ icommandsender.getDisplayName().getFormattedText() 
 				+ " has reinstalled default themes (nothing will be overwritten)"));
 //		..setColor(EnumChatFormatting.DARK_PURPLE).setItalic(true));
 		BiomeLists.reset();

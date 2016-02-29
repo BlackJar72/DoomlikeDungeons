@@ -245,7 +245,7 @@ public class ConfigHandler {
 			if(outstream == null) throw new IOException();
 			
 			for(Object item : Item.itemRegistry){ 
-				String name = Item.itemRegistry.getNameForObject(item).toString();
+				String name = Item.itemRegistry.getNameForObject((Item) item).toString();
 				if(true) {
 					//System.out.println("[DLDUNGEONS] Found item " + name);
 					outstream.write(name);
@@ -272,7 +272,7 @@ public class ConfigHandler {
 			if(outstream == null) throw new IOException();	
 			
 			for(Object block : Block.blockRegistry){ 
-				String name = Block.blockRegistry.getNameForObject(block).toString();
+				String name = Block.blockRegistry.getNameForObject((Block)block).toString();
 				if(true) {
 					//System.out.println("[DLDUNGEONS] Found item " + name);
 					outstream.write(name);

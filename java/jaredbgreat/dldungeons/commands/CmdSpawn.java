@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.BlockPos;
@@ -24,24 +25,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.server.command.ForgeCommand;
 
 
-public class CmdSpawn extends ForgeCommand {
+public class CmdSpawn extends CommandBase {
 
-    public CmdSpawn(MinecraftServer server) {
-		super(server);
-	}
-
-
-	private List aliases = new ArrayList<String>();
-	
-    
-	@Override
-	public int compareTo(Object o) {
-		return 0;
+    public CmdSpawn() {
+		super();
 	}
 
 	
 	@Override
-	public String getName() {
+	public String getCommandName() {
 		return "dldspawn";
 	}
 
@@ -53,13 +45,7 @@ public class CmdSpawn extends ForgeCommand {
 
 	
 	@Override
-	public List getAliases() {
-		return aliases;
-	}
-
-	
-	@Override
-	public void execute(ICommandSender icommandsender, String[] astring) {
+	public void processCommand(ICommandSender icommandsender, String[] astring) {
 		World world =  icommandsender.getEntityWorld();
 		BlockPos location = icommandsender.getPosition();
 		try {
@@ -72,8 +58,8 @@ public class CmdSpawn extends ForgeCommand {
 			e.printStackTrace();
 		}
 		if(ConfigHandler.announceCommands) icommandsender.addChatMessage(new ChatComponentText("[DLDUNGEONS] " 
-				+ icommandsender.getName() 
-				+ " just spawned a dungeon at X=" + location.getX() 
+				+ icommandsender.getDisplayName().getFormattedText() 
+				+ " just spawned a dungeon at X=" + location.getX()
 				+ ", Z=" + location.getZ()));
 	}
 	
