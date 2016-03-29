@@ -13,14 +13,14 @@ import jaredbgreat.dldungeons.debug.Logging;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
-import java.util.logging.Logger;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntityMobSpawner;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -29,14 +29,14 @@ public final class DBlock {
 	private final Block block; // The Minecraft block
 	private final int meta;	 // The blocks meta-data
 	
-	public static final Block spawner = (Block)Block.getBlockFromName("mob_spawner");
-	public static final Block chest   = (Block)Block.getBlockFromName("chest");
-	public static final Block portal1 = (Block)Block.getBlockFromName("end_portal_frame");
-	public static final Block portal2 = (Block)Block.getBlockFromName("end_portal");
-	public static final Block quartz  = (Block)Block.getBlockFromName("quartz_block");
-	public static final Block lapis   = (Block)Block.getBlockFromName("lapis_block");
-	public static final Block water   = (Block)Block.getBlockFromName("water");
-	public static final Block air     = (Block)Block.getBlockFromName("air");
+	public static final Block spawner = Blocks.mob_spawner;
+	public static final Block chest   = Blocks.chest;
+	public static final Block portal1 = Blocks.end_portal_frame;
+	public static final Block portal2 = Blocks.end_portal;
+	public static final Block quartz  = Blocks.quartz_block;
+	public static final Block lapis   = Blocks.lapis_block;
+	public static final Block water   = Blocks.water;
+	public static final Block air     = Blocks.air;
 	
 	public static final int chestid = Block.getIdFromBlock(chest);	
 	public static final int spawnerid = Block.getIdFromBlock(spawner);	
@@ -199,7 +199,8 @@ public final class DBlock {
 	
 	
 	public static boolean isGroundBlock(World world, int x, int y, int z) {
-		Material mat = ((Block)world.getChunkFromChunkCoords(x / 16, z / 16).getBlock(x, y, z)).getMaterial();
+		IBlockState bs = world.getChunkFromChunkCoords(x / 16, z / 16).getBlockState(x, y, z);
+		Material mat = bs.getMaterial();
 		return 	   (mat == Material.grass) 
 				|| (mat == Material.iron) 
 				|| (mat == Material.ground) 

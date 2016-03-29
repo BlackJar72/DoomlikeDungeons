@@ -15,8 +15,9 @@ import static jaredbgreat.dldungeons.builder.Builder.placeDungeon;
 import java.util.HashSet;
 import java.util.Random;
 
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
@@ -39,7 +40,7 @@ public class GenerationHandler implements IWorldGenerator {
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world,
-						IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
+			IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
 		// Prevent bad spawns
 		if(world.isRemote) return; // Do not perform world-gen on the client!
 		if((ConfigHandler.obeyRule && !world.getWorldInfo().isMapFeaturesEnabled())
@@ -52,14 +53,14 @@ public class GenerationHandler implements IWorldGenerator {
 			//System.out.println("[DLDUNGONS] biome type " + type.toString() +", blockedBiome = " + blockedBiome);
 		}
 		if(blockedBiome) return;
-		if((dimensions.contains(Integer.valueOf(world.provider.getDimensionId())) != ConfigHandler.positiveDims)) return;
+		if((dimensions.contains(Integer.valueOf(world.provider.getDimension())) != ConfigHandler.positiveDims)) return;
 		if((Math.abs(chunkX - (world.getSpawnPoint().getX() / 16)) < minXZ) 
 				|| (Math.abs(chunkZ - (world.getSpawnPoint().getZ() / 16)) < minXZ)) return;
 		
 		//Get some numbers		
 		//DoomlikeDungeons.profiler.startTask("Checking for Dungeon");
-		int xseed = (int)(world.getSeed()  % (1 << 31)) + world.provider.getDimensionId();
-		int zseed = (int)(world.getSeed()  / (1 << 31)) + world.provider.getDimensionId();
+		int xseed = (int)(world.getSeed()  % (1 << 31)) + world.provider.getDimension();
+		int zseed = (int)(world.getSeed()  / (1 << 31)) + world.provider.getDimension();
 		//mrand = new Random(xseed + zseed + (2027 * (long)(chunkX / factor)) + (1987 * (long)(chunkZ / factor)));
 		mrand = new Random(xseed 
 				+ (2027 * (long)(chunkX / factor)) 
@@ -117,6 +118,5 @@ public class GenerationHandler implements IWorldGenerator {
 	public static void subDimension(int value) {
 		dimensions.remove(Integer.valueOf(value));
 	}
-	
 	
 }

@@ -17,10 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentText;
-import net.minecraftforge.server.command.ForgeCommand;
+import net.minecraft.util.text.TextComponentString;
 
 public class CmdForceInstallThemes extends CommandBase {
 
@@ -45,14 +45,15 @@ public class CmdForceInstallThemes extends CommandBase {
 
 	
 	@Override
-	public void processCommand(ICommandSender icommandsender, String[] astring) {
+	public void execute(MinecraftServer server, ICommandSender sender,
+			String[] args) throws CommandException {
 		if(!ConfigHandler.installCmd) return; // Should never happen, but a failsafe
 		Externalizer exporter = new Externalizer(ThemeReader.getThemesDir());
 		exporter.forceThemes();
 		exporter = new Externalizer(ConfigHandler.getConfigDir());
 		exporter.forceChestCfg();
-		icommandsender.addChatMessage(new ChatComponentText("[DLDUNGEONS] " 
-				+ icommandsender.getDisplayName().getFormattedText() 
+		sender.addChatMessage(new TextComponentString("[DLDUNGEONS] " 
+				+ sender.getDisplayName().getFormattedText() 
 				+ " has forced reinstalled default themes (existing themes will be overwritten!)"));
 //		..setColor(EnumChatFormatting.DARK_PURPLE).setItalic(true));
 		BiomeLists.reset();

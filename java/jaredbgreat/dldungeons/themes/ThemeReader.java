@@ -10,7 +10,6 @@ package jaredbgreat.dldungeons.themes;
 */	
 
 
-import jaredbgreat.dldungeons.DoomlikeDungeons;
 import jaredbgreat.dldungeons.builder.DBlock;
 import jaredbgreat.dldungeons.pieces.chests.LootItem;
 import jaredbgreat.dldungeons.pieces.chests.LootList;
@@ -513,8 +512,6 @@ public class ThemeReader {
 			else if(name.equals("HILLS")) biomes.add(Type.HILLS);
 			else if(name.equals("SWAMP")) biomes.add(Type.SWAMP);
 			else if(name.equals("WATER")) biomes.add(Type.WATER);
-			else if(name.equals("DESERT")) biomes.add(Type.DESERT);
-			else if(name.equals("FROZEN")) biomes.add(Type.FROZEN);
 			else if(name.equals("JUNGLE")) biomes.add(Type.JUNGLE);
 			else if(name.equals("WASTELAND")) biomes.add(Type.WASTELAND);
 			else if(name.equals("BEACH")) biomes.add(Type.BEACH);

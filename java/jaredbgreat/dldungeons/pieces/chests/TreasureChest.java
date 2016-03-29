@@ -17,10 +17,9 @@ import java.util.Random;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ChestGenHooks;
 
 public class TreasureChest extends BasicChest {
 	
@@ -46,29 +45,29 @@ public class TreasureChest extends BasicChest {
 			return;
 		}
 		TileEntityChest contents = (TileEntityChest)world.getTileEntity(pos);
-		if(ConfigHandler.vanillaLoot) vanillaChest(contents, random);
+//		if(ConfigHandler.vanillaLoot) vanillaChest(contents, random);
 		int num;
 		num = random.nextInt(2 + (level / 3)) + 2;
 		for(int i = 0; i < num; i++) {
 			treasure = LootCategory.getLoot(LootType.HEAL, level, random).getStack(random);
 			if(contents.getStackInSlot(slot) != null) slot++;
+			if(!slotValid(slot)) return;  // This should not happen, but better safe than sorry
 			contents.setInventorySlotContents(slots.get(slot++).intValue(), treasure);
-			if(slot > 25) return;  // This should not happen, but better safe than sorry
 		}
 		num = random.nextInt(2 + (level / 3)) + 2;
 		for(int i = 0; i < num; i++) {
 			treasure = LootCategory.getLoot(LootType.GEAR, level, random).getStack(random);
 			if(contents.getStackInSlot(slot) != null) slot++;
+			if(!slotValid(slot)) return;  // This should not happen, but better safe than sorry
 			contents.setInventorySlotContents(slots.get(slot++).intValue(), treasure);
-			if(slot > 25) return;  // This should not happen, but better safe than sorry
 		}
 		if(ConfigHandler.stingyLoot) num = random.nextInt(2 + (level / 3)) + 2;
 		else num = random.nextInt(3 + (level / 2)) + 2;
 		for(int i = 0; i < num; i++) {
 			treasure = LootCategory.getLoot(LootType.LOOT, level, random).getStack(random);
 			if(contents.getStackInSlot(slot) != null) slot++;
+			if(!slotValid(slot)) return;  // This should not happen, but better safe than sorry
 			contents.setInventorySlotContents(slots.get(slot++).intValue(), treasure);
-			if(slot > 25) return;  // This should not happen, but better safe than sorry
 		}
 		if(random.nextInt(7) < level) {
 			if(level >= 6) {
@@ -76,29 +75,34 @@ public class TreasureChest extends BasicChest {
 			}
 			else treasure = LootList.discs.getLoot(random).getStack(random);
 			if(contents.getStackInSlot(slot) != null) slot++;
+			if(!slotValid(slot)) return;
 			contents.setInventorySlotContents(slots.get(slot++).intValue(), treasure);
-			if(slot > 25) return;
 		}
 	}
 	
 	
-	private void vanillaChest(TileEntityChest chest, Random random) {
-		int which = random.nextInt(4);
-		ChestGenHooks chinf;
-		switch (which) {
-		case 0:
-			chinf = ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_DESERT_CHEST);
-			break;
-		case 1:
-			chinf = ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_CHEST);
-			break;
-		default:
-			chinf = ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST);
-			break;
-		}		
-        WeightedRandomChestContent.generateChestContents(random, 
-        		chinf.getItems(random), chest, chinf.getCount(random));
+	private boolean slotValid(int slot) {
+		return ((slot >= 0) && (slot < 25));
 	}
+	
+	
+//	private void vanillaChest(TileEntityChest chest, Random random) {
+//		int which = random.nextInt(4);
+//		ChestGenHooks chinf;
+//		switch (which) {
+//		case 0:
+//			chinf = ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_DESERT_CHEST);
+//			break;
+//		case 1:
+//			chinf = ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_CHEST);
+//			break;
+//		default:
+//			chinf = ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST);
+//			break;
+//		}		
+//        WeightedRandomChestContent.generateChestContents(random, 
+//        		chinf.getItems(random), chest, chinf.getCount(random));
+//	}
 	
 	
 	public static void initSlots() {

@@ -17,10 +17,9 @@ import java.util.Random;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ChestGenHooks;
 
 public class BasicChest {
 	
@@ -46,7 +45,7 @@ public class BasicChest {
 			return;
 		}
 		TileEntityChest contents = (TileEntityChest)world.getTileEntity(pos);
-		if(addVanillaLoot(random)) vanillaChest(contents, random);
+//		if(addVanillaLoot(random)) vanillaChest(contents, random);
 		int which = random.nextInt(3);
 		switch (which) {
 		case 0:
@@ -62,39 +61,39 @@ public class BasicChest {
 	}
 	
 	
-	private void vanillaChest(TileEntityChest chest, Random random) {
-		int which = random.nextInt(6);
-		ChestGenHooks chinf;
-		switch (which) {
-		case 0: 
-			chinf = ChestGenHooks.getInfo(ChestGenHooks.BONUS_CHEST); 
-			break;
-		case 1:
-			chinf = ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_DESERT_CHEST);
-			break;
-		case 2:
-			chinf = ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_CHEST);
-			break;
-		case 3:
-			chinf = ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR);
-			break;
-		case 4:
-			chinf = ChestGenHooks.getInfo(ChestGenHooks.VILLAGE_BLACKSMITH);
-			break;
-		case 5:
-		default:
-			chinf = ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST);
-			break;
-		}		
-        WeightedRandomChestContent.generateChestContents(random, 
-        		chinf.getItems(random), chest, chinf.getCount(random));
-	}
+//	private void vanillaChest(TileEntityChest chest, Random random) {
+//		int which = random.nextInt(6);
+//		ChestGenHooks chinf;
+//		switch (which) {
+//		case 0: 
+//			chinf = ChestGenHooks.getInfo(ChestGenHooks.BONUS_CHEST); 
+//			break;
+//		case 1:
+//			chinf = ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_DESERT_CHEST);
+//			break;
+//		case 2:
+//			chinf = ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_CHEST);
+//			break;
+//		case 3:
+//			chinf = ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR);
+//			break;
+//		case 4:
+//			chinf = ChestGenHooks.getInfo(ChestGenHooks.VILLAGE_BLACKSMITH);
+//			break;
+//		case 5:
+//		default:
+//			chinf = ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST);
+//			break;
+//		}		
+//        WeightedRandomChestContent.generateChestContents(random, 
+//        		chinf.getItems(random), chest, chinf.getCount(random));
+//	}
 	
 	
 	protected void fillChest(TileEntityChest chest, LootType kind, Random random) {		
 		int num;
-		if(ConfigHandler.stingyLoot) num = random.nextInt(2 + (level / 2)) + 1;
-		else num = random.nextInt(3 + (level / 2)) + 2;
+		if(ConfigHandler.stingyLoot) num = random.nextInt(3 + (level / 2)) + 2;
+		else num = random.nextInt(2 + (level)) + 2;
 		for(int i = 0; i < num; i++) {
 			ItemStack treasure = LootCategory.getLoot(kind, level, random).getStack(random);
 			if(treasure != null) chest.setInventorySlotContents(random.nextInt(27), treasure);

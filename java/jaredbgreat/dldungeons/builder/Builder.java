@@ -18,8 +18,9 @@ import jaredbgreat.dldungeons.planner.Dungeon;
 
 import java.util.Random;
 
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
 
 
@@ -45,7 +46,7 @@ public class Builder {
 	
 
 	public static void placeDungeon(Random random, int chunkX, int chunkZ, World world,
-						IChunkProvider chunkGenerator, IChunkProvider chunkProvider) throws Throwable {	
+						IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) throws Throwable {	
 		if(world.isRemote) return; // Do not perform world-gen on the client!
 		DoomlikeDungeons.profiler.startTask("Create Dungeons");
 		Dungeon dungeon = new Dungeon(random, world.getBiomeGenForCoords(new BlockPos((chunkX * 16), 64, (chunkZ * 16))), 

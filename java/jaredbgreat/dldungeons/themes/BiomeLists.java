@@ -11,7 +11,6 @@ package jaredbgreat.dldungeons.themes;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
 
@@ -94,15 +93,11 @@ public class BiomeLists {
 			end.add(theme);
 			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to end.");
 		}
-		if(theme.biomes.contains(Type.DESERT))    {
-			desert.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to desert.");
-		}
 		if(theme.biomes.contains(Type.FOREST))    {
 			forest.add(theme);
 			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to forest.");
 		}
-		if(theme.biomes.contains(Type.FROZEN) || theme.biomes.contains(Type.SNOWY))    {
+		if(theme.biomes.contains(Type.SNOWY))    {
 			frozen.add(theme);
 			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to frozen.");
 		}
@@ -214,15 +209,11 @@ public class BiomeLists {
 			nend.add(theme);
 			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from end.");
 		}
-		if(theme.notIn.contains(Type.DESERT))    {
-			ndesert.add(theme);
-			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from desert.");
-		}
 		if(theme.notIn.contains(Type.FOREST))    {
 			nforest.add(theme);
 			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from forest.");
 		}
-		if(theme.notIn.contains(Type.FROZEN) || theme.notIn.contains(Type.SNOWY))    {
+		if(theme.notIn.contains(Type.SNOWY))    {
 			nfrozen.add(theme);
 			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from frozen.");
 		}
@@ -335,17 +326,13 @@ public class BiomeLists {
     	ArrayList<Theme> use = new ArrayList<Theme>();
     	set.clear();
     	use.clear();
-		if(BiomeDictionary.isBiomeOfType(biome, Type.DESERT)) {
-			set.addAll(desert);
-		}
 		if(BiomeDictionary.isBiomeOfType(biome, Type.END)) {
 			set.addAll(end);
 		}
 		if(BiomeDictionary.isBiomeOfType(biome, Type.FOREST)) {
 			set.addAll(forest);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.FROZEN) // Probably not necessary...
-				|| BiomeDictionary.isBiomeOfType(biome, Type.SNOWY)) { 
+		if(BiomeDictionary.isBiomeOfType(biome, Type.SNOWY)) { 
 			set.addAll(frozen);
 		}
 		if(BiomeDictionary.isBiomeOfType(biome, Type.HILLS)) {
@@ -421,10 +408,6 @@ public class BiomeLists {
 		
 		
 		// REMOVAL CODE BELOW
-		if(BiomeDictionary.isBiomeOfType(biome, Type.DESERT)) {
-			set.removeAll(ndesert);
-			//System.out.println("[DLDUNGEONS] Adding them list for desert.");
-		}
 		if(BiomeDictionary.isBiomeOfType(biome, Type.END)) {
 			set.removeAll(nend);
 			//System.out.println("[DLDUNGEONS] Adding them list for desert.");
@@ -432,10 +415,6 @@ public class BiomeLists {
 		if(BiomeDictionary.isBiomeOfType(biome, Type.FOREST)) {
 			set.removeAll(nforest);
 			//System.out.println("[DLDUNGEONS] Adding them list for forest.");
-		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.FROZEN)) {
-			set.removeAll(nfrozen);
-			//System.out.println("[DLDUNGEONS] Adding them list for frozen.");
 		}
 		if(BiomeDictionary.isBiomeOfType(biome, Type.HILLS)) {
 			set.removeAll(nhills);
@@ -526,7 +505,7 @@ public class BiomeLists {
     		return null;
     	} else {
     		use.addAll(set);
-			System.out.println("[DLDUNGEONS] The following themes are avalable for " + biome.biomeName + ":");
+			System.out.println("[DLDUNGEONS] The following themes are avalable for " + biome.getBiomeName() + ":");
     		for(Theme theme : use) {
     			System.out.println("[DLDUNGEONS] " + theme.name);
     		}

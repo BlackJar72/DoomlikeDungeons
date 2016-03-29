@@ -12,17 +12,15 @@ package jaredbgreat.dldungeons.commands;
 import static jaredbgreat.dldungeons.builder.Builder.placeDungeon;
 import jaredbgreat.dldungeons.ConfigHandler;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
-import net.minecraftforge.server.command.ForgeCommand;
 
 
 public class CmdSpawn extends CommandBase {
@@ -45,9 +43,10 @@ public class CmdSpawn extends CommandBase {
 
 	
 	@Override
-	public void processCommand(ICommandSender icommandsender, String[] astring) {
-		World world =  icommandsender.getEntityWorld();
-		BlockPos location = icommandsender.getPosition();
+	public void execute(MinecraftServer server, ICommandSender sender,
+			String[] args) throws CommandException {
+		World world =  sender.getEntityWorld();
+		BlockPos location = sender.getPosition();
 		try {
 			placeDungeon(new Random(), 
 					location.getX() / 16, 
@@ -57,8 +56,8 @@ public class CmdSpawn extends CommandBase {
 			System.err.println("[DLDUNGEONS] Danger!  Failed to finalize a dungeon after building!");
 			e.printStackTrace();
 		}
-		if(ConfigHandler.announceCommands) icommandsender.addChatMessage(new ChatComponentText("[DLDUNGEONS] " 
-				+ icommandsender.getDisplayName().getFormattedText() 
+		if(ConfigHandler.announceCommands) sender.addChatMessage(new TextComponentString("[DLDUNGEONS] " 
+				+ sender.getDisplayName().getFormattedText() 
 				+ " just spawned a dungeon at X=" + location.getX()
 				+ ", Z=" + location.getZ()));
 	}

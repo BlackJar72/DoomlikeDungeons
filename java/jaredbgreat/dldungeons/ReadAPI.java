@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.util.Random;
 
 import net.minecraft.world.World;
-import net.minecraft.world.storage.SaveHandler;
 
 public class ReadAPI {	
 	
@@ -151,7 +150,7 @@ public class ReadAPI {
 	
 	public static void saveWorldData(World world) {
 		if(ConfigHandler.disableAPI) return;
-		String saveDir = world.getSaveHandler().getWorldDirectoryName();
+		File saveDir = world.getSaveHandler().getWorldDirectory();
 	}
 	
 	

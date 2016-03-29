@@ -13,10 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentText;
-import net.minecraftforge.server.command.ForgeCommand;
+import net.minecraft.util.text.TextComponentString;
 
 
 public class CmdDimID extends CommandBase {
@@ -42,10 +42,11 @@ public class CmdDimID extends CommandBase {
 	
 
 	@Override
-	public void processCommand(ICommandSender sender, String[] args) {
-		int dim =  sender.getEntityWorld().provider.getDimensionId();
+	public void execute(MinecraftServer server, ICommandSender sender,
+			String[] args) throws CommandException {
+		int dim =  sender.getEntityWorld().provider.getDimension();
 		System.out.println(dim);
-		sender.addChatMessage(new ChatComponentText("[DLDUNGEONS] " 
+		sender.addChatMessage(new TextComponentString("[DLDUNGEONS] " 
 				+ sender.getDisplayName().getFormattedText() 
 				+ " is in dimension " + dim));
 //		..setColor(EnumChatFormatting.DARK_PURPLE).setItalic(true));
@@ -63,5 +64,4 @@ public class CmdDimID extends CommandBase {
 	public boolean isUsernameIndex(String[] astring, int i) {
 		return false;
 	}
-
 }
