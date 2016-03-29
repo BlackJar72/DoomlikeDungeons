@@ -51,34 +51,56 @@ public class TreasureChest extends BasicChest {
 		num = random.nextInt(2 + (level / 3)) + 2;
 		for(int i = 0; i < num; i++) {
 			treasure = LootCategory.getLoot(LootType.HEAL, level, random).getStack(random);
-			if(contents.getStackInSlot(slot) != null) slot++;
+			while(contents.getStackInSlot(slot) != null) {
+				slot++;
+				if(!validSlot(slot)) return;
+			}
 			contents.setInventorySlotContents(slots.get(slot++).intValue(), treasure);
-			if(slot > 25) return;  // This should not happen, but better safe than sorry
+		}
+		num = random.nextInt(2 + (level / 3)) + 2;
+		for(int i = 0; i < num; i++) {
+			treasure = LootCategory.getLoot(LootType.HEAL, level, random).getStack(random);
+			while(contents.getStackInSlot(slot) != null) {
+				slot++;
+				if(!validSlot(slot)) return;
+			}
+			contents.setInventorySlotContents(slots.get(slot++).intValue(), treasure);
 		}
 		num = random.nextInt(2 + (level / 3)) + 2;
 		for(int i = 0; i < num; i++) {
 			treasure = LootCategory.getLoot(LootType.GEAR, level, random).getStack(random);
-			if(contents.getStackInSlot(slot) != null) slot++;
+			while(contents.getStackInSlot(slot) != null) {
+				slot++;
+				if(!validSlot(slot)) return;
+			}
 			contents.setInventorySlotContents(slots.get(slot++).intValue(), treasure);
-			if(slot > 25) return;  // This should not happen, but better safe than sorry
 		}
 		if(ConfigHandler.stingyLoot) num = random.nextInt(2 + (level / 3)) + 2;
 		else num = random.nextInt(3 + (level / 2)) + 2;
 		for(int i = 0; i < num; i++) {
 			treasure = LootCategory.getLoot(LootType.LOOT, level, random).getStack(random);
-			if(contents.getStackInSlot(slot) != null) slot++;
+			while(contents.getStackInSlot(slot) != null) {
+				slot++;
+				if(!validSlot(slot)) return;
+			}
 			contents.setInventorySlotContents(slots.get(slot++).intValue(), treasure);
-			if(slot > 25) return;  // This should not happen, but better safe than sorry
 		}
 		if(random.nextInt(7) < level) {
 			if(level >= 6) {
 				treasure = LootList.special.getLoot(random).getStack(random);
 			}
 			else treasure = LootList.discs.getLoot(random).getStack(random);
-			if(contents.getStackInSlot(slot) != null) slot++;
+			while(contents.getStackInSlot(slot) != null) {
+				slot++;
+				if(!validSlot(slot)) return;
+			}
 			contents.setInventorySlotContents(slots.get(slot++).intValue(), treasure);
-			if(slot > 25) return;
 		}
+	}
+	
+	
+	private boolean validSlot(int slot) {
+		return ((slot >= 0) && (slot < 25));
 	}
 	
 	
