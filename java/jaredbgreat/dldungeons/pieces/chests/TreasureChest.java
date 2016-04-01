@@ -51,50 +51,29 @@ public class TreasureChest extends BasicChest {
 		num = random.nextInt(2 + (level / 3)) + 2;
 		for(int i = 0; i < num; i++) {
 			treasure = LootCategory.getLoot(LootType.HEAL, level, random).getStack(random);
-			while(contents.getStackInSlot(slot) != null) {
-				slot++;
-				if(!validSlot(slot)) return;
-			}
-			contents.setInventorySlotContents(slots.get(slot++).intValue(), treasure);
-		}
-		num = random.nextInt(2 + (level / 3)) + 2;
-		for(int i = 0; i < num; i++) {
-			treasure = LootCategory.getLoot(LootType.HEAL, level, random).getStack(random);
-			while(contents.getStackInSlot(slot) != null) {
-				slot++;
-				if(!validSlot(slot)) return;
-			}
-			contents.setInventorySlotContents(slots.get(slot++).intValue(), treasure);
+			contents.setInventorySlotContents(slots.get(slot).intValue(), treasure);
+			slot++;
 		}
 		num = random.nextInt(2 + (level / 3)) + 2;
 		for(int i = 0; i < num; i++) {
 			treasure = LootCategory.getLoot(LootType.GEAR, level, random).getStack(random);
-			while(contents.getStackInSlot(slot) != null) {
-				slot++;
-				if(!validSlot(slot)) return;
-			}
-			contents.setInventorySlotContents(slots.get(slot++).intValue(), treasure);
+			contents.setInventorySlotContents(slots.get(slot).intValue(), treasure);
+			slot++;
 		}
 		if(ConfigHandler.stingyLoot) num = random.nextInt(2 + (level / 3)) + 2;
 		else num = random.nextInt(3 + (level / 2)) + 2;
 		for(int i = 0; i < num; i++) {
 			treasure = LootCategory.getLoot(LootType.LOOT, level, random).getStack(random);
-			while(contents.getStackInSlot(slot) != null) {
-				slot++;
-				if(!validSlot(slot)) return;
-			}
-			contents.setInventorySlotContents(slots.get(slot++).intValue(), treasure);
+			contents.setInventorySlotContents(slots.get(slot).intValue(), treasure);
+			slot++;
 		}
 		if(random.nextInt(7) < level) {
 			if(level >= 6) {
 				treasure = LootList.special.getLoot(random).getStack(random);
 			}
 			else treasure = LootList.discs.getLoot(random).getStack(random);
-			while(contents.getStackInSlot(slot) != null) {
-				slot++;
-				if(!validSlot(slot)) return;
-			}
-			contents.setInventorySlotContents(slots.get(slot++).intValue(), treasure);
+			contents.setInventorySlotContents(slots.get(slot).intValue(), treasure);
+			slot++;
 		}
 	}
 	
@@ -124,6 +103,6 @@ public class TreasureChest extends BasicChest {
 	
 	
 	public static void initSlots() {
-		for(int i = 1; i < 25; i++) slots.add(new Integer(i));
+		for(int i = 1; i < 27; i++) slots.add(new Integer(i));
 	}
 }
