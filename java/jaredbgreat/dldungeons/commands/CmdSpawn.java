@@ -44,7 +44,7 @@ public class CmdSpawn extends CommandBase {
 	
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender,
-			String[] args) throws CommandException {
+			String[] args) throws CommandException  {
 		World world =  sender.getEntityWorld();
 		BlockPos location = sender.getPosition();
 		try {

@@ -306,8 +306,9 @@ public class Room extends AbstractRoom {
 			y = dungeon.map.floorY[x][z];
 			chests.add(new BasicChest(x, y, z, level));
 		} else {
-			if(isNode)num = dungeon.random.nextInt(1 + ((spawners.size())) / 2) + 2;
-			else      num = dungeon.random.nextInt(1 + (spawners.size()) / 2) + 1;			
+			int ms = Math.max(spawners.size(), 2);
+			if(isNode)num = Math.min(ms, dungeon.random.nextInt(2 + (ms / 2)) + 2);
+			else      num = dungeon.random.nextInt(1 + (ms / 2)) + 1;
 			for(int i = 0; i < num; i++) {
 				tmp = (endX - beginX - 3);
 				x = dungeon.random.nextInt(tmp) + beginX + 2;

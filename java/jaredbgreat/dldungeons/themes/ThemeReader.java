@@ -10,6 +10,7 @@ package jaredbgreat.dldungeons.themes;
 */	
 
 
+import jaredbgreat.dldungeons.DoomlikeDungeons;
 import jaredbgreat.dldungeons.builder.DBlock;
 import jaredbgreat.dldungeons.pieces.chests.LootItem;
 import jaredbgreat.dldungeons.pieces.chests.LootList;

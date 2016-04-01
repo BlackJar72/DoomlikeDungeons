@@ -39,7 +39,7 @@ public class CmdInstallThemes extends CommandBase {
 	
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender,
-			String[] args) throws CommandException {
+			String[] args) throws CommandException  {
 		if(!ConfigHandler.installCmd) return; // Should never happen, but a failsafe
 		Externalizer exporter = new Externalizer(ThemeReader.getThemesDir());
 		exporter.makeThemes();

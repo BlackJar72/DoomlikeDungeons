@@ -43,7 +43,7 @@ public class CmdDimID extends CommandBase {
 
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender,
-			String[] args) throws CommandException {
+			String[] args) throws CommandException  {
 		int dim =  sender.getEntityWorld().provider.getDimension();
 		System.out.println(dim);
 		sender.addChatMessage(new TextComponentString("[DLDUNGEONS] " 

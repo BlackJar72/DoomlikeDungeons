@@ -17,7 +17,6 @@ import java.util.Random;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -47,41 +46,37 @@ public class TreasureChest extends BasicChest {
 		TileEntityChest contents = (TileEntityChest)world.getTileEntity(pos);
 //		if(ConfigHandler.vanillaLoot) vanillaChest(contents, random);
 		int num;
-		num = random.nextInt(2 + (level / 3)) + 2;
+		num = random.nextInt(3 + (level / 3)) + 2;
 		for(int i = 0; i < num; i++) {
 			treasure = LootCategory.getLoot(LootType.HEAL, level, random).getStack(random);
-			if(contents.getStackInSlot(slot) != null) slot++;
-			if(!slotValid(slot)) return;  // This should not happen, but better safe than sorry
-			contents.setInventorySlotContents(slots.get(slot++).intValue(), treasure);
+			contents.setInventorySlotContents(slots.get(slot).intValue(), treasure);
+			slot++;
 		}
-		num = random.nextInt(2 + (level / 3)) + 2;
+		num = random.nextInt(3 + (level / 3)) + 2;
 		for(int i = 0; i < num; i++) {
 			treasure = LootCategory.getLoot(LootType.GEAR, level, random).getStack(random);
-			if(contents.getStackInSlot(slot) != null) slot++;
-			if(!slotValid(slot)) return;  // This should not happen, but better safe than sorry
-			contents.setInventorySlotContents(slots.get(slot++).intValue(), treasure);
+			contents.setInventorySlotContents(slots.get(slot).intValue(), treasure);
+			slot++;
 		}
-		if(ConfigHandler.stingyLoot) num = random.nextInt(2 + (level / 3)) + 2;
+		if(ConfigHandler.stingyLoot) num = random.nextInt(3 + (level / 3)) + 2;
 		else num = random.nextInt(3 + (level / 2)) + 2;
 		for(int i = 0; i < num; i++) {
 			treasure = LootCategory.getLoot(LootType.LOOT, level, random).getStack(random);
-			if(contents.getStackInSlot(slot) != null) slot++;
-			if(!slotValid(slot)) return;  // This should not happen, but better safe than sorry
-			contents.setInventorySlotContents(slots.get(slot++).intValue(), treasure);
+			contents.setInventorySlotContents(slots.get(slot).intValue(), treasure);
+			slot++;
 		}
 		if(random.nextInt(7) < level) {
 			if(level >= 6) {
 				treasure = LootList.special.getLoot(random).getStack(random);
 			}
 			else treasure = LootList.discs.getLoot(random).getStack(random);
-			if(contents.getStackInSlot(slot) != null) slot++;
-			if(!slotValid(slot)) return;
-			contents.setInventorySlotContents(slots.get(slot++).intValue(), treasure);
+			contents.setInventorySlotContents(slots.get(slot).intValue(), treasure);
+			slot++;
 		}
 	}
 	
 	
-	private boolean slotValid(int slot) {
+	private boolean validSlot(int slot) {
 		return ((slot >= 0) && (slot < 25));
 	}
 	
@@ -106,6 +101,6 @@ public class TreasureChest extends BasicChest {
 	
 	
 	public static void initSlots() {
-		for(int i = 1; i < 25; i++) slots.add(new Integer(i));
+		for(int i = 0; i < 27; i++) slots.add(new Integer(i));
 	}
 }

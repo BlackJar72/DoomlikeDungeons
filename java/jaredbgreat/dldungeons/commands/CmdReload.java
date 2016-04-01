@@ -37,7 +37,7 @@ public class CmdReload extends CommandBase {
 	
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender,
-			String[] args) throws CommandException {		
+			String[] args) throws CommandException  {		
 			System.out.println("[DLDUNGEONS] " 
 					+ sender.getDisplayName().getFormattedText() 
 					+ " Used /dldreload command; Reloading config file now.");

@@ -17,7 +17,6 @@ import java.util.Random;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -92,7 +91,7 @@ public class BasicChest {
 	
 	protected void fillChest(TileEntityChest chest, LootType kind, Random random) {		
 		int num;
-		if(ConfigHandler.stingyLoot) num = random.nextInt(3 + (level / 2)) + 2;
+		if(ConfigHandler.stingyLoot) num = random.nextInt(2 + (level / 2)) + 2;
 		else num = random.nextInt(2 + (level)) + 2;
 		for(int i = 0; i < num; i++) {
 			ItemStack treasure = LootCategory.getLoot(kind, level, random).getStack(random);

@@ -27,12 +27,12 @@ public class WeakChest extends BasicChest {
 	@Override
 	public void place(World world, int x, int y, int z, Random random) {
 		BlockPos pos = new BlockPos(x, y, z);
-		//DBlock.placeChest(world, x, y, z);
-		if(world.getBlockState(pos).getBlock() != DBlock.chest) {
-			System.err.println("[DLDUNGEONS] ERROR! Trying to put loot into non-chest at " 
-					+ x + ", " + y + ", " + z + " (basic chest).");
-			return;
-		}
+		DBlock.placeChest(world, x, y, z);
+//		if(world.getBlockState(pos).getBlock() != DBlock.chest) {
+//			System.err.println("[DLDUNGEONS] ERROR! Trying to put loot into non-chest at " 
+//					+ x + ", " + y + ", " + z + " (basic chest).");
+//			return;
+//		}
 		TileEntityChest contents = (TileEntityChest)world.getTileEntity(pos);
 //		if(ConfigHandler.vanillaLoot && (!ConfigHandler.stingyLoot) && random.nextBoolean()) {
 //			ChestGenHooks chinf = ChestGenHooks.getInfo(ChestGenHooks.BONUS_CHEST);

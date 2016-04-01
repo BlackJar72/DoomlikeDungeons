@@ -71,7 +71,7 @@ public class LootItem {
 	
 	public ItemStack getStack(Random random) {
 		ItemStack out;
-		if(max == min) {
+		if(max <= min) {
 			if(item instanceof Item)  out = new ItemStack((Item)item, max);
 			else                      out = new ItemStack((Block)item, max);
 		}
@@ -81,8 +81,15 @@ public class LootItem {
 			else 
 				out = new ItemStack((Block)item, random.nextInt(max - min) + min +1);
 		}
-		if(meta != 0) out.setItemDamage(meta);
-		//System.out.println("Placing " + out.stackSize + " of "+ out.getItem().toString() + " with damge value " + out.getItemDamage() + "; (" + out.toString() + ")");
+		if(out.getItem() == null) {
+			return null;
+		}
+		if(out.getHasSubtypes() && meta >= 0) {
+			out.setItemDamage(meta);
+		} else {
+			out.setItemDamage(0);
+		}
+		//System.out.println("Placing " + out.stackSize + " of "+ out.getItem().toString() + " with damage value " + out.getItemDamage() + "; (" + out.toString() + ")");
 		return out;
 	}
 	
