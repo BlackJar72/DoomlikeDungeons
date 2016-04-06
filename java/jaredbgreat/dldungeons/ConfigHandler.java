@@ -44,13 +44,15 @@ public class ConfigHandler {
 	
 	private static final int[] DEFAULT_DIMS = {0, -1};
 	
-//	private static final boolean DEFAULT_NODEND = true;
 	private static final boolean DEFAULT_WRITE_LISTS = false;
 	private static final boolean DEFAULT_NATURAL_SPAWN = true;
 	private static final boolean DEFAULT_OBEY_RULE = true;
 	private static final boolean DEFAULT_POSITIVE_DIMS = true;
 	private static final boolean DEFAULT_ANNOUNCE_COMMANDS = true;
-	private static final boolean DEFAULT_VANILLA_LOOT = true;	
+	
+	// Vanilla loot will not be added in version of Mincraft 1.9+
+	// Instead all dungeons will have some loot enchanted.
+	private static final boolean DEFAULT_VANILLA_LOOT = false;	
 	private static final boolean DEFAULT_STINGY_LOOT = false;	
 	private static final boolean EASY_FIND = false;
 
@@ -115,10 +117,6 @@ public class ConfigHandler {
 		for(int i = 0; i < dims.length; i++) System.out.print(dims[i] + ", ");
 		System.out.println();
 		
-//		boolean noEnd = config.get("General", "NotInEnd", DEFAULT_NODEND).getBoolean(true);
-//		GenerationHandler.setEnd(noEnd);
-//		System.out.println("[DLDUNGEONS] NoEnd set to: " + noEnd);
-		
 		naturalSpawn = config.get("General", "SpawnWithWordgen", DEFAULT_NATURAL_SPAWN).getBoolean(true);
 		System.out.println("[DLDUNGEONS] Will spawn dungeons in with world generation? " + naturalSpawn);
 		
@@ -145,10 +143,6 @@ public class ConfigHandler {
 		
 		installCmd = config.get("General", "InstallThemesByCommand", INSTALL_CMD).getBoolean(INSTALL_CMD);
 		System.out.println("[DLDUNGEONS] Can themes be (re)installed by command? " + installCmd);
-		
-		vanillaLoot = config.get("General", "IncludeVanillaChestLoot", 
-				DEFAULT_VANILLA_LOOT).getBoolean(DEFAULT_VANILLA_LOOT);
-		System.out.println("[DLDUNGEONS] Will include vanilla loot from vanilla chests? " + vanillaLoot);
 		
 		stingyLoot = config.get("General", "StingyWithLoot", 
 				DEFAULT_STINGY_LOOT).getBoolean(DEFAULT_STINGY_LOOT);

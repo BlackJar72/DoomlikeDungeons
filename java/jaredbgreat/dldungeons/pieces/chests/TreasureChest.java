@@ -48,20 +48,20 @@ public class TreasureChest extends BasicChest {
 		int num;
 		num = random.nextInt(3 + (level / 3)) + 2;
 		for(int i = 0; i < num; i++) {
-			treasure = LootCategory.getLoot(LootType.HEAL, level, random).getStack(random);
+			treasure = LootCategory.getLoot(LootType.HEAL, level, random);
 			contents.setInventorySlotContents(slots.get(slot).intValue(), treasure);
 			slot++;
 		}
 		num = random.nextInt(3 + (level / 3)) + 2;
 		for(int i = 0; i < num; i++) {
-			treasure = LootCategory.getLoot(LootType.GEAR, level, random).getStack(random);
+			treasure = LootCategory.getLoot(LootType.GEAR, level, random);
 			contents.setInventorySlotContents(slots.get(slot).intValue(), treasure);
 			slot++;
 		}
 		if(ConfigHandler.stingyLoot) num = random.nextInt(3 + (level / 3)) + 2;
 		else num = random.nextInt(3 + (level / 2)) + 2;
 		for(int i = 0; i < num; i++) {
-			treasure = LootCategory.getLoot(LootType.LOOT, level, random).getStack(random);
+			treasure = LootCategory.getLoot(LootType.LOOT, level, random);
 			contents.setInventorySlotContents(slots.get(slot).intValue(), treasure);
 			slot++;
 		}
@@ -79,25 +79,6 @@ public class TreasureChest extends BasicChest {
 	private boolean validSlot(int slot) {
 		return ((slot >= 0) && (slot < 25));
 	}
-	
-	
-//	private void vanillaChest(TileEntityChest chest, Random random) {
-//		int which = random.nextInt(4);
-//		ChestGenHooks chinf;
-//		switch (which) {
-//		case 0:
-//			chinf = ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_DESERT_CHEST);
-//			break;
-//		case 1:
-//			chinf = ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_CHEST);
-//			break;
-//		default:
-//			chinf = ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST);
-//			break;
-//		}		
-//        WeightedRandomChestContent.generateChestContents(random, 
-//        		chinf.getItems(random), chest, chinf.getCount(random));
-//	}
 	
 	
 	public static void initSlots() {

@@ -37,14 +37,12 @@ public class BasicChest {
 		BlockPos pos = new BlockPos(x, y, z);
 		level += random.nextInt(2);
 		if(level >= LootCategory.LEVELS) level = LootCategory.LEVELS - 1;
-		//DBlock.placeChest(world, x, y, z);
 		if(world.getBlockState(pos).getBlock() != DBlock.chest) {
 			System.err.println("[DLDUNGEONS] ERROR! Trying to put loot into non-chest at " 
 									+ x + ", " + y + ", " + z + " (basic chest).");
 			return;
 		}
 		TileEntityChest contents = (TileEntityChest)world.getTileEntity(pos);
-//		if(addVanillaLoot(random)) vanillaChest(contents, random);
 		int which = random.nextInt(3);
 		switch (which) {
 		case 0:
@@ -94,11 +92,11 @@ public class BasicChest {
 		if(ConfigHandler.stingyLoot) num = random.nextInt(2 + (level / 2)) + 2;
 		else num = random.nextInt(2 + (level)) + 2;
 		for(int i = 0; i < num; i++) {
-			ItemStack treasure = LootCategory.getLoot(kind, level, random).getStack(random);
+			ItemStack treasure = LootCategory.getLoot(kind, level, random);
 			if(treasure != null) chest.setInventorySlotContents(random.nextInt(27), treasure);
 		}
 		if(!ConfigHandler.vanillaLoot) {
-			ItemStack treasure = LootCategory.getLoot(LootType.HEAL, level, random).getStack(random);
+			ItemStack treasure = LootCategory.getLoot(LootType.HEAL, level, random);
 			if(treasure != null) chest.setInventorySlotContents(random.nextInt(27), treasure);
 		}
 	}

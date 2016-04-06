@@ -14,7 +14,6 @@ import jaredbgreat.dldungeons.debug.Logging;
 
 import java.util.Random;
 import java.util.StringTokenizer;
-import java.util.logging.Logger;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
