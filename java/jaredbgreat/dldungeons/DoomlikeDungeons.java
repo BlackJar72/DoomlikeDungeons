@@ -45,7 +45,7 @@ public class DoomlikeDungeons {
 	private static GenerationHandler dungeonPlacer;
 	public  static IProfiler profiler;
 	
-    @Instance(value = Info.ID)
+    @Instance(Info.ID)
     public static DoomlikeDungeons instance;
     
     @EventHandler
