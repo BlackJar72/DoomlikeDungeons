@@ -212,10 +212,7 @@ public class ConfigHandler {
 			
 			for(String name : mobNames){ 
 				Class A = (Class)EntityList.stringToClassMapping.get(name);
-				//System.out.println(EntityList.stringToClassMapping.get(name));
-				//System.out.println(A);
 				if(EntityLiving.class.isAssignableFrom(A) && !Modifier.isAbstract(A.getModifiers())) {
-					//System.out.println("[DLDUNGEONS] Found living entity " + (String)name);
 					outstream.write((String)name);
 					outstream.newLine();
 				}

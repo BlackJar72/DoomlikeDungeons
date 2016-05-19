@@ -123,11 +123,11 @@ public class Dungeon {
 	}
 
 	
-	public Dungeon(Random random, BiomeGenBase biome, World world, int chunkX, int chunkZ) throws Throwable {
+	public Dungeon(Random rnd, BiomeGenBase biome, World world, int chunkX, int chunkZ) throws Throwable {
 		DoomlikeDungeons.profiler.startTask("Planning Dungeon");
 		DoomlikeDungeons.profiler.startTask("Layout dungeon (rough draft)");
 		//this.random = random;
-		this.random = new Random(random.nextLong());
+		random = new Random(rnd.nextLong());
 		this.biome = biome;
 		theme = BiomeLists.getTheme(biome, random);
 		if(theme == null) return;

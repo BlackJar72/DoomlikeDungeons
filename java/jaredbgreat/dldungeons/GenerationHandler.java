@@ -59,16 +59,13 @@ public class GenerationHandler implements IWorldGenerator {
 		
 		//Get some numbers		
 		//DoomlikeDungeons.profiler.startTask("Checking for Dungeon");
-		int xseed = (int)(world.getSeed()  % (1 << 31)) + world.provider.getDimension();
-		int zseed = (int)(world.getSeed()  / (1 << 31)) + world.provider.getDimension();
-		//mrand = new Random(xseed + zseed + (2027 * (long)(chunkX / factor)) + (1987 * (long)(chunkZ / factor)));
-		mrand = new Random(xseed 
+		mrand = new Random(world.getSeed() + world.provider.getDimension()
 				+ (2027 * (long)(chunkX / factor)) 
 				+ (1987 * (long)(chunkZ / factor)));
 		int xrand = mrand.nextInt();
 		int zrand = mrand.nextInt();
-		int xuse = ((chunkX + xseed + xrand) % factor);
-		int zuse = ((chunkZ + zseed + zrand) % factor);
+		int xuse = ((chunkX + xrand) % factor);
+		int zuse = ((chunkZ + zrand) % factor);
 		
 		if((xuse == 0) && (zuse == 0)) {
 			try {
