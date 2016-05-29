@@ -18,11 +18,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.rooms.Room;
-import jaredbgreat.dldungeons.themes.Degrees;
+import jaredbgreat.dldungeons.themes.Degree;
 
+/**
+ * A chance to add a sub-room inside the main room.
+ * 
+ * @author Jared Blackburn
+ *
+ */
 public class IslandRoom extends FeatureAdder {
 
-	public IslandRoom(Degrees chance) {
+	public IslandRoom(Degree chance) {
 		super(chance);
 	}
 

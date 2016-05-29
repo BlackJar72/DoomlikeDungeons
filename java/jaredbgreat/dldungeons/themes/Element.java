@@ -13,7 +13,7 @@ import java.util.Random;
 
 public class Element implements Autoselecting {
 	
-	private Degrees none, few, some, plenty, heaps, all;
+	private Degree none, few, some, plenty, heaps, all;
 	private int prob1, prob2, prob3, prob4, prob5, prob6;
 	private int probScale;
 	
@@ -24,36 +24,36 @@ public class Element implements Autoselecting {
 					int prob4,
 					int prob5,
 					int prob6) {
-		this.none 	= Degrees.NONE;
+		this.none 	= Degree.NONE;
 		this.prob1 	= prob1;
-		this.few 	= Degrees.FEW;
+		this.few 	= Degree.FEW;
 		this.prob2 	= prob2;
-		this.some 	= Degrees.SOME;
+		this.some 	= Degree.SOME;
 		this.prob3 	= prob3;
-		this.plenty = Degrees.PLENTY;
+		this.plenty = Degree.PLENTY;
 		this.prob4 	= prob4;
-		this.heaps 	= Degrees.HEAPS;
+		this.heaps 	= Degree.HEAPS;
 		this.prob5 	= prob5;
-		this.all 	= Degrees.ALL;
+		this.all 	= Degree.ALL;
 		this.prob6 	= prob6;
 		probScale = prob1 + prob2 + prob3 + prob4 + prob5 + prob6;
 	}
 	
 	
-	public Degrees select(Random random) {
+	public Degree select(Random random) {
 		int roll = random.nextInt(probScale);
-		if(roll < prob1) return Degrees.NONE;
+		if(roll < prob1) return Degree.NONE;
 		else roll -= prob1;
-		if(roll < prob2) return Degrees.FEW;
+		if(roll < prob2) return Degree.FEW;
 		else roll -= prob2;
-		if(roll < prob3) return Degrees.SOME;
+		if(roll < prob3) return Degree.SOME;
 		else roll -= prob3;
-		if(roll < prob4) return Degrees.PLENTY;
+		if(roll < prob4) return Degree.PLENTY;
 		else roll -= prob4;
-		if(roll < prob5) return Degrees.HEAPS;
+		if(roll < prob5) return Degree.HEAPS;
 		else roll -= prob5;
-		if(roll < prob6) return Degrees.ALL;
-		else return Degrees.NONE;
+		if(roll < prob6) return Degree.ALL;
+		else return Degree.NONE;
 	}
 	
 	

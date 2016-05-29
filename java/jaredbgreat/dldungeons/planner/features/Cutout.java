@@ -18,11 +18,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.rooms.Room;
-import jaredbgreat.dldungeons.themes.Degrees;
+import jaredbgreat.dldungeons.themes.Degree;
 
+/**
+ * A chance for to add a wall segment to the room. 
+ * 
+ * @author Jared Blackburn
+ *
+ */
 public class Cutout extends FeatureAdder {
 
-	public Cutout(Degrees chance) {
+	public Cutout(Degree chance) {
 		super(chance);
 	}
 

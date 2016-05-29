@@ -19,7 +19,7 @@ import jaredbgreat.dldungeons.pieces.chests.LootCategory;
 import jaredbgreat.dldungeons.pieces.chests.TreasureChest;
 import jaredbgreat.dldungeons.pieces.chests.WeakChest;
 import jaredbgreat.dldungeons.planner.Dungeon;
-import jaredbgreat.dldungeons.planner.PlaceSeed;
+import jaredbgreat.dldungeons.planner.RoomSeed;
 import jaredbgreat.dldungeons.planner.Route;
 import jaredbgreat.dldungeons.planner.Symmetry;
 import jaredbgreat.dldungeons.planner.astar.AStar;
@@ -49,7 +49,7 @@ public class Room extends AbstractRoom {
 	public int orientation;
 	public boolean XFlip, ZFlip;
 	public Shapes shape = Shapes.X;
-	public ArrayList<PlaceSeed> childSeeds;
+	public ArrayList<RoomSeed> childSeeds;
 	public boolean isNode;
 	public boolean isSubroom;
 	public boolean hasEntrance;
@@ -82,7 +82,7 @@ public class Room extends AbstractRoom {
 		//DoomlikeDungeons.profiler.startTask("Creating a Room");
 		dungeon.rooms.add(this);
 		id = dungeon.rooms.realSize();
-		childSeeds = new ArrayList<PlaceSeed>();
+		childSeeds = new ArrayList<RoomSeed>();
 		spawners = new ArrayList<Spawner>();
 		chests   = new ArrayList<BasicChest>();
 		doors    = new ArrayList<Doorway>();
@@ -365,7 +365,7 @@ public class Room extends AbstractRoom {
 		int ymod = (dimX <= dimZ) ? (int) Math.sqrt(dimX) : (int) Math.sqrt(dimZ);
 		int height = dungeon.random.nextInt((dungeon.verticle.value / 2) + ymod + 1) + 2;
 		Room created = 
-				new PlaceSeed((int)centerX, floorY, 
+				new RoomSeed((int)centerX, floorY, 
 						(int)centerZ).growRoom(dimX, dimZ, height, dungeon, this, this);
 		if(created == null) return false;
 		// Apply Symmetries
@@ -375,7 +375,7 @@ public class Room extends AbstractRoom {
 				oppX = realX + ((centerZ - realZ) / (endZ - beginZ)) * (endX - beginX);
 				oppZ = realZ + ((centerX - realX) / (endX - beginX)) * (endZ - beginZ); 
 				created = 
-						new PlaceSeed((int)oppX, floorY, 
+						new RoomSeed((int)oppX, floorY, 
 								(int)oppZ).growRoom(dimZ, dimX, height, dungeon, this, this);
 			} break;
 			case TR2: {
@@ -383,33 +383,33 @@ public class Room extends AbstractRoom {
 				oppZ = realZ + ((centerX - realX) / (endX - beginX)) * (endZ - beginZ);  
 				oppZ = endZ - (oppZ - beginZ);  
 				created = 
-						new PlaceSeed((int)oppX, floorY, 
+						new RoomSeed((int)oppX, floorY, 
 								(int)oppZ).growRoom(dimZ, dimX, height, dungeon, this, this);
 			} break;
 			case X: {
 				created = 
-						new PlaceSeed((int)oppX, floorY, 
+						new RoomSeed((int)oppX, floorY, 
 								(int)centerZ).growRoom(dimX, dimZ, height, dungeon, this, this);
 			} break;
-			case Y: {
+			case Z: {
 				created = 
-						new PlaceSeed((int)centerX, floorY, 
+						new RoomSeed((int)centerX, floorY, 
 								(int)oppZ).growRoom(dimX, dimZ, height, dungeon, this, this);
 			} break;
-			case XY: {
+			case XZ: {
 				created = 
-						new PlaceSeed((int)oppX, floorY, 
+						new RoomSeed((int)oppX, floorY, 
 								(int)centerZ).growRoom(dimX, dimZ, height, dungeon, this, this);
 				created = 
-						new PlaceSeed((int)centerX, floorY, 
+						new RoomSeed((int)centerX, floorY, 
 								(int)oppZ).growRoom(dimX, dimZ, height, dungeon, this, this);
 				created = 
-						new PlaceSeed((int)oppX, floorY, 
+						new RoomSeed((int)oppX, floorY, 
 								(int)oppZ).growRoom(dimX, dimZ, height, dungeon, this, this);
 			} break;
 			case R: { 
 				created = 
-						new PlaceSeed((int)oppX, floorY, 
+						new RoomSeed((int)oppX, floorY, 
 								(int)oppZ).growRoom(dimX, dimZ, height, dungeon, this, this);
 			} break;
 			case SW: {
@@ -418,13 +418,13 @@ public class Room extends AbstractRoom {
 				float swX2 = realX + ((oppZ - realZ) / (endZ - beginZ)) * (endX - beginX);
 				float swZ2 = realZ + ((oppX - realX) / (endX - beginX)) * (endZ - beginZ);
 				created = 
-						new PlaceSeed((int)swX2, floorY, 
+						new RoomSeed((int)swX2, floorY, 
 								(int)swZ1).growRoom(dimZ, dimX, height, dungeon, this, this);
 				created = 
-						new PlaceSeed((int)swX1, floorY, 
+						new RoomSeed((int)swX1, floorY, 
 								(int)swZ2).growRoom(dimZ, dimX, height, dungeon, this, this);
 				created = 
-						new PlaceSeed((int)oppX, floorY, 
+						new RoomSeed((int)oppX, floorY, 
 								(int)oppZ).growRoom(dimX, dimZ, height, dungeon, this, this);
 			}
 		}
@@ -506,7 +506,7 @@ public class Room extends AbstractRoom {
 		}		
 		addDoor(dungeon, x, z, (xSeedDir != 0));
 		addDoor(dungeon, x + xExtend, z + zExtend, (xSeedDir != 0));
-		childSeeds.add(new PlaceSeed(x + xSeedDir, floorY, z + zSeedDir));
+		childSeeds.add(new RoomSeed(x + xSeedDir, floorY, z + zSeedDir));
 		// Apply Symmetries
 		switch (sym) {
 			case NONE: break;
@@ -519,7 +519,7 @@ public class Room extends AbstractRoom {
 				if(oppZ > (dungeon.size.width - 2)) oppZ = (dungeon.size.width - 2); 
 				addDoor(dungeon, oppX, oppZ, (zSeedDir != 0));
 				addDoor(dungeon, oppX + xExtend, oppZ + zExtend, (zSeedDir != 0));
-				childSeeds.add(new PlaceSeed(oppX + zSeedDir, floorY, oppZ + xSeedDir));
+				childSeeds.add(new RoomSeed(oppX + zSeedDir, floorY, oppZ + xSeedDir));
 			} break;
 			case TR2: {
 				oppX = (int)(realX + ((z - realZ) / (float)(endZ - beginZ)) * (endX - beginX));
@@ -531,51 +531,50 @@ public class Room extends AbstractRoom {
 				if(oppZ > (dungeon.size.width - 2)) oppZ = (dungeon.size.width - 2); 
 				addDoor(dungeon, oppX, oppZ, (zSeedDir != 0));
 				addDoor(dungeon, oppX + xExtend, oppZ + zExtend, (zSeedDir != 0));	
-				childSeeds.add(new PlaceSeed(oppX + zSeedDir, floorY, oppZ - xSeedDir));			
+				childSeeds.add(new RoomSeed(oppX + zSeedDir, floorY, oppZ - xSeedDir));			
 			} break;
 			case X: {
 				addDoor(dungeon, oppX, z, (xSeedDir != 0));
 				addDoor(dungeon, oppX - xExtend, z + zExtend, (xSeedDir != 0));
-				childSeeds.add(new PlaceSeed(oppX - xSeedDir, floorY, z + zSeedDir));
+				childSeeds.add(new RoomSeed(oppX - xSeedDir, floorY, z + zSeedDir));
 			} break;
-			case Y: {
+			case Z: {
 				addDoor(dungeon, x, oppZ, (xSeedDir != 0));
 				addDoor(dungeon, x + xExtend, oppZ - zExtend, (xSeedDir != 0));
-				childSeeds.add(new PlaceSeed(x + xSeedDir, floorY, oppZ - zSeedDir));
+				childSeeds.add(new RoomSeed(x + xSeedDir, floorY, oppZ - zSeedDir));
 			} break;
-			case XY: {
+			case XZ: {
 				addDoor(dungeon, oppX,z, (xSeedDir != 0));
 				addDoor(dungeon, oppX - xExtend, z + zExtend, (xSeedDir != 0));
-				childSeeds.add(new PlaceSeed(oppX - xSeedDir, floorY, z + zSeedDir));
+				childSeeds.add(new RoomSeed(oppX - xSeedDir, floorY, z + zSeedDir));
 				addDoor(dungeon, x, oppZ, (xSeedDir != 0));
 				addDoor(dungeon, x + xExtend, oppZ - zExtend, (xSeedDir != 0));
-				childSeeds.add(new PlaceSeed(x + xSeedDir, floorY, oppZ - zSeedDir));
+				childSeeds.add(new RoomSeed(x + xSeedDir, floorY, oppZ - zSeedDir));
 				addDoor(dungeon, oppX, oppZ, (xSeedDir != 0));
 				addDoor(dungeon, oppX - xExtend, oppZ - zExtend, (xSeedDir != 0));
-				childSeeds.add(new PlaceSeed(oppX - xSeedDir, floorY, oppZ - zSeedDir));
+				childSeeds.add(new RoomSeed(oppX - xSeedDir, floorY, oppZ - zSeedDir));
 			} break;
 			case R: {
 				addDoor(dungeon, oppX, oppZ, (xSeedDir != 0));
 				addDoor(dungeon, oppX - xExtend, oppZ - zExtend, (xSeedDir != 0));
-				childSeeds.add(new PlaceSeed(oppX - xSeedDir, floorY, oppZ - zSeedDir));
+				childSeeds.add(new RoomSeed(oppX - xSeedDir, floorY, oppZ - zSeedDir));
 			} break;
 			case SW: {
 				addDoor(dungeon, oppX, z, (xSeedDir != 0));
 				addDoor(dungeon, oppX - xExtend, z + zExtend, (xSeedDir != 0));
-				childSeeds.add(new PlaceSeed(oppX - xSeedDir, floorY, z + zSeedDir));
+				childSeeds.add(new RoomSeed(oppX - xSeedDir, floorY, z + zSeedDir));
 				addDoor(dungeon, x, oppZ, (xSeedDir != 0));
 				addDoor(dungeon, x + xExtend, oppZ - zExtend, (xSeedDir != 0));
-				childSeeds.add(new PlaceSeed(x + xSeedDir, floorY, oppZ - zSeedDir));
+				childSeeds.add(new RoomSeed(x + xSeedDir, floorY, oppZ - zSeedDir));
 				addDoor(dungeon, oppX, oppZ, (xSeedDir != 0));
 				addDoor(dungeon, oppX - xExtend, oppZ - zExtend, (xSeedDir != 0));
-				childSeeds.add(new PlaceSeed(oppX - xSeedDir, floorY, oppZ - zSeedDir));
+				childSeeds.add(new RoomSeed(oppX - xSeedDir, floorY, oppZ - zSeedDir));
 			}
 		}		
 	}
 	
 	
 	public Room connector(Dungeon dungeon, int dir, int xdim, int zdim, int height, Route source) {
-		//System.out.println("Running connector(Dungeon dungeon, int dir, int xdim, int zdim, int height)");
 		int xExtend = 0;
 		int zExtend = 0;
 		int xSeedDir = 0;
@@ -638,9 +637,9 @@ public class Room extends AbstractRoom {
 		if(dungeon.map.room[x + xSeedDir][z + zSeedDir] != 0) {
 				return dungeon.rooms.get(dungeon.map.room[x + xSeedDir][z + zSeedDir]);
 			}
-		else if((dir % 2) == 0) return new PlaceSeed(x + xSeedDir, floorY, z + zSeedDir)
+		else if((dir % 2) == 0) return new RoomSeed(x + xSeedDir, floorY, z + zSeedDir)
 				.growRoomZ(xdim, zdim, height, dungeon, null, this);
-		else return new PlaceSeed(x + xSeedDir, floorY, z + zSeedDir)
+		else return new RoomSeed(x + xSeedDir, floorY, z + zSeedDir)
 				.growRoomX(xdim, zdim, height, dungeon, null, this);
 	}
 	
@@ -714,11 +713,11 @@ public class Room extends AbstractRoom {
 				which[rotation].drawPlatform(dungeon, this, platY, oppX, 
 						centerZ, dimX, dimZ, true, false);
 			} break;
-			case Y: {
+			case Z: {
 				which[rotation].drawPlatform(dungeon, this, platY, centerX, 
 						oppZ, dimX, dimZ, false, true);
 			} break;
-			case XY: {
+			case XZ: {
 				which[rotation].drawPlatform(dungeon, this, platY, oppX, 
 						centerZ, dimX, dimZ, true, false);
 				which[rotation].drawPlatform(dungeon, this, platY, centerX, 
@@ -775,13 +774,13 @@ public class Room extends AbstractRoom {
 			dungeon.map.wall[pillarx1][pillarz1]  = pillarBlock;
 			dungeon.map.wall[pillarx2][pillarz1]  = pillarBlock;
 			break;
-		case Y:
+		case Z:
 			dungeon.map.isWall[pillarx1][pillarz1] = true;
 			dungeon.map.isWall[pillarx1][pillarz2] = true;
 			dungeon.map.wall[pillarx1][pillarz1]  = pillarBlock;
 			dungeon.map.wall[pillarx1][pillarz2]  = pillarBlock;
 			break;
-		case XY:
+		case XZ:
 			dungeon.map.isWall[pillarx1][pillarz1] = true;
 			dungeon.map.isWall[pillarx1][pillarz2] = true;
 			dungeon.map.isWall[pillarx2][pillarz1] = true;
@@ -844,7 +843,7 @@ public class Room extends AbstractRoom {
 		if(dungeon.random.nextBoolean() || !dungeon.complexity.use(dungeon.random)) {
 			which = Shape.xgroup;
 		} else {
-			which = Shape.allSolids[dungeon.random.nextInt(Shape.allSolids.length)];
+			which = Shape.allshapes[dungeon.random.nextInt(Shape.allshapes.length)];
 		}
 		which[rotation].drawLiquid(dungeon, this, centerX, centerZ, dimX, dimZ, false, false);
 		// Apply Symmetries
@@ -867,11 +866,11 @@ public class Room extends AbstractRoom {
 				which[rotation].drawLiquid(dungeon, this, oppX, 
 						centerZ, dimX, dimZ, true, false);
 			} break;
-			case Y: {
+			case Z: {
 				which[rotation].drawLiquid(dungeon, this, centerX, 
 						oppZ, dimX, dimZ, false, true);
 			} break;
-			case XY: {
+			case XZ: {
 				which[rotation].drawLiquid(dungeon, this, oppX, 
 						centerZ, dimX, dimZ, true, false);
 				which[rotation].drawLiquid(dungeon, this, centerX, 
@@ -956,11 +955,11 @@ public class Room extends AbstractRoom {
 				which[rotation].drawCutout(dungeon, this, oppX, 
 						centerZ, dimX, dimZ, true, false);
 			} break;
-			case Y: {
+			case Z: {
 				which[rotation].drawCutout(dungeon, this, centerX, 
 						oppZ, dimX, dimZ, false, true);
 			} break;
-			case XY: {
+			case XZ: {
 				which[rotation].drawCutout(dungeon, this, oppX, 
 						centerZ, dimX, dimZ, true, false);
 				which[rotation].drawCutout(dungeon, this, centerX, 
@@ -1018,7 +1017,7 @@ public class Room extends AbstractRoom {
 	
 	public boolean plantChildren(Dungeon dungeon) {
 		boolean result = false;
-		for(PlaceSeed planted : childSeeds) {
+		for(RoomSeed planted : childSeeds) {
 			if(dungeon.rooms.realSize() >= dungeon.size.maxRooms) return false;
 				int height = dungeon.baseHeight;
 				int x = dungeon.random.nextInt(dungeon.size.width);

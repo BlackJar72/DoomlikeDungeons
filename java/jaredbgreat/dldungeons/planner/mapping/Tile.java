@@ -8,8 +8,20 @@ package jaredbgreat.dldungeons.planner.mapping;
  * https://creativecommons.org/licenses/by/4.0/legalcode
 */	
 
+/**
+ * This is a 1x1 column of block, or put differently, a block
+ * in 2D.  This is used to repressent a location in the 2D map,
+ * especially for use with pathfinding / graph algorithms, for 
+ * which tiles are the vertices and adjency between tiles is an
+ * edge.
+ * 
+ * This being used mostly as a C-struct, so everything is left 
+ * public. 
+ * 
+ * @author Jared Blackburn
+ *
+ */
 public class Tile {
-	//I've been bad with way over using public, but int this case its acting like a C struct
 	public int x, z;
 	public Tile(int x, int z) {
 		this.x = x;

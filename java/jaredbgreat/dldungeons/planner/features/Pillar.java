@@ -18,11 +18,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.rooms.Room;
-import jaredbgreat.dldungeons.themes.Degrees;
+import jaredbgreat.dldungeons.themes.Degree;
 
+/**
+ * A chance to add a pillar / column (1x1 wall with a different block) 
+ * into a room.  
+ * 
+ * @author Jared Blackburn
+ *
+ */
 public class Pillar extends FeatureAdder {
 
-	public Pillar(Degrees chance) {
+	public Pillar(Degree chance) {
 		super(chance);
 	}
 

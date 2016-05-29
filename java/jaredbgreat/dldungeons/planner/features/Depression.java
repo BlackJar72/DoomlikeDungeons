@@ -18,11 +18,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.rooms.Room;
-import jaredbgreat.dldungeons.themes.Degrees;
+import jaredbgreat.dldungeons.themes.Degree;
 
+/**
+ * A chance to add an area of lower floor height (i.e., a pit
+ * or depression).
+ * 
+ * @author Jared Blackburn
+ *
+ */
 public class Depression extends FeatureAdder {
 
-	public Depression(Degrees chance){
+	public Depression(Degree chance){
 		super(chance);
 	}
 

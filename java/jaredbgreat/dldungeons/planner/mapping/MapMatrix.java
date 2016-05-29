@@ -20,16 +20,26 @@ import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-// More data intensive but perhaps simpler
-
+/**
+ * A two dimensional map of the dungeon, including heights, blocks, and 
+ * certain features such as fall and doorways, and pathfinding data.
+ * 
+ * This map also includes the method for building itself into the actual 
+ * world, converting the 2 1/2 d mapping into blocks.
+ * 
+ * @author Jared Blackburn
+ *
+ */
 public class MapMatrix {
-	private static Block lapis = Block.getBlockFromName("lapis_block");
-	private static Block slab  = Block.getBlockFromName("double_stone_slab");
-	private static Block glow  = Block.getBlockFromName("gold_block");
-	private static Block glass = Block.getBlockFromName("glass");
+	private static final Block lapis = Block.getBlockFromName("lapis_block");
+	private static final Block slab  = Block.getBlockFromName("double_stone_slab");
+	private static final Block gold  = Block.getBlockFromName("gold_block");
+	private static final Block glass = Block.getBlockFromName("glass");
 	
-	public World world;
-	public int chunkX, chunkZ, origenX, origenZ;
+	private static boolean drawFlyingMap = false;
+	
+	public final World world;
+	public final int   chunkX, chunkZ, origenX, origenZ;
 	
 	// map of heights to build at
 	public byte[][] ceilY;		// Ceiling height
@@ -37,11 +47,13 @@ public class MapMatrix {
 	public byte[][] nCeilY;		// Height of Neighboring Ceiling	
 	public byte[][] nFloorY;	// Height of Neighboring Floor
 	
-	// Blocks referenced against theme data	
+	// Blocks referenced against the DBlock.registry	
 	public int[][] ceiling;
 	public int[][] wall;
 	public int[][] floor;
-	public int[][] room;		// The index of the room in an array or ArrayList
+	
+	// The room id (index of the room in the dungeons main RoomList)
+	public int[][] room;
 	
 	// Is it a wall?
 	public boolean[][] isWall;	    // Is this coordinate occupied by a wall?
@@ -50,14 +62,8 @@ public class MapMatrix {
 	public boolean[][] isDoor;		// Is there a door here?
 	
 	//The A* scratch pad
-	public Step nodedge[][];
+	public Step    nodedge[][];
 	public boolean astared[][];
-	
-	@Override
-	public void finalize() throws Throwable {
-		world = null;
-		super.finalize();
-	}
 	
 	
 	public MapMatrix(int width, World world, int chunkX, int chunkZ) {
@@ -83,36 +89,39 @@ public class MapMatrix {
 	}
 	
 	
+	/**
+	 * This will build the dungeon into the world, transforming the information 
+	 * mapped here in 2D arrays into the finished 3D structure in the Minecraft 
+	 * world.
+	 * 
+	 * @param dungeon
+	 */
 	public void build(Dungeon dungeon) {		
 		DoomlikeDungeons.profiler.startTask("Building Dungeon in World");	
 		DoomlikeDungeons.profiler.startTask("Building Dungeon architecture");
-		//System.out.println("Running map.build(Dungeon dungeon); generating dungeon");
 		int shiftX = (chunkX * 16) - (room.length / 2) + 8;
 		int shiftZ = (chunkZ * 16) - (room.length / 2) + 8;
 		int below;
 		boolean flooded = dungeon.theme.flags.contains(ThemeFlags.WATER);
 		for(int i = 0; i < room.length; i++)
 			for(int j = 0; j < room.length; j++) {
-				//DoomlikeDungeons.profiler.startTask("Looking at Column " + i +  ", " + j);
-				//System.out.println("Checking X = " + (shiftX + i) + ", Y = " + (shiftZ + j) + " for dungeon; " 
-				//		+ " room #" + room[i][j]);
 				if(room[i][j] != 0) {
-					 //DoomlikeDungeons.profiler.startTask("Building Room " + room[i][j] + " column " + i + ", " +j);
 					 Room theRoom = dungeon.rooms.get(room[i][j]);
 					 
-//					 if(astared[i][j]) {
-//						 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, lapis);
-//					 } else if(isDoor[i][j]) {
-//						 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, slab);
-//					 } else if(isWall[i][j]) {
-//						 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, glass);
-//					 } else {
-//						 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, glow);
-//					 }
+					 // Debugging code; should not normally run
+					 if(drawFlyingMap) {
+						 if(astared[i][j]) {
+							 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, lapis);
+						 } else if(isDoor[i][j]) {
+							 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, slab);
+						 } else if(isWall[i][j]) {
+							 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, gold);
+						 } else {
+							 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, glass);
+						 }
+					 }
 					 
 					 // Lower parts of the room
-
-					 //DoomlikeDungeons.profiler.startTask("Building Height Variant");
 					 if(nFloorY[i][j] < floorY[i][j])
 						 for(int k = nFloorY[i][j]; k < floorY[i][j]; k++) 
 							 if(noLowDegenerate(theRoom, shiftX + i, k, shiftZ + j, i, j))
@@ -121,32 +130,24 @@ public class MapMatrix {
 						 for(int k = floorY[i][j]; k < nFloorY[i][j]; k++) 
 							 if(noLowDegenerate(theRoom, shiftX + i, k, shiftZ + j, i, j))
 								 DBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
-					 //DoomlikeDungeons.profiler.endTask("Building Height Variant");
 					 
 					 if(noLowDegenerate(theRoom, shiftX + i, floorY[i][j] - 1, shiftZ + j, i, j)) {
-						 //DoomlikeDungeons.profiler.startTask("Building Floor");
 						 DBlock.place(world, shiftX + i, floorY[i][j] - 1, shiftZ + j, floor[i][j]);
 						 if(dungeon.theme.buildFoundation) {
-							 //DoomlikeDungeons.profiler.startTask("Building Foundation");
 							 below = nFloorY[i][j] < floorY[i][j] ? nFloorY[i][j] - 1 : floorY[i][j] - 2;
 							 while(!DBlock.isGroundBlock(world, shiftX + i, below, shiftZ + j)) {
 								 DBlock.place(world, shiftX + i, below, shiftZ + j, dungeon.floorBlock);
 						 		below--;
 						 		if(below < 0) break;						 		
 						 	 }
-							 //DoomlikeDungeons.profiler.endTask("Building Foundation");
 						}
-						//DoomlikeDungeons.profiler.endTask("Building Floor");
 					 }
 					 
 					 // Upper parts of the room
-					 //DoomlikeDungeons.profiler.startTask("Building Cieling");
 					 if(!theRoom.sky 
 							 && noHighDegenerate(theRoom, shiftX + i, ceilY[i][j] + 1, shiftZ + j))
 						 DBlock.place(world, shiftX + i, ceilY[i][j] + 1, shiftZ + j, ceiling[i][j]);
-					 //DoomlikeDungeons.profiler.endTask("Building Cieling");
-					 
-					 //DoomlikeDungeons.profiler.startTask("Building Wall");
+					
 					 for(int k = roomBottom(i, j); k <= ceilY[i][j]; k++)
 						 if(!isWall[i][j])DBlock.deleteBlock(world, shiftX +i, k, shiftZ + j, flooded);
 						 else if(noHighDegenerate(theRoom, shiftX + i, k, shiftZ + j))
@@ -156,26 +157,18 @@ public class MapMatrix {
 							 DBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
 					 if(isFence[i][j]) 
 						 DBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, dungeon.fenceBlock);
-					 //DoomlikeDungeons.profiler.endTask("Building Wall");
 					 
-					 //DoomlikeDungeons.profiler.startTask("Building Doorway");
 					 if(isDoor[i][j]) {
 						 DBlock.deleteBlock(world, shiftX + i, floorY[i][j],     shiftZ + j, flooded);
 						 DBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 1, shiftZ + j, flooded);
 						 DBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 2, shiftZ + j, flooded);
 					 }
-					 //DoomlikeDungeons.profiler.endTask("Building Doorway");
 					 
 					 // Liquids
-					 //DoomlikeDungeons.profiler.startTask("Building Pool");
 					 if(hasLiquid[i][j] && (!isWall[i][j] && !isDoor[i][j])
-							 && !isAirBlock(world, shiftX + i, floorY[i][j] - 1, shiftZ + j)) 
-						 DBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, theRoom.liquidBlock);
-					 //DoomlikeDungeons.profiler.endTask("Building Pool");
-					 //System.out.println("One column of the dungeon should be built!");
-					 //DoomlikeDungeons.profiler.endTask("Building Room " + room[i][j] + " column " + i + ", " + j);
+							 && !world.isAirBlock(new BlockPos(shiftX + i, floorY[i][j] - 1, shiftZ + j))) 
+						 DBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, theRoom.liquidBlock);					 
 				}
-				//DoomlikeDungeons.profiler.endTask("Looking at Column " + i +  ", " + j);
 			}	
 		DoomlikeDungeons.profiler.endTask("Building Dungeon architecture");
 		dungeon.addTileEntities();	
@@ -184,18 +177,53 @@ public class MapMatrix {
 	}
 	
 	
+	/**
+	 * Returns true if a block should be placed in those coordinates; that is 
+	 * the block is not air or the room is not degenerate.
+	 * 
+	 * This is for use with wall and ceiling blocks; for floor blocks use 
+	 * noLowDegenerate.
+	 * 
+	 * @param theRoom
+	 * @param x world x coordinate
+	 * @param y world y coordinate
+	 * @param z world z coordinate
+	 * @return if the block should be placed here.
+	 */
 	private boolean noHighDegenerate(Room theRoom, int x, int y, int z) {
-		return !(theRoom.degenerate && isAirBlock(world, x, y, z));
+		return !(theRoom.degenerate && world.isAirBlock(new BlockPos(x, y, z)));
 	}
 	
 	
+	/**
+	 * Returns true if a floor block should be placed here.  This will be true
+	 * if the block is not air, if the room does not have degenerate floors, or 
+	 * is part of a main path through the room.
+	 * 
+	 * @param theRoom
+	 * @param x world x coordinate
+	 * @param y world y coordinate
+	 * @param z world z coordinate
+	 * @param i dungeon x coordinate
+	 * @param j dungeon z coordinate
+	 * @return
+	 * @return if the block should be placed here.
+	 */
 	private boolean noLowDegenerate(Room theRoom, int x, int y, int z, int i, int j) {
 		return !(theRoom.degenerateFloors 
-				&& isAirBlock(world, x, y, z)
+				&& world.isAirBlock(new BlockPos(x, y, z))
 				&& !astared[i][j]);
 	}
 	
 	
+	/**
+	 * The lowest height to place air or wall; walls may 
+	 * go one block lower.
+	 * 
+	 * @param i dungeon x coordinate
+	 * @param j dungeon z coordinate
+	 * @return lowest height to place a wall or air/water block.
+	 */
 	private int roomBottom(int i, int j) {
 		int b = floorY[i][j];
 		if(isWall[i][j] && !isDoor[i][j]) b--;
@@ -203,78 +231,12 @@ public class MapMatrix {
 	}
 	
 	
-	private boolean isAirBlock(World world, int x, int y, int z) {
-		// Trying stuff, may not work!
-		return world.isAirBlock(new BlockPos(x, y, z));
+	/**
+	 * Sets whether the flying debug map should be drawn.
+	 * 
+	 * @param value
+	 */
+	public static void setDrawFlyingMap(boolean value) {
+		drawFlyingMap = value;
 	}
-	
-	
-	
-	
-
-	
-/*	
-//	public void build(Dungeon dungeon) {
-////		//System.out.println("Running map.build(Dungeon dungeon); generating dungeon");
-////		int shiftX = (chunkX * 16) + 8;
-////		int shiftZ = (chunkZ * 16) + 8;
-////		int below;
-////		for(int i = 0; i < room.length; i++)
-////			for(int j = 0; j < room.length; j++) {
-////				//System.out.println("Checking X = " + (shiftX + i) + ", Y = " + (shiftZ + j) + " for dungeon; " 
-////				//		+ " room #" + room[i][j]);
-////				if(room[i][j] != 0) {
-////					 Room theRoom = dungeon.rooms.get(room[i][j]);
-////					 
-////					 Builder.placeBlock(world, shiftX, 96, shiftZ, Block.glowStone.blockID);
-////					 
-////					 // Lower parts of the room
-////					 if(nFloorY[i][j] < floorY[i][j])
-////						 for(int k = nFloorY[i][j]; k < floorY[i][j]; k++) 
-////							 if(noLowDegenerate(theRoom, shiftX, 128, shiftZ))
-////								 Builder.placeBlock(world, shiftX, 128, shiftZ, wall[i][j]);
-////					 if(nFloorY[i][j] > floorY[i][j])
-////						 for(int k = floorY[i][j]; k < nFloorY[i][j]; k++) 
-////							 if(noLowDegenerate(theRoom, shiftX, 128, shiftZ))
-////								 Builder.placeBlock(world, shiftX, 128, shiftZ, wall[i][j]);
-////					 if(noLowDegenerate(theRoom, shiftX, 128, shiftZ)) { 
-////						 Builder.placeBlock(world, shiftX, 128, shiftZ, floor[i][j]);
-////						 if(dungeon.theme.buildFoundation) {
-////						 below = nFloorY[i][j] < floorY[i][j] ? nFloorY[i][j] - 1 : floorY[i][j] - 2;
-////						 while(!Builder.isGroundBlock(world, shiftX, 128, shiftZ)) {
-////						 		Builder.placeBlock(world, shiftX, 128, shiftZ, dungeon.floorBlock);
-////						 		below--;
-////						 	} 
-////						}
-////					 }
-////					 
-////					 // Upper parts of the room
-////					 if(!theRoom.sky 
-////							 && noHighDegenerate(theRoom, shiftX, ceilY[i][j] + 1, shiftZ))
-////						 Builder.placeBlock(world, shiftX, 128, shiftZ, ceiling[i][j]);
-////					 for(int k = floorY[i][j]; k <= ceilY[i][j]; k++)
-////						 if(!isWall[i][j])Builder.deleteBlock(world, shiftX, 128, shiftZ);
-////						 else if(noHighDegenerate(theRoom, shiftX, 128, shiftZ))
-////							 Builder.placeBlock(world, shiftX, 128, shiftZ, wall[i][j]);
-////					 for(int k = nCeilY[i][j]; k < ceilY[i][j]; k++) 
-////						 if(noHighDegenerate(theRoom, shiftX, 128, shiftZ))
-////							 Builder.placeBlock(world, shiftX, 128, shiftZ, wall[i][j]);
-////					 if(isFence[i][j]) 
-////						 Builder.placeBlock(world, shiftX, 128, shiftZ, dungeon.fenceBlock);					 
-////					 if(isDoor[i][j]) {
-////						 Builder.deleteBlock(world, shiftX, 128,     shiftZ);
-////						 Builder.deleteBlock(world, shiftX, 128, shiftZ);
-////					 }
-////					 
-////					 // Liquids
-////					 if(hasLiquid[i][j] && !isWall[i][j]
-////							 && !world.isAirBlock(shiftX, 128, shiftZ)) 
-////						 Builder.placeBlock(world, shiftX, 128, shiftZ, theRoom.liquidBlock);
-////					 //System.out.println("One column of the dungeon should be built!");
-////				}
-////			}
-////		dungeon.addSpawners();
-//	}
-*/
-	
 }

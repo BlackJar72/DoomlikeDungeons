@@ -25,9 +25,7 @@ public class AStar {
 	Step root;
 	Tile end;
 	
-	protected AStar() {
-		// Do not use!
-	}
+	protected AStar() {/*Do not use!*/}
 	
 	public AStar(Room room, Dungeon dungeon, Doorway start, Doorway finish) {
 		this.room = room.id;
@@ -137,15 +135,6 @@ public class AStar {
 	protected void addDoor(Step from, Step to) {
 		dungeon.map.isDoor[to.x][to.z] = true;
 		dungeon.map.isDoor[from.x][from.z] = true;
-//		if(from.x != to.x) { 
-//			if(DoorChecker.validateDoor(dungeon, 
-//					new Doorway(to.x, to.z, true)))
-//				dungeon.map.isDoor[to.x][to.z] = true;
-//		} else { 
-//			if(DoorChecker.validateDoor(dungeon, 
-//					new Doorway(to.x, to.z, false)))
-//				dungeon.map.isDoor[to.x][to.z] = true;
-//		}		
 	}
 	
 	
@@ -159,20 +148,17 @@ public class AStar {
 	
 	
 	protected void fixHeights(Step from, Step to) {
-		// FIXME: This needs to be improved (centered) somehow
 		int diff = dungeon.map.floorY[to.x][to.z] - dungeon.map.floorY[from.x][from.z];
 		if(diff > 2) dungeon.map.floorY[to.x][to.z] 
 				= (byte) (dungeon.map.floorY[from.x][from.z] - 1);
 		if(diff < -2) dungeon.map.floorY[to.x][to.z] 
 				= (byte) (dungeon.map.floorY[from.x][from.z] + 1);
-		//TODO: Eventually add stairs for short and ladders for tall
 	}
 	
 	
 	protected void getEdgeStep(Step src) {
 		Step nextEdge;
 		int x, z;
-		//TODO: This could be optimized 
 		x = src.x - 1; z = src.z;
 		if(x >= x1) {
 			nextEdge = new Step(x, z, src, end, dungeon);

@@ -75,9 +75,9 @@ public enum Shapes {
 			return sym.transPart[random.nextInt(sym.transPart.length)];
 		case X:
 			return sym.xsymmetricPart[random.nextInt(sym.xsymmetricPart.length)];
-		case XY:
+		case XZ:
 			return sym.xysymmetricPart[random.nextInt(sym.xysymmetricPart.length)];
-		case Y:
+		case Z:
 			return sym.ysymmetricPart[random.nextInt(sym.ysymmetricPart.length)];
 		default:
 			return sym.allPart[random.nextInt(sym.allPart.length)];		

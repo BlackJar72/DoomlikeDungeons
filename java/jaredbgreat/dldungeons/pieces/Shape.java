@@ -217,32 +217,10 @@ public class Shape {
 	public static final Shape[] sgroup = {S000, S090, S180, S270};
 	
 	
-	public static final Shape[][] assymmetrics = {fgroup};
-	public static final Shape[][] xsymmetrics = {xgroup, ogroup, cgroup, ugroup, tgroup, igroup};
-	public static final Shape[][] ysymmetrics = {xgroup, ogroup, cgroup, egroup, igroup};
-	public static final Shape[][] xysymmetrics = {xgroup, ogroup, cgroup, igroup};
-	public static final Shape[][] transshapes = {lgroup, xgroup, ogroup, cgroup};
-	public static final Shape[][] rotateds = {sgroup, xgroup, ogroup, cgroup, igroup};
+
 	public static final Shape[][] allshapes = {xgroup, lgroup, ogroup, tgroup, fgroup, 
 											   egroup, igroup, cgroup, ugroup, sgroup};
-	
-	
-	public static final Shape[][] assymmetricPart = {fgroup};
-	public static final Shape[][] xsymmetricPart = {ogroup, cgroup, ugroup, tgroup, igroup};
-	public static final Shape[][] ysymmetricPart = {ogroup, cgroup, egroup, igroup};
-	public static final Shape[][] xysymmetricPart = {ogroup, cgroup, igroup};
-	public static final Shape[][] transPart = {ogroup, cgroup, lgroup};
-	public static final Shape[][] rotatedPart = {sgroup, ogroup, cgroup, igroup};
-	public static final Shape[][] allPart = {lgroup, ogroup, tgroup, fgroup, 
-											   egroup, igroup, cgroup, ugroup, sgroup};
-	
-	
-	public static final Shape[][] assymmetricSolid = {fgroup};
-	public static final Shape[][] xsymmetricSolid = {xgroup, ugroup, tgroup};
-	public static final Shape[][] ysymmetricSolid = {xgroup, egroup};
-	public static final Shape[][] xysymmetricSolid = {xgroup};
-	public static final Shape[][] transSolid = {xgroup, lgroup};
-	public static final Shape[][] rotatedSolid = {sgroup, xgroup};
+
 	public static final Shape[][] allSolids = {xgroup, lgroup, tgroup, fgroup, 
 											   egroup, ugroup};
 	

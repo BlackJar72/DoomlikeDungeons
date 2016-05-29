@@ -11,6 +11,7 @@ package jaredbgreat.dldungeons;
 
 
 import jaredbgreat.dldungeons.builder.Builder;
+import jaredbgreat.dldungeons.planner.mapping.MapMatrix;
 import jaredbgreat.dldungeons.setup.Externalizer;
 import jaredbgreat.dldungeons.themes.Theme;
 import jaredbgreat.dldungeons.themes.ThemeReader;
@@ -155,7 +156,7 @@ public class ConfigHandler {
 		
 		// API Stuff
 		disableAPI = config.get("API", "DisableApiCalls", DISABLE_API).getBoolean(DISABLE_API);
-		System.out.println("[DLDUNGEONS] Will use? " + !disableAPI);
+		System.out.println("[DLDUNGEONS] Will use API? " + !disableAPI);
 
 		noMobChanges = config.get("API", "DontAllowApiOnMobs", NO_MOB_CHANGES).getBoolean(NO_MOB_CHANGES);
 		System.out.println("[DLDUNGEONS] Will allow API base mob change? " + !noMobChanges);
@@ -163,6 +164,8 @@ public class ConfigHandler {
 		
 		// Debugging
 		Builder.setDebugPole(config.get("Debugging", "BuildPole", false).getBoolean(false));
+		
+		MapMatrix.setDrawFlyingMap(config.get("Debugging", "BuildFlyingMap", false).getBoolean(false));
 		
 		profile = config.get("Debugging", "AutoProfilingOn", PROFILE).getBoolean(PROFILE);
 		System.out.println("[DLDUNGEONS] Will self-profile? " + profile);

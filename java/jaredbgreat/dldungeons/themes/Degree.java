@@ -12,7 +12,7 @@ package jaredbgreat.dldungeons.themes;
 
 import java.util.Random;
 
-public enum Degrees implements Autoselectable {
+public enum Degree implements Autoselectable {
 	
 	
 	NONE	( 0),
@@ -27,7 +27,7 @@ public enum Degrees implements Autoselectable {
 	public static final int scale = 10;
 	
 	
-	Degrees(int val) {
+	Degree(int val) {
 		value = val;
 	}
 	

@@ -47,7 +47,15 @@ public class Step extends Tile implements Comparable<Step> {
 	}
 	
 	
-	// The preferred way to make one of these
+	/**
+	 * The preferred way to constructor for creating a Step.
+	 * 
+	 * @param x
+	 * @param z
+	 * @param previous
+	 * @param destination
+	 * @param dungeon
+	 */
 	public Step(int x, int z, Step previous, Tile destination, Dungeon dungeon) {
 		super(x, z);
 		distance = previous.distance + 1;
@@ -63,11 +71,23 @@ public class Step extends Tile implements Comparable<Step> {
 	}
 	
 	
+	/**
+	 * Returns the first step from a Tile ("door") toward a destination Tile.
+	 * 
+	 * @param door
+	 * @param destination
+	 * @return first step from door to destination
+	 */
 	public static Step firstFromDoorway(Tile door, Tile destination) {
 		return new Step(door.x, door.z, 0, 0, destination);		
 	}
 	
 	
+	/**
+	 * Returns a Tile with the same coordinates as the Step
+	 * 
+	 * @return The base Tile representation of this Step
+	 */
 	public Tile getTile() {
 		return new Tile(x, z);
 	}

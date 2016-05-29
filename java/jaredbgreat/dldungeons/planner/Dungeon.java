@@ -24,7 +24,7 @@ import jaredbgreat.dldungeons.rooms.Cave;
 import jaredbgreat.dldungeons.rooms.Room;
 import jaredbgreat.dldungeons.rooms.RoomList;
 import jaredbgreat.dldungeons.themes.BiomeLists;
-import jaredbgreat.dldungeons.themes.Degrees;
+import jaredbgreat.dldungeons.themes.Degree;
 import jaredbgreat.dldungeons.themes.Sizes;
 import jaredbgreat.dldungeons.themes.Theme;
 
@@ -36,44 +36,55 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
 
+/**
+ * A representation of a dungeon level; as multi-level dungeons are not generated this is,
+ * by extension, a dungeon.  This class holds all the dungeon wide information as well
+ * as the 2D map (MapMatrix) of the dungeon and its list of rooms.
+ * 
+ * Methods of this class are responsible for determining the dungeon wide info it holds and 
+ * and for layout the rooms and other features.
+ * 
+ * @author Jared Blackburn
+ *
+ */
 public class Dungeon {
 	
 	public Theme theme;
 	public Random random;
 	public BiomeGenBase biome;
 	
-	public MapMatrix map;
-	public Node[] nodes;
-	public int numNodes;
+	public MapMatrix map;   // 2D layout of the dungeon
+	public Node[] nodes;    // Main rooms (entrances and destination) which other rooms connect
+	public int numNodes;    
 	public int roomCount;
 	public int entrancePref;
 	
-	public int baseHeight;
+	public int baseHeight;  // Default floor height for the dungeon
 	public int numEntrances = 0;
 	
 	public RoomList rooms;
 	public RoomList nodeRooms;
 	public ArrayList<Room> planter;
 	public ArrayList<Room> grower;
-	//TODO: Other Components
 	
 	// Planning parameters
 	public Sizes   size;
+	
 	// Not sure if I'll use all of them...	
-	public Degrees outside;		// Roofless rooms (also wall-less, but may have fences)
-	public Degrees liquids;		// Quantity of water / lava pools
-	public Degrees subrooms;	// Rooms budding of from the main one
-	public Degrees islands;		// Rooms inside rooms	
-	public Degrees pillars;		// Uh, pillars / columns, duh!
-	public Degrees fences;		// Uh, fences, duh!
-	public Degrees symmetry;	// How symmetrical rooms are (technically, chance of axis mirroring)
-	public Degrees variability;	// Inconsistency, that chance of using a different style in some place
-	public Degrees degeneracy;	// Chance of walls / ceilings not spawning over airblocks (idea taken from Greymerk)
-	public Degrees complexity;	// Basically how many shape primitives to add; depth of added place seeds
-	public Degrees verticle;	// How many height change and how much height change
-	public Degrees entrances;	// Ways in and outS
-	public Degrees bigRooms;
-	public Degrees naturals;
+	public Degree outside;		// Roofless rooms (also wall-less, but may have fences)
+	public Degree liquids;		// Quantity of water / lava pools
+	public Degree subrooms;	// Rooms budding of from the main one
+	public Degree islands;		// Rooms inside rooms	
+	public Degree pillars;		// Uh, pillars / columns, duh!
+	public Degree fences;		// Uh, fences, duh!
+	public Degree symmetry;	// How symmetrical rooms are (technically, chance of axis mirroring)
+	public Degree variability;	// Inconsistency, that chance of using a different style in some place
+	public Degree degeneracy;	// Chance of walls / ceilings not spawning over airblocks (idea taken from Greymerk)
+	public Degree complexity;	// Basically how many shape primitives to add; depth of added place seeds
+	public Degree verticle;	// How many height change and how much height change
+	public Degree entrances;	// Ways in and outS
+	public Degree bigRooms;    // Not currently used, but for oversided rooms between 1 and 2 time the normal max
+	public Degree naturals;    // Cave like areas created with celluar automata
 	
 	// Default blocks
 	public int wallBlock1;
@@ -90,6 +101,11 @@ public class Dungeon {
 	int shiftZ;
 	
 	
+	/**
+	 * De-links all referenced objects as a safety measure against memory leaks, 
+	 * which the complexity creates a risk for.  This might not be needed, as 
+	 * circular have been checked for.  
+	 */
 	public void preFinalize() {
 		if(theme != null) {
 			for(int i = 0; i < nodes.length; i++) nodes[i] = null;
@@ -126,8 +142,7 @@ public class Dungeon {
 	public Dungeon(Random rnd, BiomeGenBase biome, World world, int chunkX, int chunkZ) throws Throwable {
 		DoomlikeDungeons.profiler.startTask("Planning Dungeon");
 		DoomlikeDungeons.profiler.startTask("Layout dungeon (rough draft)");
-		//this.random = random;
-		random = new Random(rnd.nextLong());
+		random = rnd;
 		this.biome = biome;
 		theme = BiomeLists.getTheme(biome, random);
 		if(theme == null) return;
@@ -164,6 +179,10 @@ public class Dungeon {
 	}
 	
 	
+	/**
+	 * Set all the dungeon wide theme derived variables that are
+	 * of type Degree.
+	 */
 	private void applyTheme() {
 		size  	 	= theme.sizes.select(random);
 		outside 	= theme.outside.select(random);
@@ -183,18 +202,29 @@ public class Dungeon {
 	}
 	
 	
+	/**
+	 * Creates all the nodes and store along with a list of node rooms.
+	 */
 	void makeNodes() {	
 		//DoomlikeDungeons.profiler.startTask("Creating Node Rooms");
-		int height = baseHeight;
 		nodeRooms = new RoomList(numNodes);
-		for(int i = 0; i < numNodes; i++) {
-			nodes[i] = new Node(random.nextInt(size.width), height, random.nextInt(size.width), random, this);
+		for(int i = 0; i < numNodes;) {
+			nodes[i] = new Node(random.nextInt(size.width), baseHeight, random.nextInt(size.width), random, this);
+			assert(nodes[i].hubRoom == nodeRooms.get(i));
+			if(nodeRooms.get(i) != null) ++i;
 		}
-		//System.out.println("[DLDUNGEONS] " + numNodes + " nodes");	
 		//DoomlikeDungeons.profiler.endTask("Creating Node Rooms");
 	}
 	
 	
+	/**
+	 * This will connect all the nodes with series of intermediate rooms. 
+	 * 
+	 * Attempts are made to connect all nodes to all others, so as to 
+	 * insure that all are connected.  This may change in a future update.
+	 * 
+	 * @throws Throwable
+	 */
 	void connectNodes() throws Throwable {		
 		//DoomlikeDungeons.profiler.startTask("Connecting Nodes");
 		Node first, other;
@@ -219,30 +249,8 @@ public class Dungeon {
 	}
 	
 	
-	void makeMoreRooms() {		
-		//DoomlikeDungeons.profiler.startTask("Adding Extra Rooms (old)");
-		while(rooms.realSize() < size.maxRooms) {
-				Room made;
-				int height = baseHeight;
-				int x = random.nextInt(size.width);
-				int z = random.nextInt(size.width);
-				int xdim = random.nextInt(size.maxRoomSize - 5) + 6;
-				int zdim = random.nextInt(size.maxRoomSize - 5) + 6;
-				if(bigRooms.use(random)) {
-					xdim += random.nextInt((size.maxRoomSize / 2)) + (size.maxRoomSize / 2);
-					zdim += random.nextInt((size.maxRoomSize / 2)) + (size.maxRoomSize / 2);
-				}
-				int ymod = (xdim <= zdim) ? (int) Math.sqrt(xdim) : (int) Math.sqrt(zdim);
-				int roomHeight = random.nextInt((verticle.value / 2) + ymod + 1) + 2;
-				made = new PlaceSeed(x, height, z).growRoom(xdim, zdim, roomHeight, this, null, null);
-			}		
-		//DoomlikeDungeons.profiler.endTask("Adding Extra Rooms (old)");
-		}
-	
-	
 	public void growthCycle() {		
 		//DoomlikeDungeons.profiler.startTask("Adding Rooms (growthCycle)");
-		//System.out.println("Running growthCycle.");
 		boolean doMore = true;
 		do {
 			doMore = false;
@@ -254,7 +262,6 @@ public class Dungeon {
 					return;
 				}
 				if(room.plantChildren(this)) {
-					//System.out.println("Added side room.");
 					doMore = true;
 				}
 			} 
