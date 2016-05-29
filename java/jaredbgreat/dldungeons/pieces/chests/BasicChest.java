@@ -20,6 +20,12 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+/**
+ * Represents a typical loot chest, including its coordinates and loot level.
+ * 
+ * @author Jared Blackburn
+ *
+ */
 public class BasicChest {
 	
 	public int mx, my, mz, level;
@@ -32,7 +38,18 @@ public class BasicChest {
 		this.level = level;
 	}
 	
-		
+	
+	/**
+	 * This adds a tile entity to the chest, and then calls fillChest to fill it.
+	 * The chest block is placed in the maps by Dungeon.addChestBlocks using 
+	 * DBlock.placeChest.
+	 * 
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param random
+	 */
 	public void place(World world, int x, int y, int z, Random random) {
 		BlockPos pos = new BlockPos(x, y, z);
 		level += random.nextInt(2);
@@ -58,35 +75,13 @@ public class BasicChest {
 	}
 	
 	
-//	private void vanillaChest(TileEntityChest chest, Random random) {
-//		int which = random.nextInt(6);
-//		ChestGenHooks chinf;
-//		switch (which) {
-//		case 0: 
-//			chinf = ChestGenHooks.getInfo(ChestGenHooks.BONUS_CHEST); 
-//			break;
-//		case 1:
-//			chinf = ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_DESERT_CHEST);
-//			break;
-//		case 2:
-//			chinf = ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_CHEST);
-//			break;
-//		case 3:
-//			chinf = ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR);
-//			break;
-//		case 4:
-//			chinf = ChestGenHooks.getInfo(ChestGenHooks.VILLAGE_BLACKSMITH);
-//			break;
-//		case 5:
-//		default:
-//			chinf = ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST);
-//			break;
-//		}		
-//        WeightedRandomChestContent.generateChestContents(random, 
-//        		chinf.getItems(random), chest, chinf.getCount(random));
-//	}
-	
-	
+	/**
+	 * Fills the chest with loot of the specified kind (lootType).
+	 * 
+	 * @param chest
+	 * @param kind
+	 * @param random
+	 */
 	protected void fillChest(TileEntityChest chest, LootType kind, Random random) {		
 		int num;
 		if(ConfigHandler.stingyLoot) num = random.nextInt(2 + (level / 2)) + 2;
@@ -99,16 +94,5 @@ public class BasicChest {
 			ItemStack treasure = LootCategory.getLoot(LootType.HEAL, level, random);
 			if(treasure != null) chest.setInventorySlotContents(random.nextInt(27), treasure);
 		}
-	}
-	
-	
-	protected boolean addVanillaLoot(Random random) {
-		boolean out;
-		if(ConfigHandler.stingyLoot) {
-			out = (random.nextInt(LootCategory.LEVELS * 3) < (level * 2));
-		} else {
-			out = (random.nextInt(LootCategory.LEVELS * 2) < (level + LootCategory.LEVELS));
-		}
-		return (out && ConfigHandler.vanillaLoot);
 	}
 }

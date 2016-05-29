@@ -31,7 +31,6 @@ public class GenerationHandler implements IWorldGenerator {
 	private static int factor = 6;
 	private static int minXZ;
 	private static Random mrand;
-//	private static boolean noEnd;
 	private static HashSet<Integer> dimensions;
 	
 	public GenerationHandler() {

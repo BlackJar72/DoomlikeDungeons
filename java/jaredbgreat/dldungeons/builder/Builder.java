@@ -28,35 +28,55 @@ public class Builder {
 	
 	private static boolean debugPole = false;
 	
-
+	
+	/**
+	 * This will place a dungeon into the world, and is called to create the dungeon object 
+	 * (which plans the dungeon) when a dungeon is cheated in by command or generated through
+	 * the API and have the dungeon built.  Basically, this is used any time and dungeons is 
+	 * generated without the use of IChunkGenerator and IChunkProvider objects, that is, not
+	 * through an IWorldGenerator.
+	 * 
+	 * @param random
+	 * @param chunkX
+	 * @param chunkZ
+	 * @param world
+	 * @throws Throwable
+	 */
 	public static void placeDungeon(Random random, int chunkX, int chunkZ, World world) throws Throwable {	
-		if(world.isRemote) return; // Do not perform world-gen on the client!z
+		if(world.isRemote) return; // Do not perform world-gen on the client!
 		DoomlikeDungeons.profiler.startTask("Create Dungeons");
-		Dungeon dungeon = new Dungeon(random, world.getBiomeGenForCoords(new BlockPos((chunkX * 16), 64, (chunkZ * 16))), 
-									  world, chunkX, chunkZ);
-
-		System.out.println("[DLDUNGONS] Running Builder.buildDungeon; building dungeon");
+		Dungeon dungeon = new Dungeon(random, 
+								world.getBiomeGenForCoords(new BlockPos((chunkX * 16), 64, (chunkZ * 16))), 
+								world, chunkX, chunkZ);
 		buildDungeon(dungeon);
-		System.out.println("[DLDUNGONS] Dungeon should be built now!");
-		//if(true) debuggingPole(world, chunkX, chunkZ, dungeon);
 		dungeon.preFinalize();
 		dungeon = null;
 		DoomlikeDungeons.profiler.endTask("Create Dungeons");
 	}
 	
-
+	
+	/**
+	 * This will place a dungeon into the world, and is called by the Generation handler to 
+	 * create the dungeon object (which plans the dungeon) and have the dungeon built.
+	 * 
+	 * @param random
+	 * @param chunkX
+	 * @param chunkZ
+	 * @param world
+	 * @param chunkGenerator
+	 * @param chunkProvider
+	 * @throws Throwable
+	 */
 	public static void placeDungeon(Random random, int chunkX, int chunkZ, World world,
 						IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) throws Throwable {	
 		if(world.isRemote) return; // Do not perform world-gen on the client!
 		DoomlikeDungeons.profiler.startTask("Create Dungeons");
-		Dungeon dungeon = new Dungeon(random, world.getBiomeGenForCoords(new BlockPos((chunkX * 16), 64, (chunkZ * 16))), 
-									  world, chunkX, chunkZ);
-		
-		System.out.println("[DLDUNGONS] Running Builder.buildDungeon; building dungeon");
+		Dungeon dungeon = new Dungeon(random, 
+							world.getBiomeGenForCoords(new BlockPos((chunkX * 16), 64, (chunkZ * 16))), 
+						    world, chunkX, chunkZ);
 		if(dungeon.theme != null) {
 			if(debugPole) debuggingPole(world, chunkX, chunkZ, dungeon);
 			buildDungeon(dungeon);
-			System.out.println("[DLDUNGONS] Dungeon should be built now!");
 		}
 		dungeon.preFinalize();
 		dungeon = null;
@@ -64,17 +84,33 @@ public class Builder {
 	}
 	
 	
+	/**
+	 * This will build the dungeon into the world, technically by having the dungeons map
+	 * build itself.
+	 * 
+	 * @param dungeon
+	 */
 	public static void buildDungeon(Dungeon dungeon /*TODO: Parameters*/) {
 		//System.out.println("[DLDUNGONS] Inside Builder.placeDungeon; building dungeon");
 		if(dungeon.theme != null) dungeon.map.build(dungeon);
 	}
 	
 	
+	/**
+	 * This will build a quartz pillar to appear in the center of the dungeon from y=16 to y=240, 
+	 * and a lapis lazuli boarder to appear around the area allotted for the dungeon at y=80.
+	 * 
+	 * This is only called if debugPole == true.
+	 * 
+	 * @param world
+	 * @param chunkX
+	 * @param chunkZ
+	 * @param dungeon
+	 */
 	public static void debuggingPole(World world, int chunkX, int chunkZ, Dungeon dungeon) {
-		//Pointless stand-in for generation testing, and to help find dungeons later
 		int x = (chunkX * 16) + 8;
 		int z = (chunkZ * 16) + 8;
-		for(int y = -16; y <= 241; y++) placeBlock(world, x, y, z, quartz);
+		for(int y = 16; y <= 241; y++) placeBlock(world, x, y, z, quartz);
 		for(int i = -dungeon.size.radius; i <= dungeon.size.radius; i++) {
 			placeBlock(world, x - dungeon.size.radius, 80, z + i, lapis);
 			placeBlock(world, x + dungeon.size.radius, 80, z + i, lapis);
@@ -84,6 +120,13 @@ public class Builder {
 	}
 	
 	
+	/**
+	 * Set the debugPole variable.  Setting this to true will cause a quartz pillar to appear in the
+	 * center of the dungeon from y=16 to y=240, and a lapis lazuli boarder to appear around the area
+	 * allotted for the dungeon at y=80. 
+	 * 
+	 * @param val 
+	 */
 	public static void setDebugPole(boolean val) {
 		debugPole = val;
 	}

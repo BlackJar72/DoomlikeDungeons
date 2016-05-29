@@ -49,7 +49,6 @@ public class CmdDimID extends CommandBase {
 		sender.addChatMessage(new TextComponentString("[DLDUNGEONS] " 
 				+ sender.getDisplayName().getFormattedText() 
 				+ " is in dimension " + dim));
-//		..setColor(EnumChatFormatting.DARK_PURPLE).setItalic(true));
 	}
 	
 	

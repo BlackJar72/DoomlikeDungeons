@@ -12,7 +12,18 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Stack;
 
+/**
+ * A class for profiling dungeon generation, or more generally infrequent 
+ * discrete events that use a non-trivial amount of time.  Such events
+ * are not measured well by the vanilla profiler as it is designed to show 
+ * the way CPU time in divided up between generally continuous activities per 
+ * frame rather than measuring long but infrequent events.
+ * 
+ * @author Jared Blackburn
+ *
+ */
 public class DLDProfile implements IProfiler {
 	int depth;
 	BufferedWriter save;
@@ -39,6 +50,10 @@ public class DLDProfile implements IProfiler {
 	}
 	
 	
+	/**
+	 * Adds a new task to the queue (represented as a list) and outputs
+	 * a log of the task. 
+	 */
 	public void startTask(String name) {
 		try {
 			String out = depth + ": Starting task " + name + "\n";			
@@ -48,12 +63,16 @@ public class DLDProfile implements IProfiler {
 			tasks.add(new Task(name));
 			depth++;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e.printStackTrace();			
 		}		
 	}
 	
 	
+	/**
+	 * Pops the last task from the queue (represented as a list) and prints a log
+	 * of the event along with the time taken for the task (along with all sub-tasks)
+	 * to be completed.
+	 */
 	public void endTask(String name) {
 		try {
 			Task task = tasks.remove(tasks.size()-1);
@@ -63,17 +82,19 @@ public class DLDProfile implements IProfiler {
 			save.flush();
 			System.out.print(out);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}				
 	}
 	
+	
+	/**
+	 * Output some information by printing it to the profilers log.
+	 */
 	public void infoOut(String info) {
 		try {
 			save.write(info);
 			save.flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

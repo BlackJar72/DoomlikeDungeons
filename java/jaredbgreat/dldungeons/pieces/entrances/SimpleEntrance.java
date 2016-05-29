@@ -16,8 +16,8 @@ import net.minecraft.world.World;
 
 public class SimpleEntrance extends AbstractEntrance {
 
-	public SimpleEntrance(int x, int y, int z) {
-		super(x, y, z);
+	public SimpleEntrance(int x, int z) {
+		super(x, z);
 	}
 
 	@Override

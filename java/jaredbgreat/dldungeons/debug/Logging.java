@@ -2,6 +2,12 @@ package jaredbgreat.dldungeons.debug;
 
 import java.util.logging.Logger;
 
+/**
+ * A mostly unused wrapper for the Java logger, to make getting a logger easier.
+ * 
+ * @author Jared Blackburn
+ */
+
 public class Logging {
 	private static Logger logger;
 	private static Logging log;
@@ -33,7 +39,6 @@ public class Logging {
 		if(log == null) {
 			log = new Logging();
 		}
-		//System.out.println(info);
 		Logger logger = Logger.getGlobal();
 		logger.info(info);
 	}

@@ -48,7 +48,6 @@ public class CmdInstallThemes extends CommandBase {
 		sender.addChatMessage(new TextComponentString("[DLDUNGEONS] " 
 				+ sender.getDisplayName().getFormattedText() 
 				+ " has reinstalled default themes (nothing will be overwritten)"));
-//		..setColor(EnumChatFormatting.DARK_PURPLE).setItalic(true));
 		BiomeLists.reset();
 	}
 	

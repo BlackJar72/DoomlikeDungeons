@@ -20,6 +20,14 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+/**
+ * This represents the treasure chests found in destination nodes
+ * (a.k.a., "boss rooms").  Each should have some of all three loot
+ * types, generally of a high level. 
+ * 
+ * @author Jared Blackburn
+ *
+ */
 public class TreasureChest extends BasicChest {
 	
 	static ArrayList<Integer> slots = new ArrayList();	
@@ -29,6 +37,11 @@ public class TreasureChest extends BasicChest {
 		super(x, y, z, level);
 	}
 	
+
+	/**
+	 * This will place some loot of every each type, being sure to use
+	 *  a separate random slot for each item so that none are overwritten. 
+	 */
 	@Override
 	public void place(World world, int x, int y, int z, Random random) {
 		BlockPos pos = new BlockPos(x, y, z);
@@ -37,14 +50,12 @@ public class TreasureChest extends BasicChest {
 		level += random.nextInt(2);
 		if(level >= LootCategory.LEVELS) level = LootCategory.LEVELS - 1;
 		ItemStack treasure;
-		//DBlock.placeChest(world, x, y, z);
 		if(world.getBlockState(pos).getBlock() != DBlock.chest) {
 			System.err.println("[DLDUNGEONS] ERROR! Trying to put loot into non-chest at " 
 					+ x + ", " + y + ", " + z + " (treasure chest).");
 			return;
 		}
 		TileEntityChest contents = (TileEntityChest)world.getTileEntity(pos);
-//		if(ConfigHandler.vanillaLoot) vanillaChest(contents, random);
 		int num;
 		num = random.nextInt(3 + (level / 3)) + 2;
 		for(int i = 0; i < num; i++) {
@@ -76,11 +87,22 @@ public class TreasureChest extends BasicChest {
 	}
 	
 	
+	/**
+	 * Returns true if a the slot is a valid part of a chests inventory.
+	 * 
+	 * @param slot
+	 * @return
+	 */
 	private boolean validSlot(int slot) {
-		return ((slot >= 0) && (slot < 25));
+		return ((slot >= 0) && (slot < 27));
 	}
 	
 	
+	/**
+	 * Initializes the slots list, which is shuffled to randomize item location in
+	 * the chest without the risk of over writing one item with the another.  Called
+	 * nut LootList.addDefaultLoot to populate the list.
+	 */
 	public static void initSlots() {
 		for(int i = 0; i < 27; i++) slots.add(new Integer(i));
 	}

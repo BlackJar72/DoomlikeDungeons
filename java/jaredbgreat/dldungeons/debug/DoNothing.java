@@ -8,6 +8,11 @@ package jaredbgreat.dldungeons.debug;
  * https://creativecommons.org/licenses/by/4.0/legalcode
 */	
 
+/**
+ * The profiler for when profiling is off.
+ * 
+ * @author Jared Blackburn
+ */
 public class DoNothing implements IProfiler {
 
 	@Override

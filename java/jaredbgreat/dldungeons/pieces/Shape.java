@@ -19,74 +19,130 @@ import net.minecraft.world.World;
 import static jaredbgreat.dldungeons.pieces.Rectangle.*;
 
 
+/**
+ * This class represents shape primitives from which dungeon architecture
+ * is drawn.  Each shape is cut from a unit square centered on 0,0 in the 
+ * xz plane and built from rectangles.  This allows for shapes to be easily
+ * stretched to fit areas they are added.  In addition, they can be flipped
+ * on either axis and come in pre-rotated variations, for easy transformation.
+ * 
+ * All shapes used by the mod are defined as static final members of the class,
+ * as are groups varying only by rotation as are larger groups defined by 
+ * symmetry.
+ * 
+ * @author Jared Blackburn
+ *
+ */
 public class Shape {
 	
-	Rectangle[] rectangles;	
+	private final Rectangle[] rectangles;	
 	
 	public Shape(Rectangle[] rectangles) {
 		this.rectangles = rectangles;
 	}
 	
 	
-	/*
-	 * I'm really not sure this is the best way to build shape primitives for room parts; it seemed 
-	 * like a good idea but there are many complications I didn't originally think of.
+	/**
+	 * Add a pool of "liquid" in this shape to the dungeon.
+	 * 
+	 * @param dungeon
+	 * @param room
+	 * @param sx the x coordinate
+	 * @param sz the z coordinate
+	 * @param sdimx the length on x
+	 * @param sdimz the length on z
+	 * @param invertX
+	 * @param invertZ
 	 */
-	
-	
-	public void write(Dungeon dungeon, Room room, 
-					  float sx, byte sy, float sz, byte height, byte sdimx, byte sdimz, 
-					  boolean invertX, boolean invertZ) {
-		for(Rectangle rect: rectangles) {
-			rect.write(dungeon, room, sx, sy, sz, height, sdimx, sdimz, invertX, invertZ);
-			// TODO: More...?
-		}
-	}
-	
-	
 	public void drawLiquid(Dungeon dungeon, Room room, float sx, float sz, float sdimx, float sdimz, 
 			boolean invertX, boolean invertZ) {
 		for(Rectangle rect: rectangles) {
 			rect.drawLiquid(dungeon, room, sx, sz, sdimx, sdimz, invertX, invertZ);
-			// TODO: More...?
 		}
 	}
 	
 	
+	/**
+	 * Add a walkway (normal floor at normal height) through a pool of 
+	 * previously added liquid.  This is mostly for use with whole room
+	 * shapes.
+	 * 
+	 * @param dungeon
+	 * @param room
+	 * @param sx the x coordinate
+	 * @param sz the z coordinate
+	 * @param sdimx the length on x
+	 * @param sdimz the length on z
+	 * @param invertX
+	 * @param invertZ
+	 */
 	public void drawWalkway(Dungeon dungeon, Room room, float sx, float sz, byte sdimx, byte sdimz, 
 				boolean invertX, boolean invertZ) {
-		//System.out.println("About to iterate rectangles; shape is " + this.getClass() + ".");
 		for(Rectangle rect: rectangles) {
-			//System.out.println("About add rectangle; rectangle is is " + rect.getClass() + ".");
 			rect.drawWalkway(dungeon, room, sx, sz, sdimx, sdimz, invertX, invertZ);
-			// TODO: More...?
 		}
 	}
 	
 	
+	/**
+	 * Effectively remove an area of in the shape from the dungeon by filling it 
+	 * with walls.
+	 * 
+	 * @param dungeon
+	 * @param room
+	 * @param sx the x coordinate
+	 * @param sz the z coordinate
+	 * @param sdimx the length on x
+	 * @param sdimz the length on z
+	 * @param invertX
+	 * @param invertZ
+	 */
 	public void drawCutout(Dungeon dungeon, Room room, float sx, float sz, float sdimx, float sdimz, 
 			boolean invertX, boolean invertZ) {
 		for(Rectangle rect: rectangles) {
 			rect.drawCutout(dungeon, room, sx, sz, sdimx, sdimz, invertX, invertZ);
-			// TODO: More...?
 		}
 	}
 	
 	
+	/**
+	 * Removes walls from an area of this shape (cuts into the wall); this is
+	 * mostly for use with whole room shapes.
+	 * 
+	 * @param dungeon
+	 * @param room
+	 * @param sx the x coordinate
+	 * @param sz the z coordinate
+	 * @param sdimx the length on x
+	 * @param sdimz the length on z
+	 * @param invertX
+	 * @param invertZ
+	 */
 	public void drawCutin(Dungeon dungeon, Room room, 
 					  float sx, float sz, byte sdimx, byte sdimz, boolean invertX, boolean invertZ) {
 		for(Rectangle rect: rectangles) {
 			rect.drawCutin(dungeon, room, sx, sz, sdimx, sdimz, invertX, invertZ);
-			// TODO: More...?
 		}
 	}
 	
 	
+	/**
+	 * Adds a platform (or depression) of this shape.
+	 * 
+	 * @param dungeon
+	 * @param room
+	 * @param floorY the new floor height
+	 * @param sx the x coordinate
+	 * @param sz the z coordinate
+	 * @param sdimx the length on x
+	 * @param sdimz the length on z
+	 * @param invertX
+	 * @param invertZ
+	 */
 	public void drawPlatform(Dungeon dungeon, Room room, byte floorY, 
 					  float sx, float sz, float sdimx, float sdimz, boolean invertX, boolean invertZ) {
 		for(Rectangle rect: rectangles) {
 			rect.drawPlatform(dungeon, room, floorY, sx, sz, sdimx, sdimz, invertX, invertZ);
-			// TODO: More...?
 		}
 	}
 	
@@ -190,6 +246,5 @@ public class Shape {
 	public static final Shape[][] allSolids = {xgroup, lgroup, tgroup, fgroup, 
 											   egroup, ugroup};
 	
-		
-	//TODO: Add a system of selecting some things by symmetry?  Or maybe just add to certain parts of the rooms 
+	
 }

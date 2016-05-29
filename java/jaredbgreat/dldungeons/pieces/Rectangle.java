@@ -16,9 +16,27 @@ import jaredbgreat.dldungeons.themes.ThemeFlags;
 import jaredbgreat.dldungeons.themes.ThemeType;
 
 
+/**
+ * The building block for more complex shape-primitives represented 
+ * by the Shape class, and thus the foundational class for all dungeon
+ * architecture.
+ * 
+ * Each rectangle is, if used correctly, a sub-section of a unit square
+ * centered on 0,0 in the xz plane.  This allows them, and thus shape 
+ * built from them, to be stretched to a desired size and shape (rounded)
+ * by multiplication by the desired dimensions and placed by adding the 
+ * coordinates of the center block (which could very well be a fractional 
+ * block.
+ * 
+ * All rectangles used are static final members of this class.  The class 
+ * is also immutable.
+ * 
+ * @author Jared Blackburn
+ *
+ */
 public class Rectangle {
 	
-	float xdim, zdim, xcoord, zcoord;				// Width in each dimension and center coordinates
+	final float xdim, zdim, xcoord, zcoord;				// Width in each dimension and center coordinates
 	
 	
 	public Rectangle(float xdim, float zdim, float xcoord, float zcoord) {
@@ -29,71 +47,26 @@ public class Rectangle {
 	}
 	
 	
-	public void scalex(float factor) {
-		xdim *= factor;
-	}
-	
-	
-	public void scalez(float factor) {
-		zdim *= factor;
-	}	
-	
-	public void rotate() {
-		float tmp = xdim;
-		xdim = zdim;
-		zdim = tmp;
-	}
-	
-	/*
-	 * I'm really not sure this is the best way to build shape primitives for room parts; it seemed 
-	 * like a good idea but there are many complications I didn't originally think of.
+	/**
+	 * Add the rectangle to the dungeon as pool of "liquid."
+	 * 
+	 * @param dungeon
+	 * @param room
+	 * @param sx x coordinate
+	 * @param sz z coordinate
+	 * @param sdimx length on x
+	 * @param sdimz length on z
+	 * @param invertX
+	 * @param invertZ
 	 */
-	
-	
-	public void write(Dungeon dungeon, Room room, float sx, byte sy, float sz, 
-				byte height, byte sdimx, byte sdimz, boolean invertX, boolean invertZ) {
-		byte xbegin, xend, zbegin, zend;
-		// This should probably be in a helper method
-		if(invertX) {
-			xbegin = (byte)(sx - ((sdimx * xdim) / 2.0f) - (xcoord * sdimx));
-			xend   = (byte)(sx + ((sdimx * xdim) / 2.0f) - (xcoord * sdimx));
-		} else {
-			xbegin = (byte)(sx - ((sdimx * xdim) / 2.0f) + (xcoord * sdimx));
-			xend   = (byte)(sx + ((sdimx * xdim) / 2.0f) + (xcoord * sdimx));
-		}
-		if(invertZ) {
-			zbegin = (byte)(sz - ((sdimz * zdim) / 2.0f) - (zcoord * sdimz));
-			zend   = (byte)(sz + ((sdimz * zdim) / 2.0f) - (zcoord * sdimz));
-		} else {
-			zbegin = (byte)(sz - ((sdimz * zdim) / 2.0f) + (zcoord * sdimz));
-			zend   = (byte)(sz + ((sdimz * zdim) / 2.0f) + (zcoord * sdimz));
-		}
-		byte ceily  = (byte)(sy + height);	
-			
-		// Place floor, ceiling, and empty space
-				for(byte k = zbegin; k < zend; k++) 
-					for(byte j = xbegin; j < xend; j++) {
-						if((j < 0) || (j >= dungeon.size.width) || (k < 0) || (k >= dungeon.size.width)) continue;
-						if(dungeon.map.floorY[j][k] != 0) 
-							dungeon.map.nFloorY[j][k] = dungeon.map.floorY[j][k];
-						if(dungeon.map.ceilY[j][k] != 0) 
-							dungeon.map.nCeilY[j][k] = dungeon.map.floorY[j][k]; 
-						dungeon.map.ceilY[j][k]   = ceily;
-						dungeon.map.floorY[j][k]  = sy;
-						dungeon.map.wall[j][k]    = room.wallBlock1;
-						dungeon.map.floor[j][k] = room.floorBlock;
-						if(!room.sky) dungeon.map.ceiling[j][k] = room.cielingBlock;
-					}
-		
-	}
-	
-	
 	public void drawLiquid(Dungeon dungeon, Room room, float sx, float sz, float sdimx, float sdimz, 
 			boolean invertX, boolean invertZ) {
 		int drop;
 		if(dungeon.theme.flags.contains(ThemeFlags.SWAMPY)) drop = 1;
 		else drop = 2;
 		byte xbegin, xend, zbegin, zend;
+		
+		// Find actual beginning and ending coordinates
 		if(invertX) {
 			xbegin = (byte)(sx - ((sdimx * xdim) / 2.0f) - (xcoord * sdimx));
 			xend   = (byte)(sx + ((sdimx * xdim) / 2.0f) - (xcoord * sdimx));
@@ -124,9 +97,20 @@ public class Rectangle {
 		}
 	
 	
+	/**
+	 * Add the rectangle to as a walkway (normal floor) through a previously added pool.
+	 * 
+	 * @param dungeon
+	 * @param room
+	 * @param sx x coordinate
+	 * @param sz z coordinate
+	 * @param sdimx length in x 
+	 * @param sdimz length in z
+	 * @param invertX
+	 * @param invertZ
+	 */
 	public void drawWalkway(Dungeon dungeon, Room room, float sx, float sz, byte sdimx, byte sdimz, 
 				boolean invertX, boolean invertZ) {
-		// To be used after setting whole room to hasLiquid
 		byte xbegin, xend, zbegin, zend;
 		int drop;
 		if(dungeon.theme.type.contains(ThemeType.SWAMP)) drop = 1;
@@ -154,12 +138,24 @@ public class Rectangle {
 						dungeon.map.floorY[j][k] += drop;
 						dungeon.map.hasLiquid[j][k] = false;
 						dungeon.map.nFloorY[j][k] = nFloorY;
-						//dungeon.map.extraDebugBuilding(j, k);
 					}
 				//System.out.println("Rectangle has been drawn.");
 		}
 	
 	
+	/**
+	 * Adds the rectangle as a section filled with walls from floor to ceiling (an 
+	 * area cut out from the rooms actual space).
+	 * 
+	 * @param dungeon
+	 * @param room
+	 * @param sx x coordinate
+	 * @param sz z coordinate
+	 * @param sdimx length on x
+	 * @param sdimz length on z
+	 * @param invertX
+	 * @param invertZ
+	 */
 	public void drawCutout(Dungeon dungeon, Room room, float sx, float sz, float sdimx, float sdimz, 
 			boolean invertX, boolean invertZ) {
 		byte xbegin, xend, zbegin, zend;
@@ -186,6 +182,19 @@ public class Rectangle {
 		}
 	
 	
+	/**
+	 * Add the rectangle as a area of empty space, that is, an area from which previously
+	 * place walls have been removed.
+	 * 
+	 * @param dungeon
+	 * @param room
+	 * @param sx x coordinate
+	 * @param sz z coordinate
+	 * @param sdimx length in x
+	 * @param sdimz length in z
+	 * @param invertX
+	 * @param invertZ
+	 */
 	public void drawCutin(Dungeon dungeon, Room room, float sx, float sz, byte sdimx, byte sdimz, 
 			boolean invertX, boolean invertZ) {
 		byte xbegin, xend, zbegin, zend;
@@ -207,11 +216,27 @@ public class Rectangle {
 					for(byte j = xbegin; j < xend; j++) {
 						if((j < 0) || (j >= dungeon.size.width) || (k < 0) || (k >= dungeon.size.width)) continue;
 						dungeon.map.isWall[j][k] = false;
-						//dungeon.map.extraDebugBuilding(j, k);
 					}
 		}
 	
 	
+	/**
+	 * This will add a platform built based on the rectangle and its specifications.
+	 * The specifications include the scaling factors in x and z, coordinated to 
+	 * place it, and if it should be inverted.  This technically resent the floor 
+	 * height, and is thus also used to add depression be setting the floor to a lower
+	 * height rather than higher.
+	 * 
+	 * @param dungeon
+	 * @param room
+	 * @param floorY The new floor height
+	 * @param sx the x coordinate
+	 * @param sz the z coordinate
+	 * @param sdimx the length on x
+	 * @param sdimz the length on z
+	 * @param invertX
+	 * @param invertZ
+	 */
 	public void drawPlatform(Dungeon dungeon, Room room, byte floorY, float sx, float sz, float sdimx, float sdimz, 
 			boolean invertX, boolean invertZ) {
 		byte xbegin, xend, zbegin, zend;
@@ -235,7 +260,6 @@ public class Rectangle {
 						if(dungeon.map.room[j][k] != room.id) continue;
 						dungeon.map.floorY[j][k] = floorY;
 						dungeon.map.hasLiquid[j][k] = false;
-						//dungeon.map.extraDebugBuilding(j, k);
 					}
 		}
 		
@@ -357,18 +381,8 @@ public class Rectangle {
 	}
 	
 	
-	public void setxdim(float val) {
-		xdim = val;
-	}
-	
-	
 	public float getzdim() {
 		return zdim;
-	}
-	
-	
-	public void setzdim(float val) {
-		zdim = val;
 	}
 	
 	
@@ -377,17 +391,7 @@ public class Rectangle {
 	}
 	
 	
-	public void setxcoord(float val) {
-		xcoord = val;
-	}
-	
-	
 	public float getzcoord() {
 		return zcoord;
-	}
-	
-	
-	public void setzcoord(float val) {
-		zdim = val;
 	}
 }

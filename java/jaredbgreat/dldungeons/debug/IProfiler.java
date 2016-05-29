@@ -8,6 +8,14 @@ package jaredbgreat.dldungeons.debug;
  * https://creativecommons.org/licenses/by/4.0/legalcode
 */	
 
+/**
+ * An interface for the profiling system.  This is implemented
+ * by DLDProfile to processing profiling information and by
+ * DoNothing to ignore it.  
+ * 
+ * @author Jared Blackburn
+ *
+ */
 public interface IProfiler {
 	
 	public abstract void startTask(String name);

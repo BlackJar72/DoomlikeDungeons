@@ -18,6 +18,18 @@ import java.util.Random;
 import static jaredbgreat.dldungeons.pieces.Shape.*;
 
 
+/**
+ * Families of shapes, each representing a single shape in each of its rotations.
+ * 
+ * Each enumeration constant has an associates Shape area from the shape class
+ * allows with minimum dimensions to hold the shape without loose details to 
+ * rounding.
+ * 
+ * This class also helps find a shape for a given symmetry class.
+ * 
+ * @author Jared Blackburn
+ *
+ */
 public enum Shapes {
 
 	X (1, 1, xgroup),
@@ -44,6 +56,13 @@ public enum Shapes {
 	}
 	
 	
+	/**
+	 * Will return a random shape that fits a given symmetry.
+	 * 
+	 * @param sym
+	 * @param random
+	 * @return
+	 */
 	public static Shapes wholeShape(Symmetry sym, Random random) {
 		switch (sym) {
 		case NONE:

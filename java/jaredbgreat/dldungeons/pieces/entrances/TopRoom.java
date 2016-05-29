@@ -13,11 +13,19 @@ import jaredbgreat.dldungeons.planner.Dungeon;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 
+
+/**
+ * An entrance with a small, one-room building, either complete or as a ruin,
+ * at the top.
+ * 
+ * @author Jared Blackburn
+ *
+ */
 public class TopRoom extends AbstractEntrance {
 	int wx, wz, bottom, top, xdim, ydim, zdim, ymod, xmin, xmax, zmin, zmax, below; 
 	
-	public TopRoom(int x, int y, int z) {
-		super(x, y, z);
+	public TopRoom(int x, int z) {
+		super(x, z);
 		
 	}
 
@@ -59,7 +67,14 @@ public class TopRoom extends AbstractEntrance {
 	//////////////////////////////////////////////////////////////////////////
 	
 	
-	// Build an intact building
+	/**
+	 * Build a complete / intact building, consisting of one room in the 
+	 * shape of a rectangular solid.  This will also fill in a any areas 
+	 * between the room and ground so that it doesn't float.
+	 * 
+	 * @param dungeon
+	 * @param world
+	 */
 	private void buidBuilding(Dungeon dungeon, World world) {
 		//DoomlikeDungeons.profiler.startTask("Generating Building (TopRoom)");
 		//DoomlikeDungeons.profiler.startTask("Generating Floor (TopRoom)");
@@ -131,7 +146,13 @@ public class TopRoom extends AbstractEntrance {
 	}
 	
 	
-	// Build a ruined building
+	/**
+	 * This will build a small ruin at the dungeon entrance.  This will also 
+	 * fill in a any areas between the room and ground so that it doesn't float.
+	 * 
+	 * @param dungeon
+	 * @param world
+	 */
 	private void buildRuin(Dungeon dungeon, World world) {
 		//DoomlikeDungeons.profiler.startTask("Generating Ruin (TopRoom)");
 		//DoomlikeDungeons.profiler.startTask("Generating Floor (TopRoom)");
@@ -202,6 +223,14 @@ public class TopRoom extends AbstractEntrance {
 	//////////////////////////////////////////////////////////////////////////
 	
 	
+	/**
+	 * Will build a column holding a ladder; this is the same as what's build
+	 * by SimplEntrance, except that the column and ladder will reach to the
+	 * top room's ceiling height.
+	 * 
+	 * @param world
+	 * @param dungeon
+	 */
 	private void buildLatter(World world, Dungeon dungeon) {
 		//DoomlikeDungeons.profiler.startTask("Generating Latter (TopRoom)");
 		top += ydim;
@@ -236,6 +265,13 @@ public class TopRoom extends AbstractEntrance {
 	}
 	
 	
+	/**
+	 * This will build a spiral stair into the dungeon, the same as would have
+	 * been built by the SpiralStair class.
+	 * 
+	 * @param world
+	 * @param dungeon
+	 */
 	private void buildStair(World world, Dungeon dungeon) {
 		//DoomlikeDungeons.profiler.startTask("Generating Stair (TopRoom)");
 		top++;

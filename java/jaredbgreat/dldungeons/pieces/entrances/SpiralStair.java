@@ -19,8 +19,8 @@ import net.minecraft.world.World;
 public class SpiralStair extends AbstractEntrance {
 
 	
-	public SpiralStair(int x, int y, int z) {
-		super(x, y, z);
+	public SpiralStair(int x, int z) {
+		super(x, z);
 	}
 
 	

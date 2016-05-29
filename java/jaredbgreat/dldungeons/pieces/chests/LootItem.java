@@ -21,12 +21,30 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 
+/**
+ * A class to represent entries in loot tables.
+ * 
+ * This stores an item for use as loot in terms of the Minecraft Item instance 
+ * along with minimum and maximum quantities and the items damage value (or 
+ * metadata in block terms). 
+ * 
+ * @author Jared Blackburn
+ * 
+ */
 public class LootItem {
 	
-	Object item;
+	Item item;
 	int min, max, meta;
 	
 	
+	/**
+	 * Add the named item, where name is a string including the
+	 * items name and an optional damage value.
+	 * 
+	 * @param id
+	 * @param min
+	 * @param max
+	 */
 	public LootItem(String id, int min, int max) {
 		metaParse(id);
 		if(min > max) min = max;
@@ -39,6 +57,13 @@ public class LootItem {
 	}
 	
 	
+	/**
+	 * Create a LootItem using Item.
+	 * 
+	 * @param item
+	 * @param min
+	 * @param max
+	 */
 	public LootItem(Item item, int min, int max) {
 		this.item = item;
 		if(min > max) min = max;
@@ -47,14 +72,27 @@ public class LootItem {
 	}
 	
 	
+	/**
+	 * Create a LootItem usign a block
+	 * 
+	 * @param item
+	 * @param min
+	 * @param max
+	 */
 	public LootItem(Block item, int min, int max) {
-		this.item = item;
+		this.item = Item.getItemFromBlock(item);
 		if(min > max) min = max;
 		this.min = min;
 		this.max = max;
 	}
 	
 	
+	/**
+	 * Parses its input string to set the values for item and meta
+	 * (damage value).
+	 * 
+	 * @param in
+	 */
 	private void metaParse(String in) {
 		StringTokenizer nums = new StringTokenizer(in, "({[:]})");
 		String modid = nums.nextToken();
@@ -68,17 +106,23 @@ public class LootItem {
 	}
 	
 	
+	/**
+	 * Returns a randomly sized ItemStack of the Item.
+	 * 
+	 * @param random
+	 * @return
+	 */
 	public ItemStack getStack(Random random) {
 		ItemStack out;
 		if(max <= min) {
-			if(item instanceof Item)  out = new ItemStack((Item)item, max);
-			else                      out = new ItemStack((Block)item, max);
+			if(item instanceof Item)  out = new ItemStack(item, max);
+			else                      out = new ItemStack(item, max);
 		}
 		else {
 			if(item instanceof Item) 
-				out = new ItemStack((Item)item, random.nextInt(max - min) + min +1);
+				out = new ItemStack(item, random.nextInt(max - min) + min +1);
 			else 
-				out = new ItemStack((Block)item, random.nextInt(max - min) + min +1);
+				out = new ItemStack(item, random.nextInt(max - min) + min +1);
 		}
 		if(out.getItem() == null) {
 			return null;
@@ -88,15 +132,14 @@ public class LootItem {
 		} else {
 			out.setItemDamage(0);
 		}
-		//System.out.println("Placing " + out.stackSize + " of "+ out.getItem().toString() + " with damage value " + out.getItemDamage() + "; (" + out.toString() + ")");
 		return out;
 	}
 	
 	
 	/*----------------------------------*/
-	/*       Deafult Loots Below        */
+	/*       Default Loots Below        */
 	/*----------------------------------*/
-	
+	// Is this really necessary anymore?
 	
 	public static LootItem stoneSword   
 			= new LootItem(GameRegistry.findItem("minecraft", "stone_sword"),   1, 1);

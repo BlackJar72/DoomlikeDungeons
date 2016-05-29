@@ -281,14 +281,18 @@ public class Dungeon {
 	
 	public void addTileEntities() {
 		for(Room room : rooms) {
-			addTileEntitesToRom(room);
+			addTileEntitesToRoom(room);
 		}
 	}
 	
 	
-	public void addTileEntitesToRom(Room room) {
+	public void addTileEntitesToRoom(Room room) {
 			for(Spawner  spawner : room.spawners) {
-					DBlock.placeSpawner(map.world, shiftX + spawner.x, spawner.y, shiftZ + spawner.z, spawner.mob);
+					DBlock.placeSpawner(map.world, 
+										shiftX + spawner.getX(), 
+										spawner.getY(), 
+										shiftZ + spawner.getZ(), 
+										spawner.getMob());
 			}
 			for(BasicChest  chest : room.chests) {
 				chest.place(map.world, shiftX + chest.mx, chest.my, shiftZ + chest.mz, random);
@@ -321,18 +325,18 @@ public class Dungeon {
 		switch (entrance) {
 		case 0:
 			//DoomlikeDungeons.profiler.startTask("Adding Sriral Stair");
-			new SpiralStair((int)room.realX, room.floorY, (int)room.realZ).build(this, map.world);
+			new SpiralStair((int)room.realX, (int)room.realZ).build(this, map.world);
 			//DoomlikeDungeons.profiler.endTask("Adding Sriral Stair");
 			break;
 		case 1:
 			//DoomlikeDungeons.profiler.startTask("Adding Top Room");
-			new TopRoom((int)room.realX, room.floorY, (int)room.realZ).build(this, map.world);
+			new TopRoom((int)room.realX, (int)room.realZ).build(this, map.world);
 			//DoomlikeDungeons.profiler.endTask("Adding Top Room");
 			break;
 		case 2:
 		default:
 			//DoomlikeDungeons.profiler.startTask("Adding Simple Entrance");
-			new SimpleEntrance((int)room.realX, room.floorY, (int)room.realZ).build(this, map.world);
+			new SimpleEntrance((int)room.realX, (int)room.realZ).build(this, map.world);
 			//DoomlikeDungeons.profiler.endTask("Adding Simple Entrance");
 			break;
 		}		

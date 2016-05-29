@@ -48,7 +48,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.item.ItemTool;
 
-
+/**
+ * A representation of all available loot by type and level.  This class
+ * is actually primarily responsible for selecting specific items of
+ * the requested type and level rather than for storage, though it 
+ * does store arrays of LootList for use in the selection process.
+ * 
+ * @author Jared Blackburn
+ *
+ */
 public class LootCategory {
 	
 	public static final int LEVELS = 7; 	
@@ -72,6 +80,15 @@ public class LootCategory {
 			LootList[]{loot1, loot2, loot3, loot4, loot5, loot6, loot7});
 	
 	
+	/**
+	 * Takes the loots type and level and returns an item stack of a random
+	 * item fitting the type and level supplied.
+	 * 
+	 * @param type
+	 * @param level
+	 * @param random
+	 * @return
+	 */
 	public static ItemStack getLoot(LootType type, int level, Random random) {
 		if(level <= 6) {
 			level = Math.min(6, (level + random.nextInt(2) - random.nextInt(2)));
@@ -114,6 +131,15 @@ public class LootCategory {
 	}
 	
 	
+	/**
+	 * Returns an item stack from the gear list with some of the items value
+	 * (in terms of loot level) possibly converted to random enchantments and
+	 * the remained used as the loot level of the item itself.
+	 * 
+	 * @param lootLevel
+	 * @param random
+	 * @return
+	 */
 	private static ItemStack getEnchantedGear(int lootLevel, Random random) {
 		ItemStack out = null;
 		float portion = random.nextFloat() / 2f;
@@ -130,16 +156,29 @@ public class LootCategory {
 	}
 	
 	
+	/**
+	 * True if the item is in a category that should be considered
+	 * for possible enchantment.
+	 * 
+	 * @param in
+	 * @return
+	 */
 	private static boolean isEnchantable(LootItem in) {
 		Item item = (Item)in.item;
 		return (item instanceof ItemSword 
 				|| item instanceof ItemTool 
 				|| item instanceof ItemArmor
-				|| item instanceof ItemBow
-				|| item instanceof ItemShield);
+				|| item instanceof ItemBow);
 	}
 	
 	
+	/**
+	 * Creates a random enchanted book and returns it as an ItemStack
+	 * 
+	 * @param level
+	 * @param random
+	 * @return
+	 */
 	private static ItemStack getEnchantedBook(int level, Random random) {
 		ItemStack out = new ItemStack(Items.book, 1);
 		out = EnchantmentHelper.addRandomEnchantment(random, out, Math.min(30, (int)(level * 7.5)), true);

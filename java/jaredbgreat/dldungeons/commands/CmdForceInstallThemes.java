@@ -55,7 +55,6 @@ public class CmdForceInstallThemes extends CommandBase {
 		sender.addChatMessage(new TextComponentString("[DLDUNGEONS] " 
 				+ sender.getDisplayName().getFormattedText() 
 				+ " has forced reinstalled default themes (existing themes will be overwritten!)"));
-//		..setColor(EnumChatFormatting.DARK_PURPLE).setItalic(true));
 		BiomeLists.reset();
 	}
 	

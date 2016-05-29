@@ -17,6 +17,13 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+/**
+ * Represents a weak / junk chest found in rooms without spawners and containing
+ * small amounts of starter materials.
+ * 
+ * @author Jared Blackburn
+ *
+ */
 public class WeakChest extends BasicChest {
 	
 	

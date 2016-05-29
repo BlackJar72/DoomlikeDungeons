@@ -26,8 +26,9 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public final class DBlock {
 	private final String id;   // The name
 	private final Block block; // The Minecraft block
-	private final int meta;	 // The blocks meta-data
+	private final int meta;	   // The blocks meta-data
 	
+	// Block constants used by the mod for various purposes, usually for placement
 	public static final Block spawner = (Block)Block.getBlockFromName("mob_spawner");
 	public static final Block chest   = (Block)Block.getBlockFromName("chest");
 	public static final Block portal1 = (Block)Block.getBlockFromName("end_portal_frame");
@@ -37,14 +38,22 @@ public final class DBlock {
 	public static final Block water   = (Block)Block.getBlockFromName("water");
 	public static final Block air     = (Block)Block.getBlockFromName("air");
 	
-	public static final int chestid = Block.getIdFromBlock(chest);	
+	// Block IDs, used for comparison to tell if the block is allowed to be replaced
+	public static final int chestid   = Block.getIdFromBlock(chest);	
 	public static final int spawnerid = Block.getIdFromBlock(spawner);	
 	public static final int portal1id = Block.getIdFromBlock(portal1);	
 	public static final int portal2id = Block.getIdFromBlock(portal2);
 	
+	// All blocks, complete with meta-data used by the mod
 	public static final ArrayList<DBlock> registry = new ArrayList<DBlock>();
 	
 	
+	/**
+	 * Construct a dungeon block using an older theme format, from before
+	 * version 1.7 of the mod.
+	 * 
+	 * @param id
+	 */
 	private DBlock(String id) {
 		this.id = id;
 		StringTokenizer nums = new StringTokenizer(id, "({[]})");
@@ -55,12 +64,16 @@ public final class DBlock {
 		}
 		if(nums.hasMoreElements()) meta = Integer.parseInt(nums.nextToken());
 		else meta = 0;
-		//System.out.println("[DLD] Contructed Block " + block + " from "  + id);
 	}
+		
 	
-	
+	/**
+	 * Construct a dungeon block using a theme format from version 1.7 of the mod
+	 * or newer.
+	 * 
+	 * @param id
+	 */
 	private DBlock(String id, float version) throws NoSuchElementException {
-		//System.out.println("[DLDUNGEONS] Loading block " + id + " as " + version);
 		this.id = id;
 		if(version < 1.7) {
 			StringTokenizer nums = new StringTokenizer(id, "({[]})");
@@ -95,20 +108,34 @@ public final class DBlock {
 	}
 	
 	
+	/**
+	 * Places a the block into the world at the given coordinates and with meta-data 
+	 * as zero.  This wrapping eases updating with block representation and method
+	 * names change.
+	 * 
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
 	public void placeNoMeta(World world, int x, int y, int z) {
-		// This wrapper is a protection against possible changes in block representation,
-		// e.g., abandoning the ID system, allowing any needed changes to be made here
-		// instead of elsewhere. 
 		System.out.println(block);
 		if(!isProtectedBlock(world, x, y, z)) 
 			world.setBlockState(new BlockPos(x, y, z), block.getDefaultState());
 	}
 	
 	
+	/**
+	 * Places the block in the world, including its correct meta-data.  This wrapping allow
+	 * for changes in block / state representation and method signatures to be easily
+	 * adapted and for meta-blocks to easily be used in dungeons. 
+	 * 
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
 	public void place(World world, int x, int y, int z) {
-		// This wrapper is a protection against possible changes in block representation,
-		// e.g., abandoning the ID system, allowing any needed changes to be made here
-		// instead of elsewhere. 
 		if(!isProtectedBlock(world, x, y, z))
 			world.setBlockState(new BlockPos(x, y, z), block.getStateFromMeta(meta));
 	}
@@ -119,22 +146,54 @@ public final class DBlock {
 	/************************************************************************************/
 	
 	
+	/**
+	 * This will place a block from the DBlock registry into the world based on its internal
+	 * ID (i.e., its registry index).
+	 * 
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param block
+	 */
 	public static void place(World world, int x, int y, int z, int block) {
 		if(!isProtectedBlock(world, x, y, z)) 
 				registry.get(block).place(world, x, y, z);
 	}
 	
 	
+	/**
+	 * Turns a string labeling the block into a DBlock and adds it to the registry if 
+	 * its not already present.  It will return the new DBlocks registry index for 
+	 * use as an internal id.
+	 * 
+	 * This is for use with older theme formats from before mod version 1.7.
+	 * 
+	 * @param id
+	 * @return The index of the block in the DBlock registry
+	 */
 	public static int add(String id) {
 		DBlock block = new DBlock(id);
 		if(!registry.contains(block)) {
 			registry.add(block);
 		}
-		//System.out.println("[DLD] Adding Block " + block + " from "  + id);
 		return registry.indexOf(block);
 	}	
 	
 	
+	/**
+	 * Turns a string labeling the block into a DBlock and adds it to the registry if 
+	 * its not already present.  It will return the new DBlocks registry index for 
+	 * use as an internal id.
+	 * 
+	 * This is for use with mod versions newer that 1.7.
+	 * 
+	 * 
+	 * @param id
+	 * @param version
+	 * @return
+	 * @throws NoSuchElementException
+	 */
 	public static int add(String id, float version) throws NoSuchElementException {
 		DBlock block = new DBlock(id, version);
 		if(!registry.contains(block)) {
@@ -142,51 +201,95 @@ public final class DBlock {
 		}
 		return registry.indexOf(block);
 	}
-
 	
+	
+	/**
+	 * Purely a wrapper for block/state placing/setting methods typically found in world,
+	 * allowing easier updating when block representation or method signature / location
+	 * changes.
+	 * 
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param block
+	 */
 	public static void placeBlock(World world, int x, int y, int z, Block block) {
-		// This wrapper is a protection against possible changes in block representation,
-		// e.g., abandoning the ID system, allowing any needed changes to be made here
-		// instead of elsewhere. 
 		if(isProtectedBlock(world, x, y, z)) return;
 		world.setBlockState(new BlockPos(x, y, z), block.getDefaultState());
 	}
 	
 	
+	/**
+	 * Purely a wrapper for block/state placing/setting methods typically found in world,
+	 * allowing easier updating when block representation or method signature / location
+	 * changes.
+	 * 
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param block
+	 */
 	public static void placeBlock(World world, int x, int y, int z, Block block, int a, int b) {
-		// This wrapper is a protection against possible changes in block representation,
-		// e.g., abandoning the ID system, allowing any needed changes to be made here
 		if(isProtectedBlock(world, x, y, z)) return; 
 		world.setBlockState(new BlockPos(x, y, z), block.getStateFromMeta(a));
 	}
 	
 	
+	/**
+	 * A wrapper for setting a block to air.
+	 * 
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
 	public static void deleteBlock(World world, int x, int y, int z) {
-		// This wrapper is a protection against possible changes in block representation,
-		// e.g., abandoning the ID system, allowing any needed changes to be made here
-		// instead of elsewere. 
-		// world.setBlock(x, y, z, 0);
 		if(isProtectedBlock(world, x, y, z)) return;
 		world.setBlockToAir(new BlockPos(x, y, z));
 	}
 	
 	
+	/**
+	 * Almost a wrapper for setting the block to air in world, but will alternately set
+	 * blocks to water instead if a dungeons is flooded.
+	 * 
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param flooded
+	 */
 	public static void deleteBlock(World world, int x, int y, int z, boolean flooded) {
-		// This wrapper is a protection against possible changes in block representation,
-		// e.g., abandoning the ID system, allowing any needed changes to be made here
-		// instead of elsewere. 
-		// world.setBlock(x, y, z, 0);
 		if(isProtectedBlock(world, x, y, z)) return;
 		if(flooded) placeBlock(world, x, y, z, water); 
 		else world.setBlockToAir(new BlockPos(x, y, z));
 	}
 	
 	
+	/**
+	 * Simply a wrapper for placing a chest.
+	 * 
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
 	public static void placeChest(World world, int x, int y, int z) {
 		placeBlock(world, x, y, z, chest);		
 	}
 	
 	
+	/**
+	 * This will place a spawner and set it to spawn the mob named.
+	 * 
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param mob
+	 */
 	public static void placeSpawner(World world, int x, int y, int z, String mob) {
 		BlockPos pos = new BlockPos(x, y, z);
 		if(isProtectedBlock(world, x, y, z)) return;
@@ -197,6 +300,17 @@ public final class DBlock {
 	}
 	
 	
+	/**
+	 * True if the block Material is ground, grass, iron, sand, rock, or clay. This is 
+	 * used to determine if building under a structure should stop because it has reached
+	 * the ground, so true really mean "stop building now."
+	 * 
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
 	public static boolean isGroundBlock(World world, int x, int y, int z) {
 		IBlockState bs = world.getBlockState(new BlockPos(x, y, z));
 		Material mat = bs.getMaterial();
@@ -211,16 +325,20 @@ public final class DBlock {
 	}
 	
 	
+	/**
+	 * True if the block is one that should not be built over; specifically a chest,
+	 * spawner, or any part of the End portal.
+	 * 
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
 	public static boolean isProtectedBlock(World world, int x, int y, int z) {
 		int block = Block.getIdFromBlock(world.getBlockState(new BlockPos(x, y, z)).getBlock());
 		return (block == chestid || block == spawnerid  
 				|| block == portal1id || block == portal2id);
-
-//		Block block = world.getBlock(x, y, z);
-//		return (block == chest || block == spawner || 
-//				block == portal1 || block == portal2 || 
-//				block instanceof net.minecraft.block.BlockEndPortalFrame ||
-//				block instanceof net.minecraft.block.BlockMobSpawner);
 	}
 	
 	
@@ -229,6 +347,10 @@ public final class DBlock {
 	/************************************************************************************/
 	
 	
+	/**
+	 * Returns true if the other object is a DBlock the holds the same block with 
+	 * the same meta-data. 
+	 */
 	@Override
 	public boolean equals(Object other) {
 		if(!(other instanceof DBlock)) return false; 
@@ -236,6 +358,11 @@ public final class DBlock {
 	}
 	
 	
+	/**
+	 * Returns a hash code derived from the block id and meta data; it will only produce 
+	 * the same hash code if these are both equal, that is, equal hash codes implies equals() 
+	 * is true. 
+	 */
 	@Override
 	public int hashCode() {
 		int a = Block.getIdFromBlock(block);

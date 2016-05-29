@@ -18,19 +18,50 @@ import net.minecraft.item.Item;
 import static jaredbgreat.dldungeons.pieces.chests.LootItem.*;
 
 
+/**
+ * A list of loot items for a particular type and level.  This class also
+ * contains static LootList members to statically hold all the loot used by
+ * the mod.
+ * 
+ * @author Jared Blackburn
+ *
+ */
 public class LootList extends ArrayList<LootItem>{
 	ArrayList<LootItem> dummy = new ArrayList<LootItem>();
 	
+	
+	/**
+	 * Add the item, converting it to a LootItem.
+	 * 
+	 * @param item
+	 * @param min
+	 * @param max
+	 * @param prob
+	 */
 	public void add(Item item, int min, int max, int prob) {
 		add(new LootItem(item, min, max));
 	}
 	
 	
+	/**
+	 * Adds the block, converting it to LootItem.
+	 * 
+	 * @param item
+	 * @param min
+	 * @param max
+	 * @param prob
+	 */
 	public void add(Block item, int min, int max, int prob) {
 		add(new LootItem(item, min, max));
 	}
 	
 	
+	/**
+	 * Returns a random item (as a LootItem) stored in the list.
+	 * 
+	 * @param random
+	 * @return
+	 */
 	public LootItem getLoot(Random random) {
 		LootItem out;
 		if(isEmpty()) return null;
@@ -78,6 +109,12 @@ public class LootList extends ArrayList<LootItem>{
 	static LootList special = new LootList();
 	
 	
+	/**
+	 * Adds default loot for use if chest config cannot be found or created.
+	 * 
+	 * In addition, this also performs some pre-game initialization, specifically
+	 * populating the TreasureChest's slots list with Integers from 0 to 26.
+	 */
 	public static void addDefaultLoot() {
 		gear1.add(stoneSword);	
 		gear1.add(leatherHat);
@@ -269,6 +306,11 @@ public class LootList extends ArrayList<LootItem>{
 	}
 	
 	
+	/**
+	 * Creates the hard-coded list of discs to give as trophies in some
+	 * treasure chests. 
+	 */
+	// Should this, perhaps, be replaced with a configurable "trophies" list?
 	public static void addDiscs() {		
 		discs.add(disc13);
 		discs.add(discCat);
@@ -284,6 +326,16 @@ public class LootList extends ArrayList<LootItem>{
 	}
 	
 	
+	/**
+	 * Adds the item to the one of the static LootLists, assigning it
+	 * the type and level in the process.
+	 * 
+	 * The item will be converted to a LootItm in the process of being added.
+	 * 
+	 * @param item
+	 * @param type
+	 * @param level
+	 */
 	public static void addItem(LootItem item, String type, int level) {
 		if(type.equals("gear")) {
 			switch(level) {
