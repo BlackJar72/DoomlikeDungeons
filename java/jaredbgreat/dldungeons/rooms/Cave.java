@@ -41,6 +41,12 @@ public class Cave extends Room {
 	}
 	
 	
+	/**
+	 * Plans the room.  Chests and spawner are added in the same way 
+	 * as for basic rooms, but walls and variation in floor / ceiling
+	 * height are determined by cellular automata to produce a more
+	 * cave-like layout.
+	 */
 	@Override
 	public Room plan(Dungeon dungeon, Room parent) {
 		xSize = endX - beginX;
@@ -49,7 +55,7 @@ public class Cave extends Room {
 			if(layers < 1) layers = 1;
 		}
 		
-		cells      = new int[layers][xSize][zSize];
+		cells = new int[layers][xSize][zSize];
 		
 		for(int i = 0; i < xSize; i++) {
 			for(int j = 0; j < zSize; j++) {
@@ -111,6 +117,13 @@ public class Cave extends Room {
 	}
 	
 	
+	/**
+	 * Use cellular automata to find area that should be walls.
+	 * 
+	 * @param layer
+	 * @param thresshold
+	 * @return
+	 */
 	private int[][] layerConvert1(int[][] layer, int thresshold) {
 		makeScratchpad();
 		for(int i = xSize - 2; i > 0; i--) {
@@ -122,6 +135,15 @@ public class Cave extends Room {
 	}
 	
 	
+	/**
+	 * Use cellular automata to determine areas of height variation (floor 
+	 * and ceiling) between the walls.
+	 * 
+	 * @param layer
+	 * @param down
+	 * @param thresshold
+	 * @return
+	 */
 	private int[][] layerConvert2(int[][] layer, int down, int thresshold) {
 		makeScratchpad();
 		for(int i = xSize - 2; i > 0; i--) {
@@ -140,6 +162,17 @@ public class Cave extends Room {
 	}
 	
 	
+	/**
+	 * This process the cells for a tile, convert it to one or zero based on 
+	 * the sum of it and its neighbors.  Note that most implementation do not
+	 * consider the initial value of the cell itself, but I get good results 
+	 * doing so and it simplifies the code, so I do here.
+	 * 
+	 * @param layer
+	 * @param x
+	 * @param z
+	 * @param thresshold
+	 */
 	private void processCell(int[][] layer, int x, int z, int thresshold) {
 		sum = 0;
 		for(int i = x-1; i <= x+1; i++) {
@@ -155,6 +188,10 @@ public class Cave extends Room {
 	}
 	
 	
+	/**
+	 * Initialize the classes internal (read, private) scratchpad for a 
+	 * new round of cellular automata processing.
+	 */
 	private void makeScratchpad() {
 		scratchpad = new int[xSize][zSize];
 		for(int i = 0; i < xSize; i++) {

@@ -11,6 +11,16 @@ package jaredbgreat.dldungeons.themes;
 
 import java.util.Random;
 
+/**
+ * This a componenet of a theme representing a table of 
+ * probabilities for a certain feature to be used.
+ * 
+ * Typically, this is used for architectural style variation,
+ * such as levels of symmetry or complexity.
+ * 
+ * @author Jared Blackurn
+ *
+ */
 public class Element implements Autoselecting {
 	
 	private Degree none, few, some, plenty, heaps, all;
@@ -40,6 +50,10 @@ public class Element implements Autoselecting {
 	}
 	
 	
+	/**
+	 * Returns a Degree for the given element which will 
+	 * be applied to the dungeon.
+	 */
 	public Degree select(Random random) {
 		int roll = random.nextInt(probScale);
 		if(roll < prob1) return Degree.NONE;
@@ -57,6 +71,14 @@ public class Element implements Autoselecting {
 	}
 	
 	
+	/**
+	 * True if the theme can only return a degree of NONE,
+	 * indicating the feature should never occur in dungeons of 
+	 * this type (for example, and entrance from the surface to 
+	 * a dungeons that is found on the surface).
+	 * 
+	 * @return
+	 */
 	public boolean never() {
 		return    ((prob1 !=0) 
 				&& (prob2 ==0) 

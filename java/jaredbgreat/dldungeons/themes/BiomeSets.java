@@ -19,8 +19,32 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 
-public class BiomeLists {
-
+/**
+ * This handles the determination of which themes to use in 
+ * each biome.
+ * 
+ * Included a HashSets for various Forge biome dictionary types, 
+ * storing which dungeons should appear in each.  Additional sets 
+ * are used to store with themes should never appear in each.
+ * 
+ * In a given biome the possible dungeon themes equate to the union 
+ * of inclusion defining sets for types that describe it followed 
+ * by the subtraction of the union of the sets of forbidden themes 
+ * for those types.
+ * 
+ * @author Jared Blackburn
+ *
+ */
+public class BiomeSets {
+	
+	/*
+	 * FIXME?: Lots of set variables:
+	 * 
+	 * This should probably been handled with a collection, 
+	 * most likely a HashMap between the sets and the enum 
+	 * constants used (or else their string representation.
+	 */
+	
 	// For old types
 	static HashSet<Theme> forest    = new HashSet<Theme>();
 	static HashSet<Theme> plains    = new HashSet<Theme>();
@@ -52,7 +76,6 @@ public class BiomeLists {
 	static HashSet<Theme> ocean     = new HashSet<Theme>();
 	static HashSet<Theme> sandy      = new HashSet<Theme>();
 	static HashSet<Theme> snowy      = frozen;
-	//for hypothetical minigame (should if every be made)
 	static HashSet<Theme> minigame  = new HashSet<Theme>();
 	
 	// NEGATIONS	
@@ -89,240 +112,205 @@ public class BiomeLists {
 	static HashSet<Theme> nsnowy      = nfrozen;
 	
     
+	/**
+	 * This will look at a themes biome type data and add it 
+	 * to the proper sets for both inclusion in those type.
+	 * 
+	 * @param theme
+	 */
     public static void registerTheme(Theme theme) {
 		if(theme.biomes.contains(Type.END))       {
 			end.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to end.");
 		}
 		if(theme.biomes.contains(Type.FOREST))    {
 			forest.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to forest.");
 		}
 		if(theme.biomes.contains(Type.SNOWY))    {
 			frozen.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to frozen.");
 		}
 		if(theme.biomes.contains(Type.HILLS))     {
 			hills.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to hills.");
 		}
 		if(theme.biomes.contains(Type.JUNGLE))    {
 			jungle.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to jungle.");
 		}
 		if(theme.biomes.contains(Type.MAGICAL))   {
 			magical.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to magical.");
 		}
 		if(theme.biomes.contains(Type.MOUNTAIN))  {
 			mountain.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to mountain.");
 		}
 		if(theme.biomes.contains(Type.MUSHROOM))  {
 			mushroom.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to mushroom.");
 		}
 		if(theme.biomes.contains(Type.NETHER))    {
 			nether.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to nether.");
 		}
 		if(theme.biomes.contains(Type.PLAINS))    {
 			plains.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to plains.");
 		}
 		if(theme.biomes.contains(Type.SWAMP))     {
 			swamp.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to swamp.");
 		}
 		if(theme.biomes.contains(Type.WASTELAND)) {
 			wasteland.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to wasteland.");
 		}
 		if(theme.biomes.contains(Type.WATER) || theme.biomes.contains(Type.BEACH)) {
 			water.add(theme);  
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to water.");  	
 		}
 		if(theme.biomes.contains(Type.OCEAN)) {
 			ocean.add(theme);  
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to water.");  	
 		}
 		if(theme.biomes.contains(Type.HOT))     {
 			hot.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to hot.");
 		}
 		if(theme.biomes.contains(Type.COLD))     {
 			cold.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to cold.");
 		}
 		if(theme.biomes.contains(Type.SPARSE))     {
 			sparse.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to sparce.");
 		}
 		if(theme.biomes.contains(Type.DENSE))     {
 			dense.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to dense.");
 		}
 		if(theme.biomes.contains(Type.WET))     {
 			wet.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to wet.");
 		}
 		if(theme.biomes.contains(Type.DRY))     {
 			dry.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to dry.");
 		}
 		if(theme.biomes.contains(Type.SAVANNA))     {
 			savanna.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to savanna.");
 		}
 		if(theme.biomes.contains(Type.CONIFEROUS))     {
 			coniferous.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to coniferous.");
 		}
 		if(theme.biomes.contains(Type.SPOOKY))     {
 			spooky.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to spooky.");
 		}
 		if(theme.biomes.contains(Type.DEAD))     {
 			dead.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to dead.");
 		}
 		if(theme.biomes.contains(Type.LUSH))     {
 			lush.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to lush.");
 		}
 		if(theme.biomes.contains(Type.CONIFEROUS))     {
 			coniferous.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to coniferous.");
 		}
 		if(theme.biomes.contains(Type.MESA))     {
 			mesa.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to mesa.");
 		}
 		if(theme.biomes.contains(Type.SANDY))     {
 			sandy.add(theme);
-			//System.out.println("[DLDUNGEONS] Assigning theme " + theme + " to sandy.");
 		}
     }
 	
     
+    /**
+     * This will use a themes biome data to added it 
+     * to set for exclusion from appearing in biomes 
+     * of a type.
+     * 
+     * @param theme
+     */
     public static void removeTheme(Theme theme) {
 		if(theme.notIn.contains(Type.END))       {
 			nend.add(theme);
-			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from end.");
 		}
 		if(theme.notIn.contains(Type.FOREST))    {
 			nforest.add(theme);
-			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from forest.");
 		}
 		if(theme.notIn.contains(Type.SNOWY))    {
 			nfrozen.add(theme);
-			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from frozen.");
 		}
 		if(theme.notIn.contains(Type.HILLS))     {
 			nhills.add(theme);
-			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from hills.");
 		}
 		if(theme.notIn.contains(Type.JUNGLE))    {
 			njungle.add(theme);
-			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from jungle.");
 		}
 		if(theme.notIn.contains(Type.MAGICAL))   {
 			nmagical.add(theme);
-			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from magical.");
 		}
 		if(theme.notIn.contains(Type.MOUNTAIN))  {
 			nmountain.add(theme);
-			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from mountain.");
 		}
 		if(theme.notIn.contains(Type.MUSHROOM))  {
 			nmushroom.add(theme);
-			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from mushroom.");
 		}
 		if(theme.notIn.contains(Type.NETHER))    {
 			nnether.add(theme);
-			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from nether.");
 		}
 		if(theme.notIn.contains(Type.PLAINS))    {
 			nplains.add(theme);
-			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from plains.");
 		}
 		if(theme.notIn.contains(Type.SWAMP))     {
 			nswamp.add(theme);
-			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from swamp.");
 		}
 		if(theme.notIn.contains(Type.WASTELAND)) {
 			nwasteland.add(theme);
-			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from wasteland.");
 		}
 		if(theme.notIn.contains(Type.WATER) || theme.notIn.contains(Type.BEACH)) {
-			nwater.add(theme);  
-			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from water.");  	
+			nwater.add(theme);  	
 		}
 		if(theme.notIn.contains(Type.OCEAN)) {
-			nocean.add(theme);  
-			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from water.");  	
+			nocean.add(theme);  	
 		}
 		if(theme.notIn.contains(Type.HOT))     {
 			nhot.add(theme);
-			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from hot.");
 		}
 		if(theme.notIn.contains(Type.COLD))     {
 			ncold.add(theme);
-			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from cold.");
 		}
 		if(theme.notIn.contains(Type.SPARSE))     {
 			nsparse.add(theme);
-			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from sparce.");
 		}
 		if(theme.notIn.contains(Type.DENSE))     {
 			ndense.add(theme);
-			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from dense.");
 		}
 		if(theme.notIn.contains(Type.WET))     {
 			nwet.add(theme);
-			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from wet.");
 		}
 		if(theme.notIn.contains(Type.DRY))     {
 			ndry.add(theme);
-			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from dry.");
 		}
 		if(theme.notIn.contains(Type.SAVANNA))     {
 			nsavanna.add(theme);
-			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from savanna.");
 		}
 		if(theme.notIn.contains(Type.CONIFEROUS))     {
 			nconiferous.add(theme);
-			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from coniferous.");
 		}
 		if(theme.notIn.contains(Type.SPOOKY))     {
 			nspooky.add(theme);
-			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from spooky.");
 		}
 		if(theme.notIn.contains(Type.DEAD))     {
 			ndead.add(theme);
-			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from dead.");
 		}
 		if(theme.notIn.contains(Type.LUSH))     {
 			nlush.add(theme);
-			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from lush.");
 		}
 		if(theme.notIn.contains(Type.CONIFEROUS))     {
 			nconiferous.add(theme);
-			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from coniferous.");
 		}
 		if(theme.notIn.contains(Type.MESA))     {
 			nmesa.add(theme);
-			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from mesa.");
 		}
 		if(theme.notIn.contains(Type.SANDY))     {
 			nsandy.add(theme);
-			//System.out.println("[DLDUNGEONS] Removing theme " + theme + " from sandy.");
 		}
     }
     
     
+    /**
+     * This will perform the set logic to determine which 
+     * themes are available in the given biome then randomly 
+     * select one from that set. 
+     * 
+     * @param biome
+     * @param random
+     * @return
+     */
     public static Theme getTheme(BiomeGenBase biome, Random random) {
-		//System.out.println("[DLDUNGEONS] Dungeon biome is " + biome + ".");
     	HashSet<Theme> set = new HashSet<Theme>();
     	ArrayList<Theme> use = new ArrayList<Theme>();
     	set.clear();
@@ -411,56 +399,43 @@ public class BiomeLists {
 		// REMOVAL CODE BELOW
 		if(BiomeDictionary.isBiomeOfType(biome, Type.END)) {
 			set.removeAll(nend);
-			//System.out.println("[DLDUNGEONS] Adding them list for desert.");
 		}
 		if(BiomeDictionary.isBiomeOfType(biome, Type.FOREST)) {
 			set.removeAll(nforest);
-			//System.out.println("[DLDUNGEONS] Adding them list for forest.");
 		}
 		if(BiomeDictionary.isBiomeOfType(biome, Type.HILLS)) {
 			set.removeAll(nhills);
-			//System.out.println("[DLDUNGEONS] Adding them list for hills.");
 		}
 		if(BiomeDictionary.isBiomeOfType(biome, Type.JUNGLE)) {
 			set.removeAll(njungle);
-			//System.out.println("[DLDUNGEONS] Adding them list for jungle.");
 		}
 		if(BiomeDictionary.isBiomeOfType(biome, Type.MAGICAL)) {
 			set.removeAll(nmagical);
-			//System.out.println("[DLDUNGEONS] Adding them list for magical.");
 		}
 		if(BiomeDictionary.isBiomeOfType(biome, Type.MOUNTAIN)) {
 			set.removeAll(nmountain);
-			//System.out.println("[DLDUNGEONS] Adding them list for moutains.");
 		}
 		if(BiomeDictionary.isBiomeOfType(biome, Type.MUSHROOM)) {
 			set.removeAll(nmushroom);
-			//System.out.println("[DLDUNGEONS] Adding them list for mushroom.");
 		}
 		if(BiomeDictionary.isBiomeOfType(biome, Type.NETHER)) {
 			set.removeAll(nnether);
-			//System.out.println("[DLDUNGEONS] Adding them list for nether.");
 		}
 		if(BiomeDictionary.isBiomeOfType(biome, Type.PLAINS)) {
 			set.removeAll(nplains);
-			//System.out.println("[DLDUNGEONS] Adding them list for plains.");
 		}
 		if(BiomeDictionary.isBiomeOfType(biome, Type.SWAMP)) {
 			set.removeAll(nswamp);
-			//System.out.println("[DLDUNGEONS] Adding them list for swamp.");
 		}
 		if(BiomeDictionary.isBiomeOfType(biome, Type.WASTELAND)) {
 			set.removeAll(nwasteland);
-			//System.out.println("[DLDUNGEONS] Adding them list for wasteland.");
 		}
 		if(BiomeDictionary.isBiomeOfType(biome, Type.WATER) || 
 				BiomeDictionary.isBiomeOfType(biome, Type.BEACH)) {
 			set.removeAll(nwater);
-			//System.out.println("[DLDUNGEONS] Adding them list for water.");
 		}	
 		if(BiomeDictionary.isBiomeOfType(biome, Type.OCEAN)) {
 			set.removeAll(nocean);
-			//System.out.println("[DLDUNGEONS] Adding them list for water.");
 		}
 		if(BiomeDictionary.isBiomeOfType(biome, Type.HOT)) {
 			set.removeAll(nhot);
@@ -517,70 +492,70 @@ public class BiomeLists {
     }
     
     
-    public static void registerWithMinigame(Theme theme) {
-    	minigame.add(theme);
-    }
-    
-    
+    /**
+     * Clears and re-initializes all the set used by this class.
+     * 
+     * This is called by the /dldreload command to reload theme data.
+     */
     public static void reset() {
-    	forest    = new HashSet<Theme>();
-    	plains    = new HashSet<Theme>();
-    	mountain  = new HashSet<Theme>();
-    	hills     = new HashSet<Theme>();
-    	swamp     = new HashSet<Theme>();
-    	water     = new HashSet<Theme>();
-    	desert    = new HashSet<Theme>();
-    	frozen    = new HashSet<Theme>();
-    	jungle    = new HashSet<Theme>();
-    	wasteland = new HashSet<Theme>();
-    	nether    = new HashSet<Theme>();
-    	end       = new HashSet<Theme>();
-    	mushroom  = new HashSet<Theme>();
-    	magical   = new HashSet<Theme>();
-    	hot        = new HashSet<Theme>();
-    	cold       = new HashSet<Theme>();
-    	sparse     = new HashSet<Theme>();
-    	dense      = new HashSet<Theme>();
-    	wet        = new HashSet<Theme>();
-    	dry        = new HashSet<Theme>();
-    	savanna    = new HashSet<Theme>();
-    	coniferous = new HashSet<Theme>();
-    	spooky     = new HashSet<Theme>();
-    	dead       = new HashSet<Theme>();
-    	lush       = new HashSet<Theme>();
-    	mesa       = new HashSet<Theme>();
-    	ocean     = new HashSet<Theme>();
-    	sandy      = new HashSet<Theme>();
-    	snowy      = frozen;
-    	nforest    = new HashSet<Theme>();
-    	nplains    = new HashSet<Theme>();
-    	nmountain  = new HashSet<Theme>();
-    	nhills     = new HashSet<Theme>();
-    	nswamp     = new HashSet<Theme>();
-    	nwater     = new HashSet<Theme>();
-    	ndesert    = new HashSet<Theme>();
-    	nfrozen    = new HashSet<Theme>();
-    	njungle    = new HashSet<Theme>();
-    	nwasteland = new HashSet<Theme>();
-    	nnether    = new HashSet<Theme>();
-    	nend       = new HashSet<Theme>();
-    	nmushroom  = new HashSet<Theme>();
-    	nmagical   = new HashSet<Theme>();
-    	nhot        = new HashSet<Theme>();
-    	ncold       = new HashSet<Theme>();
-    	nsparse     = new HashSet<Theme>();
-    	ndense      = new HashSet<Theme>();
-    	nwet        = new HashSet<Theme>();
-    	ndry        = new HashSet<Theme>();
-    	nsavanna    = new HashSet<Theme>();
-    	nconiferous = new HashSet<Theme>();
-    	nspooky     = new HashSet<Theme>();
-    	ndead       = new HashSet<Theme>();
-    	nlush       = new HashSet<Theme>();
-    	nmesa       = new HashSet<Theme>();
-    	nocean      = new HashSet<Theme>();
-    	nsandy      = new HashSet<Theme>();
-    	nsnowy      = nfrozen;
+    	forest.clear();
+    	plains.clear();
+    	mountain.clear();
+    	hills.clear();
+    	swamp.clear();
+    	water.clear();
+    	desert.clear();
+    	frozen.clear();
+    	jungle.clear();
+    	wasteland.clear();
+    	nether.clear();
+    	end.clear();
+    	mushroom.clear();
+    	magical.clear();
+    	hot.clear();
+    	cold.clear();
+    	sparse.clear();
+    	dense.clear();
+    	wet.clear();
+    	dry.clear();
+    	savanna.clear();
+    	coniferous.clear();
+    	spooky.clear();
+    	dead.clear();
+    	lush.clear();
+    	mesa.clear();
+    	ocean.clear();
+    	sandy.clear();
+    	snowy.clear();
+    	nforest.clear();
+    	nplains.clear();
+    	nmountain.clear();
+    	nhills.clear();
+    	nswamp.clear();
+    	nwater.clear();
+    	ndesert.clear();
+    	nfrozen.clear();
+    	njungle.clear();
+    	nwasteland.clear();
+    	nnether.clear();
+    	nend.clear();
+    	nmushroom.clear();
+    	nmagical.clear();
+    	nhot.clear();
+    	ncold.clear();
+    	nsparse.clear();
+    	ndense.clear();
+    	nwet.clear();
+    	ndry.clear();
+    	nsavanna.clear();
+    	nconiferous.clear();
+    	nspooky.clear();
+    	ndead.clear();
+    	nlush.clear();
+    	nmesa.clear();
+    	nocean.clear();
+    	nsandy.clear();
+    	nsnowy.clear();
     	ThemeReader.readThemes();
     }
 	

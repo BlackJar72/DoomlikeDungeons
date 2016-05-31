@@ -10,4 +10,11 @@ package jaredbgreat.dldungeons.themes;
 */		
 
 
+/**
+ * Tags an enum as one that should be automatically selected by 
+ * and Autoselecting enum. 
+ * 
+ * @author Jared Blackburn
+ *
+ */
 public interface Autoselectable {}

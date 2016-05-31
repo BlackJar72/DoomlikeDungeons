@@ -27,17 +27,9 @@ import jaredbgreat.dldungeons.themes.Degree;
  * @author Jared Blackburn
  *
  */
-public class Depression extends FeatureAdder {
-
+public class Depression extends IslandPlatform {
+	
 	public Depression(Degree chance){
 		super(chance);
 	}
-
-	@Override
-	public boolean addFeature(Dungeon dungeon, Room room) {
-		boolean built = chance.use(dungeon.random);
-		if(built) room.islandPlatform(dungeon, true);
-		return built;
-	}
-
 }

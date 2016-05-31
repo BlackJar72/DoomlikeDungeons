@@ -23,7 +23,7 @@ import jaredbgreat.dldungeons.planner.mapping.MapMatrix;
 import jaredbgreat.dldungeons.rooms.Cave;
 import jaredbgreat.dldungeons.rooms.Room;
 import jaredbgreat.dldungeons.rooms.RoomList;
-import jaredbgreat.dldungeons.themes.BiomeLists;
+import jaredbgreat.dldungeons.themes.BiomeSets;
 import jaredbgreat.dldungeons.themes.Degree;
 import jaredbgreat.dldungeons.themes.Sizes;
 import jaredbgreat.dldungeons.themes.Theme;
@@ -144,7 +144,7 @@ public class Dungeon {
 		DoomlikeDungeons.profiler.startTask("Layout dungeon (rough draft)");
 		random = rnd;
 		this.biome = biome;
-		theme = BiomeLists.getTheme(biome, random);
+		theme = BiomeSets.getTheme(biome, random);
 		if(theme == null) return;
 		
 		applyTheme();
@@ -345,6 +345,7 @@ public class Dungeon {
 	 */
 	private void fixRoomContents() {
 		for(Room room : rooms) {
+			addChestBlocks(room);
 			DoorChecker.processDoors1(this, room);
 		}
 		for(Room room : rooms) {	
@@ -355,6 +356,19 @@ public class Dungeon {
 			if(room instanceof Cave) DoorChecker.caveConnector(this, room);
 		}
 		DoorChecker.checkConnectivity(this);
+	}
+	
+	
+	/**
+	 * Places the chest blocks; this is done in advance to decrease the chance of 
+	 * absent chests resulting from concurrent optimization in the main game.
+	 * 
+	 * @param room
+	 */
+	public void addChestBlocks(Room room) {
+		for(BasicChest  chest : room.chests) {
+			DBlock.placeChest(map.world, shiftX + chest.mx, chest.my, shiftZ + chest.mz);
+		}		
 	}
 	
 	

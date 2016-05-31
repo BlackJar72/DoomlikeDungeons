@@ -12,6 +12,13 @@ package jaredbgreat.dldungeons.themes;
 
 import java.util.Random;
 
+/**
+ * A theme element representing sizes that dungeons of 
+ * using that them can occur in.
+ * 
+ * @author Jared Blackburn
+ *
+ */
 public class SizeElement implements Autoselecting {
 	
 	private Sizes tiny, small, medium, large, huge;
@@ -37,6 +44,10 @@ public class SizeElement implements Autoselecting {
 		probScale = prob1 + prob2 + prob3 + prob4 + prob5;
 	}
 	
+	
+	/**
+	 * A Size category for the dungeon.
+	 */
 	public Sizes select(Random random) {
 		int roll = random.nextInt(probScale);
 		if(roll < prob1) return Sizes.TINY;

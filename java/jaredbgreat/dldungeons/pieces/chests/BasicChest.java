@@ -52,7 +52,6 @@ public class BasicChest {
 	 */
 	public void place(World world, int x, int y, int z, Random random) {
 		BlockPos pos = new BlockPos(x, y, z);
-		DBlock.placeChest(world, x, y, z);
 		level += random.nextInt(2);
 		if(level >= LootCategory.LEVELS) level = LootCategory.LEVELS - 1;
 		if(world.getBlockState(pos).getBlock() != DBlock.chest) {

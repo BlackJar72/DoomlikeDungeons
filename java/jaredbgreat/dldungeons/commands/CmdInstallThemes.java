@@ -10,7 +10,7 @@ package jaredbgreat.dldungeons.commands;
 
 import jaredbgreat.dldungeons.ConfigHandler;
 import jaredbgreat.dldungeons.setup.Externalizer;
-import jaredbgreat.dldungeons.themes.BiomeLists;
+import jaredbgreat.dldungeons.themes.BiomeSets;
 import jaredbgreat.dldungeons.themes.ThemeReader;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -48,7 +48,7 @@ public class CmdInstallThemes extends CommandBase {
 		sender.addChatMessage(new TextComponentString("[DLDUNGEONS] " 
 				+ sender.getDisplayName().getFormattedText() 
 				+ " has reinstalled default themes (nothing will be overwritten)"));
-		BiomeLists.reset();
+		BiomeSets.reset();
 	}
 	
 	

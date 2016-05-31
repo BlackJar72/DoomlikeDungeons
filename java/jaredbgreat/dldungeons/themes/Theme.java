@@ -150,8 +150,8 @@ public class Theme {
 	
 	
 	public void biomeRegister() {
-		BiomeLists.registerTheme(this);
-		BiomeLists.removeTheme(this);
+		BiomeSets.registerTheme(this);
+		BiomeSets.removeTheme(this);
 	}
 	
 	

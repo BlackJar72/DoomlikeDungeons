@@ -51,6 +51,7 @@ public class Doorway extends Tile implements Comparable<Doorway> {
 		super(door.x, door.z);
 		xOriented = door.xOriented;
 		priority = door.priority;
+		otherside = door.otherside;
 	}
 	
 	

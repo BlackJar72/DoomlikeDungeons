@@ -52,6 +52,14 @@ public class Externalizer {
 		outDirectory = outDir;
 	}
 	
+	
+	/**
+	 * Exports a theme file by reading it from the jar and 
+	 * writing it to the hard drive, but only if a file with 
+	 * that path does not already exist on the drive.
+	 * 
+	 * @param name
+	 */
 	public void copyOut(String name) {
 		try {
 			outFile = new File(outDirectory + name);
@@ -74,6 +82,14 @@ public class Externalizer {
 		} 
 	}
 	
+	
+	/**
+	 * Exports a theme file by reading it from the jar and 
+	 * writing it to the hard drive, over-writing any file 
+	 * with the same path.
+	 * 
+	 * @param name
+	 */
 	public boolean forceOut(String name) {
 		boolean result = true;
 		try {
@@ -108,6 +124,9 @@ public class Externalizer {
 	}
 	
 	
+	/**
+	 * Iterate through the default themes and export them to their own files.
+	 */
 	public void makeThemes() {
 		for(String name : themes) {
 			System.out.println("[DLDUNGEONS] Installing file " + outDirectory + name);
@@ -116,6 +135,10 @@ public class Externalizer {
 	}
 	
 	
+	/**
+	 * Iterate through the default themes and export them to their own files, 
+	 * over-writing any files with the same path.
+	 */
 	public void forceThemes() {
 		for(String name : themes) {
 			System.out.println("[DLDUNGEONS] Installing file " + outDirectory + name);
@@ -124,12 +147,18 @@ public class Externalizer {
 	}
 	
 	
+	/**
+	 * Export the chest.cfg file if it doesn't currently exist.
+	 */
 	public void makeChestCfg() {
 		System.out.println("[DLDUNGEONS] Installing file " + outDirectory + "chests.cfg");
 		copyOut("chests.cfg");
 	}
 	
 	
+	/**
+	 * Export the chest.cfg file, over-writing it if it already exists.
+	 */
 	public void forceChestCfg() {
 		System.out.println("[DLDUNGEONS] Installing file " + outDirectory + "chests.cfg");
 		forceOut("chests.cfg");

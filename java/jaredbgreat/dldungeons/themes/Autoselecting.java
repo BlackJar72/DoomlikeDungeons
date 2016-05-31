@@ -12,9 +12,23 @@ package jaredbgreat.dldungeons.themes;
 
 import java.util.Random;
 
+
+/**
+ * Classes with this interface can automatically select an
+ * Autoselectable enum.
+ * 
+ * @author jared
+ *
+ */
 public interface Autoselecting {
 	
-	
+	/**
+	 * Returns an enum constant from an enum that implements 
+	 * Autoselectable.
+	 * 
+	 * @param random
+	 * @return
+	 */
 	public Autoselectable select(Random random);
 
 }

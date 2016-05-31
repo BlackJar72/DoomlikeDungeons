@@ -52,6 +52,19 @@ public abstract class FeatureAdder {
 	 * @param room
 	 * @return the result of chance.use()
 	 */
-	public abstract boolean addFeature(Dungeon dungeon, Room room);
+	public boolean addFeature(Dungeon dungeon, Room room) {
+		boolean built = chance.use(dungeon.random);
+		if(built) buildFeature(dungeon, room);
+		return built;	
+	}
+	
+	
+	/**
+	 * This will actually build the feature into the room.
+	 * 
+	 * @param dungeon
+	 * @param room
+	 */
+	public abstract void buildFeature(Dungeon dungeon, Room room);
 
 }

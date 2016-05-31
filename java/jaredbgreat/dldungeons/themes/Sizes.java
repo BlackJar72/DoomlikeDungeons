@@ -9,6 +9,12 @@ package jaredbgreat.dldungeons.themes;
 */		
 
 
+/**
+ * An enumeration of dungeon size categories.
+ * 
+ * @author Jared Blackburn
+ *
+ */
 public enum Sizes implements Autoselectable {
 	TINY 	(80,	39,		42,	12,	2,	2),
 	SMALL 	(96,	47,		50,	16,	3,	2),

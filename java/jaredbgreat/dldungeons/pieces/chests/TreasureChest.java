@@ -45,7 +45,6 @@ public class TreasureChest extends BasicChest {
 	@Override
 	public void place(World world, int x, int y, int z, Random random) {
 		BlockPos pos = new BlockPos(x, y, z);
-		DBlock.placeChest(world, x, y, z);
 		Collections.shuffle(slots, random);
 		slot = 0;
 		level += random.nextInt(2);

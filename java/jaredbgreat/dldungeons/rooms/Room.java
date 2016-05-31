@@ -129,7 +129,6 @@ public class Room extends AbstractRoom {
 		orientation = dungeon.random.nextInt(4);
 		XFlip = dungeon.random.nextBoolean();
 		ZFlip = dungeon.random.nextBoolean();
-		if((sym == Symmetry.TR1) && (XFlip != ZFlip)) sym = Symmetry.TR2;
 		
 		this.beginX = beginX;
 		this.endX = endX;
@@ -171,6 +170,13 @@ public class Room extends AbstractRoom {
 	}
 	
 	
+	/**
+	 * Adds the features, including chests and spawners, to the room.
+	 * 
+	 * @param dungeon
+	 * @param parent
+	 * @return
+	 */
 	public Room plan(Dungeon dungeon, Room parent) {
 		if(!dungeon.complexity.use(dungeon.random) && !isNode) {
 			hasWholePattern = true;
@@ -197,6 +203,15 @@ public class Room extends AbstractRoom {
 	}
 	
 	
+	/**
+	 * Assigns a wall section between this room and another to the room with 
+	 * the higher ceiling, so as too avoid overly short walls between rooms
+	 * of differing heights.
+	 * 
+	 * @param dungeon
+	 * @param x
+	 * @param z
+	 */
 	private void assignEdge(Dungeon dungeon, int x, int z) {
 		if((dungeon.map.room[x][z] == 0) 
 				|| (dungeon.rooms.get(dungeon.map.room[x][z]).sky && !sky)
@@ -217,6 +232,20 @@ public class Room extends AbstractRoom {
 	}
 	
 	
+	/**
+	 * Adds features other than chests and spawns to the room to rooms that
+	 * lack a whole room pattern.  This is called by plan room.
+	 * 
+	 * It will try to at a number of features based on dungeon complexity. 
+	 * On each attempt it will check each possible feature once; if a feature
+	 * is selected to add it the attempt ends and the next begins.  To avoid 
+	 * a universal bias based on checking order, all features types are added 
+	 * to a list and shuffled once, giving each room its own set of biases 
+	 * that can be thought of as the room character or a room equivalent to 
+	 * the dungeons wide theme-based probabilities.
+	 * 
+	 * @param dungeon
+	 */
 	public void addFeatures(Dungeon dungeon) {
 		ArrayList<FeatureAdder> features = new ArrayList<FeatureAdder>();
 		features.add(new IslandPlatform(dungeon.verticle));
@@ -239,7 +268,13 @@ public class Room extends AbstractRoom {
 	}
 	
 	
-	public void addSpawners(Dungeon dungeon) {
+	/**
+	 * Adds spawners, taking into consideration the mods difficulty setting 
+	 * and whether the room is an entrance, a destination, or an ordinary room.
+	 * 
+	 * @param dungeon
+	 */
+	protected void addSpawners(Dungeon dungeon) {
 		if(ConfigHandler.difficulty == Difficulty.NONE ||
 				(!isNode && !ConfigHandler.difficulty.addmob(dungeon.random)) 
 				|| hasEntrance) return;
@@ -302,6 +337,14 @@ public class Room extends AbstractRoom {
 	}
 	
 	
+	/**
+	 * Checks to see if there are mobs available at the level determined,
+	 * and if not adjusts down.
+	 * 
+	 * @param lev
+	 * @param dungeon
+	 * @return
+	 */
 	private int levAdjust(int lev, Dungeon dungeon) {
 		while(dungeon.theme.allMobs[lev].isEmpty()) {
 			lev--;
@@ -311,7 +354,14 @@ public class Room extends AbstractRoom {
 	}
 	
 	
-	public void addChests(Dungeon dungeon) {
+	/**
+	 * Adds chests, taking into consideration the rooms difficulty and 
+	 * whether its a destination or ordinary room.  No chests will be
+	 * added to entrance rooms.
+	 * 
+	 * @param dungeon
+	 */
+	protected void addChests(Dungeon dungeon) {
 		if((ConfigHandler.difficulty == Difficulty.NONE) || 
 				hasEntrance) return;
 		if((!hasSpawners && (dungeon.random.nextInt(5) > 0))) return;
@@ -351,126 +401,38 @@ public class Room extends AbstractRoom {
 	}
 	
 	
-	private void addPlatform(Dungeon dungeon) {
-		float platX, platZ;
-		if(dungeon.random.nextBoolean()) {
-			// Wall bordering
-			
-		} else {
-			
-		}
-	}
-	
-	
-	public boolean islandSubroom(Dungeon dungeon) {
-		int dimX = (int)((endX - beginX) * (0.2f + (0.3f * dungeon.random.nextFloat()))); 
-		int dimZ = (int)((endZ - beginZ) * (0.2f + (0.3f * dungeon.random.nextFloat())));
-		float centerX, centerZ, oppX, oppZ;
-		centerX = dungeon.random.nextInt(endX - beginX) + beginX;
-		centerZ = dungeon.random.nextInt(endZ - beginZ) + beginZ;
-		oppX = endX - (centerX - beginX); 
-		oppZ = endZ - (centerZ - beginZ); 
-		if(sym.halfX) {
-			dimX *= 2;
-			dimX /= 3;
-			oppX = endX - ((centerX - beginX) / 2);
-			centerX = ((centerX - beginX) / 2) + beginX;
-		}
-		if(sym.halfZ) {
-			dimZ *= 2;
-			dimZ /= 3;
-			oppZ = endZ -((centerZ - beginZ) / 2);
-			centerZ = ((centerZ - beginZ) / 2) + beginZ;
-		}
-		if(sym.doubler) {
-			dimX *= 0.75;
-			dimZ *= 0.75;
-		}
-		if((dimX < 5) || (dimZ < 5)) return false;
-		int ymod = (dimX <= dimZ) ? (int) Math.sqrt(dimX) : (int) Math.sqrt(dimZ);
-		int height = dungeon.random.nextInt((dungeon.verticle.value / 2) + ymod + 1) + 2;
-		Room created = 
-				new RoomSeed((int)centerX, floorY, 
-						(int)centerZ).growRoom(dimX, dimZ, height, dungeon, this, this);
-		if(created == null) return false;
-		// Apply Symmetries
-		switch (sym) {
-			case NONE: break;
-			case TR1: {
-				oppX = realX + ((centerZ - realZ) / (endZ - beginZ)) * (endX - beginX);
-				oppZ = realZ + ((centerX - realX) / (endX - beginX)) * (endZ - beginZ); 
-				created = 
-						new RoomSeed((int)oppX, floorY, 
-								(int)oppZ).growRoom(dimZ, dimX, height, dungeon, this, this);
-			} break;
-			case TR2: {
-				oppX = realX + ((centerZ - realZ) / (endZ - beginZ)) * (endX - beginX);
-				oppZ = realZ + ((centerX - realX) / (endX - beginX)) * (endZ - beginZ);  
-				oppZ = endZ - (oppZ - beginZ);  
-				created = 
-						new RoomSeed((int)oppX, floorY, 
-								(int)oppZ).growRoom(dimZ, dimX, height, dungeon, this, this);
-			} break;
-			case X: {
-				created = 
-						new RoomSeed((int)oppX, floorY, 
-								(int)centerZ).growRoom(dimX, dimZ, height, dungeon, this, this);
-			} break;
-			case Z: {
-				created = 
-						new RoomSeed((int)centerX, floorY, 
-								(int)oppZ).growRoom(dimX, dimZ, height, dungeon, this, this);
-			} break;
-			case XZ: {
-				created = 
-						new RoomSeed((int)oppX, floorY, 
-								(int)centerZ).growRoom(dimX, dimZ, height, dungeon, this, this);
-				created = 
-						new RoomSeed((int)centerX, floorY, 
-								(int)oppZ).growRoom(dimX, dimZ, height, dungeon, this, this);
-				created = 
-						new RoomSeed((int)oppX, floorY, 
-								(int)oppZ).growRoom(dimX, dimZ, height, dungeon, this, this);
-			} break;
-			case R: { 
-				created = 
-						new RoomSeed((int)oppX, floorY, 
-								(int)oppZ).growRoom(dimX, dimZ, height, dungeon, this, this);
-			} break;
-			case SW: {
-				float swX1 = realX + ((centerZ - realZ) / (endZ - beginZ)) * (endX - beginX);
-				float swZ1 = realZ + ((centerX - realX) / (endX - beginX)) * (endZ - beginZ);
-				float swX2 = realX + ((oppZ - realZ) / (endZ - beginZ)) * (endX - beginX);
-				float swZ2 = realZ + ((oppX - realX) / (endX - beginX)) * (endZ - beginZ);
-				created = 
-						new RoomSeed((int)swX2, floorY, 
-								(int)swZ1).growRoom(dimZ, dimX, height, dungeon, this, this);
-				created = 
-						new RoomSeed((int)swX1, floorY, 
-								(int)swZ2).growRoom(dimZ, dimX, height, dungeon, this, this);
-				created = 
-						new RoomSeed((int)oppX, floorY, 
-								(int)oppZ).growRoom(dimX, dimZ, height, dungeon, this, this);
-			}
-		}
-		return true;
-	}
-	
-	
-	public void doorways(Dungeon dungeon) {
+	/**
+	 * Determine the number of doorways and add them.
+	 * 
+	 * @param dungeon
+	 */
+	protected void doorways(Dungeon dungeon) {
 		int num = dungeon.random.nextInt(2 + ((endX - beginX + endZ - beginZ) / ((sym.level * 8) + 8)) 
 				+ (dungeon.subrooms.value / (2 + sym.level))) + 1;
 		for(int i = 0; i < num; i++) doorway(dungeon);
 	}
 	
 	
-	public void addDoor(Dungeon dungeon, int x, int z, boolean xOriented) {
+	/**
+	 * Adds a doorway.
+	 * 
+	 * @param dungeon
+	 * @param x
+	 * @param z
+	 * @param xOriented
+	 */
+	protected void addDoor(Dungeon dungeon, int x, int z, boolean xOriented) {
 		doors.add(new Doorway(x, z, xOriented));
 		dungeon.map.isDoor[x][z] = true;
 	}
 	
 	
-	public void doorway(Dungeon dungeon) {
+	/**
+	 * Creates a doorway, or more than one based on room symmetry.
+	 * 
+	 * @param dungeon
+	 */
+	protected void doorway(Dungeon dungeon) {
 		int xExtend = 0;
 		int zExtend = 0;
 		int xSeedDir = 0;
@@ -599,6 +561,18 @@ public class Room extends AbstractRoom {
 	}
 	
 	
+	/**
+	 * Adds a room new room branching from this one that is part of a sequence of 
+	 * rooms between two dungeon nods.
+	 * 
+	 * @param dungeon
+	 * @param dir
+	 * @param xdim
+	 * @param zdim
+	 * @param height
+	 * @param source
+	 * @return
+	 */
 	public Room connector(Dungeon dungeon, int dir, int xdim, int zdim, int height, Route source) {
 		int xExtend = 0;
 		int zExtend = 0;
@@ -669,366 +643,33 @@ public class Room extends AbstractRoom {
 	}
 	
 	
-	public void islandPlatform(Dungeon dungeon, boolean isDepression) {
-		int available = ceilY - floorY;
-		if(available < 4) return;
-		float dimX, dimZ, centerX, centerZ, oppX, oppZ;
-		byte platY;
-		int rotation = dungeon.random.nextInt(4);
-		Shape[] which;
-		dimX = ((endX - beginX) * ((dungeon.random.nextFloat() * 0.25f) + 0.15f));
-		dimZ = ((endX - beginX) * ((dungeon.random.nextFloat() * 0.25f) + 0.15f));
-		centerX = dungeon.random.nextInt(endX - beginX - 1) + beginX + 1;
-		centerZ = dungeon.random.nextInt(endZ - beginZ - 1) + beginZ + 1;
-		oppX = endX - (centerX - beginX); 
-		oppZ = endZ - (centerZ - beginZ); 
-		if(sym.halfX) {
-			dimX *= 2;
-			dimX /= 3;
-			oppX = endX - ((centerX - beginX) / 2);
-			centerX = ((centerX - beginX) / 2) + beginX;
-		}
-		if(sym.halfZ) {
-			dimZ *= 2;
-			dimZ /= 3;
-			oppZ = endZ -((centerZ - beginZ) / 2);
-			centerZ = ((centerZ - beginZ) / 2) + beginZ;
-		}
-		if(sym.doubler) {
-			dimX *= 0.75;
-			dimZ *= 0.75;
-		}
-		centerX++;
-		centerZ++;
-		oppX++;
-		oppZ++;
-		if(isDepression) {
-			available -= 2;
-			if(available > ((dungeon.verticle.value / 2) + 1)) available = ((dungeon.verticle.value / 2) + 1);
-			platY = (byte) (floorY - dungeon.random.nextInt((dungeon.verticle.value / 2) + 1) -1);
-		}
-		else {
-			platY = (byte) (floorY + 1 + (dungeon.random.nextInt(2)));
-			if(available > 4) platY += (byte)(dungeon.random.nextInt(available - 3));
-		}
-		if(dungeon.random.nextBoolean() || !dungeon.complexity.use(dungeon.random)) {
-			which = Shape.xgroup;
-		} else {
-			which = Shape.allSolids[dungeon.random.nextInt(Shape.allSolids.length)];
-		}
-		if(platY > nFloorY) nFloorY = platY; 
-		which[rotation].drawPlatform(dungeon, this, platY, centerX, centerZ, dimX, dimZ, false, false);
-		// Apply Symmetries
-		switch (sym) {
-			case NONE: break;
-			case TR1: {
-				oppX = realX + ((centerZ - realZ) / (endZ - beginZ)) * (endX - beginX);
-				oppZ = realZ + ((centerX - realX) / (endX - beginX)) * (endZ - beginZ); 
-				which[(rotation + 3) % 4].drawPlatform(dungeon, this, platY, oppX, 
-						oppZ, dimX, dimZ, false, false);
-			} break;
-			case TR2: {
-				oppX = realX + ((centerZ - realZ) / (endZ - beginZ)) * (endX - beginX);
-				oppZ = realZ + ((centerX - realX) / (endX - beginX)) * (endZ - beginZ);  
-				oppZ = endZ - (oppZ - beginZ); 
-				which[(rotation + 3) % 4].drawPlatform(dungeon, this, platY, oppX, 
-						oppZ, dimX, dimZ, false, true);				
-			} break;
-			case X: {
-				which[rotation].drawPlatform(dungeon, this, platY, oppX, 
-						centerZ, dimX, dimZ, true, false);
-			} break;
-			case Z: {
-				which[rotation].drawPlatform(dungeon, this, platY, centerX, 
-						oppZ, dimX, dimZ, false, true);
-			} break;
-			case XZ: {
-				which[rotation].drawPlatform(dungeon, this, platY, oppX, 
-						centerZ, dimX, dimZ, true, false);
-				which[rotation].drawPlatform(dungeon, this, platY, centerX, 
-						oppZ, dimX, dimZ, false, true);
-				which[rotation].drawPlatform(dungeon, this, platY, oppX, 
-						oppZ, dimX, dimZ, true, true);			
-			} break;
-			case R: {
-				which[(rotation + 2) % 4].drawPlatform(dungeon, this, platY, oppX, 
-						oppZ, dimX, dimZ, false, false);			
-			} break;
-			case SW: {
-				float swX1 = realX + ((centerZ - realZ) / (endZ - beginZ)) * (endX - beginX);
-				float swZ1 = realZ + ((centerX - realX) / (endX - beginX)) * (endZ - beginZ);
-				float swX2 = realX + ((oppZ - realZ) / (endZ - beginZ)) * (endX - beginX);
-				float swZ2 = realZ + ((oppX - realX) / (endX - beginX)) * (endZ - beginZ);
-				which[(rotation + 1) % 4].drawPlatform(dungeon, this, platY, swX2, swZ1, 
-						dimX, dimZ, false, false);
-				which[(rotation + 3) % 4].drawPlatform(dungeon, this, platY, swX1, swZ2, 
-						dimX, dimZ, false, false);
-				which[(rotation + 2) % 4].drawPlatform(dungeon, this, platY, oppX, oppZ, 
-						dimX, dimZ, false, false);			
-			}
-		}
-	}
-	
-	
-	public void pillar(Dungeon dungeon) {
-		int pillarx1 = dungeon.random.nextInt(endX - beginX - 2) + 1;
-		int pillarz1 = dungeon.random.nextInt(endZ - beginZ - 2) + 1;
-		if(sym.halfX) pillarx1 = ((pillarx1 - 1) / 2) + 1;
-		if(sym.halfZ) pillarz1 = ((pillarz1 - 1) / 2) + 1;
-		int pillarx2 = endX - pillarx1;
-		int pillarz2 = endZ - pillarz1;
-		pillarx1 += beginX;
-		pillarz1 += beginZ;
-		switch (sym) {
-		case NONE: break;
-		case TR1:
-			dungeon.map.isWall[pillarx1][pillarz1] = true;
-			dungeon.map.isWall[pillarz1][pillarx1] = true;
-			dungeon.map.wall[pillarx1][pillarz1] = pillarBlock;
-			dungeon.map.wall[pillarz1][pillarx1] = pillarBlock;
-			break;
-		case TR2:
-			dungeon.map.isWall[pillarx1][pillarz1]  = true;
-			dungeon.map.isWall[pillarz1][pillarx1] = true;
-			dungeon.map.wall[pillarx2][pillarz1]  = pillarBlock;
-			dungeon.map.wall[pillarz2][pillarx1] = pillarBlock;
-			break;
-		case X:
-			dungeon.map.isWall[pillarx1][pillarz1] = true;
-			dungeon.map.isWall[pillarx2][pillarz1] = true;
-			dungeon.map.wall[pillarx1][pillarz1]  = pillarBlock;
-			dungeon.map.wall[pillarx2][pillarz1]  = pillarBlock;
-			break;
-		case Z:
-			dungeon.map.isWall[pillarx1][pillarz1] = true;
-			dungeon.map.isWall[pillarx1][pillarz2] = true;
-			dungeon.map.wall[pillarx1][pillarz1]  = pillarBlock;
-			dungeon.map.wall[pillarx1][pillarz2]  = pillarBlock;
-			break;
-		case XZ:
-			dungeon.map.isWall[pillarx1][pillarz1] = true;
-			dungeon.map.isWall[pillarx1][pillarz2] = true;
-			dungeon.map.isWall[pillarx2][pillarz1] = true;
-			dungeon.map.isWall[pillarx2][pillarz2] = true;
-			dungeon.map.wall[pillarx1][pillarz1]  = pillarBlock;
-			dungeon.map.wall[pillarx1][pillarz2]  = pillarBlock;
-			dungeon.map.wall[pillarx2][pillarz1]  = pillarBlock;
-			dungeon.map.wall[pillarx2][pillarz2]  = pillarBlock;
-			break;
-		case R:
-			dungeon.map.isWall[pillarx1][pillarz1] = true;
-			dungeon.map.isWall[pillarx2][pillarz2] = true;
-			dungeon.map.wall[pillarx1][pillarz1]  = pillarBlock;
-			dungeon.map.wall[pillarx2][pillarz2]  = pillarBlock;
-			break;
-		case SW:
-			dungeon.map.isWall[pillarx1][pillarz1] = true;
-			dungeon.map.isWall[pillarx1][pillarz2] = true;
-			dungeon.map.isWall[pillarx2][pillarz1] = true;
-			dungeon.map.isWall[pillarx2][pillarz2] = true;
-			dungeon.map.wall[pillarx1][pillarz1]  = pillarBlock;
-			dungeon.map.wall[pillarx1][pillarz2]  = pillarBlock;
-			dungeon.map.wall[pillarx2][pillarz1]  = pillarBlock;
-			dungeon.map.wall[pillarx2][pillarz2]  = pillarBlock;
-		}
-	}
-	
-	
-	public void pool(Dungeon dungeon) {
-		float centerX, centerZ, oppX, oppZ;
-		float dimX, dimZ;
-		int rotation = dungeon.random.nextInt(4);
-		Shape[] which;
-		dimX = ((endX - beginX) * ((dungeon.random.nextFloat() * 0.25f) + 0.15f));
-		dimZ = ((endX - beginX) * ((dungeon.random.nextFloat() * 0.25f) + 0.15f));
-		centerX = dungeon.random.nextInt(endX - beginX -1) + beginX + 1;
-		centerZ = dungeon.random.nextInt(endZ - beginZ -1) + beginZ + 1;
-		oppX = endX - (centerX - beginX); 
-		oppZ = endZ - (centerZ - beginZ); 
-		if(sym.halfX) {
-			dimX *= 2;
-			dimX /= 3;
-			oppX = endX - ((centerX - beginX) / 2);
-			centerX = ((centerX - beginX) / 2) + beginX;
-		}
-		if(sym.halfZ) {
-			dimZ *= 2;
-			dimZ /= 3;
-			oppZ = endZ -((centerZ - beginZ) / 2);
-			centerZ = ((centerZ - beginZ) / 2) + beginZ;
-		}
-		if(sym.doubler) {
-			dimX *= 0.75;
-			dimZ *= 0.75;
-		}
-		centerX++;
-		centerZ++;
-		oppX++;
-		oppZ++;
-		if(dungeon.random.nextBoolean() || !dungeon.complexity.use(dungeon.random)) {
-			which = Shape.xgroup;
-		} else {
-			which = Shape.allshapes[dungeon.random.nextInt(Shape.allshapes.length)];
-		}
-		which[rotation].drawLiquid(dungeon, this, centerX, centerZ, dimX, dimZ, false, false);
-		// Apply Symmetries
-		switch (sym) {
-			case NONE: break;
-			case TR1: {
-				oppX = realX + ((centerZ - realZ) / (endZ - beginZ)) * (endX - beginX);
-				oppZ = realZ + ((centerX - realX) / (endX - beginX)) * (endZ - beginZ); 
-				which[(rotation + 1) % 4].drawLiquid(dungeon, this, oppX, 
-						oppZ, dimX, dimZ, false, false);
-			} break;
-			case TR2: {
-				oppX = realX + ((centerZ - realZ) / (endZ - beginZ)) * (endX - beginX);
-				oppZ = realZ + ((centerX - realX) / (endX - beginX)) * (endZ - beginZ); 
-				oppZ = endZ - (oppZ - beginZ); 
-				which[(rotation + 1) % 4].drawLiquid(dungeon, this, oppX, 
-						oppZ, dimX, dimZ, false, true);				
-			} break;
-			case X: {
-				which[rotation].drawLiquid(dungeon, this, oppX, 
-						centerZ, dimX, dimZ, true, false);
-			} break;
-			case Z: {
-				which[rotation].drawLiquid(dungeon, this, centerX, 
-						oppZ, dimX, dimZ, false, true);
-			} break;
-			case XZ: {
-				which[rotation].drawLiquid(dungeon, this, oppX, 
-						centerZ, dimX, dimZ, true, false);
-				which[rotation].drawLiquid(dungeon, this, centerX, 
-						oppZ, dimX, dimZ, false, true);
-				which[rotation].drawLiquid(dungeon, this, oppX, 
-						oppZ, dimX, dimZ, true, true);			
-			} break;
-			case R: {
-				which[(rotation + 2) % 4].drawLiquid(dungeon, this, oppX, 
-						oppZ, dimX, dimZ, false, false);			
-			} break;
-			case SW: {
-				float swX1 = realX + ((centerZ - realZ) / (endZ - beginZ)) * (endX - beginX);
-				float swZ1 = realZ + ((centerX - realX) / (endX - beginX)) * (endZ - beginZ);
-				float swX2 = realX + ((oppZ - realZ) / (endZ - beginZ)) * (endX - beginX);
-				float swZ2 = realZ + ((oppX - realX) / (endX - beginX)) * (endZ - beginZ);
-				which[(rotation + 1) % 4].drawLiquid(dungeon, this, swX2, 
-						swZ1, dimX, dimZ, false, false);
-				which[(rotation + 3) % 4].drawLiquid(dungeon, this, swX1, 
-						swZ2, dimX, dimZ, false, false);
-				which[(rotation + 2) % 4].drawLiquid(dungeon, this, oppX, 
-						oppZ, dimX, dimZ, false, false);			
-			}
-		}
-	}
-	
-	
-	public void cutout(Dungeon dungeon) {
-		float centerX, centerZ, oppX, oppZ;
-		float dimX, dimZ;
-		int rotation = dungeon.random.nextInt(4);
-		Shape[] which;
-		dimX = ((endX - beginX) * ((dungeon.random.nextFloat() * 0.20f) + 0.10f));
-		dimZ = ((endX - beginX) * ((dungeon.random.nextFloat() * 0.20f) + 0.10f));
-		centerX = dungeon.random.nextInt(endX - beginX -1) + beginX + 1;
-		centerZ = dungeon.random.nextInt(endZ - beginZ -1) + beginZ + 1;
-		oppX = endX - (centerX - beginX); 
-		oppZ = endZ - (centerZ - beginZ); 
-		if(sym.halfX) {
-			dimX *= 2;
-			dimX /= 3;
-			oppX = endX - ((centerX - beginX) / 2);
-			centerX = ((centerX - beginX) / 2) + beginX;
-		}
-		if(sym.halfZ) {
-			dimZ *= 2;
-			dimZ /= 3;
-			oppZ = endZ -((centerZ - beginZ) / 2);
-			centerZ = ((centerZ - beginZ) / 2) + beginZ;
-		}
-		if(sym.doubler) {
-			dimX *= 0.7;
-			dimZ *= 0.7;
-		}
-		centerX++;
-		centerZ++;
-		oppX++;
-		oppZ++;
-		if(!dungeon.complexity.use(dungeon.random)) {
-			which = Shape.xgroup;
-		} else {
-			which = Shape.allSolids[dungeon.random.nextInt(Shape.allSolids.length)];
-		}
-		which[rotation].drawCutout(dungeon, this, centerX, centerZ, dimX, dimZ, false, false);
-		// Apply Symmetries
-		switch (sym) {
-			case NONE: break;
-			case TR1: {
-				oppX = realX + ((centerZ - realZ) / (endZ - beginZ)) * (endX - beginX);
-				oppZ = realZ + ((centerX - realX) / (endX - beginX)) * (endZ - beginZ); 
-				which[(rotation + 1) % 4].drawCutout(dungeon, this, oppX, 
-						oppZ, dimX, dimZ, false, false);
-			} break;
-			case TR2: {
-				oppX = realX + ((centerZ - realZ) / (endZ - beginZ)) * (endX - beginX);
-				oppZ = realZ + ((centerX - realX) / (endX - beginX)) * (endZ - beginZ); 
-				oppZ = endZ - (oppZ - beginZ); 
-				which[(rotation + 1) % 4].drawCutout(dungeon, this, oppX, 
-						oppZ, dimX, dimZ, false, true);				
-			} break;
-			case X: {
-				which[rotation].drawCutout(dungeon, this, oppX, 
-						centerZ, dimX, dimZ, true, false);
-			} break;
-			case Z: {
-				which[rotation].drawCutout(dungeon, this, centerX, 
-						oppZ, dimX, dimZ, false, true);
-			} break;
-			case XZ: {
-				which[rotation].drawCutout(dungeon, this, oppX, 
-						centerZ, dimX, dimZ, true, false);
-				which[rotation].drawCutout(dungeon, this, centerX, 
-						oppZ, dimX, dimZ, false, true);
-				which[rotation].drawCutout(dungeon, this, oppX, 
-						oppZ, dimX, dimZ, true, true);			
-			} break;
-			case R: {
-				which[(rotation + 2) % 4].drawCutout(dungeon, this, oppX, 
-						oppZ, dimX, dimZ, false, false);			
-			} break;
-			case SW: {
-				float swX1 = realX + ((centerZ - realZ) / (endZ - beginZ)) * (endX - beginX);
-				float swZ1 = realZ + ((centerX - realX) / (endX - beginX)) * (endZ - beginZ);
-				float swX2 = realX + ((oppZ - realZ) / (endZ - beginZ)) * (endX - beginX);
-				float swZ2 = realZ + ((oppX - realX) / (endX - beginX)) * (endZ - beginZ);
-				which[(rotation + 1) % 4].drawCutout(dungeon, this, swX2, 
-						swZ1, dimX, dimZ, false, false);
-				which[(rotation + 3) % 4].drawCutout(dungeon, this, swX1, 
-						swZ2, dimX, dimZ, false, false);
-				which[(rotation + 2) % 4].drawCutout(dungeon, this, oppX, 
-						oppZ, dimX, dimZ, false, false);			
-			}
-		}
-	}
-	
-	
+	/**
+	 * Fills a room with a "liquid" and then adds a walkway through it; 
+	 * this is used for rooms with a whole room pattern. 
+	 * 
+	 * @param dungeon
+	 */
 	private void walkway(Dungeon dungeon) {
 		int drop;
 		if(dungeon.theme.type.contains(ThemeType.SWAMP)) drop = 1;
 		else drop = 2;
 		shape = Shapes.wholeShape(sym, dungeon.random);
-		//System.out.println("About to flood room for walkway.");
 		for(int i = beginX; i <= endX; i++) 
 			for(int j = beginZ; j <= endZ; j++) {
 				dungeon.map.floorY[i][j] -= drop;
 				dungeon.map.hasLiquid[i][j] = true;
 			}
-		//System.out.println("Room is now flooded; ready to place walkway.");
 		shape.family[orientation].drawWalkway(dungeon, this, realX, realZ, 
 				(byte)(endX - beginX + 1), (byte)(endZ - beginZ + 1), XFlip, ZFlip);
 	}
 	
 	
+	/**
+	 * Fills the room with walls, then opens up a passage; used for rooms 
+	 * with a whole room pattern.
+	 * 
+	 * @param dungeon
+	 */
 	private void cutin(Dungeon dungeon) {
 		shape = Shapes.wholeShape(sym, dungeon.random);
 		for(int i = beginX; i <= endX; i++) 
@@ -1040,6 +681,13 @@ public class Room extends AbstractRoom {
 	}
 	
 	
+	/**
+	 * Generate a side room; this is called by Dungeon.growCycle to expand 
+	 * the dungeon.
+	 * 
+	 * @param dungeon
+	 * @return
+	 */
 	public boolean plantChildren(Dungeon dungeon) {
 		boolean result = false;
 		for(RoomSeed planted : childSeeds) {
@@ -1060,6 +708,12 @@ public class Room extends AbstractRoom {
 	}
 	
 	
+	/**
+	 * Determines the other rooms to which a door leads; this is 
+	 * used in processing door corrections and room passibility.
+	 * 
+	 * @param door
+	 */
 	public void addToConnections(Doorway door) {
 		if(id < 1) {
 			return;
