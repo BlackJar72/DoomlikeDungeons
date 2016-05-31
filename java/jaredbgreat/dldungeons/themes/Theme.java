@@ -10,7 +10,6 @@ package jaredbgreat.dldungeons.themes;
 */	
 
 
-
 import jaredbgreat.dldungeons.builder.DBlock;
 
 import java.util.ArrayList;
@@ -18,6 +17,25 @@ import java.util.EnumSet;
 
 import net.minecraftforge.common.BiomeDictionary.Type;
 
+
+/**
+ * Themes represent dungeon styles, including blocks and mobs 
+ * to use; and variables influencing architectural style elements 
+ * such as the amount of symmetry, complexity, and height variability; 
+ * and the frequency of various features such as platforms, sub-rooms, 
+ * and pools of liquid. 
+ * 
+ * Each theme is tagged to appear in certain biome types and at certain 
+ * altitudes.
+ * 
+ * As with Room, this class is not truly encapsulated.  While this could 
+ * be fixed, so much of the code has since been written based on the 
+ * unencapsulated version that at this time there is no plan to improve 
+ * this.
+ * 
+ * @author Jared Blackburn
+ *
+ */
 public class Theme {
 	
 	public String name;
@@ -95,6 +113,12 @@ public class Theme {
 	}
 	
 	
+	/**
+	 * Add a mob to the list of mobs at the given difficulty level.
+	 * 
+	 * @param mob
+	 * @param level
+	 */
 	public void addMob(String mob, int level) {
 		switch(level) {
 		case 0:
@@ -117,6 +141,14 @@ public class Theme {
 	}
 	
 	
+	/**
+	 * Remove a mob from the list of mobs with the given difficulty 
+	 * level.  This primarily for use with API to allow other mods 
+	 * to remove mobs, presumably when replacing then with an alternative.
+	 * 
+	 * @param mob
+	 * @param level
+	 */
 	public void removeMob(String mob, int level) {
 		switch(level) {
 		case 0:
@@ -139,6 +171,10 @@ public class Theme {
 	}
 	
 	
+	/**
+	 * This makes sure that the complete set of lists has all 
+	 * of its elements (levels) set to the appropriate lists.
+	 */
 	public void fixMobs() {
 		allMobs = new ArrayList[5];
 		allMobs[0] = commonMobs;
@@ -149,6 +185,10 @@ public class Theme {
 	}
 	
 	
+	/**
+	 * Register the theme with biome types it should and 
+	 * should never appear in.
+	 */
 	public void biomeRegister() {
 		BiomeSets.registerTheme(this);
 		BiomeSets.removeTheme(this);
@@ -157,16 +197,31 @@ public class Theme {
 	
 	@Override
 	public String toString() {
-		if(name == null) return "null";
+		if(name == null) return "null:" + super.toString();
 		return name;
 	}
 	
 	
+	/**
+	 * Register a block from the theme with the dungeon 
+	 * block registry.
+	 * 
+	 * @param block
+	 * @return
+	 */
 	private static int makeDBlock(String block) {
 		return DBlock.add(block);
 	}
 	
 	
+	/**
+	 * Convert String block names read from the theme file to integer 
+	 * id's representing the blocks in terms of the dungeon block 
+	 * registry.
+	 * 
+	 * @param in
+	 * @return
+	 */
 	private static int[] makeBlockList(String[] in) {
 		int[] out = new int[in.length];
 		for(int i = 0; i < in.length; i++) 

@@ -30,9 +30,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 /**
- * The methods in this class should not usually be called directly.
+ * This is an enumeration of theme types to be used with the API, primarily 
+ * for adding mobs to themes which may have been created by another third 
+ * party.
  * 
- * @author jared
+ * The methods in this class should not usually be called directly; they 
+ * are inteded to be called through the mods API.
+ * 
+ * @author Jared Blackburn
  *
  */
 public enum ThemeType {	
@@ -61,7 +66,7 @@ public enum ThemeType {
 	public final ArrayList<String>[] mobs;
 	public final ArrayList<Theme>    themes;
 	public final ArrayList<String>[] mobsOut;
-	
+		
 	private static final EnumSet<ThemeType> all = EnumSet.allOf(ThemeType.class);
 	
 	
@@ -76,21 +81,49 @@ public enum ThemeType {
 	}
 	
 	
+	/**
+	 * Get a type from its name.  This is mostly a wrapper for valueOf, 
+	 * but takes care of some string clean-up.
+	 * 
+	 * @param name
+	 * @return
+	 */
 	public static ThemeType type(String name) {
 		return ThemeType.valueOf(name.toUpperCase().trim());
 	}
 	
 	
+	/**
+	 * This will register a theme as being of the type named with the 
+	 * String.
+	 * 
+	 * @param theme
+	 * @param theType
+	 */
 	public static void addThemeToType(Theme theme, String theType) {
 		type(theType).themes.add(theme);
 	}
 	
 	
+	/**
+	 * This will register a theme as belonging to a give type.
+	 * 
+	 * @param theme
+	 * @param theType
+	 */
 	public static void addThemeToType(Theme theme, ThemeType theType) {
 		theType.themes.add(theme);
 	}
 	
 	
+	/**
+	 * This will register a mob to be added to themes of the given type and 
+	 * as the given difficulty level.
+	 * 
+	 * @param mob
+	 * @param level
+	 * @param theType
+	 */
 	public static void addMobToType(String mob, int level, String theType) {
 		if(ConfigHandler.disableAPI || ConfigHandler.noMobChanges) return;		
 		ArrayList<String> list = type(theType).mobs[level];
@@ -98,6 +131,14 @@ public enum ThemeType {
 	}
 	
 	
+	/**
+	 * This will register a mob to be removed themes of the given type at the given 
+	 * difficulty level.
+	 * 
+	 * @param mob
+	 * @param level
+	 * @param theType
+	 */
 	public static void removeMobFromType(String mob, int level, String theType) {
 		if(ConfigHandler.disableAPI || ConfigHandler.noMobChanges) return;		
 		ArrayList<String> list = type(theType).mobs[level];
@@ -105,6 +146,14 @@ public enum ThemeType {
 	}
 	
 	
+	/**
+	 * This will immediately remove the move from mob-lists of the given difficulty 
+	 * level for all themes of the given type.
+	 * 
+	 * @param mob
+	 * @param level
+	 * @param theType
+	 */
 	public static void removeMobFromTypeNow(String mob, int level, String theType) {
 		if(ConfigHandler.disableAPI || ConfigHandler.noMobChanges) return;
 		for(Theme theme : type(theType).themes) {
@@ -112,7 +161,15 @@ public enum ThemeType {
 		}
 	}
 
-
+	
+	/**
+	 * This will immediately add the named mob to all themes of the given type at 
+	 * the given level. 
+	 * 
+	 * @param mob
+	 * @param level
+	 * @param theType
+	 */
 	public static void addMobToTypeNow(String mob, int level, String theType) {
 		if(ConfigHandler.disableAPI || ConfigHandler.noMobChanges) return;
 		for(Theme theme : type(theType).themes) {
@@ -121,6 +178,10 @@ public enum ThemeType {
 	}
 	
 	
+	/**
+	 * This will apply all type-based mob additions and subtraction listed for all 
+	 * themes of all types.
+	 */
 	public static void SyncMobLists() {
 		for(ThemeType current : all) {
 			if(current.themes.isEmpty()) continue;

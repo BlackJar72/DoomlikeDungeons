@@ -32,7 +32,12 @@ import java.util.logging.Logger;
 import net.minecraft.block.Block;
 import net.minecraftforge.common.BiomeDictionary.Type;
 
-
+/**
+ * This is the file IO class for reading theme files.
+ * 
+ * @author Jared Blackburn
+ *
+ */
 public class ThemeReader {
 	
 	private static File configDir;
@@ -41,28 +46,67 @@ public class ThemeReader {
 	
 	private static final String ESTRING = "";
 	
+	
+	/**
+	 * Set the directory / folder in which themes are found.
+	 * 
+	 * @param dir
+	 */
 	public static void setThemesDir(File dir) {
 		System.out.println("[DLDUNGEONS] themesdir is " + dir);
 		themesDir = dir;
 	}
 	
 	
+	/**
+	 * Set the directory / folder in which config files are store,
+	 * or more accurately, when this class will look for chests.cfg 
+	 * and which is the parent of the themes and list directories.
+	 * 
+	 * @param dir
+	 */
 	public static void setConfigDir(File dir) {
 		System.out.println("[DLDUNGEONS] themesdir is " + dir);
 		configDir = dir;
 	}
 	
 	
+	/**
+	 * Get the path for the themes directory.
+	 * 
+	 * @return path to themes as String
+	 */
 	public static String getThemesDir() {
 		return themesDir + File.separator;
 	}
 	
 	
+	/**
+	 * Get the path for the mods config directory.
+	 * 
+	 * @return path to the config directory as a String
+	 */
 	public static String getConfigDir() {
 		return configDir + File.separator;
 	}
 	
 	
+	/**
+	 * This will look into the themes folder and add theme files 
+	 * to the list of files to read themes from.
+	 * 
+	 * Technically it will treat any file ending in ".cfg" and found 
+	 * inside the theme's directory except for the supplied template 
+	 * as theme, whether it holds valid theme data or not.
+	 * 
+	 * Themes are read as one per file, so no file can contain more 
+	 * than one theme, nor can a theme be split between multiple files.
+	 * 
+	 * If the themes folder is absent of empty it will attempt to fill it 
+	 * by calling exporter.makerThemes.
+	 * 
+	 * @return
+	 */
 	private static int findFiles() {
 		int num = 0;
 		Externalizer exporter;
@@ -78,7 +122,7 @@ public class ThemeReader {
 		if(fileNames.length < 1) return 0;
 		for(String name : fileNames) {
 			if(name.length() >= 5) {
-				if(name.equals("template.cfg") || name.equals("chests.cfg")) continue;
+				if(name.equals("template.cfg")) continue;
 				else if(name.substring(name.length() - 4).equals(".cfg")) {
 					files.add(new File(name));
 					num++;
@@ -89,6 +133,14 @@ public class ThemeReader {
 	}
 
 	
+	/**
+	 * This will find and read all the theme files in the themes
+	 * directory, and will then read the chests.cfg from the main 
+	 * config directory.
+	 * 
+	 * findFiles is called to get the list of files to read, while 
+	 * readTheme and openLoot are called to open the files.
+	 */
 	public static void readThemes() {
 		int num = findFiles();
 		System.out.println("[DLDUNGEONS] Found " + num + " themes.");
@@ -98,6 +150,10 @@ public class ThemeReader {
 	}
 	
 	
+	/**
+	 * Attempts to open chest.cfg, and if succesful will call readLoot 
+	 * to read it.
+	 */
 	public static void openLoot() {
 		BufferedReader instream = null;
 		File chests = new File(configDir.toString() + File.separator + "chests.cfg");
@@ -115,6 +171,13 @@ public class ThemeReader {
 	}
 	
 	
+	/**
+	 * This will read the chests.cfg file and populate the loots list from
+	 * its data.
+	 * 
+	 * @param instream
+	 * @throws IOException
+	 */
 	public static void readLoot(BufferedReader instream) throws IOException {
 		System.out.println("[DLDUNGEONS] Loading chest loot file (chests.cfg)");
 		
@@ -161,18 +224,20 @@ public class ThemeReader {
 	}			
 		
 	
+	/**
+	 * This will attempt to open a theme file, and if successful will call 
+	 * parseTheme read the data. 
+	 * 
+	 * @param file
+	 */
 	private static void readTheme(File file) {
 		BufferedReader instream = null;
 		try {
-			//DoomlikeDungeons.profiler.startTask("Loading theme " + file);
 			instream = new BufferedReader(new 
 					FileReader(themesDir.toString() + File.separator + file.toString()));
-			//System.out.println("[DLDUNGEONS] Loading theme file " + file.toString());
 			parseTheme(instream, file.toString());
 			if(instream != null) instream.close();
-			//DoomlikeDungeons.profiler.endTask("Loading theme " + file);
 		} catch (IOException e) {
-			//DoomlikeDungeons.profiler.endTask("Loading theme " + file);
 			e.printStackTrace();
 		} catch (NoSuchElementException e) {
 			if(instream != null) {
@@ -220,6 +285,15 @@ public class ThemeReader {
 	}
 	
 	
+	/**
+	 * This will read a themes data and convert it into a working theme in
+	 * the running mod.
+	 * 
+	 * @param instream
+	 * @param name
+	 * @throws IOException
+	 * @throws NoSuchElementException
+	 */
 	public static void parseTheme(BufferedReader instream, String name) 
 			throws IOException, NoSuchElementException {
 		//DoomlikeDungeons.profiler.startTask("Parsing theme " + name);		
@@ -231,7 +305,6 @@ public class ThemeReader {
 		String token;
 		String delimeters = " ,:;\t\n\r\f="; // Assume old version until a newer version number is detected
 		while((line = instream.readLine()) != null) {
-			//System.out.println(line);
 			if(line.length() < 2) continue;
 			if(line.charAt(0) == '#') continue;
 			tokens = new StringTokenizer(line, delimeters);
@@ -342,13 +415,11 @@ public class ThemeReader {
 				continue;
 			} if(token.equals("version")) {
 				theme.version = floatParser(theme.version, tokens);
-				//System.out.println("[DLDUNGEONS] Theme is vesion " + theme.version);
 				if(theme.version > 1.6) {
 					delimeters = " ,;\t\n\r\f=";
 				} else {
 					delimeters = " ,;:\t\n\r\f=";
 				}
-				//System.out.println("[DLDUNGEONS] Delimeters are " + delimeters);
 				continue;
 			} 
 		}
@@ -357,10 +428,16 @@ public class ThemeReader {
 		if(theme.caveWalls.length < 1) {
 			theme.caveWalls = theme.walls;
 		}
-		//DoomlikeDungeons.profiler.endTask("Parsing theme " + name);
 	}
 
 
+	/**
+	 * Read a Degree Element tag's data.
+	 * 
+	 * @param el
+	 * @param tokens
+	 * @return 
+	 */
 	private static Element elementParser(Element el, StringTokenizer tokens) {
 		boolean valid = false;
 		int[] values = new int[]{0, 0, 0, 0, 0, 0};
@@ -376,6 +453,13 @@ public class ThemeReader {
 	}
 	
 	
+	/**
+	 * Read a SizeElement tag's data.
+	 * 
+	 * @param el
+	 * @param tokens
+	 * @return
+	 */
 	private static SizeElement sizeParser(SizeElement el, StringTokenizer tokens) {
 		boolean valid = false;
 		int[] values = new int[]{0, 0, 0, 0, 0};
@@ -391,6 +475,15 @@ public class ThemeReader {
 	}
 	
 	
+	/**
+	 * Read integer data, converting it from a String format to an int in 
+	 * the range from 6 to 223; values outside this range will be treat as 
+	 * el.  This is used for reading the minimum and maximum altitude values.
+	 * 
+	 * @param el
+	 * @param tokens
+	 * @return
+	 */
 	private static int intParser(int el, StringTokenizer tokens) {
 		boolean valid = false;
 		int value = 0;
@@ -412,6 +505,13 @@ public class ThemeReader {
 	}
 	
 	
+	/**
+	 * Read floating point data, converting it from a String format to a float.
+	 * 
+	 * @param el
+	 * @param tokens
+	 * @return
+	 */
 	private static float floatParser(float el, StringTokenizer tokens) {
 		float value = 0f;
 		String num = ESTRING;
@@ -429,6 +529,15 @@ public class ThemeReader {
 	}
 	
 	
+	/**
+	 * This will read integer data, converting it from a String format 
+	 * to an int.  This is the method that should be used for reading 
+	 * general int data.  If the token passed in is not a valid integer 
+	 * the method return -1.
+	 * 
+	 * @param tokens
+	 * @return
+	 */
 	private static int intParser(StringTokenizer tokens) {
 		int value = 0;
 		String num = ESTRING;
@@ -446,6 +555,14 @@ public class ThemeReader {
 	}
 	
 	
+	/**
+	 * This will parse boolean data, converting it from a string format 
+	 * to a boolean. 
+	 * 
+	 * @param el
+	 * @param tokens
+	 * @return
+	 */
 	private static boolean booleanParser(boolean el, StringTokenizer tokens) {
 		boolean valid = false;
 		boolean bool;
@@ -456,14 +573,26 @@ public class ThemeReader {
 	}
 	
 	
+	/**
+	 * This will read in a block data and convert it from string format to an 
+	 * of int's holding dungeon block id's (indices in DBlock.registry).  The 
+	 * int's are then appended to the passed in int array "el"; this allows 
+	 * multiple lines of data to be used for one block related component.
+	 * 
+	 * These blocks can then 
+	 * 
+	 * @param el
+	 * @param tokens
+	 * @param version
+	 * @return
+	 * @throws NoSuchElementException
+	 */
 	private static int[] blockParser(int[] el, 
 			StringTokenizer tokens, float version) throws NoSuchElementException {
-		//DoomlikeDungeons.profiler.startTask("Parsing blocks");
 		ArrayList<String> values = new ArrayList<String>();
 		String nums;
 		while(tokens.hasMoreTokens()) {
 			nums = tokens.nextToken();
-			//System.out.println("Read MC block " + nums);
 			if(version > 1.6) {
 				values.add(String.valueOf(DBlock.add(nums, version)));
 			} else {
@@ -472,18 +601,23 @@ public class ThemeReader {
 		}
 		int[] out = new int[values.size() + el.length];
 		for(int i = 0; i < el.length; i++) {
-			//System.out.println("Adding DBlock " + el[i]);
 			out[i] = el[i];
 		}
 		for(int i = 0; i < values.size(); i++) {
-			//System.out.println("Adding DBlock " + values.get(i));
 			out[i + el.length] = Integer.parseInt(values.get(i));
 		}
-		//DoomlikeDungeons.profiler.startTask("Parsing blocks");
 		return out;
 	}
 	
 	
+	/**
+	 * This will turn tokens read from the them file to be added to the list 
+	 * of mobs names to use for creating spawners.
+	 * 
+	 * @param el
+	 * @param tokens
+	 * @return
+	 */
 	private static ArrayList<String> parseMobs(ArrayList<String> el, StringTokenizer tokens) {
 		ArrayList<String> mobs;
 		if(el != null) {
@@ -494,17 +628,21 @@ public class ThemeReader {
 		while(tokens.hasMoreTokens()) {
 			String nextMob = tokens.nextToken();
 			mobs.add(nextMob);
-			//System.out.println("[DLDUNGEONS] Adding " + nextMob);
 		}
 		return mobs;
 	}
 	
 	
+	/**
+	 * This will convert tokens in string format to a set of biome types. 
+	 * 
+	 * @param tokens
+	 * @return
+	 */
 	private static EnumSet<Type> biomeParser(StringTokenizer tokens) {
 		String name;
 		EnumSet<Type> biomes = EnumSet.noneOf(Type.class);
-		while(tokens.hasMoreTokens()) {
-			// Note: This should probably use the Enum.valueOf(String)			
+		while(tokens.hasMoreTokens()) {		
 			name = tokens.nextToken().toUpperCase();
 			// Old biome types
 			if(name.equals("FOREST")) biomes.add(Type.FOREST);
@@ -540,8 +678,13 @@ public class ThemeReader {
 	}
 	
 	
+	/**
+	 * This will convert tokens in string format to a set of ThemeTypes.
+	 * 
+	 * @param tokens
+	 * @return
+	 */
 	private static EnumSet<ThemeType> typeParser(StringTokenizer tokens) {
-		// Note: This should probably use the Enum.valueOf(String)
 		String name;
 		EnumSet<ThemeType> types = EnumSet.noneOf(ThemeType.class);
 		while(tokens.hasMoreTokens()) {
@@ -571,6 +714,12 @@ public class ThemeReader {
 	}
 	
 	
+	/**
+	 * This will convert tokens in string format to a set of ThemeFlags.
+	 * 
+	 * @param tokens
+	 * @return
+	 */
 	private static EnumSet<ThemeFlags> flagParser(StringTokenizer tokens) {
 		String name;
 		EnumSet<ThemeFlags> flags = EnumSet.noneOf(ThemeFlags.class);

@@ -32,7 +32,19 @@ import net.minecraft.item.Item;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.config.Configuration;
 
-public class ConfigHandler {
+
+/**
+ * This class reads and holds data from the main configuration file.
+ * 
+ * It might have been better to store many of these with the class they
+ * directly influence, but this is not likely to be changed as the current 
+ * system is already in place the rest of the code base is already mature.
+ * 
+ * In addition to reading and holding config data, this class also contains 
+ * utility methods output information that can be useful in setting up 
+ * configurations and writing theme files.
+ */
+public final class ConfigHandler {
 	
 	private static File mainConfig;
 	private static File themesDir;
@@ -90,6 +102,14 @@ public class ConfigHandler {
 	public static Difficulty difficulty;
 
 	
+	// All methods and data are static. 
+	// There is no reason this should ever be instantiated.
+	private ConfigHandler(){/*Do nothing*/}
+	
+	
+	/**
+	 * This will read the them file and apply the themes.
+	 */
 	public static void init() {
 		File file = new File(ConfigHandler.configDir.toString() 
 			+ File.separator + Info.OLD_ID  + ".cfg");
@@ -177,11 +197,20 @@ public class ConfigHandler {
 	}
 	
 	
+	/**
+	 * This will reload the config data; really just 
+	 * wraps init.
+	 */
 	protected static void reload() {
 		init();
 	}
 	
 	
+	/**
+	 * This will output lists of blocks, items, and mobs know to the 
+	 * game with their proper, unlocalized names.  This data is useful
+	 * in editing theme files.
+	 */
 	public static void generateLists() {
 		if(!writeLists) return;
 		listsDir = new File(configDir.toString() + File.separator + "lists");
@@ -195,14 +224,18 @@ public class ConfigHandler {
 			System.out.println("[DLDUNGEONS] Warning: " + listsDir 
 					+ " is not a directory (folder); no themes loaded.");
 		} else {		
-			listEntities();
+			listMobs();
 			listItems();
 			listBlocks();
 		}
 	}
 	
 	
-	public static void listEntities() {	
+	/**
+	 * This will list all mobs, using there unlocalized names, writing 
+	 * the data to the file lists/mobs.txt.
+	 */
+	public static void listMobs() {	
 		ArrayList<String> mobNames = new ArrayList<String>();
 		mobNames.addAll(EntityList.stringToClassMapping.keySet());
 		Collections.sort(mobNames);
@@ -228,6 +261,11 @@ public class ConfigHandler {
 	}
 	
 	
+	/**
+	 * This will list all items, using their complete unlocalized names 
+	 * with mod id's, and write them the file lists/items.txt.  This 
+	 * is useful for writing theme files.
+	 */
 	public static void listItems() {	
 		BufferedWriter outstream = null;
 		File itemlist = new File(listsDir.toString() + File.separator + "itmes.txt");
@@ -236,12 +274,9 @@ public class ConfigHandler {
 			outstream = new BufferedWriter(new 
 					FileWriter(itemlist.toString()));
 			
-			if(outstream == null) throw new IOException();
-			
 			for(Object item : Item.itemRegistry){ 
 				String name = Item.itemRegistry.getNameForObject((Item) item).toString();
 				if(true) {
-					//System.out.println("[DLDUNGEONS] Found item " + name);
 					outstream.write(name);
 					outstream.newLine();
 				}
@@ -255,20 +290,22 @@ public class ConfigHandler {
 	}
 	
 	
+	/**
+	 * This will list all blocks using their correct, unlocalized names, complete with 
+	 * mod id's, and write them to the file lists/blocks.txt.  This is useful for editing 
+	 * theme files.
+	 */
 	public static void listBlocks() {	
 		BufferedWriter outstream = null;
 		File itemlist = new File(listsDir.toString() + File.separator + "blocks.txt");
 		if(itemlist.exists()) itemlist.delete(); 
 		try {
 			outstream = new BufferedWriter(new 
-					FileWriter(itemlist.toString()));
-			
-			if(outstream == null) throw new IOException();	
+					FileWriter(itemlist.toString()));	
 			
 			for(Object block : Block.blockRegistry){ 
 				String name = Block.blockRegistry.getNameForObject((Block)block).toString();
-				if(true) {
-					//System.out.println("[DLDUNGEONS] Found item " + name);
+				if(true) {;
 					outstream.write(name);
 					outstream.newLine();
 				}
@@ -282,10 +319,14 @@ public class ConfigHandler {
 	}
 	
 	
+	/**
+	 * This will open the theme's directory for some general housekeeping 
+	 * purposes.  I does not read the theme files, as this called by init 
+	 * during pre-init phase of mod loading, while themes are loaded 
+	 * post-init to allow other mods a chance to load and register their 
+	 * content.
+	 */
 	private static void openThemesDir() {
-		// This will open the directory for theme data; it will not load themes
-		// as that must be done post-init incase blocks / mobs / items from
-		// other mobs are requested by user themes.
 		Externalizer exporter;
 		String themesDirName = configDir.toString() + File.separator 
 				+ "themes" + File.separator;
@@ -309,6 +350,12 @@ public class ConfigHandler {
 	}
 	
 	
+	/**
+	 * This convert difficulty setting from an integer to a 
+	 * Difficulty enum constant. 
+	 * 
+	 * @param diff
+	 */
 	protected static void parseDiff(int diff) {
 		switch(diff) {
 			case 0:
@@ -335,6 +382,14 @@ public class ConfigHandler {
 	}
 	
 	
+	/**
+	 * This looks for the mods config directory, and attempts to 
+	 * create it if it does not exist.  It will them set this as 
+	 * the config directory and return it as a File.
+	 * 
+	 * @param fd
+	 * @return the config directory / folder
+	 */
 	public static File findConfigDir(File fd) {
 		File out = new File(fd.toString() + File.separator + Info.OLD_ID);
 		if(!out.exists()) out.mkdir();
@@ -351,6 +406,12 @@ public class ConfigHandler {
 	}
 	
 	
+	/**
+	 * This will put biome types in the string array into the list of 
+	 * types where no dungeons show everr generate.
+	 * 
+	 * @param array
+	 */
 	private static void processBiomeExclusions(String[] array) {
 		for(String str : array) {
 			str = str.toUpperCase();
@@ -362,14 +423,18 @@ public class ConfigHandler {
 				}
 			} catch(Exception e) {
 				System.err.println("[DLDUNGEONS] Error in config! " + str + " is not valid biome dictionary type!");
+				e.printStackTrace();
 			}
 		}
 	}
 	
 	
+	/**
+	 * Returns the full path of the config directory as a String.
+	 * 
+	 * @return
+	 */
 	public static String getConfigDir() {
 		return configDir + File.separator;
 	}
-
-	
 }

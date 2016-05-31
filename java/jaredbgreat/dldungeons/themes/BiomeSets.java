@@ -481,12 +481,9 @@ public class BiomeSets {
     		return null;
     	} else {
     		use.addAll(set);
-			System.out.println("[DLDUNGEONS] The following themes are avalable for " + biome.getBiomeName() + ":");
     		for(Theme theme : use) {
-    			System.out.println("[DLDUNGEONS] " + theme.name);
     		}
     		Theme theme = use.get((random.nextInt(use.size())));
-    		System.out.println("[DLDUNGEONS] Selected and returning " + theme +".");
     		return theme;
     	}
     }
