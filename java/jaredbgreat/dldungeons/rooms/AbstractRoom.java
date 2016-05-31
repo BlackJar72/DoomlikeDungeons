@@ -14,6 +14,14 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 
+
+
+/**
+ * The base type for all rooms, this determines some general 
+ * room characteristics and provides factory methods for creating 
+ * rooms the types of which are randomly chosen based on dungeon 
+ * wide theme-derived variables. 
+ */
 public abstract class AbstractRoom /*extends Shape*/ {
 
 
@@ -31,6 +39,13 @@ public abstract class AbstractRoom /*extends Shape*/ {
 	public boolean fenced;
 	
 	
+	/**
+	 * The constructor for the null room (room 0, representing areas 
+	 * that are not part of the dungeon).  It should never be used to 
+	 * generate a "normal" room of any type.  It is only protected 
+	 * (rather than private) because the null room needs to be instantiated 
+	 * to as a place holder in the room lists.
+	 */
 	protected AbstractRoom() {
 		wallBlock1   = 0;
 		floorBlock   = 0;
@@ -41,7 +56,15 @@ public abstract class AbstractRoom /*extends Shape*/ {
 	}
 	
 	
-	public AbstractRoom(Dungeon dungeon, AbstractRoom previous) {
+	/**
+	 * The super constructor for creating real rooms.  It is still protected 
+	 * as no public constructor should exist for rooms as the are provided 
+	 * by the makeRoom methods.
+	 * 
+	 * @param dungeon
+	 * @param previous
+	 */
+	protected AbstractRoom(Dungeon dungeon, AbstractRoom previous) {
 		if((previous != null) && !dungeon.variability.use(dungeon.random)) {
 			wallBlock1   = previous.wallBlock1;
 			floorBlock   = previous.floorBlock;
@@ -103,6 +126,22 @@ public abstract class AbstractRoom /*extends Shape*/ {
 	}
 	
 	
+	/**
+	 * A factory method for creating rooms of a random type.  The 
+	 * actual type will be based on dungeon-wide theme-derived 
+	 * variables.
+	 * 
+	 * @param beginX
+	 * @param endX
+	 * @param beginZ
+	 * @param endZ
+	 * @param floorY
+	 * @param ceilY
+	 * @param dungeon
+	 * @param parent
+	 * @param previous
+	 * @return
+	 */
 	public static Room makeRoom(int beginX, int endX, int beginZ, int endZ, int floorY, int ceilY, 
 			Dungeon dungeon, Room parent, Room previous) {		
 		RoomType type = RoomType.ROOM;
@@ -125,20 +164,39 @@ public abstract class AbstractRoom /*extends Shape*/ {
 	}
 	
 	
+	/**
+	 * A factory method for creating rooms of a specified type.  Specifying 
+	 * and unimplemented type will result in a default room of type ROOM / 
+	 * class Room -- that is, a basic room built from shape primitives.
+	 * 
+	 * This is not currently used, but is kept for possible expansion.
+	 * 
+	 * @param beginX
+	 * @param endX
+	 * @param beginZ
+	 * @param endZ
+	 * @param floorY
+	 * @param ceilY
+	 * @param dungeon
+	 * @param parent
+	 * @param previous
+	 * @param type
+	 * @return
+	 */
 	public static Room makeRoom(int beginX, int endX, int beginZ, int endZ, int floorY, int ceilY, 
 			Dungeon dungeon, Room parent, Room previous, RoomType type) {	
 		switch(type) {
-		case CAVE: {
-			Cave base = new Cave(beginX, endX, beginZ, endZ, floorY, ceilY, 
+			case CAVE: {
+				Cave base = new Cave(beginX, endX, beginZ, endZ, floorY, ceilY, 
 					dungeon, parent, previous);
-			return base.plan(dungeon, parent);
-		}
-		case ROOM:
-		default: {
-			Room base = new Room(beginX, endX, beginZ, endZ, floorY, ceilY, 
-				dungeon, parent, previous);
-			return base.plan(dungeon, parent);
-		}
+				return base.plan(dungeon, parent);
+			}
+			case ROOM:
+			default: {
+				Room base = new Room(beginX, endX, beginZ, endZ, floorY, ceilY, 
+						dungeon, parent, previous);
+				return base.plan(dungeon, parent);
+			}
 		}
 	}
 }

@@ -34,9 +34,9 @@ import jaredbgreat.dldungeons.themes.ThemeType;
  * @author Jared Blackburn
  *
  */
-public class Rectangle {
+public final class Rectangle {
 	
-	final float xdim, zdim, xcoord, zcoord;				// Width in each dimension and center coordinates
+	private final float xdim, zdim, xcoord, zcoord;				// Width in each dimension and center coordinates
 	
 	
 	public Rectangle(float xdim, float zdim, float xcoord, float zcoord) {

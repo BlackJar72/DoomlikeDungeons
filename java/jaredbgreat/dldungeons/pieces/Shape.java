@@ -33,7 +33,7 @@ import static jaredbgreat.dldungeons.pieces.Rectangle.*;
  * @author Jared Blackburn
  *
  */
-public class Shape {
+public final class Shape {
 	
 	private final Rectangle[] rectangles;	
 	

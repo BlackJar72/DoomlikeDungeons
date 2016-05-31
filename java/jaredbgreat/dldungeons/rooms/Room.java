@@ -38,6 +38,25 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 
+/**
+ * This is the basic room type, built from shape primitive and most 
+ * common in most dungeon themes.  Most of the methods are used for
+ * adding features to the room so that it builds itself, though most 
+ * of these features are actually store in the dungeon map (a MapMatrix)
+ * rather than the Room instance.  Exception are chests, spawners, 
+ * and doors, which are kept in lists to be further processes and/or 
+ * added in ways that accommodate their special features (TileEntities).
+ * 
+ * Note that the poor encapsulation of this class is largely due to 
+ * excessive concerns about efficiency and exaggerated assumptions 
+ * about the overhead of method calls (getters).  While this could, and
+ * perhaps should be changed in principle, the number of required 
+ * code changes throughout the mod is now a major reason for leaving 
+ * them as public. 
+ * 
+ * @author Jared Blackburn
+ *
+ */
 public class Room extends AbstractRoom {
 	
 	public int id;	// Should be equal to the index in Dungeon.rooms ArrayList.
@@ -65,6 +84,12 @@ public class Room extends AbstractRoom {
 	private Room() {id = 0;}	
 	
 	
+	/**
+	 * A safety method to ensure there are no circular references 
+	 * to create a memory leak.  Note that none should exist, this 
+	 * is included as a safety measure do to the general complexity 
+	 * of the relationship between dungeons, rooms, and related rooms.
+	 */
 	public void preFinalize() {
 		childSeeds.clear();
 		childSeeds = null;

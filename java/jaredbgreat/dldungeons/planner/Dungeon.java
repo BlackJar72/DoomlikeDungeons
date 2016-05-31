@@ -63,7 +63,7 @@ public class Dungeon {
 	public int numEntrances = 0;
 	
 	public RoomList rooms;
-	public RoomList nodeRooms;
+	//public RoomList nodeRooms;
 	public ArrayList<Room> planter;
 	public ArrayList<Room> grower;
 	
@@ -205,37 +205,88 @@ public class Dungeon {
 	/**
 	 * Creates all the nodes and store along with a list of node rooms.
 	 */
-	void makeNodes() {	
+	private void makeNodes() {	
 		//DoomlikeDungeons.profiler.startTask("Creating Node Rooms");
-		nodeRooms = new RoomList(numNodes);
-		for(int i = 0; i < numNodes;) {
+		int i = 0;
+		while(i < numNodes) {
 			nodes[i] = new Node(random.nextInt(size.width), baseHeight, random.nextInt(size.width), random, this);
-			assert(nodes[i].hubRoom == nodeRooms.get(i));
-			if(nodeRooms.get(i) != null) ++i;
+			if(nodes[i].hubRoom != null) ++i;
 		}
 		//DoomlikeDungeons.profiler.endTask("Creating Node Rooms");
 	}
 	
 	
 	/**
-	 * This will connect all the nodes with series of intermediate rooms. 
-	 * 
-	 * Attempts are made to connect all nodes to all others, so as to 
-	 * insure that all are connected.  This may change in a future update.
+	 * This will connect all the nodes with series of intermediate rooms by 
+	 * callaing either connectNodesDensely or connectNodesSparcely, with a 
+	 * 50% chance of each.
 	 * 
 	 * @throws Throwable
 	 */
-	void connectNodes() throws Throwable {		
+	private void connectNodes() {
+		if(random.nextBoolean()) {
+			connectNodesDensely();
+		} else {
+			connectNodesSparcely();
+		}
+	}
+	
+	
+	/**
+	 * This will attempt to connect all nodes based on the logic that 
+	 * if B can be reached from A, and C can be reached from B, then 
+	 * C can be reached from A (by going through B if no other route 
+	 * exists).
+	 * 
+	 * Specifically, it will connect the first node to one random other 
+	 * node, and then connect a random node already connected to the 
+	 * first with one that has not been connected, until all nodes have 
+	 * attempted a connects.  Note that this does not guarantee connections 
+	 * as the attempt to place a route between any two nodes may fail.
+	 * 
+	 * @throws Throwable
+	 */
+	private void connectNodesSparcely() {		
+		//DoomlikeDungeons.profiler.startTask("Connecting Nodes");
+		Node first, other;
+		ArrayList<Node> connected = new ArrayList<Node>(nodes.length), 
+				        disconnected = new ArrayList<Node>(nodes.length);		
+		connected.add(nodes[0]);
+		for(int i = 1; i < nodes.length; i++) {
+			disconnected.add(nodes[i]);
+		}		
+		while(!disconnected.isEmpty()) {
+			if(rooms.realSize() >= size.maxRooms) {
+				//DoomlikeDungeons.profiler.endTask("Connecting Nodes");
+				return;
+			}
+			first = connected.get(random.nextInt(connected.size()));
+			other = disconnected.get(random.nextInt(disconnected.size()));
+			new Route(first, other).drawConnections(this);
+			connected.add(other);
+			disconnected.remove(other);
+		}		
+		//DoomlikeDungeons.profiler.endTask("Connecting Nodes");
+	}
+	
+	
+	/**
+	 * This will attempt to make one connects between every two pairs of 
+	 * nodes by first connecting the first node to all others directly, 
+	 * then each successive node to every node with a higher index.  As 
+	 * nodes with a lower index will already have attempted a connects 
+	 * this is not repeated.  Note that this does not guarantee connections 
+	 * as the attempt to place a route between any two nodes may fail.
+	 * 
+	 * @throws Throwable
+	 */
+	private void connectNodesDensely() {		
 		//DoomlikeDungeons.profiler.startTask("Connecting Nodes");
 		Node first, other;
 		for(int i = 0; i < nodes.length; i++) {
 			first = nodes[i];
-			if(first == null) continue;
-			if(first.hubRoom == null) continue;
 			for(int j = i + 1; j < nodes.length; j++) {
 				other = nodes[j];
-				if(other == null) continue;
-				if(other.hubRoom == null) continue;
 				if(rooms.realSize() >= size.maxRooms) {
 					//DoomlikeDungeons.profiler.endTask("Connecting Nodes");
 					return;
@@ -249,7 +300,21 @@ public class Dungeon {
 	}
 	
 	
-	public void growthCycle() {		
+	/**
+	 * This will add side rooms not directly connecting nodes (though new 
+	 * connection are often added by luck); these are the extra rooms whose 
+	 * only real purpose it to give the player more areas to explore, mobs 
+	 * to fights, and chests to loot.
+	 * 
+	 * The basic system try to sprout side room from all rooms that are eligible 
+	 * to produce side rooms in random order, but trying to grow rooms their 
+	 * doors.  If a room fails to grow a new room it is no longer considered 
+	 * eligible for future attempt, while all new rooms start as eligible by 
+	 * default.  The cycle will repeat until either the maximum number of rooms 
+	 * for the dungeons size have been generated or there are no more eligible 
+	 * rooms to spread from.
+	 */
+	private void growthCycle() {		
 		//DoomlikeDungeons.profiler.startTask("Adding Rooms (growthCycle)");
 		boolean doMore = true;
 		do {
@@ -270,9 +335,16 @@ public class Dungeon {
 	}
 	
 	
-	public void fixRoomContents() {
+	/**
+	 * This is the master method for error corrections and improvements 
+	 * in the dungeon.  While it does none of these things directly, it 
+	 * calls methods for removing doors-to-nowhere, determining which 
+	 * doors to treat as the main connection between rooms, check room 
+	 * passibility, and check dungeon connectivity, ensure all these methods 
+	 * are called (and in the correct order).
+	 */
+	private void fixRoomContents() {
 		for(Room room : rooms) {
-			addChestBlocks(room);
 			DoorChecker.processDoors1(this, room);
 		}
 		for(Room room : rooms) {	
@@ -286,6 +358,10 @@ public class Dungeon {
 	}
 	
 	
+	/**
+	 * This cycles through all the rooms and add chests and spawners 
+	 * by calling addTileEntitiesToRoom on each.
+	 */
 	public void addTileEntities() {
 		for(Room room : rooms) {
 			addTileEntitesToRoom(room);
@@ -293,7 +369,12 @@ public class Dungeon {
 	}
 	
 	
-	public void addTileEntitesToRoom(Room room) {
+	/**
+	 * This add all the chest and spawners to the room. 
+	 * 
+	 * @param room
+	 */
+	private void addTileEntitesToRoom(Room room) {
 			for(Spawner  spawner : room.spawners) {
 					DBlock.placeSpawner(map.world, 
 										shiftX + spawner.getX(), 
@@ -307,21 +388,24 @@ public class Dungeon {
 	}
 	
 	
-	public void addChestBlocks(Room room) {
-		for(BasicChest  chest : room.chests) {
-			DBlock.placeChest(map.world, shiftX + chest.mx, chest.my, shiftZ + chest.mz);
-		}		
-	}
-	
-	
+	/**
+	 * This cycles through all nodes and calls addEntrance on each; 
+	 * entrances will only be added to entrance nodes, but that is 
+	 * checked by addEntrance, not here.
+	 */
 	public void addEntrances() {
-		for(Room room : nodeRooms) {
-			if(room != null) addEntrance(room);
+		for(int i = 0; i < nodes.length; i++) {
+			if(nodes[i].hubRoom != null) addEntrance(nodes[i].hubRoom);
 		}
 	}
 	
 	
-	public void addEntrance(Room room) {		
+	/**
+	 * This will added a physical entrance to all entrance nodes.
+	 * 
+	 * @param room
+	 */
+	private void addEntrance(Room room) {		
 		if(!room.hasEntrance) return;
 		//DoomlikeDungeons.profiler.startTask("Adding Entrances");
 		int entrance;
@@ -351,7 +435,12 @@ public class Dungeon {
 	}
 	
 	
-	public void addAnEntrance() {
+	/**
+	 * This will convert one non-entrance node into an entrance node 
+	 * if and only if the number of entrances has not been set to 
+	 * a degree of NONE by the dungeons theme. 
+	 */
+	private void addAnEntrance() {
 		if(theme.entrances.never()) return;
 		int which = random.nextInt(nodes.length);
 		Room it   = nodes[which].hubRoom;
@@ -359,7 +448,7 @@ public class Dungeon {
 		it.spawners.clear();
 		it.hasEntrance = true;
 		it.hasSpawners = false;
-		numEntrances = 1; // Probably never really needed :-/
+		numEntrances = 1;
 		for(int i = (int)it.realX -2; i < ((int)it.realX + 2); i++)
 			for(int j = (int)it.realZ - 2; j < ((int)it.realZ + 2); j++) {
 				map.floorY[i][j] = (byte)it.floorY;
