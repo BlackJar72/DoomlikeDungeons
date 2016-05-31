@@ -314,12 +314,12 @@ public final class DBlock {
 	public static boolean isGroundBlock(World world, int x, int y, int z) {
 		IBlockState bs = world.getBlockState(new BlockPos(x, y, z));
 		Material mat = bs.getMaterial();
-		return 	   (mat == Material.grass) 
-				|| (mat == Material.iron) 
-				|| (mat == Material.ground) 
-				|| (mat == Material.sand) 
-				|| (mat == Material.rock) 
-				|| (mat == Material.clay
+		return 	   (mat == Material.GRASS) 
+				|| (mat == Material.IRON) 
+				|| (mat == Material.GROUND) 
+				|| (mat == Material.SAND) 
+				|| (mat == Material.ROCK) 
+				|| (mat == Material.CLAY
 				// Failsafe, it can never go into the void, or become an infinite loop
 				|| (y < 0));
 	}

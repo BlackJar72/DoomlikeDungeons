@@ -33,7 +33,7 @@ import java.util.Collections;
 import java.util.Random;
 
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 
 
 /**
@@ -51,7 +51,7 @@ public class Dungeon {
 	
 	public Theme theme;
 	public Random random;
-	public BiomeGenBase biome;
+	public Biome biome;
 	
 	public MapMatrix map;   // 2D layout of the dungeon
 	public Node[] nodes;    // Main rooms (entrances and destination) which other rooms connect
@@ -139,7 +139,7 @@ public class Dungeon {
 	}
 
 	
-	public Dungeon(Random rnd, BiomeGenBase biome, World world, int chunkX, int chunkZ) throws Throwable {
+	public Dungeon(Random rnd, Biome biome, World world, int chunkX, int chunkZ) throws Throwable {
 		DoomlikeDungeons.profiler.startTask("Planning Dungeon");
 		DoomlikeDungeons.profiler.startTask("Layout dungeon (rough draft)");
 		random = rnd;

@@ -180,7 +180,7 @@ public class LootCategory {
 	 * @return
 	 */
 	private static ItemStack getEnchantedBook(int level, Random random) {
-		ItemStack out = new ItemStack(Items.book, 1);
+		ItemStack out = new ItemStack(Items.BOOK, 1);
 		out = EnchantmentHelper.addRandomEnchantment(random, out, Math.min(30, (int)(level * 7.5)), true);
 		return out;
 	}	

@@ -13,7 +13,6 @@ package jaredbgreat.dldungeons;
 import jaredbgreat.dldungeons.builder.Builder;
 import jaredbgreat.dldungeons.planner.mapping.MapMatrix;
 import jaredbgreat.dldungeons.setup.Externalizer;
-import jaredbgreat.dldungeons.themes.Theme;
 import jaredbgreat.dldungeons.themes.ThemeReader;
 
 import java.io.BufferedWriter;
@@ -237,7 +236,7 @@ public final class ConfigHandler {
 	 */
 	public static void listMobs() {	
 		ArrayList<String> mobNames = new ArrayList<String>();
-		mobNames.addAll(EntityList.stringToClassMapping.keySet());
+		mobNames.addAll(EntityList.getEntityNameList());
 		Collections.sort(mobNames);
 		BufferedWriter outstream = null;
 		File moblist = new File(listsDir.toString() + File.separator + "mobs.txt");
@@ -247,7 +246,7 @@ public final class ConfigHandler {
 					FileWriter(moblist.toString()));			
 			
 			for(String name : mobNames){ 
-				Class A = (Class)EntityList.stringToClassMapping.get(name);
+				Class A = (Class)EntityList.getClassFromID(EntityList.getIDFromString(name));
 				if(EntityLiving.class.isAssignableFrom(A) && !Modifier.isAbstract(A.getModifiers())) {
 					outstream.write((String)name);
 					outstream.newLine();
@@ -274,8 +273,8 @@ public final class ConfigHandler {
 			outstream = new BufferedWriter(new 
 					FileWriter(itemlist.toString()));
 			
-			for(Object item : Item.itemRegistry){ 
-				String name = Item.itemRegistry.getNameForObject((Item) item).toString();
+			for(Object item : Item.REGISTRY){ 
+				String name = Item.REGISTRY.getNameForObject((Item) item).toString();
 				if(true) {
 					outstream.write(name);
 					outstream.newLine();
@@ -303,8 +302,8 @@ public final class ConfigHandler {
 			outstream = new BufferedWriter(new 
 					FileWriter(itemlist.toString()));	
 			
-			for(Object block : Block.blockRegistry){ 
-				String name = Block.blockRegistry.getNameForObject((Block)block).toString();
+			for(Object block : Block.REGISTRY){ 
+				String name = Block.REGISTRY.getNameForObject((Block)block).toString();
 				if(true) {;
 					outstream.write(name);
 					outstream.newLine();

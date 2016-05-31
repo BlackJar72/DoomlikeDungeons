@@ -11,11 +11,10 @@ package jaredbgreat.dldungeons.themes;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
 
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 
@@ -310,7 +309,7 @@ public class BiomeSets {
      * @param random
      * @return
      */
-    public static Theme getTheme(BiomeGenBase biome, Random random) {
+    public static Theme getTheme(Biome biome, Random random) {
     	HashSet<Theme> set = new HashSet<Theme>();
     	ArrayList<Theme> use = new ArrayList<Theme>();
     	set.clear();
