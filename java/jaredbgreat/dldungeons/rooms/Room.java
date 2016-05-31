@@ -1062,8 +1062,6 @@ public class Room extends AbstractRoom {
 	
 	public void addToConnections(Doorway door) {
 		if(id < 1) {
-			//System.err.println("[DLDUNGEONS] Error! Trying to add a " 
-			//			+ "connection to room #" + id + " (nullRoom)!");
 			return;
 		}
 		if(connections.isEmpty()) {

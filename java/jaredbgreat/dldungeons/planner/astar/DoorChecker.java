@@ -135,7 +135,7 @@ public class DoorChecker {
 			if(dungeon.map.room[exit.x][exit.z-1] == room.id)
 				return dungeon.map.room[exit.x][exit.z+1];
 		}
-		return 0; // This will result in a error (should not be the nullRoom)
+		return 0; // This will result in a error (fail-fast -- should not be the nullRoom)
 	}
 	
 	
@@ -162,15 +162,10 @@ public class DoorChecker {
 	
 	
 	public static void retestDoors(Dungeon dungeon, Room room) {
-		//System.out.println("[DLDUNGEONS] runnning retestDoors on room " 
-		//		+ room.id);
 		if(room.doors.isEmpty()) {
-			//System.out.println("[DLDUNGEONS] List rooms was empty for " 
-			//		+ "room " + room.id);
 			return;
 		}
 		for(Doorway door : room.doors) {
-			//System.out.println("[DLDUNGEONS] Testing a door");
 			if(dungeon.map.astared[door.x][door.z]) continue;
 			if(door.xOriented) {
 				if(dungeon.map.isWall[door.x+1][door.z] || 
@@ -234,8 +229,9 @@ public class DoorChecker {
 	public static void processDoors2(Dungeon dungeon, Room room) {
 		room.topDoors = makeConnectionList(room, dungeon.random);
 		for(Doorway exit : room.topDoors) {
-			exit.priority = -16;
-			dungeon.rooms.get(getOtherRoom(exit, room, dungeon)).addToConnections(exit);
+			exit.priority -= 16;
+			dungeon.rooms.get(getOtherRoom(exit, room, dungeon))
+				.addToConnections(new Doorway(exit, room.id));
 		}
 	}
 	
@@ -248,8 +244,7 @@ public class DoorChecker {
 	
 	public static void caveConnector(Dungeon dungeon, Room cave) {
 		for(Doorway door : cave.doors) {
-			//new AStar(cave, dungeon, cave.midpoint, dungeon.rooms.get(door.otherside).midpoint).seek();
-			new AStar2(dungeon, cave, dungeon.rooms.get(door.otherside)).seek();
+			new AStar(cave, dungeon, cave.midpoint, dungeon.rooms.get(door.otherside).midpoint).seek();
 		}
 	}
 }

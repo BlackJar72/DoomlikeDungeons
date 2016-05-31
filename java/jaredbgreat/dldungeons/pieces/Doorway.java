@@ -47,6 +47,21 @@ public class Doorway extends Tile implements Comparable<Doorway> {
 	}
 	
 	
+	public Doorway(Doorway door) {
+		super(door.x, door.z);
+		xOriented = door.xOriented;
+		priority = door.priority;
+	}
+	
+	
+	public Doorway(Doorway door, int otherside) {
+		super(door.x, door.z);
+		xOriented = door.xOriented;
+		priority = door.priority;
+		this.otherside = otherside;
+	}
+	
+	
 	/**
 	 * This will find the number of sides bordering a "liguid"
 	 * pool and add it to the priority value; since the Java
