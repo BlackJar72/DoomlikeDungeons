@@ -51,22 +51,6 @@ public class DoorChecker {
 	 * @param tile
 	 * @return boolean for if tile is inside a room in the dungeon
 	 */
-	public static boolean validateTile(Dungeon dungeon, Tile tile) {
-		if(tile.x < 0 || tile.x >= dungeon.size.width) return false;
-		if(tile.z < 0 || tile.z >= dungeon.size.width) return false;
-		if(dungeon.map.room[tile.x][tile.z] <= 0) return false;
-		return true;
-	}
-
-	
-	/**
-	 * This will check to see if a tile is a valid location in the
-	 * Dungeon.  That is, it will check to see if its both inside
-	 * the dungeons and has a room value other than zero.
-	 * 
-	 * @param tile
-	 * @return boolean for if tile is inside a room in the dungeon
-	 */
 	public static boolean validateTile(Dungeon dungeon, int x, int z) {
 		if(x < 0 || x >= dungeon.size.width) return false;
 		if(z < 0 || z >= dungeon.size.width) return false;
@@ -84,17 +68,14 @@ public class DoorChecker {
 	 * @return boolean for if the door connects two room in the dungeon
 	 */
 	public static boolean validateDoor(Dungeon dungeon, Doorway door) {
-		if(door.xOriented) {
-			if(validateTile(dungeon, door.x - 1, door.z) 
-					&& validateTile(dungeon, door.x + 1, door.z)) return true;
-			dungeon.map.isDoor[door.x][door.z] = false;
-			return false;
-		} else {
-			if(validateTile(dungeon, door.x, door.z - 1) 
-					&& validateTile(dungeon, door.x, door.z + 1)) return true;
-			dungeon.map.isDoor[door.x][door.z] = false;
-			return false;
-		}
+			return (validateTile(dungeon, door.x - 1, door.z) 
+					&& validateTile(dungeon, door.x + 1, door.z)
+					&& validateTile(dungeon, door.x, door.z - 1)
+					&& validateTile(dungeon, door.x, door.z + 1)
+					&& validateTile(dungeon, door.x - 1, door.z - 1) 
+					&& validateTile(dungeon, door.x + 1, door.z + 1)
+					&& validateTile(dungeon, door.x + 1, door.z - 1)
+					&& validateTile(dungeon, door.x - 1, door.z + 1));
 	}
 	
 	
@@ -152,11 +133,10 @@ public class DoorChecker {
 		Doorway next, current;
 		ArrayList<Doorway> connected = new ArrayList<Doorway>(exits.size());
 		connected.add(exits.remove(exits.size() - 1));
-		while(!exits.isEmpty()) {
-			current = connected.get(0);
-			connected.add((next = exits.remove(exits.size() - 1)));
-			new AStar(room, dungeon, current, next).seek();			
-			Collections.shuffle(connected, dungeon.random);
+		for(int i = exits.size() -1; i >= 0; --i) {
+			current = connected.get(dungeon.random.nextInt(connected.size()));
+			connected.add((next = exits.get(i)));
+			new AStar(room, dungeon, current, next).seek();	
 		}
 	}
 	
@@ -205,6 +185,7 @@ public class DoorChecker {
 			valid = validateDoor(dungeon, door);
 			if(!valid) {
 				invalid.add(door);
+				dungeon.map.isDoor[door.x][door.z] = false;
 			} else {
 				door.prioritize(dungeon, room.id); // Will only be run on valid doors
 				room.addToConnections(door);
@@ -229,7 +210,7 @@ public class DoorChecker {
 	public static void processDoors2(Dungeon dungeon, Room room) {
 		room.topDoors = makeConnectionList(room, dungeon.random);
 		for(Doorway exit : room.topDoors) {
-			exit.priority -= 16;
+			exit.priority -= 16;			
 			dungeon.rooms.get(getOtherRoom(exit, room, dungeon))
 				.addToConnections(new Doorway(exit, room.id));
 		}

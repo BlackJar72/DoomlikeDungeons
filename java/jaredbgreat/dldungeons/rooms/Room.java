@@ -166,7 +166,7 @@ public class Room extends AbstractRoom {
 		doorways(dungeon);
 		midX = beginX + ((endX - beginX) / 2);
 		midZ = beginZ + ((endZ - beginZ) / 2);
-		midpoint = new Doorway(beginX, beginZ, dungeon.random.nextBoolean());
+		midpoint = new Doorway(midX, midZ, dungeon.random.nextBoolean());
 	}
 	
 	
