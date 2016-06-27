@@ -117,12 +117,6 @@ public class Room extends AbstractRoom {
 		isSubroom = (parent != null);
 		hasEntrance = (isNode && dungeon.entrances.use(dungeon.random));
 		if(hasEntrance) dungeon.numEntrances++;
-		if(isNode) {
-			degenerateFloors = false;
-			doors.add(new Doorway(beginX + ((endX - beginX) / 2), 
-					              beginZ + ((endZ - beginZ) / 2), 
-					              dungeon.random.nextBoolean()));
-		}
 		hasSpawners = false;		
 		
 		sym = Symmetry.getSymmetry(dungeon);		
@@ -136,10 +130,18 @@ public class Room extends AbstractRoom {
 		this.endZ = endZ;
 		this.floorY = floorY;
 		this.ceilY = ceilY;
-		level = 0;
+		level = 0;		
+
+		midX = beginX + ((endX - beginX) / 2);
+		midZ = beginZ + ((endZ - beginZ) / 2);
 		
 		realX = (((float)(endX - beginX)) / 2.0f) + (float)beginX + 1.0f;
 		realZ = (((float)(endZ - beginZ)) / 2.0f) + (float)beginZ + 1.0f;
+		
+		if(isNode) {
+			degenerateFloors = false;
+			doors.add(new Doorway(midX, midZ, dungeon.random.nextBoolean()));
+		}
 		
 		if(isSubroom && parent.sky) {
 			sky = (sky && !dungeon.outside.use(dungeon.random));
@@ -164,8 +166,6 @@ public class Room extends AbstractRoom {
 			assignEdge(dungeon, endX, i);
 		}
 		doorways(dungeon);
-		midX = beginX + ((endX - beginX) / 2);
-		midZ = beginZ + ((endZ - beginZ) / 2);
 		midpoint = new Doorway(midX, midZ, dungeon.random.nextBoolean());
 	}
 	
