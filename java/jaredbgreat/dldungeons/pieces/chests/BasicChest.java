@@ -11,6 +11,7 @@ package jaredbgreat.dldungeons.pieces.chests;
 
 
 import jaredbgreat.dldungeons.ConfigHandler;
+import jaredbgreat.dldungeons.api.DLDEvent;
 import jaredbgreat.dldungeons.builder.DBlock;
 
 import java.util.Random;
@@ -19,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 
 /**
  * Represents a typical loot chest, including its coordinates and loot level.
@@ -72,6 +74,10 @@ public class BasicChest {
 			fillChest(contents, LootType.RANDOM, random);
 			break;
 		}
+		
+		
+		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.AfterChestTileEntity(world, contents, which, x, y, z, random, level));
+		
 	}
 	
 	
