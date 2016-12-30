@@ -218,6 +218,7 @@ public class ThemeReader {
 			max = intParser(tokens);
 			item = modid + ":" + name;
 			loot = new LootItem(item, min, max);
+			if(tokens.hasMoreTokens()) loot.addNbt(tokens.nextToken());
 			if(item != null && loot != null) LootList.addItem(loot, type, level);
 		}
 		LootList.addDiscs();

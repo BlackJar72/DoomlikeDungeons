@@ -11,6 +11,7 @@ package jaredbgreat.dldungeons.pieces.chests;
 
 
 import jaredbgreat.dldungeons.debug.Logging;
+import jaredbgreat.dldungeons.nbt.NbtTag;
 
 import java.util.Random;
 import java.util.StringTokenizer;
@@ -35,6 +36,7 @@ public class LootItem {
 	
 	Item item;
 	int min, max, meta;
+	NbtTag tag; // This may be changed to use a list
 	
 	
 	/**
@@ -73,7 +75,7 @@ public class LootItem {
 	
 	
 	/**
-	 * Create a LootItem usign a block
+	 * Create a LootItem using a block
 	 * 
 	 * @param item
 	 * @param min
@@ -94,15 +96,31 @@ public class LootItem {
 	 * @param in
 	 */
 	private void metaParse(String in) {
-		StringTokenizer nums = new StringTokenizer(in, "({[:]})");
-		String modid = nums.nextToken();
-		String name  = nums.nextToken();
+		StringTokenizer tokens = new StringTokenizer(in, "({[:]})");
+		String modid = tokens.nextToken();
+		String name  = tokens.nextToken();
 		item = GameRegistry.findItem(modid, name);
 		if(item == null) {
 			Logging.LogError("[DLDUNGEONS] ERROR! Item read as \"" + in 
 					+ "\" was was not in registry (returned null).");
 		}
-		if(nums.hasMoreElements()) meta = Integer.parseInt(nums.nextToken());
+		if(tokens.hasMoreElements()) meta = Integer.parseInt(tokens.nextToken());
+	}
+	
+	
+	/**
+	 * This will parse an NBT tag from the chest.cfg and add it to the LootItem 
+	 * as an NbtTag object for later use in adding the tag to actual item stacks
+	 * in chests.
+	 * 
+	 * @param in
+	 */
+	public void addNbt(String in) {
+		StringTokenizer tokens = new StringTokenizer(in, ":=\"");
+		String type = tokens.nextToken();
+		String name = tokens.nextToken();
+		String data = tokens.nextToken();
+		tag = new NbtTag(type, name, data);
 	}
 	
 	
