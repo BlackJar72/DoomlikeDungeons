@@ -23,7 +23,7 @@ public class NBTString implements ITag {
 	 * @param name
 	 * @param data
 	 */
-	public NBTString(String label, String name, String data) {
+	NBTString(String label, String name, String data) {
 		this.label = label;
 		this.name  = name;
 		this.data  = data;
@@ -34,5 +34,4 @@ public class NBTString implements ITag {
 	public void write(NBTTagCompound cmp) {
 		cmp.setString(name, data);
 	}
-
 }

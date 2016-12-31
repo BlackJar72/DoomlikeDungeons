@@ -24,7 +24,7 @@ public class NBTByte implements ITag {
 	 * @param name
 	 * @param data
 	 */
-	public NBTByte(String label, String name, String data) {
+	NBTByte(String label, String name, String data) {
 		this.label = label;
 		this.name  = name;
 		this.data  = Byte.parseByte(data);
@@ -38,7 +38,7 @@ public class NBTByte implements ITag {
 	 * @param name
 	 * @param data
 	 */
-	public NBTByte(String label, String name, byte data) {
+	NBTByte(String label, String name, byte data) {
 		this.label = label;
 		this.name  = name;
 		this.data  = data;
@@ -49,5 +49,4 @@ public class NBTByte implements ITag {
 	public void write(NBTTagCompound cmp) {
 		cmp.setByte(name, data);
 	}
-
 }

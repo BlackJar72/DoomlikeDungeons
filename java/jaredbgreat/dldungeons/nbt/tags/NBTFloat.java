@@ -24,7 +24,7 @@ public class NBTFloat implements ITag{
 	 * @param name
 	 * @param data
 	 */
-	public NBTFloat(String label, String name, String data) {
+	NBTFloat(String label, String name, String data) {
 		this.label = label;
 		this.name  = name;
 		this.data  = Float.parseFloat(data);
@@ -38,7 +38,7 @@ public class NBTFloat implements ITag{
 	 * @param name
 	 * @param data
 	 */
-	public NBTFloat(String label, String name, float data) {
+	NBTFloat(String label, String name, float data) {
 		this.label = label;
 		this.name  = name;
 		this.data  = data;
@@ -49,5 +49,4 @@ public class NBTFloat implements ITag{
 	public void write(NBTTagCompound cmp) {
 		cmp.setFloat(name, data);
 	}
-
 }

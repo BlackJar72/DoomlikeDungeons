@@ -10,35 +10,35 @@ package jaredbgreat.dldungeons.nbt.tags;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-public class NBTLong implements ITag {
-	public final String label; // The label to uniquely identify the tag
-	public final String name;  // The name / label of the tag in NBT
-	public final long   data;  // The data carried by the tag in the NBT
+public class NBTBoolean implements ITag {
+	public final String  label; // The label to uniquely identify the tag
+	public final String  name;  // The name / label of the tag in NBT
+	public final boolean data;  // The data carried by the tag in the NBT
 	
 	
 	/**
 	 * The constructor for use with text data; it will convert a text based 
-	 * value to a long.
+	 * value to a boolean.
 	 * 
 	 * @param label
 	 * @param name
 	 * @param data
 	 */
-	NBTLong(String label, String name, String data) {
+	NBTBoolean(String label, String name, String data) {
 		this.label = label;
 		this.name  = name;
-		this.data  = Long.parseLong(data);
+		this.data  = Boolean.parseBoolean(data);
 	}
 	
 	
 	/**
-	 * A constructor to use if a long is actually already available.
+	 * A constructor to use if a boolean is actually already available.
 	 * 
 	 * @param label
 	 * @param name
 	 * @param data
 	 */
-	NBTLong(String label, String name, long data) {
+	NBTBoolean(String label, String name, boolean data) {
 		this.label = label;
 		this.name  = name;
 		this.data  = data;
@@ -47,6 +47,6 @@ public class NBTLong implements ITag {
 	
 	@Override
 	public void write(NBTTagCompound cmp) {
-		cmp.setLong(name, data);
+		cmp.setBoolean(name, data);
 	}
 }

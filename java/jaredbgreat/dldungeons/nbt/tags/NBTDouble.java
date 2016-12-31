@@ -38,7 +38,7 @@ public class NBTDouble implements ITag {
 	 * @param name
 	 * @param data
 	 */
-	public NBTDouble(String label, String name, double data) {
+	NBTDouble(String label, String name, double data) {
 		this.label = label;
 		this.name  = name;
 		this.data  = data;
@@ -49,5 +49,4 @@ public class NBTDouble implements ITag {
 	public void write(NBTTagCompound cmp) {
 		cmp.setDouble(name, data);
 	}
-
 }

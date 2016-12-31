@@ -24,7 +24,7 @@ public class NBTInt implements ITag{
 	 * @param name
 	 * @param data
 	 */
-	public NBTInt(String label, String name, String data) {
+	NBTInt(String label, String name, String data) {
 		this.label = label;
 		this.name  = name;
 		this.data  = Integer.parseInt(data);
@@ -38,7 +38,7 @@ public class NBTInt implements ITag{
 	 * @param name
 	 * @param data
 	 */
-	public NBTInt(String label, String name, int data) {
+	NBTInt(String label, String name, int data) {
 		this.label = label;
 		this.name  = name;
 		this.data  = data;
@@ -49,5 +49,4 @@ public class NBTInt implements ITag{
 	public void write(NBTTagCompound cmp) {
 		cmp.setInteger(name, data);
 	}
-
 }

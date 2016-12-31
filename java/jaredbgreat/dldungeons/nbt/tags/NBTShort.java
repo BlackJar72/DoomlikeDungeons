@@ -24,7 +24,7 @@ public class NBTShort implements ITag {
 	 * @param name
 	 * @param data
 	 */
-	public NBTShort(String label, String name, String data) {
+	NBTShort(String label, String name, String data) {
 		this.label = label;
 		this.name  = name;
 		this.data  = Short.parseShort(data);
@@ -38,7 +38,7 @@ public class NBTShort implements ITag {
 	 * @param name
 	 * @param data
 	 */
-	public NBTShort(String label, String name, short data) {
+	NBTShort(String label, String name, short data) {
 		this.label = label;
 		this.name  = name;
 		this.data  = data;
@@ -49,5 +49,4 @@ public class NBTShort implements ITag {
 	public void write(NBTTagCompound cmp) {
 		cmp.setShort(name, data);
 	}
-
 }
