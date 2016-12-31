@@ -171,6 +171,19 @@ public class ThemeReader {
 	}
 	
 	
+//	/**
+//	 * This is a convenience method for getting trimmed tokens without including
+//	 * whitespace as a delimiter.  The purpose is to allow tags to have white 
+//	 * space. 
+//	 * 
+//	 * @param in
+//	 * @return
+//	 */
+//	private static String getNextToken(StringTokenizer in) {
+//		return in.nextToken().trim();
+//	}
+	
+	
 	/**
 	 * This will read the chests.cfg file and populate the loots list from
 	 * its data.
@@ -544,7 +557,7 @@ public class ThemeReader {
 		String num = ESTRING;
 		try {
 			if(tokens.hasMoreTokens()) {
-				num = tokens.nextToken();
+				num = tokens.nextToken().trim();
 				value = Integer.parseInt(num);
 			}
 		} catch(Exception e) {

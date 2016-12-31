@@ -11,7 +11,8 @@ package jaredbgreat.dldungeons.pieces.chests;
 
 
 import jaredbgreat.dldungeons.debug.Logging;
-import jaredbgreat.dldungeons.nbt.NbtTag;
+import jaredbgreat.dldungeons.nbt.NbtHelper;
+import jaredbgreat.dldungeons.nbt.NBTData;
 
 import java.util.Random;
 import java.util.StringTokenizer;
@@ -36,7 +37,7 @@ public class LootItem {
 	
 	Item item;
 	int min, max, meta;
-	NbtTag tag; // This may be changed to use a list
+	NBTData tag; // This may be changed to use a list
 	
 	
 	/**
@@ -120,7 +121,7 @@ public class LootItem {
 		String type = tokens.nextToken();
 		String name = tokens.nextToken();
 		String data = tokens.nextToken();
-		tag = new NbtTag(type, name, data);
+		tag = new NBTData(type, name, data);
 	}
 	
 	
@@ -150,6 +151,9 @@ public class LootItem {
 		} else {
 			out.setItemDamage(0);
 		}
+//		if(tag != null) {
+//			NbtHelper.setNbtTag(out, tag);
+//		}
 		return out;
 	}
 	

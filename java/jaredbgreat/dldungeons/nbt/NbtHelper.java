@@ -9,6 +9,7 @@ package jaredbgreat.dldungeons.nbt;
 */	
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * This class should contain helper functions to deal with applying NBT 
@@ -33,11 +34,16 @@ public class NbtHelper {
 	 * @param item
 	 * @param tags
 	 */
-	public static void setNBT(ItemStack item, NbtTag tag) {
+	public static void setNbtTag(ItemStack item, NBTData tag) {
+		setCompound(item.getTagCompound(), tag);
+	}
+	
+	
+	public static void setCompound(NBTTagCompound compound, NBTData tag) {
 		// FIXME: This could probably be done more efficiently
 		switch(tag.type) {
 		case BYTE:
-			item.getTagCompound().setByte(tag.name, Byte.parseByte(tag.data));
+			compound.setByte(tag.name, Byte.parseByte(tag.data));
 			break;
 		case BYTE_ARRAY:
 			// MAY be supported (but not yet)
@@ -46,16 +52,16 @@ public class NbtHelper {
 			// NOT SUPPORTED (maybe never)
 			break;
 		case DOUBLE:
-			item.getTagCompound().setDouble(tag.name, Double.parseDouble(tag.data));
+			compound.setDouble(tag.name, Double.parseDouble(tag.data));
 			break;
 		case END:
 			// NOT SUPPORTED (maybe never)
 			break;
 		case FLOAT:
-			item.getTagCompound().setFloat(tag.name, Float.parseFloat(tag.data));
+			compound.setFloat(tag.name, Float.parseFloat(tag.data));
 			break;
 		case INT:
-			item.getTagCompound().setInteger(tag.name, Integer.parseInt(tag.data));
+			compound.setInteger(tag.name, Integer.parseInt(tag.data));
 			break;
 		case INT_ARRAY:
 			// MAY be supported (but not yet)
@@ -64,13 +70,13 @@ public class NbtHelper {
 			// NOT SUPPORTED (maybe never)
 			break;
 		case LONG:
-			item.getTagCompound().setLong(tag.name, Long.parseLong(tag.data));
+			compound.setLong(tag.name, Long.parseLong(tag.data));
 			break;
 		case SHORT:
-			item.getTagCompound().setShort(tag.name, Short.parseShort(tag.data));
+			compound.setShort(tag.name, Short.parseShort(tag.data));
 			break;
 		case STRING:
-			item.getTagCompound().setString(tag.name, tag.data);
+			compound.setString(tag.name, tag.data);
 			break;
 		default:
 			// TODO: Add error handling or message here; this should never happen!!!
