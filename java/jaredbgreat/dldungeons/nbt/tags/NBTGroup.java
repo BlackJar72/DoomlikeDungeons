@@ -8,14 +8,13 @@ package jaredbgreat.dldungeons.nbt.tags;
  * https://creativecommons.org/licenses/by/4.0/legalcode
 */		
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-public class NBTCompound extends ITag {
+public class NBTGroup extends ITag {
 	public final List<ITag> data;  // The data carried by the tag in the NBT
 	
 	
@@ -26,7 +25,7 @@ public class NBTCompound extends ITag {
 	 * @param name
 	 * @param data
 	 */
-	NBTCompound(String label, String name, String data) {
+	NBTGroup(String label, String name, String data) {
 		super(label, name);
 		this.data  = new ArrayList<ITag>();
 		parseData(data);
@@ -34,9 +33,8 @@ public class NBTCompound extends ITag {
 
 	@Override
 	public void write(NBTTagCompound cmp) {
-		NBTTagCompound out = cmp.getCompoundTag(name);
 		for(ITag child : data) {
-			child.write(out);
+			child.write(cmp);
 		}
 	}
 	

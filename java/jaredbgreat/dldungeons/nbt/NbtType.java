@@ -33,5 +33,8 @@ public enum NbtType {
 	
 	// Types not part of the NBT format but which are stored in NBT files
 	BOOLEAN,
-	UUID /*Not actually used by the mod, but included for completeness*/;
+	UUID, /*Not actually used by the mod, but included for completeness*/
+	
+	// Special categories that are not true NBT tags
+	GROUP; /*Used to group several tags without creating a sub-compound*/
 }
