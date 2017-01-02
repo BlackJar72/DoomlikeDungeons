@@ -10,9 +10,7 @@ package jaredbgreat.dldungeons.nbt.tags;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-public class NBTShort implements ITag {
-	public final String label; // The label to uniquely identify the tag
-	public final String name;  // The name / label of the tag in NBT
+public class NBTShort extends ITag {
 	public final short  data;  // The data carried by the tag in the NBT
 	
 	
@@ -25,23 +23,21 @@ public class NBTShort implements ITag {
 	 * @param data
 	 */
 	NBTShort(String label, String name, String data) {
-		this.label = label;
-		this.name  = name;
+		super(label, name);
 		this.data  = Short.parseShort(data);
 	}
 	
 	
 	/**
-	 * A constructor to use if a short is actually already available.
+	 * The constructor for use when a short is already available. 
 	 * 
 	 * @param label
 	 * @param name
 	 * @param data
 	 */
 	NBTShort(String label, String name, short data) {
-		this.label = label;
-		this.name  = name;
-		this.data  = data;
+		super(label, name);
+		this.data = data;
 	}
 	
 	

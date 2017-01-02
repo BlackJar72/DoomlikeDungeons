@@ -10,9 +10,7 @@ package jaredbgreat.dldungeons.nbt.tags;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-public class NBTDouble implements ITag {
-	public final String label; // The label to uniquely identify the tag
-	public final String name;  // The name / label of the tag in NBT
+public class NBTDouble extends ITag {
 	public final double data;  // The data carried by the tag in the NBT
 	
 	
@@ -25,23 +23,21 @@ public class NBTDouble implements ITag {
 	 * @param data
 	 */
 	public NBTDouble(String label, String name, String data) {
-		this.label = label;
-		this.name  = name;
+		super(label, name);
 		this.data  = Double.parseDouble(data);
 	}
 	
 	
 	/**
-	 * A constructor to use if a byte is actually already available.
+	 * The constructor for use when a double is already available. 
 	 * 
 	 * @param label
 	 * @param name
 	 * @param data
 	 */
 	NBTDouble(String label, String name, double data) {
-		this.label = label;
-		this.name  = name;
-		this.data  = data;
+		super(label, name);
+		this.data = data;
 	}
 	
 	

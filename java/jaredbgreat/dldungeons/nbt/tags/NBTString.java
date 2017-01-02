@@ -10,9 +10,7 @@ package jaredbgreat.dldungeons.nbt.tags;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-public class NBTString implements ITag {
-	public final String label; // The label to uniquely identify the tag
-	public final String name;  // The name / label of the tag in NBT
+public class NBTString extends ITag {
 	public final String data;  // The data carried by the tag in the NBT
 	
 	
@@ -24,8 +22,7 @@ public class NBTString implements ITag {
 	 * @param data
 	 */
 	NBTString(String label, String name, String data) {
-		this.label = label;
-		this.name  = name;
+		super(label, name);
 		this.data  = data;
 	}
 	

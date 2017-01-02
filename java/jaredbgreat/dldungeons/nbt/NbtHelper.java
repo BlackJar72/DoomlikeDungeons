@@ -8,8 +8,9 @@ package jaredbgreat.dldungeons.nbt;
  * https://creativecommons.org/licenses/by/4.0/legalcode
 */	
 
+import jaredbgreat.dldungeons.nbt.tags.ITag;
+import jaredbgreat.dldungeons.nbt.tags.Tags;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * This class should contain helper functions to deal with applying NBT 
@@ -26,7 +27,8 @@ import net.minecraft.nbt.NBTTagCompound;
 public class NbtHelper {
 	
 	/**
-	 * This will take a string and parse it into a tag and apply it.
+	 * This will take a an NBT tag (stored as an ITag object) and apply it
+	 * to the item stack.
 	 * 
 	 * I'm not yet sure if this is the best approach; this may very well
 	 * change as I learn more about the use of NBT.
@@ -34,54 +36,34 @@ public class NbtHelper {
 	 * @param item
 	 * @param tags
 	 */
-	public static void setNbtTag(ItemStack item, NBTData tag) {
-		setCompound(item.getTagCompound(), tag);
+	public static void setNbtTag(ItemStack item, ITag tag) {
+		tag.write(item.getTagCompound());
 	}
 	
 	
-	public static void setCompound(NBTTagCompound compound, NBTData tag) {
-		// FIXME: This could probably be done more efficiently
-		switch(tag.type) {
-		case BYTE:
-			compound.setByte(tag.name, Byte.parseByte(tag.data));
-			break;
-		case BYTE_ARRAY:
-			// MAY be supported (but not yet)
-			break;
-		case COMPOUND:
-			// NOT SUPPORTED (maybe never)
-			break;
-		case DOUBLE:
-			compound.setDouble(tag.name, Double.parseDouble(tag.data));
-			break;
-		case END:
-			// NOT SUPPORTED (maybe never)
-			break;
-		case FLOAT:
-			compound.setFloat(tag.name, Float.parseFloat(tag.data));
-			break;
-		case INT:
-			compound.setInteger(tag.name, Integer.parseInt(tag.data));
-			break;
-		case INT_ARRAY:
-			// MAY be supported (but not yet)
-			break;
-		case LIST:
-			// NOT SUPPORTED (maybe never)
-			break;
-		case LONG:
-			compound.setLong(tag.name, Long.parseLong(tag.data));
-			break;
-		case SHORT:
-			compound.setShort(tag.name, Short.parseShort(tag.data));
-			break;
-		case STRING:
-			compound.setString(tag.name, tag.data);
-			break;
-		default:
-			// TODO: Add error handling or message here; this should never happen!!!
-			break;		
-		}
+	/**
+	 * This will take a string and parse it into a tag and apply it to the
+	 * item stack.
+	 * 
+	 * @param item
+	 * @param tags
+	 */
+	public static void setNbtTag(ItemStack item, String label) {
+		Tags.registry.get(label).write(item.getTagCompound());
 	}
-
+	
+	
+	/**
+	 * Will take a tag label and return the corresponding NBT tag as an ITag
+	 * object.
+	 * 
+	 * @param label
+	 * @return
+	 */
+	public static ITag getTagFromLabel(String label) {
+		return Tags.registry.get(label);
+	}
+	
+	
+	
 }

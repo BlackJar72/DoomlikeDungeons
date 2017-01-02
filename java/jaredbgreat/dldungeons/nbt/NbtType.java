@@ -16,6 +16,8 @@ package jaredbgreat.dldungeons.nbt;
  * @author JaredBGreat (Jared Blackburn)
  */
 public enum NbtType {
+	
+	// Actual types stored in the NBT format
 	END,
 	BYTE,
 	SHORT,
@@ -27,5 +29,9 @@ public enum NbtType {
 	STRING,
 	LIST,
 	COMPOUND,
-	INT_ARRAY;
+	INT_ARRAY,
+	
+	// Types not part of the NBT format but which are stored in NBT files
+	BOOLEAN,
+	UUID /*Not actually used by the mod, but included for completeness*/;
 }

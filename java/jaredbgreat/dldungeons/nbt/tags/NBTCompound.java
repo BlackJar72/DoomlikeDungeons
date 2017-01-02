@@ -6,9 +6,7 @@ import java.util.StringTokenizer;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-public class NBTCompound implements ITag {
-	public final String     label; // The label to uniquely identify the tag
-	public final String     name;  // The name / label of the tag in NBT
+public class NBTCompound extends ITag {
 	public final List<ITag> data;  // The data carried by the tag in the NBT
 	
 	
@@ -20,9 +18,9 @@ public class NBTCompound implements ITag {
 	 * @param data
 	 */
 	NBTCompound(String label, String name, String data) {
-		this.label = label;
-		this.name  = name;
+		super(label, name);
 		this.data  = new ArrayList<ITag>();
+		parseData(data);
 	}
 
 	@Override
