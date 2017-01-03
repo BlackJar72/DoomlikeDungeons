@@ -36,5 +36,6 @@ public enum NBTType {
 	UUID, /*Not actually used by the mod, but included for completeness*/
 	
 	// Special categories that are not true NBT tags
-	GROUP; /*Used to group several tags without creating a sub-compound*/
+	GROUP, /*Used to group several tags without creating a sub-compound*/
+	ENCH;  /*Last ditch attempt to make this work*/
 }

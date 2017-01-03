@@ -15,7 +15,6 @@ import jaredbgreat.dldungeons.parser.Tokenizer;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
@@ -38,21 +37,21 @@ public class NBTCompound extends ITag {
 
 	@Override
 	public void write(NBTTagCompound in) {
+		System.err.println("\n " + name);
 		NBTTagCompound sub = in.getCompoundTag(name);
 		in.setTag(name, sub);
 		for(ITag child : data) {
 			child.write(sub);
 		}
 	}
-	
-	
+
 	@Override
 	public void write(NBTTagList in) {
-		NBTTagCompound sub = new NBTTagCompound();
+        NBTTagCompound sub = new NBTTagCompound();
 		for(ITag child : data) {
 			child.write(sub);
 		}
-		sub.setTag(name, in);
+        in.appendTag(sub);
 	}
 	
 	
@@ -62,7 +61,6 @@ public class NBTCompound extends ITag {
 			data.add(Tags.registry.get(tokens.nextToken()));
 		}
 	}
-
 
 	@Override
 	public NBTType getType() {

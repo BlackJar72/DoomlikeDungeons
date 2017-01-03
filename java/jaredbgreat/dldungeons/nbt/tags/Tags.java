@@ -61,6 +61,9 @@ public final class Tags {
 		case UUID:
 			out = new NBTuuid(tokens.getToken(0), tokens.getToken(2), tokens.getToken(3));
 			break;
+		case ENCH:
+			out = new Enchantment(tokens.getToken(0), tokens.getToken(2), tokens.getToken(3));
+			break;
 		case END: // Neither supported nor needed. 			
 		default:
 			out = null;
