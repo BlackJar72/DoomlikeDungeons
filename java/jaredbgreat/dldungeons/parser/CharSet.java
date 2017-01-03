@@ -72,7 +72,7 @@ public class CharSet {
 		if(in > 255) return;
 		bit = ((int) in) % 32;
 		loc = ((int) in) / 32;
-		if((data[loc] & ~(1 << bit)) == 0) {
+		if((data[loc] &  (1 << bit)) == 0) {
 			data[loc] |= (1 << bit);	
 		}
 	}
@@ -196,7 +196,7 @@ public class CharSet {
 		if(in > 255) return false;
 		bit = ((int) in) % 32;
 		loc = ((int) in) / 32;
-		return (data[loc] & ~(1 << bit)) != 0;
+		return (data[loc] & (1 << bit)) != 0;
 	}
 	
 }
