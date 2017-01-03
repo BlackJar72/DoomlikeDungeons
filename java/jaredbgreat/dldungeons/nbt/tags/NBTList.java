@@ -1,14 +1,5 @@
 package jaredbgreat.dldungeons.nbt.tags;
 
-/* 
- * This mod is the creation and copyright (c) 2015 
- * of Jared Blackburn (JaredBGreat).
- * 
- * It is licensed under the creative commons 4.0 attribution license: 
- * https://creativecommons.org/licenses/by/4.0/legalcode
-*/		
-
-
 import jaredbgreat.dldungeons.nbt.NBTType;
 import jaredbgreat.dldungeons.parser.Tokenizer;
 
@@ -19,8 +10,9 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
-public class NBTCompound extends ITag {
-	public final List<ITag> data;  // The data carried by the tag in the NBT
+public class NBTList extends ITag {
+	private final List<ITag> data;  // The data carried by the tag in the NBT
+	private final int type;         // Type of data
 	
 	
 	/**
@@ -30,16 +22,30 @@ public class NBTCompound extends ITag {
 	 * @param name
 	 * @param data
 	 */
-	NBTCompound(String label, String name, String data) {
+	NBTList(String label, String name, String data) {
 		super(label, name);
 		this.data  = new ArrayList<ITag>();
 		parseData(data);
+		type = this.data.get(0).getType().ordinal();
 	}
+
+//	@Override
+//	public void write(NBTTagCompound in) {
+//        if (!in.hasKey(name, type)) {
+//            in.setTag(name, new NBTTagList());
+//        }		
+//        NBTTagList sub = in.getTagList(name, data.get(0).getType().ordinal());
+//		for(ITag child : data) {
+//			child.write(sub);
+//		}
+//	}
 
 	@Override
 	public void write(NBTTagCompound in) {
-		NBTTagCompound sub = in.getCompoundTag(name);
-		in.setTag(name, sub);
+        if (!in.hasKey(name, 9)) {
+            in.setTag(name, new NBTTagList());
+        }		
+        NBTTagList sub = in.getTagList(name, 10);
 		for(ITag child : data) {
 			child.write(sub);
 		}
@@ -48,11 +54,9 @@ public class NBTCompound extends ITag {
 	
 	@Override
 	public void write(NBTTagList in) {
-		NBTTagCompound sub = new NBTTagCompound();
 		for(ITag child : data) {
-			child.write(sub);
+			child.write(in);
 		}
-		sub.setTag(name, in);
 	}
 	
 	
@@ -60,12 +64,12 @@ public class NBTCompound extends ITag {
 		Tokenizer tokens = new Tokenizer(in, ",");
 		while(tokens.hasMoreTokens()) {
 			data.add(Tags.registry.get(tokens.nextToken()));
-		}
+		}		
 	}
 
 
 	@Override
 	public NBTType getType() {
-		return NBTType.COMPOUND;
+		return NBTType.LIST;
 	}
 }

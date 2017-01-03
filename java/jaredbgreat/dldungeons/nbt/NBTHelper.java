@@ -11,6 +11,7 @@ package jaredbgreat.dldungeons.nbt;
 import jaredbgreat.dldungeons.nbt.tags.ITag;
 import jaredbgreat.dldungeons.nbt.tags.Tags;
 import jaredbgreat.dldungeons.parser.Tokenizer;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -46,6 +47,10 @@ public class NBTHelper {
 				item.setTagCompound(new NBTTagCompound());
 			}
 			tag.write(item.getTagCompound());
+			System.err.println(tag);
+			System.err.println(item.getTagCompound());
+			System.err.println();
+			
 		}
 	}
 	

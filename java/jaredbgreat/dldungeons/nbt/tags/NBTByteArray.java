@@ -1,9 +1,15 @@
 package jaredbgreat.dldungeons.nbt.tags;
 
+import jaredbgreat.dldungeons.nbt.NBTType;
+
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagByte;
+import net.minecraft.nbt.NBTTagByteArray;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 
 public class NBTByteArray extends ITag {
 	public final byte[]    data;  // The data carried by the tag in the NBT
@@ -49,6 +55,12 @@ public class NBTByteArray extends ITag {
 	}
 	
 	
+	@Override
+	public void write(NBTTagList cmp) {
+		cmp.appendTag(new NBTTagByteArray(data));
+	}
+	
+	
 	/**
 	 * This will parse the data from an array written as text into a
 	 * (temporary) ArrayList of integers. 
@@ -63,5 +75,11 @@ public class NBTByteArray extends ITag {
 			tmp.add(Byte.parseByte(tokens.nextToken()));
 		}
 		return tmp;
+	}
+
+
+	@Override
+	public NBTType getType() {
+		return NBTType.BYTE_ARRAY;
 	}
 }

@@ -8,7 +8,10 @@ package jaredbgreat.dldungeons.nbt.tags;
  * https://creativecommons.org/licenses/by/4.0/legalcode
 */		
 
+import jaredbgreat.dldungeons.nbt.NBTType;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 
 /**
  * This is the basis for creating trees of NBT data, including simple tags,
@@ -41,6 +44,20 @@ public abstract class ITag {
 	 * @param cmp
 	 */
 	public abstract void write(NBTTagCompound cmp);
+
+	
+	/**
+	 * Writes NBT data and returns the tag for inclusion in a list.
+	 * 
+	 * @param in
+	 * @return
+	 */
+	public abstract void write(NBTTagList in);
+	
+	/**
+	 * This will return the NBTType of the tag.
+	 */
+	public abstract NBTType getType();
 	
 	
 	@Override

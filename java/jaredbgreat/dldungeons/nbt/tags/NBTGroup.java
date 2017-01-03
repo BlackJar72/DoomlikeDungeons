@@ -8,12 +8,14 @@ package jaredbgreat.dldungeons.nbt.tags;
  * https://creativecommons.org/licenses/by/4.0/legalcode
 */		
 
+import jaredbgreat.dldungeons.nbt.NBTType;
 import jaredbgreat.dldungeons.parser.Tokenizer;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 
 public class NBTGroup extends ITag {
 	public final List<ITag> data;  // The data carried by the tag in the NBT
@@ -40,10 +42,24 @@ public class NBTGroup extends ITag {
 	}
 	
 	
+	@Override
+	public void write(NBTTagList cmp) {
+		for(ITag child : data) {
+			child.write(cmp);
+		}
+	}
+	
+	
 	private void parseData(String in) {
 		Tokenizer tokens = new Tokenizer(in, ",");
 		while(tokens.hasMoreTokens()) {
 			data.add(Tags.registry.get(tokens.nextToken()));
 		}
+	}
+
+
+	@Override
+	public NBTType getType() {
+		return NBTType.GROUP;
 	}
 }
