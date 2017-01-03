@@ -8,12 +8,21 @@ package jaredbgreat.dldungeons.parser;
  * https://creativecommons.org/licenses/by/4.0/legalcode
 */
 
-import java.util.HashSet;
+import java.util.Arrays;
 
-import scala.actors.threadpool.Arrays;
-
+/**
+ * A custom alternative to Java's StringTokenizer class.  This allows for
+ * the use of quotations and escape sequences.  Basically, its this makes
+ * it possible to use white space inside strings.  Anything inside quotation
+ * marks will be read in, processing escape sequences normally but without 
+ * tokenizing the quoted text.  All the escape sequences found in Java are also
+ * recognized, along wiht an \s sequences the become a single white space (an 
+ * alternative to quoted strings).
+ * 
+ * @author JaredBGreat (Jared Blackburn)
+ *
+ */
 public class Tokenizer {
-	//private final HashSet<Character>  delim;
 	private final CharSet  delim;
 	private String[] tokens;
 	private int  token = 0;
@@ -29,10 +38,6 @@ public class Tokenizer {
 	
 	public Tokenizer(String input, String delims) {
 		delim = new CharSet(delims);
-		char[] fuck = delims.toCharArray();
-		for(int i = 0; i < fuck.length; i++) {
-			delim.add(fuck[i]);
-		}
 		in = input;
 		readTokens();
 	}
@@ -54,7 +59,7 @@ public class Tokenizer {
 	 * Reads the line of text and turns it into tokens.
 	 */
 	private void readTokens() {
-		tokens = new String[(in.length()) + 1];
+		tokens = new String[(in.length() / 5) + 1];
 		scratchpad = new char[in.length()];
 		while(position < in.length()) {
 			nextChar();
@@ -89,12 +94,11 @@ public class Tokenizer {
 	 * Adds a token that has been found.
 	 */
 	private void addToken() {
-		if(tokens.length < token) {
-			String[] tmp = (String[])Arrays.copyOf(tokens, token + 16); 
-			tokens = tmp;
+		if(token >= tokens.length) {
+			int newCapacity = Math.min(tokens.length * 2, tokens.length + 16);
+			tokens = (String[])Arrays.copyOf(tokens, newCapacity);
 		}
 		tokens[token] = new String(scratchpad, 0, size);
-		System.err.println("New token was: \"" + tokens[token] + "\"");
 		token++;
 	}
 	
