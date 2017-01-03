@@ -8,9 +8,10 @@ package jaredbgreat.dldungeons.nbt.tags;
  * https://creativecommons.org/licenses/by/4.0/legalcode
 */		
 
+import jaredbgreat.dldungeons.parser.Tokenizer;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -40,7 +41,7 @@ public class NBTGroup extends ITag {
 	
 	
 	private void parseData(String in) {
-		StringTokenizer tokens = new StringTokenizer(in, ",");
+		Tokenizer tokens = new Tokenizer(in, ",");
 		while(tokens.hasMoreTokens()) {
 			data.add(Tags.registry.get(tokens.nextToken()));
 		}

@@ -15,7 +15,7 @@ package jaredbgreat.dldungeons.nbt;
  * 
  * @author JaredBGreat (Jared Blackburn)
  */
-public enum NbtType {
+public enum NBTType {
 	
 	// Actual types stored in the NBT format
 	END,

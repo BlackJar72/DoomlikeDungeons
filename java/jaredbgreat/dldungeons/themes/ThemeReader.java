@@ -11,6 +11,7 @@ package jaredbgreat.dldungeons.themes;
 
 
 import jaredbgreat.dldungeons.builder.DBlock;
+import jaredbgreat.dldungeons.nbt.NBTHelper;
 import jaredbgreat.dldungeons.parser.Tokenizer;
 import jaredbgreat.dldungeons.pieces.chests.LootItem;
 import jaredbgreat.dldungeons.pieces.chests.LootList;
@@ -141,6 +142,7 @@ public class ThemeReader {
 	 * readTheme and openLoot are called to open the files.
 	 */
 	public static void readThemes() {
+		openNBTConfig();
 		int num = findFiles();
 		System.out.println("[DLDUNGEONS] Found " + num + " themes.");
 		for(File file : files) readTheme(file);
@@ -150,7 +152,46 @@ public class ThemeReader {
 	
 	
 	/**
-	 * Attempts to open chest.cfg, and if succesful will call readLoot 
+	 * Attempts to open chest.cfg, and if successful will call readLoot 
+	 * to read it.
+	 */
+	public static void openNBTConfig() {
+		BufferedReader instream = null;
+		File nbtconfig = new File(configDir.toString() + File.separator + "nbt.cfg");
+		if(nbtconfig.exists()) try {
+			instream = new BufferedReader(new 
+					FileReader(nbtconfig.toString()));
+			readNBT(instream);
+			if(instream != null) instream.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} else {
+			System.out.println("[DLDUNGEONS] File nbt.cfg is missing; will fallabck on default loot");
+		}
+	}
+	
+	
+	/**
+	 * This will read the nbt.cfg file and populate BNT registry from
+	 * its data.
+	 * 
+	 * @param instream
+	 * @throws IOException
+	 */
+	public static void readNBT(BufferedReader instream) throws IOException {
+		System.out.println("[DLDUNGEONS] Loading custom NBT tags (nbt.cfg)");		
+		Tokenizer tokens = null;
+		String line = null;		
+		while((line = instream.readLine()) != null) {
+			if(line.length() < 2) continue;
+			if(line.charAt(0) == '#') continue;
+			NBTHelper.parseNBTLine(line);
+		}
+	}	
+	
+	
+	/**
+	 * Attempts to open chest.cfg, and if successful will call readLoot 
 	 * to read it.
 	 */
 	public static void openLoot() {
@@ -168,19 +209,6 @@ public class ThemeReader {
 			LootList.addDefaultLoot();
 		}
 	}
-	
-	
-//	/**
-//	 * This is a convenience method for getting trimmed tokens without including
-//	 * whitespace as a delimiter.  The purpose is to allow tags to have white 
-//	 * space. 
-//	 * 
-//	 * @param in
-//	 * @return
-//	 */
-//	private static String getNextToken(Tokenizer in) {
-//		return in.nextToken().trim();
-//	}
 	
 	
 	/**
@@ -230,8 +258,13 @@ public class ThemeReader {
 			max = intParser(tokens);
 			item = modid + ":" + name;
 			loot = new LootItem(item, min, max);
-			if(tokens.hasMoreTokens()) loot.addNbt(tokens.nextToken());
-			if(item != null && loot != null) LootList.addItem(loot, type, level);
+			if(item != null && loot != null) {
+				while(tokens.hasMoreTokens()) {
+					loot.addNbt(tokens.nextToken());
+				}
+				loot.trimNbt();
+				LootList.addItem(loot, type, level);
+			}
 		}
 		LootList.addDiscs();
 	}			

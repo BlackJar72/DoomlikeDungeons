@@ -11,7 +11,9 @@ package jaredbgreat.dldungeons.pieces.chests;
 
 
 import jaredbgreat.dldungeons.debug.Logging;
+import jaredbgreat.dldungeons.nbt.NBTHelper;
 import jaredbgreat.dldungeons.nbt.tags.ITag;
+import jaredbgreat.dldungeons.parser.Tokenizer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +40,7 @@ public class LootItem {
 	
 	Item item;
 	int min, max, meta;
-	List<ITag> nbtData; // This may be changed to use a list
+	ArrayList<ITag> nbtData;
 	
 	
 	/**
@@ -98,7 +100,7 @@ public class LootItem {
 	 * @param in
 	 */
 	private void metaParse(String in) {
-		StringTokenizer tokens = new StringTokenizer(in, "({[:]})");
+		Tokenizer tokens = new Tokenizer(in, "({[:]})");
 		String modid = tokens.nextToken();
 		String name  = tokens.nextToken();
 		item = GameRegistry.findItem(modid, name);
@@ -106,7 +108,7 @@ public class LootItem {
 			Logging.LogError("[DLDUNGEONS] ERROR! Item read as \"" + in 
 					+ "\" was was not in registry (returned null).");
 		}
-		if(tokens.hasMoreElements()) meta = Integer.parseInt(tokens.nextToken());
+		if(tokens.hasMoreTokens()) meta = Integer.parseInt(tokens.nextToken());
 	}
 	
 	
@@ -118,11 +120,20 @@ public class LootItem {
 	 * @param in
 	 */
 	public void addNbt(String in) {
-		StringTokenizer tokens = new StringTokenizer(in, ":=\"");
-		String type = tokens.nextToken();
-		String name = tokens.nextToken();
-		String data = tokens.nextToken();
-		nbtData = new ArrayList<ITag>();
+		if(nbtData == null) {
+			nbtData = new ArrayList<ITag>();
+		}
+		nbtData.add(NBTHelper.getTagFromLabel(in));
+	}
+	
+	
+	/**
+	 * Make the items NBT data a small as possible.
+	 */
+	public void trimNbt() {
+		if(nbtData != null) {
+			nbtData.trimToSize();
+		}
 	}
 	
 	
@@ -152,9 +163,11 @@ public class LootItem {
 		} else {
 			out.setItemDamage(0);
 		}
-//		if(tag != null) {
-//			NbtHelper.setNbtTag(out, tag);
-//		}
+		if(nbtData != null && !nbtData.isEmpty()) {
+			for(ITag tag: nbtData) {
+				NBTHelper.setNbtTag(out, tag);
+			}
+		}
 		return out;
 	}
 	

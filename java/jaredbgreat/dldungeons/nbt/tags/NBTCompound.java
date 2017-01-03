@@ -9,9 +9,10 @@ package jaredbgreat.dldungeons.nbt.tags;
 */		
 
 
+import jaredbgreat.dldungeons.parser.Tokenizer;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -33,16 +34,17 @@ public class NBTCompound extends ITag {
 	}
 
 	@Override
-	public void write(NBTTagCompound cmp) {
-		NBTTagCompound out = cmp.getCompoundTag(name);
+	public void write(NBTTagCompound in) {
+		NBTTagCompound sub = in.getCompoundTag(name);
+		in.setTag(name, sub);
 		for(ITag child : data) {
-			child.write(out);
+			child.write(sub);
 		}
 	}
 	
 	
 	private void parseData(String in) {
-		StringTokenizer tokens = new StringTokenizer(in, ",");
+		Tokenizer tokens = new Tokenizer(in, ",");
 		while(tokens.hasMoreTokens()) {
 			data.add(Tags.registry.get(tokens.nextToken()));
 		}

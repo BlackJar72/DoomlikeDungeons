@@ -10,7 +10,9 @@ package jaredbgreat.dldungeons.nbt;
 
 import jaredbgreat.dldungeons.nbt.tags.ITag;
 import jaredbgreat.dldungeons.nbt.tags.Tags;
+import jaredbgreat.dldungeons.parser.Tokenizer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * This class should contain helper functions to deal with applying NBT 
@@ -24,7 +26,7 @@ import net.minecraft.item.ItemStack;
  * @author JaredBGreat (Jared Blackburn)
  */
 
-public class NbtHelper {
+public class NBTHelper {
 	
 	/**
 	 * This will take a an NBT tag (stored as an ITag object) and apply it
@@ -37,7 +39,14 @@ public class NbtHelper {
 	 * @param tags
 	 */
 	public static void setNbtTag(ItemStack item, ITag tag) {
-		tag.write(item.getTagCompound());
+		if(tag == null) {
+			System.err.println("ERROR! null tag on item " + item.getItem().getUnlocalizedName());
+		} else {
+			if(!item.hasTagCompound()) {
+				item.setTagCompound(new NBTTagCompound());
+			}
+			tag.write(item.getTagCompound());
+		}
 	}
 	
 	
@@ -49,7 +58,7 @@ public class NbtHelper {
 	 * @param tags
 	 */
 	public static void setNbtTag(ItemStack item, String label) {
-		Tags.registry.get(label).write(item.getTagCompound());
+		Tags.getTag(label).write(item.getTagCompound());
 	}
 	
 	
@@ -61,7 +70,20 @@ public class NbtHelper {
 	 * @return
 	 */
 	public static ITag getTagFromLabel(String label) {
-		return Tags.registry.get(label);
+		return Tags.getTag(label);
+	}
+	
+	
+	/**
+	 * This will parse a line into a relevant tag.
+	 * 
+	 * @param line
+	 * @return
+	 */
+	public static ITag parseNBTLine(String line) {
+		ITag out;
+		Tokenizer tokens = new Tokenizer(line, " \t");
+		return Tags.makeITag(tokens);
 	}
 	
 	
