@@ -46,11 +46,7 @@ public class NBTHelper {
 			if(!item.hasTagCompound()) {
 				item.setTagCompound(new NBTTagCompound());
 			}
-			tag.write(item.getTagCompound());
-			System.err.println(tag);
-			System.err.println(item.getTagCompound());
-			System.err.println();
-			
+			tag.write(item.getTagCompound());			
 		}
 	}
 	

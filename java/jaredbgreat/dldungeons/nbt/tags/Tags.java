@@ -39,7 +39,9 @@ public final class Tags {
 		case FLOAT:
 			out = new NBTFloat(tokens.getToken(0), tokens.getToken(2), tokens.getToken(3));
 			break;
-		case LIST: // Not really supported, will be turned into a group
+		case LIST:
+			out = new NBTList(tokens.getToken(0), tokens.getToken(2), tokens.getToken(3));
+			break;
 		case GROUP:
 			out = new NBTGroup(tokens.getToken(0), tokens.getToken(2), tokens.getToken(3));
 			break;

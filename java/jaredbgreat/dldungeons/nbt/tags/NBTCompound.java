@@ -37,7 +37,6 @@ public class NBTCompound extends ITag {
 
 	@Override
 	public void write(NBTTagCompound in) {
-		System.err.println("\n " + name);
 		NBTTagCompound sub = in.getCompoundTag(name);
 		in.setTag(name, sub);
 		for(ITag child : data) {

@@ -19,9 +19,8 @@ public class Enchantment extends ITag {
 
 	protected Enchantment(String label, String name, String data) {
 		super(label, name);
-		Tokenizer tokens = new Tokenizer(data, ",");
-		id  = Short.parseShort(tokens.getToken(0));
-		lvl = Short.parseShort(tokens.getToken(1));
+		id = Short.parseShort(name);
+		lvl = Short.parseShort(data);
 	}
 
 	@Override

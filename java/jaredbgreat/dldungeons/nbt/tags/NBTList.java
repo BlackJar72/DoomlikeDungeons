@@ -28,27 +28,22 @@ public class NBTList extends ITag {
 		parseData(data);
 		type = this.data.get(0).getType().ordinal();
 	}
-
-//	@Override
-//	public void write(NBTTagCompound in) {
-//        if (!in.hasKey(name, type)) {
-//            in.setTag(name, new NBTTagList());
-//        }		
-//        NBTTagList sub = in.getTagList(name, data.get(0).getType().ordinal());
-//		for(ITag child : data) {
-//			child.write(sub);
-//		}
-//	}
+	
 
 	@Override
 	public void write(NBTTagCompound in) {
-        if (!in.hasKey(name, 9)) {
+        if (!in.hasKey(name, type)) {
             in.setTag(name, new NBTTagList());
-        }		
-        NBTTagList sub = in.getTagList(name, 10);
+        }	
+        NBTTagList list;
 		for(ITag child : data) {
-			child.write(sub);
+			list = in.getTagList(name, child.getType().ordinal());
+			child.write(list);
 		}
+	}
+	
+	
+	private void writeHelper(NBTTagCompound in, ITag child) {
 	}
 	
 	
