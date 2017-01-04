@@ -8,6 +8,8 @@ package jaredbgreat.dldungeons.builder;
  * https://creativecommons.org/licenses/by/4.0/legalcode
 */	
 
+import jaredbgreat.dldungeons.api.DLDEvent;
+
 import jaredbgreat.dldungeons.debug.Logging;
 
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public final class DBlock {
@@ -119,9 +122,10 @@ public final class DBlock {
 	 * @param z
 	 */
 	public void placeNoMeta(World world, int x, int y, int z) {
-		System.out.println(block);
-		if(!isProtectedBlock(world, x, y, z)) 
-			world.setBlockState(new BlockPos(x, y, z), block.getDefaultState());
+		if(isProtectedBlock(world, x, y, z)) return;
+		BlockPos pos = new BlockPos(x, y, z);
+		if (MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceDBlock(world, pos, this))) return;
+		world.setBlockState(new BlockPos(x, y, z), block.getDefaultState());
 	}
 	
 	
@@ -136,8 +140,10 @@ public final class DBlock {
 	 * @param z
 	 */
 	public void place(World world, int x, int y, int z) {
-		if(!isProtectedBlock(world, x, y, z))
-			world.setBlockState(new BlockPos(x, y, z), block.getStateFromMeta(meta));
+		if(isProtectedBlock(world, x, y, z)) return;
+		BlockPos pos = new BlockPos(x, y, z);
+		if (MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceDBlock(world, pos, this))) return;
+		world.setBlockState(pos, block.getStateFromMeta(meta));
 	}
 	
 	
@@ -214,9 +220,12 @@ public final class DBlock {
 	 * @param z
 	 * @param block
 	 */
-	public static void placeBlock(World world, int x, int y, int z, Block block) {
-		if(isProtectedBlock(world, x, y, z)) return;
-		world.setBlockState(new BlockPos(x, y, z), block.getDefaultState());
+	public static boolean placeBlock(World world, int x, int y, int z, Block block) {
+		if(isProtectedBlock(world, x, y, z)) return false;
+		BlockPos pos = new BlockPos(x, y, z);
+		if (MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceBlock(world, pos, block))) return false;
+		world.setBlockState(pos, block.getDefaultState());
+		return true;
 	}
 	
 	
@@ -292,8 +301,9 @@ public final class DBlock {
 	 */
 	public static void placeSpawner(World world, int x, int y, int z, String mob) {
 		BlockPos pos = new BlockPos(x, y, z);
+		if (MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.BeforePlaceSpawner(world, pos, mob))) return;
 		if(isProtectedBlock(world, x, y, z)) return;
-		placeBlock(world, x, y, z, spawner);
+		if(!placeBlock(world, x, y, z, spawner)) return;
 		TileEntityMobSpawner theSpawner = (TileEntityMobSpawner)world.getTileEntity(pos);
 		MobSpawnerBaseLogic logic = theSpawner.getSpawnerBaseLogic();
 		logic.setEntityName(mob);
