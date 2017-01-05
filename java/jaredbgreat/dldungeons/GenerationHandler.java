@@ -14,6 +14,7 @@ import static jaredbgreat.dldungeons.builder.Builder.placeDungeon;
 
 import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -77,7 +78,7 @@ public class GenerationHandler implements IWorldGenerator {
 		if((ConfigHandler.obeyRule && !world.getWorldInfo().isMapFeaturesEnabled())
 				|| !ConfigHandler.naturalSpawn) return; 
 		boolean blockedBiome = false;
-		Type[] types = BiomeDictionary.getTypesForBiome((world.getBiomeGenForCoords(new BlockPos(chunkX * 16, 63, chunkZ * 16))));
+		Set<Type> types = BiomeDictionary.getTypes((world.getBiome(new BlockPos(chunkX * 16, 63, chunkZ * 16))));
 		for(Type type : types) {			
 			blockedBiome = ConfigHandler.biomeExclusions.contains(type) || blockedBiome;
 		}

@@ -15,12 +15,12 @@ package jaredbgreat.dldungeons.builder;
 import static jaredbgreat.dldungeons.builder.DBlock.lapis;
 import static jaredbgreat.dldungeons.builder.DBlock.placeBlock;
 import static jaredbgreat.dldungeons.builder.DBlock.quartz;
-
-import java.util.Random;
-
 import jaredbgreat.dldungeons.DoomlikeDungeons;
 import jaredbgreat.dldungeons.api.DLDEvent;
 import jaredbgreat.dldungeons.planner.Dungeon;
+
+import java.util.Random;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkGenerator;
@@ -51,7 +51,7 @@ public class Builder {
 		if (MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceDungeonBegin(random, chunkX, chunkZ, world))) return;
 		DoomlikeDungeons.profiler.startTask("Create Dungeons");
 		Dungeon dungeon = new Dungeon(random, 
-								world.getBiomeGenForCoords(new BlockPos((chunkX * 16), 64, (chunkZ * 16))), 
+								world.getBiome(new BlockPos((chunkX * 16), 64, (chunkZ * 16))), 
 								world, chunkX, chunkZ);
 		buildDungeon(dungeon);
 		dungeon.preFinalize();
@@ -79,7 +79,7 @@ public class Builder {
 		if (MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceDungeonBegin(random, chunkX, chunkZ, world))) return;
 		DoomlikeDungeons.profiler.startTask("Create Dungeons");
 		Dungeon dungeon = new Dungeon(random, 
-							world.getBiomeGenForCoords(new BlockPos((chunkX * 16), 64, (chunkZ * 16))), 
+							world.getBiome(new BlockPos((chunkX * 16), 64, (chunkZ * 16))), 
 						    world, chunkX, chunkZ);
 		if(dungeon.theme != null) {
 			if(debugPole) debuggingPole(world, chunkX, chunkZ, dungeon);

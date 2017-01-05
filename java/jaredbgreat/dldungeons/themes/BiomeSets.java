@@ -314,165 +314,165 @@ public class BiomeSets {
     	ArrayList<Theme> use = new ArrayList<Theme>();
     	set.clear();
     	use.clear();
-		if(BiomeDictionary.isBiomeOfType(biome, Type.END)) {
+		if(BiomeDictionary.hasType(biome, Type.END)) {
 			set.addAll(end);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.FOREST)) {
+		if(BiomeDictionary.hasType(biome, Type.FOREST)) {
 			set.addAll(forest);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.SNOWY)) { 
+		if(BiomeDictionary.hasType(biome, Type.SNOWY)) { 
 			set.addAll(frozen);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.HILLS)) {
+		if(BiomeDictionary.hasType(biome, Type.HILLS)) {
 			set.addAll(hills);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.JUNGLE)) {
+		if(BiomeDictionary.hasType(biome, Type.JUNGLE)) {
 			set.addAll(jungle);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.MAGICAL)) {
+		if(BiomeDictionary.hasType(biome, Type.MAGICAL)) {
 			set.addAll(magical);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.MOUNTAIN)) {
+		if(BiomeDictionary.hasType(biome, Type.MOUNTAIN)) {
 			set.addAll(mountain);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.MUSHROOM)) {
+		if(BiomeDictionary.hasType(biome, Type.MUSHROOM)) {
 			set.addAll(mushroom);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.NETHER)) {
+		if(BiomeDictionary.hasType(biome, Type.NETHER)) {
 			set.addAll(nether);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.PLAINS)) {
+		if(BiomeDictionary.hasType(biome, Type.PLAINS)) {
 			set.addAll(plains);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.SWAMP)) {
+		if(BiomeDictionary.hasType(biome, Type.SWAMP)) {
 			set.addAll(swamp);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.WASTELAND)) {
+		if(BiomeDictionary.hasType(biome, Type.WASTELAND)) {
 			set.addAll(wasteland);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.WATER) || 
-				BiomeDictionary.isBiomeOfType(biome, Type.BEACH)) {
+		if(BiomeDictionary.hasType(biome, Type.WATER) || 
+				BiomeDictionary.hasType(biome, Type.BEACH)) {
 			set.addAll(water);
 		}	
-		if(BiomeDictionary.isBiomeOfType(biome, Type.HOT)) {
+		if(BiomeDictionary.hasType(biome, Type.HOT)) {
 			set.addAll(hot);
 		}	
-		if(BiomeDictionary.isBiomeOfType(biome, Type.COLD)) {
+		if(BiomeDictionary.hasType(biome, Type.COLD)) {
 			set.addAll(cold);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.DENSE)) {
+		if(BiomeDictionary.hasType(biome, Type.DENSE)) {
 			set.addAll(dense);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.SPARSE)) {
+		if(BiomeDictionary.hasType(biome, Type.SPARSE)) {
 			set.addAll(sparse);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.DRY)) {
+		if(BiomeDictionary.hasType(biome, Type.DRY)) {
 			set.addAll(dry);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.WET)) {
+		if(BiomeDictionary.hasType(biome, Type.WET)) {
 			set.addAll(wet);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.SAVANNA)) {
+		if(BiomeDictionary.hasType(biome, Type.SAVANNA)) {
 			set.addAll(savanna);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.CONIFEROUS)) {
+		if(BiomeDictionary.hasType(biome, Type.CONIFEROUS)) {
 			set.addAll(coniferous);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.SPOOKY)) {
+		if(BiomeDictionary.hasType(biome, Type.SPOOKY)) {
 			set.addAll(spooky);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.DEAD)) {
+		if(BiomeDictionary.hasType(biome, Type.DEAD)) {
 			set.addAll(dead);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.LUSH)) {
+		if(BiomeDictionary.hasType(biome, Type.LUSH)) {
 			set.addAll(lush);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.MESA)) {
+		if(BiomeDictionary.hasType(biome, Type.MESA)) {
 			set.addAll(mesa);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.SANDY)) {
+		if(BiomeDictionary.hasType(biome, Type.SANDY)) {
 			set.addAll(sandy);
 		}
 		
 		
 		// REMOVAL CODE BELOW
-		if(BiomeDictionary.isBiomeOfType(biome, Type.END)) {
+		if(BiomeDictionary.hasType(biome, Type.END)) {
 			set.removeAll(nend);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.FOREST)) {
+		if(BiomeDictionary.hasType(biome, Type.FOREST)) {
 			set.removeAll(nforest);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.HILLS)) {
+		if(BiomeDictionary.hasType(biome, Type.HILLS)) {
 			set.removeAll(nhills);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.JUNGLE)) {
+		if(BiomeDictionary.hasType(biome, Type.JUNGLE)) {
 			set.removeAll(njungle);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.MAGICAL)) {
+		if(BiomeDictionary.hasType(biome, Type.MAGICAL)) {
 			set.removeAll(nmagical);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.MOUNTAIN)) {
+		if(BiomeDictionary.hasType(biome, Type.MOUNTAIN)) {
 			set.removeAll(nmountain);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.MUSHROOM)) {
+		if(BiomeDictionary.hasType(biome, Type.MUSHROOM)) {
 			set.removeAll(nmushroom);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.NETHER)) {
+		if(BiomeDictionary.hasType(biome, Type.NETHER)) {
 			set.removeAll(nnether);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.PLAINS)) {
+		if(BiomeDictionary.hasType(biome, Type.PLAINS)) {
 			set.removeAll(nplains);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.SWAMP)) {
+		if(BiomeDictionary.hasType(biome, Type.SWAMP)) {
 			set.removeAll(nswamp);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.WASTELAND)) {
+		if(BiomeDictionary.hasType(biome, Type.WASTELAND)) {
 			set.removeAll(nwasteland);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.WATER) || 
-				BiomeDictionary.isBiomeOfType(biome, Type.BEACH)) {
+		if(BiomeDictionary.hasType(biome, Type.WATER) || 
+				BiomeDictionary.hasType(biome, Type.BEACH)) {
 			set.removeAll(nwater);
 		}	
-		if(BiomeDictionary.isBiomeOfType(biome, Type.OCEAN)) {
+		if(BiomeDictionary.hasType(biome, Type.OCEAN)) {
 			set.removeAll(nocean);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.HOT)) {
+		if(BiomeDictionary.hasType(biome, Type.HOT)) {
 			set.removeAll(nhot);
 		}	
-		if(BiomeDictionary.isBiomeOfType(biome, Type.COLD)) {
+		if(BiomeDictionary.hasType(biome, Type.COLD)) {
 			set.removeAll(ncold);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.DENSE)) {
+		if(BiomeDictionary.hasType(biome, Type.DENSE)) {
 			set.removeAll(ndense);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.SPARSE)) {
+		if(BiomeDictionary.hasType(biome, Type.SPARSE)) {
 			set.removeAll(nsparse);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.DRY)) {
+		if(BiomeDictionary.hasType(biome, Type.DRY)) {
 			set.removeAll(ndry);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.WET)) {
+		if(BiomeDictionary.hasType(biome, Type.WET)) {
 			set.removeAll(nwet);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.SAVANNA)) {
+		if(BiomeDictionary.hasType(biome, Type.SAVANNA)) {
 			set.removeAll(nsavanna);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.CONIFEROUS)) {
+		if(BiomeDictionary.hasType(biome, Type.CONIFEROUS)) {
 			set.removeAll(nconiferous);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.SPOOKY)) {
+		if(BiomeDictionary.hasType(biome, Type.SPOOKY)) {
 			set.removeAll(nspooky);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.DEAD)) {
+		if(BiomeDictionary.hasType(biome, Type.DEAD)) {
 			set.removeAll(ndead);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.LUSH)) {
+		if(BiomeDictionary.hasType(biome, Type.LUSH)) {
 			set.removeAll(nlush);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.MESA)) {
+		if(BiomeDictionary.hasType(biome, Type.MESA)) {
 			set.removeAll(nmesa);
 		}
-		if(BiomeDictionary.isBiomeOfType(biome, Type.SANDY)) {
+		if(BiomeDictionary.hasType(biome, Type.SANDY)) {
 			set.removeAll(nsandy);
 		}
 		

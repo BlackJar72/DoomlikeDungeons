@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -685,9 +686,9 @@ public class ThemeReader {
 	 * @param tokens
 	 * @return
 	 */
-	private static EnumSet<Type> biomeParser(Tokenizer tokens) {
+	private static HashSet<Type> biomeParser(Tokenizer tokens) {
 		String name;
-		EnumSet<Type> biomes = EnumSet.noneOf(Type.class);
+		HashSet<Type> biomes = new HashSet<Type>();
 		while(tokens.hasMoreTokens()) {		
 			name = tokens.nextToken().toUpperCase();
 			// Old biome types

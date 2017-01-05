@@ -9,7 +9,6 @@ package jaredbgreat.dldungeons.builder;
 */	
 
 import jaredbgreat.dldungeons.api.DLDEvent;
-
 import jaredbgreat.dldungeons.debug.Logging;
 
 import java.util.ArrayList;
@@ -19,6 +18,7 @@ import java.util.StringTokenizer;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.Item;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.math.BlockPos;
@@ -49,6 +49,18 @@ public final class DBlock {
 	
 	// All blocks, complete with meta-data used by the mod
 	public static final ArrayList<DBlock> registry = new ArrayList<DBlock>();
+	
+	
+	/**
+	 * Gets the item named by the string "in" -- hacky, but might work 
+	 * for now, hopefully....
+	 * 
+	 * @param in
+	 * @return
+	 */
+	private static Item getItem(String in) {
+		return GameRegistry.makeItemStack(in, 0, 1, "").getItem();
+	}
 	
 	
 	/**
@@ -91,7 +103,7 @@ public final class DBlock {
 				if(nums.hasMoreElements()) meta = Integer.parseInt(nums.nextToken());
 				else meta = 0;
 			} else {
-				block = Block.getBlockFromItem(GameRegistry.findItem(modid, nums.nextToken()));
+				block = Block.getBlockFromItem(getItem(nums.nextToken()));
 				if(nums.hasMoreElements()) meta = Integer.parseInt(nums.nextToken());
 				else meta = 0;	
 			}			
@@ -306,7 +318,7 @@ public final class DBlock {
 		if(!placeBlock(world, x, y, z, spawner)) return;
 		TileEntityMobSpawner theSpawner = (TileEntityMobSpawner)world.getTileEntity(pos);
 		MobSpawnerBaseLogic logic = theSpawner.getSpawnerBaseLogic();
-		logic.setEntityName(mob);
+		logic.setEntityName(mob); //logic.setNextSpawnData(p_184993_1_);
 	}
 	
 	

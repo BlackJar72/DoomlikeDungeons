@@ -14,6 +14,7 @@ import jaredbgreat.dldungeons.builder.DBlock;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashSet;
 
 import net.minecraftforge.common.BiomeDictionary.Type;
 
@@ -41,8 +42,8 @@ public class Theme {
 	public String name;
 	public float version = 0f;
 	
-	public EnumSet<Type> biomes = EnumSet.noneOf(Type.class);
-	public EnumSet<Type> notIn  = EnumSet.noneOf(Type.class);
+	public HashSet<Type> biomes = new HashSet<Type>();
+	public HashSet<Type> notIn  = new HashSet<Type>();
 	
 	public EnumSet<ThemeType> type  = EnumSet.noneOf(ThemeType.class);
 	public EnumSet<ThemeFlags> flags = EnumSet.noneOf(ThemeFlags.class);

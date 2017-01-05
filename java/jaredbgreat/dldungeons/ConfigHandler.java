@@ -22,12 +22,14 @@ import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.config.Configuration;
 
@@ -76,7 +78,7 @@ public final class ConfigHandler {
 	
 	private static final String[] NEVER_IN_BIOMES = new String[]{"END"};
 	private static       String[] neverInBiomes   = NEVER_IN_BIOMES;
-	public  static EnumSet<Type>  biomeExclusions = EnumSet.noneOf(Type.class);
+	public  static HashSet<Type>  biomeExclusions = new HashSet<Type>();
 	
 	protected static boolean writeLists = DEFAULT_WRITE_LISTS;	
 	protected static boolean naturalSpawn = DEFAULT_NATURAL_SPAWN;	
@@ -235,9 +237,17 @@ public final class ConfigHandler {
 	 * the data to the file lists/mobs.txt.
 	 */
 	public static void listMobs() {	
-		ArrayList<String> mobNames = new ArrayList<String>();
-		mobNames.addAll(EntityList.getEntityNameList());
-		Collections.sort(mobNames);
+		Set<ResourceLocation> mobrl = EntityList.getEntityNameList();
+		ArrayList<String> mobs = new ArrayList<String>();
+		Class A;
+		for(ResourceLocation mob : mobrl) {
+			A = (Class)mob.getClass();
+			if(EntityLiving.class.isAssignableFrom(A) && !Modifier.isAbstract(A.getModifiers())) {
+				mobs.add(mob.toString());
+			}
+		}
+		Collections.sort(mobs);
+		
 		BufferedWriter outstream = null;
 		File moblist = new File(listsDir.toString() + File.separator + "mobs.txt");
 		if(moblist.exists()) moblist.delete(); 
@@ -245,12 +255,9 @@ public final class ConfigHandler {
 			outstream = new BufferedWriter(new 
 					FileWriter(moblist.toString()));			
 			
-			for(String name : mobNames){ 
-				Class A = (Class)EntityList.getClassFromID(EntityList.getIDFromString(name));
-				if(EntityLiving.class.isAssignableFrom(A) && !Modifier.isAbstract(A.getModifiers())) {
-					outstream.write((String)name);
-					outstream.newLine();
-				}
+			for(String name : mobs){ 
+				outstream.write((String)name);
+				outstream.newLine();
 			}
 			
 			if(outstream != null) outstream.close();
@@ -421,7 +428,7 @@ public final class ConfigHandler {
 			str = str.toUpperCase();
 			System.out.println("[DLDUNGEONS] adding " + str + " to excusion list");
 			try { 
-				Type value = Type.valueOf(str);
+				Type value = Type.getType(str);
 				if(value != null) {
 					biomeExclusions.add(value);
 				}
