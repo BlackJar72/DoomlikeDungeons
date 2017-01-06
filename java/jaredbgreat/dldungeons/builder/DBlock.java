@@ -19,8 +19,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntityMobSpawner;
+import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -312,13 +314,18 @@ public final class DBlock {
 	 * @param mob
 	 */
 	public static void placeSpawner(World world, int x, int y, int z, String mob) {
+		// Place spawner block
 		BlockPos pos = new BlockPos(x, y, z);
 		if (MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.BeforePlaceSpawner(world, pos, mob))) return;
 		if(isProtectedBlock(world, x, y, z)) return;
 		if(!placeBlock(world, x, y, z, spawner)) return;
 		TileEntityMobSpawner theSpawner = (TileEntityMobSpawner)world.getTileEntity(pos);
-		MobSpawnerBaseLogic logic = theSpawner.getSpawnerBaseLogic();
-		logic.setEntityName(mob); //logic.setNextSpawnData(p_184993_1_);
+		
+		// Set up spawner logic
+		MobSpawnerBaseLogic logic = theSpawner.getSpawnerBaseLogic();		
+		NBTTagCompound spawnData = new NBTTagCompound();
+	    spawnData.setString("id", mob);
+	    logic.setNextSpawnData(new WeightedSpawnerEntity(1, spawnData));
 	}
 	
 	

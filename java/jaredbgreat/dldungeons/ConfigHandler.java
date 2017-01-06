@@ -239,24 +239,20 @@ public final class ConfigHandler {
 	public static void listMobs() {	
 		Set<ResourceLocation> mobrl = EntityList.getEntityNameList();
 		ArrayList<String> mobs = new ArrayList<String>();
-		Class A;
 		for(ResourceLocation mob : mobrl) {
-			A = (Class)mob.getClass();
-			if(EntityLiving.class.isAssignableFrom(A) && !Modifier.isAbstract(A.getModifiers())) {
 				mobs.add(mob.toString());
-			}
 		}
 		Collections.sort(mobs);
 		
 		BufferedWriter outstream = null;
-		File moblist = new File(listsDir.toString() + File.separator + "mobs.txt");
+		File moblist = new File(listsDir.toString() + File.separator + "entities.txt");
 		if(moblist.exists()) moblist.delete(); 
 		try {
 			outstream = new BufferedWriter(new 
 					FileWriter(moblist.toString()));			
 			
-			for(String name : mobs){ 
-				outstream.write((String)name);
+			for(String mob : mobs){ 
+				outstream.write(mob.toString());
 				outstream.newLine();
 			}
 			
