@@ -22,6 +22,7 @@ import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntityMobSpawner;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -61,7 +62,7 @@ public final class DBlock {
 	 * @return
 	 */
 	private static Item getItem(String in) {
-		return GameRegistry.makeItemStack(in, 0, 1, "").getItem();
+		return Item.REGISTRY.getObject(new ResourceLocation(in));
 	}
 	
 	
@@ -94,14 +95,14 @@ public final class DBlock {
 		this.id = id;
 		if(version < 1.7) {
 			StringTokenizer nums = new StringTokenizer(id, "({[]})");
-			block = (Block)Block.getBlockFromName(nums.nextToken());
+			block = Block.getBlockFromName(nums.nextToken());
 			if(nums.hasMoreElements()) meta = Integer.parseInt(nums.nextToken());
 			else meta = 0;
 		} else {
 			StringTokenizer nums = new StringTokenizer(id, ":({[]})");
 			String modid = nums.nextToken();
 			if(modid.toLowerCase().equals("minecraft") || modid.toLowerCase().equals("vanilla")) {
-				block = (Block)Block.getBlockFromName(nums.nextToken());
+				block = Block.getBlockFromName(nums.nextToken());
 				if(nums.hasMoreElements()) meta = Integer.parseInt(nums.nextToken());
 				else meta = 0;
 			} else {

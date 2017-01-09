@@ -21,6 +21,7 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.IForgeRegistry;
 
@@ -104,7 +105,7 @@ public class LootItem {
 		String modid = tokens.nextToken();
 		String name  = tokens.nextToken();
 		//Hacky, but it might work for now
-		item = GameRegistry.makeItemStack(name, meta, 1, "").getItem();
+		item = Item.REGISTRY.getObject(new ResourceLocation(in));
 		if(item == null) {
 			Logging.LogError("[DLDUNGEONS] ERROR! Item read as \"" + in 
 					+ "\" was was not in registry (returned null).");
@@ -113,7 +114,7 @@ public class LootItem {
 	}
 	
 	private static Item getItem(String in) {
-		return GameRegistry.makeItemStack(in, 0, 1, "").getItem();
+		return Item.REGISTRY.getObject(new ResourceLocation(in));
 	}
 	
 	
