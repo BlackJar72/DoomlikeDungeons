@@ -22,15 +22,15 @@ public class CmdReload extends CommandBase {
 		super();
 	}
 
-	
+
 	@Override
-	public String getCommandName() {
+	public String getName() {
 		return "dldreload";
 	}
 
-	
+
 	@Override
-	public String getCommandUsage(ICommandSender icommandsender) {
+	public String getUsage(ICommandSender sender) {
 		return "/dldreload";
 	}
 
@@ -43,7 +43,7 @@ public class CmdReload extends CommandBase {
 					+ " Used /dldreload command; Reloading config file now.");
 			ReadAPI.reloadConfig();
 			if(ConfigHandler.announceCommands) sender
-			.addChatMessage(new TextComponentString("[DLDUNGEONS] " 
+			.sendMessage(new TextComponentString("[DLDUNGEONS] " 
 					+ sender.getDisplayName().getFormattedText() 
 					+ " Used /dldreload command; Reloading config file now."));
 	}
@@ -60,5 +60,4 @@ public class CmdReload extends CommandBase {
 	public boolean isUsernameIndex(String[] astring, int i) {
 		return false;
 	}
-
 }

@@ -24,15 +24,15 @@ public class CmdInstallThemes extends CommandBase {
 		super();
 	}
 
-	
+
 	@Override
-	public String getCommandName() {
+	public String getName() {
 		return "dldInstallThemes";
 	}
 
-	
+
 	@Override
-	public String getCommandUsage(ICommandSender icommandsender) {
+	public String getUsage(ICommandSender sender) {
 		return "/dldInstallThemes";
 	}
 
@@ -45,7 +45,7 @@ public class CmdInstallThemes extends CommandBase {
 		exporter.makeThemes();
 		exporter = new Externalizer(ConfigHandler.getConfigDir());
 		exporter.makeChestCfg();
-		sender.addChatMessage(new TextComponentString("[DLDUNGEONS] " 
+		sender.sendMessage(new TextComponentString("[DLDUNGEONS] " 
 				+ sender.getDisplayName().getFormattedText() 
 				+ " has reinstalled default themes (nothing will be overwritten)"));
 		BiomeSets.reset();

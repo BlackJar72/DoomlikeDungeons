@@ -28,15 +28,17 @@ public class CmdDimID extends CommandBase {
 
 	private List aliases = new ArrayList<String>();
 
-	
+
+
+
 	@Override
-	public String getCommandName() {
+	public String getName() {
 		return "dlddimid";
 	}
 
-	
+
 	@Override
-	public String getCommandUsage(ICommandSender icommandsender) {
+	public String getUsage(ICommandSender sender) {
 		return "/dlddimid";
 	}
 	
@@ -46,7 +48,7 @@ public class CmdDimID extends CommandBase {
 			String[] args) throws CommandException  {
 		int dim =  sender.getEntityWorld().provider.getDimension();
 		System.out.println(dim);
-		sender.addChatMessage(new TextComponentString("[DLDUNGEONS] " 
+		sender.sendMessage(new TextComponentString("[DLDUNGEONS] " 
 				+ sender.getDisplayName().getFormattedText() 
 				+ " is in dimension " + dim));
 	}

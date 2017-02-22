@@ -31,15 +31,15 @@ public class CmdForceInstallThemes extends CommandBase {
 
 	private List aliases = new ArrayList<String>();
 
-	
+
 	@Override
-	public String getCommandName() {
+	public String getName() {
 		return "dldForceInstallThemes";
 	}
 
-	
+
 	@Override
-	public String getCommandUsage(ICommandSender icommandsender) {
+	public String getUsage(ICommandSender sender) {
 		return "/dldForceInstallThemes";
 	}
 
@@ -52,7 +52,7 @@ public class CmdForceInstallThemes extends CommandBase {
 		exporter.forceThemes();
 		exporter = new Externalizer(ConfigHandler.getConfigDir());
 		exporter.forceChestCfg();
-		sender.addChatMessage(new TextComponentString("[DLDUNGEONS] " 
+		sender.sendMessage(new TextComponentString("[DLDUNGEONS] " 
 				+ sender.getDisplayName().getFormattedText() 
 				+ " has forced reinstalled default themes (existing themes will be overwritten!)"));
 		BiomeSets.reset();

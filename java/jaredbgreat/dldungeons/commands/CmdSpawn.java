@@ -29,15 +29,15 @@ public class CmdSpawn extends CommandBase {
 		super();
 	}
 
-	
+
 	@Override
-	public String getCommandName() {
+	public String getName() {
 		return "dldspawn";
 	}
 
-	
+
 	@Override
-	public String getCommandUsage(ICommandSender icommandsender) {
+	public String getUsage(ICommandSender sender) {
 		return "/dldspawn";
 	}
 
@@ -56,7 +56,7 @@ public class CmdSpawn extends CommandBase {
 			System.err.println("[DLDUNGEONS] Danger!  Failed to finalize a dungeon after building!");
 			e.printStackTrace();
 		}
-		if(ConfigHandler.announceCommands) sender.addChatMessage(new TextComponentString("[DLDUNGEONS] " 
+		if(ConfigHandler.announceCommands) sender.sendMessage(new TextComponentString("[DLDUNGEONS] " 
 				+ sender.getDisplayName().getFormattedText() 
 				+ " just spawned a dungeon at X=" + location.getX()
 				+ ", Z=" + location.getZ()));
@@ -74,5 +74,4 @@ public class CmdSpawn extends CommandBase {
 	public boolean isUsernameIndex(String[] astring, int i) {
 		return false;
 	}
-
 }

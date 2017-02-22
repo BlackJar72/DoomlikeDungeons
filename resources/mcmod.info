@@ -2,9 +2,9 @@
 {
   "modid": "DLDungeonJBG",
   "name": "Doomlike Dungeons",
-  "description": "Algorithmically generates multiroom dungeons resembling Doom levels into the world.",
-  "version": "1.9.0",
-  "mcversion": "1.11",
+  "description": "Procedurally generates multiroom dungeons resembling Doom levels into the world.",
+  "version": "1.9.1",
+  "mcversion": "1.11.2",
   "url": "http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/1293843-doomlike-dungeons",
   "updateUrl": "",
   "authors": ["Jared Blackburn (JaredBGreat)"],
