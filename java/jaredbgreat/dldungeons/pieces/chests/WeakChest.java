@@ -35,6 +35,11 @@ public class WeakChest extends BasicChest {
 	public void place(World world, int x, int y, int z, Random random) {
 		BlockPos pos = new BlockPos(x, y, z);
 		TileEntityChest contents = (TileEntityChest)world.getTileEntity(pos);
+		if(world.getBlockState(pos).getBlock() != DBlock.chest) {
+			System.err.println("[DLDUNGEONS] ERROR! Trying to put loot into non-chest at " 
+									+ x + ", " + y + ", " + z + " (basic chest).");
+			return;
+		}
 		if(ConfigHandler.stingyLoot) {
 			if(random.nextBoolean()) fillChest(contents, LootType.GEAR, random);
 			else fillChest(contents, LootType.HEAL, random);
