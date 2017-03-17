@@ -34,9 +34,19 @@ public class Tokenizer {
 	private char next = 0;
 	private char[] scratchpad;
 	boolean onTokens = false;
+	boolean keepQuotes = false;
 	
 	
 	public Tokenizer(String input, String delims) {
+		keepQuotes = false; // What was assumed before adding the variable
+		delim = new CharSet(delims);
+		in = input;
+		readTokens();
+	}
+	
+	
+	public Tokenizer(String input, String delims, boolean keepQuotes) {
+		this.keepQuotes = keepQuotes;
 		delim = new CharSet(delims);
 		in = input;
 		readTokens();
@@ -118,14 +128,24 @@ public class Tokenizer {
 	 * 
 	 * @param basis 
 	 */
+
 	private void readQuote() {
-		onTokens = true;
-		nextChar();
-		while((position < in.length()) && (next != '\"')) {
-			scratchpad[size] = next;
-			size++;
-			nextChar();
+	    onTokens = true;
+		addToken();
+		size = 0;
+		if(keepQuotes) {
+	        scratchpad[size++] = '\"';
 		}
+		do {
+			nextChar();
+			scratchpad[size++] = next;
+		} while((position < in.length()) && (next != '\"'));
+		if((!keepQuotes) && (next == '\"')) {
+	        size--;
+		}
+		addToken();
+		position++;
+		size = 0;
 	}
 	
 	
