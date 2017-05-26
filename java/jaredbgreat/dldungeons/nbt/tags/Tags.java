@@ -21,6 +21,9 @@ public final class Tags {
 	public static ITag makeITag(Tokenizer tokens) {
 		ITag out;
 		NBTType type = NBTType.valueOf(tokens.getToken(1).toUpperCase());
+		System.out.println(tokens.getToken(0) + ", " 
+						 + tokens.getToken(2) + ", " 
+						 + tokens.getToken(3));
 		switch(type) {
 		case BOOLEAN:
 			out = new NBTBoolean(tokens.getToken(0), tokens.getToken(2), tokens.getToken(3));
