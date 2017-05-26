@@ -9,7 +9,7 @@ package jaredbgreat.dldungeons.planner.astar;
 */	
 
 import jaredbgreat.dldungeons.pieces.Doorway;
-import jaredbgreat.dldungeons.planner.Dungeon;
+import jaredbgreat.dldungeons.planner.Level;
 import jaredbgreat.dldungeons.planner.mapping.Tile;
 import jaredbgreat.dldungeons.rooms.Room;
 import jaredbgreat.dldungeons.themes.ThemeFlags;
@@ -51,7 +51,7 @@ public class DoorChecker {
 	 * @param tile
 	 * @return boolean for if tile is inside a room in the dungeon
 	 */
-	public static boolean validateTile(Dungeon dungeon, int x, int z) {
+	public static boolean validateTile(Level dungeon, int x, int z) {
 		if(x < 0 || x >= dungeon.size.width) return false;
 		if(z < 0 || z >= dungeon.size.width) return false;
 		return (dungeon.map.room[x][z] > 0);
@@ -67,7 +67,7 @@ public class DoorChecker {
 	 * @param door
 	 * @return boolean for if the door connects two room in the dungeon
 	 */
-	public static boolean validateDoor(Dungeon dungeon, Doorway door) {
+	public static boolean validateDoor(Level dungeon, Doorway door) {
 			return (validateTile(dungeon, door.x - 1, door.z) 
 					&& validateTile(dungeon, door.x + 1, door.z)
 					&& validateTile(dungeon, door.x, door.z - 1)
@@ -104,7 +104,7 @@ public class DoorChecker {
 	 * @param dungeon
 	 * @return the id of the connect room
 	 */
-	public static int getOtherRoom(Doorway exit, Room room, Dungeon dungeon) {
+	public static int getOtherRoom(Doorway exit, Room room, Level dungeon) {
 		if(exit.xOriented) {
 			if(dungeon.map.room[exit.x+1][exit.z] == room.id)
 				return dungeon.map.room[exit.x-1][exit.z];
@@ -128,7 +128,7 @@ public class DoorChecker {
 	 * @param exits
 	 */
 	public static void checkConnections(ArrayList<Doorway> exits, 
-					Room room, Dungeon dungeon) {
+					Room room, Level dungeon) {
 		if(exits.isEmpty()) return;
 		Doorway next, current;
 		ArrayList<Doorway> connected = new ArrayList<Doorway>(exits.size());
@@ -141,7 +141,7 @@ public class DoorChecker {
 	}
 	
 	
-	public static void retestDoors(Dungeon dungeon, Room room) {
+	public static void retestDoors(Level dungeon, Room room) {
 		if(room.doors.isEmpty()) {
 			return;
 		}
@@ -178,7 +178,7 @@ public class DoorChecker {
 	}
 	
 	
-	public static void processDoors1(Dungeon dungeon, Room room) {
+	public static void processDoors1(Level dungeon, Room room) {
 		ArrayList<Tile> invalid = new ArrayList<Tile>();
 		boolean valid;	
 		for(Doorway door : room.doors) {
@@ -195,7 +195,7 @@ public class DoorChecker {
 	}
 	
 	
-	public static void checkConnectivity(Dungeon dungeon) {		
+	public static void checkConnectivity(Level dungeon) {		
 		ArrayList<ArrayList<Room>> sections = new RoomBFS(dungeon).check();
 		while(sections.size() > 1) {
 			Collections.sort(sections, c);
@@ -207,7 +207,7 @@ public class DoorChecker {
 	}
 	
 	
-	public static void processDoors2(Dungeon dungeon, Room room) {
+	public static void processDoors2(Level dungeon, Room room) {
 		room.topDoors = makeConnectionList(room, dungeon.random);
 		for(Doorway exit : room.topDoors) {
 			exit.priority -= 16;			
@@ -217,13 +217,13 @@ public class DoorChecker {
 	}
 	
 		
-	public static void processDoors3(Dungeon dungeon, Room room) {
+	public static void processDoors3(Level dungeon, Room room) {
 		checkConnections(room.topDoors, room, dungeon);
 		retestDoors(dungeon, room);
 	}
 	
 	
-	public static void caveConnector(Dungeon dungeon, Room cave) {
+	public static void caveConnector(Level dungeon, Room cave) {
 		for(Doorway door : cave.doors) {
 			new AStar(cave, dungeon, cave.midpoint, dungeon.rooms.get(door.otherside).midpoint).seek();
 		}

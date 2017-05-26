@@ -20,7 +20,7 @@ import java.util.Random;
 
 import jaredbgreat.dldungeons.DoomlikeDungeons;
 import jaredbgreat.dldungeons.api.DLDEvent;
-import jaredbgreat.dldungeons.planner.Dungeon;
+import jaredbgreat.dldungeons.planner.Level;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkGenerator;
@@ -50,7 +50,7 @@ public class Builder {
 		if(world.isRemote) return; // Do not perform world-gen on the client!
 		if (MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceDungeonBegin(random, chunkX, chunkZ, world))) return;
 		DoomlikeDungeons.profiler.startTask("Create Dungeons");
-		Dungeon dungeon = new Dungeon(random, 
+		Level dungeon = new Level(random, 
 								world.getBiomeGenForCoords(new BlockPos((chunkX * 16), 64, (chunkZ * 16))), 
 								world, chunkX, chunkZ);
 		buildDungeon(dungeon);
@@ -78,7 +78,7 @@ public class Builder {
 		if(world.isRemote) return; // Do not perform world-gen on the client!
 		if (MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceDungeonBegin(random, chunkX, chunkZ, world))) return;
 		DoomlikeDungeons.profiler.startTask("Create Dungeons");
-		Dungeon dungeon = new Dungeon(random, 
+		Level dungeon = new Level(random, 
 							world.getBiomeGenForCoords(new BlockPos((chunkX * 16), 64, (chunkZ * 16))), 
 						    world, chunkX, chunkZ);
 		if(dungeon.theme != null) {
@@ -98,7 +98,7 @@ public class Builder {
 	 * 
 	 * @param dungeon
 	 */
-	public static void buildDungeon(Dungeon dungeon /*TODO: Parameters*/) {
+	public static void buildDungeon(Level dungeon /*TODO: Parameters*/) {
 		//System.out.println("[DLDUNGONS] Inside Builder.placeDungeon; building dungeon");
 		if(dungeon.theme != null) dungeon.map.build(dungeon);
 	}
@@ -115,7 +115,7 @@ public class Builder {
 	 * @param chunkZ
 	 * @param dungeon
 	 */
-	public static void debuggingPole(World world, int chunkX, int chunkZ, Dungeon dungeon) {
+	public static void debuggingPole(World world, int chunkX, int chunkZ, Level dungeon) {
 		int x = (chunkX * 16) + 8;
 		int z = (chunkZ * 16) + 8;
 		for(int y = 16; y <= 241; y++) placeBlock(world, x, y, z, quartz);

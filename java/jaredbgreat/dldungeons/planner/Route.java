@@ -84,7 +84,7 @@ public class Route {
 	 * 
 	 * @param dungeon
 	 */
-	protected void drawConnections(Dungeon dungeon) {
+	protected void drawConnections(Level dungeon) {
 		int limit = dungeon.size.maxRooms;
 		while(!complete && (limit > 0)) {
 			limit--;
@@ -108,7 +108,7 @@ public class Route {
 	 * 
 	 * @param dungeon
 	 */
-	public void drawConnection(Dungeon dungeon) {
+	public void drawConnection(Level dungeon) {
 		//System.out.println("Running drawConnections(Dungeon dungeon)");
 		getGrowthDir(dungeon.random);
 		int height = dungeon.baseHeight;

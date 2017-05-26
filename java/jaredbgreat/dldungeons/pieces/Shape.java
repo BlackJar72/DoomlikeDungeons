@@ -10,7 +10,7 @@ package jaredbgreat.dldungeons.pieces;
 */		
 
 
-import jaredbgreat.dldungeons.planner.Dungeon;
+import jaredbgreat.dldungeons.planner.Level;
 import jaredbgreat.dldungeons.rooms.Room;
 
 import java.util.ArrayList;
@@ -54,7 +54,7 @@ public final class Shape {
 	 * @param invertX
 	 * @param invertZ
 	 */
-	public void drawLiquid(Dungeon dungeon, Room room, float sx, float sz, float sdimx, float sdimz, 
+	public void drawLiquid(Level dungeon, Room room, float sx, float sz, float sdimx, float sdimz, 
 			boolean invertX, boolean invertZ) {
 		for(Rectangle rect: rectangles) {
 			rect.drawLiquid(dungeon, room, sx, sz, sdimx, sdimz, invertX, invertZ);
@@ -76,7 +76,7 @@ public final class Shape {
 	 * @param invertX
 	 * @param invertZ
 	 */
-	public void drawWalkway(Dungeon dungeon, Room room, float sx, float sz, byte sdimx, byte sdimz, 
+	public void drawWalkway(Level dungeon, Room room, float sx, float sz, byte sdimx, byte sdimz, 
 				boolean invertX, boolean invertZ) {
 		for(Rectangle rect: rectangles) {
 			rect.drawWalkway(dungeon, room, sx, sz, sdimx, sdimz, invertX, invertZ);
@@ -97,7 +97,7 @@ public final class Shape {
 	 * @param invertX
 	 * @param invertZ
 	 */
-	public void drawCutout(Dungeon dungeon, Room room, float sx, float sz, float sdimx, float sdimz, 
+	public void drawCutout(Level dungeon, Room room, float sx, float sz, float sdimx, float sdimz, 
 			boolean invertX, boolean invertZ) {
 		for(Rectangle rect: rectangles) {
 			rect.drawCutout(dungeon, room, sx, sz, sdimx, sdimz, invertX, invertZ);
@@ -118,7 +118,7 @@ public final class Shape {
 	 * @param invertX
 	 * @param invertZ
 	 */
-	public void drawCutin(Dungeon dungeon, Room room, 
+	public void drawCutin(Level dungeon, Room room, 
 					  float sx, float sz, byte sdimx, byte sdimz, boolean invertX, boolean invertZ) {
 		for(Rectangle rect: rectangles) {
 			rect.drawCutin(dungeon, room, sx, sz, sdimx, sdimz, invertX, invertZ);
@@ -139,7 +139,7 @@ public final class Shape {
 	 * @param invertX
 	 * @param invertZ
 	 */
-	public void drawPlatform(Dungeon dungeon, Room room, byte floorY, 
+	public void drawPlatform(Level dungeon, Room room, byte floorY, 
 					  float sx, float sz, float sdimx, float sdimz, boolean invertX, boolean invertZ) {
 		for(Rectangle rect: rectangles) {
 			rect.drawPlatform(dungeon, room, floorY, sx, sz, sdimx, sdimz, invertX, invertZ);

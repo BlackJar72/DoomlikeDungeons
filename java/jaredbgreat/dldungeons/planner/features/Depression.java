@@ -16,7 +16,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */	
 
 
-import jaredbgreat.dldungeons.planner.Dungeon;
+import jaredbgreat.dldungeons.planner.Level;
 import jaredbgreat.dldungeons.rooms.Room;
 import jaredbgreat.dldungeons.themes.Degree;
 

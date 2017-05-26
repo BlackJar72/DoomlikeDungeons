@@ -9,7 +9,7 @@ package jaredbgreat.dldungeons.planner.astar;
 */	
 
 import jaredbgreat.dldungeons.pieces.Doorway;
-import jaredbgreat.dldungeons.planner.Dungeon;
+import jaredbgreat.dldungeons.planner.Level;
 import jaredbgreat.dldungeons.planner.mapping.MapMatrix;
 import jaredbgreat.dldungeons.planner.mapping.Tile;
 import jaredbgreat.dldungeons.rooms.Room;
@@ -21,13 +21,13 @@ public class AStar {
 	int room, x1, x2, z1, z2;   // Room id and bounds
 	PriorityQueue<Step> edges;  // Steps to consider
 	Step[][] spt;               // Not a true tree but will hold the data
-	Dungeon dungeon;
+	Level dungeon;
 	Step root;
 	Tile end;
 	
 	protected AStar() {/*Do not use!*/}
 	
-	public AStar(Room room, Dungeon dungeon, Doorway start, Doorway finish) {
+	public AStar(Room room, Level dungeon, Doorway start, Doorway finish) {
 		this.room = room.id;
 		this.dungeon = dungeon;
 		x1 = room.beginX;

@@ -10,7 +10,7 @@ package jaredbgreat.dldungeons.pieces;
 */	
 
 
-import jaredbgreat.dldungeons.planner.Dungeon;
+import jaredbgreat.dldungeons.planner.Level;
 import jaredbgreat.dldungeons.rooms.Room;
 import jaredbgreat.dldungeons.themes.ThemeFlags;
 import jaredbgreat.dldungeons.themes.ThemeType;
@@ -59,7 +59,7 @@ public final class Rectangle {
 	 * @param invertX
 	 * @param invertZ
 	 */
-	public void drawLiquid(Dungeon dungeon, Room room, float sx, float sz, float sdimx, float sdimz, 
+	public void drawLiquid(Level dungeon, Room room, float sx, float sz, float sdimx, float sdimz, 
 			boolean invertX, boolean invertZ) {
 		int drop;
 		if(dungeon.theme.flags.contains(ThemeFlags.SWAMPY)) drop = 1;
@@ -109,7 +109,7 @@ public final class Rectangle {
 	 * @param invertX
 	 * @param invertZ
 	 */
-	public void drawWalkway(Dungeon dungeon, Room room, float sx, float sz, byte sdimx, byte sdimz, 
+	public void drawWalkway(Level dungeon, Room room, float sx, float sz, byte sdimx, byte sdimz, 
 				boolean invertX, boolean invertZ) {
 		byte xbegin, xend, zbegin, zend;
 		int drop;
@@ -156,7 +156,7 @@ public final class Rectangle {
 	 * @param invertX
 	 * @param invertZ
 	 */
-	public void drawCutout(Dungeon dungeon, Room room, float sx, float sz, float sdimx, float sdimz, 
+	public void drawCutout(Level dungeon, Room room, float sx, float sz, float sdimx, float sdimz, 
 			boolean invertX, boolean invertZ) {
 		byte xbegin, xend, zbegin, zend;
 		if(invertX) {
@@ -195,7 +195,7 @@ public final class Rectangle {
 	 * @param invertX
 	 * @param invertZ
 	 */
-	public void drawCutin(Dungeon dungeon, Room room, float sx, float sz, byte sdimx, byte sdimz, 
+	public void drawCutin(Level dungeon, Room room, float sx, float sz, byte sdimx, byte sdimz, 
 			boolean invertX, boolean invertZ) {
 		byte xbegin, xend, zbegin, zend;
 		if(invertX) {
@@ -237,7 +237,7 @@ public final class Rectangle {
 	 * @param invertX
 	 * @param invertZ
 	 */
-	public void drawPlatform(Dungeon dungeon, Room room, byte floorY, float sx, float sz, float sdimx, float sdimz, 
+	public void drawPlatform(Level dungeon, Room room, byte floorY, float sx, float sz, float sdimx, float sdimz, 
 			boolean invertX, boolean invertZ) {
 		byte xbegin, xend, zbegin, zend;
 		if(invertX) {

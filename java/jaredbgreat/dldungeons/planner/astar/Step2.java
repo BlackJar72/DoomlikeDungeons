@@ -8,12 +8,12 @@ package jaredbgreat.dldungeons.planner.astar;
  * https://creativecommons.org/licenses/by/4.0/legalcode
 */	
 
-import jaredbgreat.dldungeons.planner.Dungeon;
+import jaredbgreat.dldungeons.planner.Level;
 import jaredbgreat.dldungeons.planner.mapping.Tile;
 
 public class Step2 extends Step {
 
-	public Step2(int x, int z, Step previous, Tile destination, Dungeon dungeon) {
+	public Step2(int x, int z, Step previous, Tile destination, Level dungeon) {
 		super(x, z, previous, destination, dungeon);
 		if(!dungeon.map.astared[x][z]) value += 7;
 		if(dungeon.map.room[x][z] == 0) value += 512; 

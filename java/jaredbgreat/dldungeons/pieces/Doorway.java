@@ -8,7 +8,7 @@ package jaredbgreat.dldungeons.pieces;
  * https://creativecommons.org/licenses/by/4.0/legalcode
 */	
 
-import jaredbgreat.dldungeons.planner.Dungeon;
+import jaredbgreat.dldungeons.planner.Level;
 import jaredbgreat.dldungeons.planner.mapping.Tile;
 
 
@@ -74,7 +74,7 @@ public class Doorway extends Tile implements Comparable<Doorway> {
 	 * @param dungeon
 	 * @param start
 	 */
-	public void prioritize(Dungeon dungeon, int start) {
+	public void prioritize(Level dungeon, int start) {
 		if(xOriented) {
 			if(dungeon.map.hasLiquid[x+1][z]) priority++;
 			if(dungeon.map.hasLiquid[x-1][z]) priority++;

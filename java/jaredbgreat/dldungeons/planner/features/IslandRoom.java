@@ -16,7 +16,7 @@ along with room program.  If not, see <http://www.gnu.org/licenses/>.
 */	
 
 
-import jaredbgreat.dldungeons.planner.Dungeon;
+import jaredbgreat.dldungeons.planner.Level;
 import jaredbgreat.dldungeons.planner.RoomSeed;
 import jaredbgreat.dldungeons.rooms.Room;
 import jaredbgreat.dldungeons.themes.Degree;
@@ -36,7 +36,7 @@ public class IslandRoom extends FeatureAdder {
 	
 	
 	
-	public boolean addFeature(Dungeon dungeon, Room room) {
+	public boolean addFeature(Level dungeon, Room room) {
 		built = chance.use(dungeon.random);
 		if(built) buildFeature(dungeon, room);
 		return built;	
@@ -44,12 +44,12 @@ public class IslandRoom extends FeatureAdder {
 	
 
 	@Override
-	public void buildFeature(Dungeon dungeon, Room room) {
+	public void buildFeature(Level dungeon, Room room) {
 		built = buildSubroom(dungeon, room);
 	}
 	
 	
-	private boolean buildSubroom(Dungeon dungeon, Room room) {
+	private boolean buildSubroom(Level dungeon, Room room) {
 		int dimX = (int)((room.endX - room.beginX) 
 				* (0.2f + (0.3f * dungeon.random.nextFloat()))); 
 		int dimZ = (int)((room.endZ - room.beginZ) 

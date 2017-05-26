@@ -26,7 +26,7 @@ public class Node {
 	Room hubRoom;
 	
 	
-	public Node(int x, int y, int z, Random random, Dungeon dungeon) {	
+	public Node(int x, int y, int z, Random random, Level dungeon) {	
 		// Nodes should be on the larger end of the size scale for rooms...
 		int xdim = random.nextInt((dungeon.size.maxRoomSize / 2) - 3) 
 				+ (dungeon.size.maxRoomSize / 2) + 4;

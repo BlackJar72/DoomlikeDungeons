@@ -11,7 +11,7 @@ package jaredbgreat.dldungeons.planner.astar;
 import java.util.PriorityQueue;
 
 import jaredbgreat.dldungeons.pieces.Doorway;
-import jaredbgreat.dldungeons.planner.Dungeon;
+import jaredbgreat.dldungeons.planner.Level;
 import jaredbgreat.dldungeons.planner.mapping.Tile;
 import jaredbgreat.dldungeons.rooms.Room;
 
@@ -19,7 +19,7 @@ public class AStar2 extends AStar {
 	PriorityQueue<Step2> edges;  // Steps to consider
 	Step2 root;
 
-	public AStar2(Dungeon dungeon, Room start, Room finish) {
+	public AStar2(Level dungeon, Room start, Room finish) {
 		this.dungeon = dungeon;
 		room = 0;
 		x1 = 2;

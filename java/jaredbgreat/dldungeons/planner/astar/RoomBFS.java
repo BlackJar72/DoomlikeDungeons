@@ -9,7 +9,7 @@ package jaredbgreat.dldungeons.planner.astar;
 */	
 
 
-import jaredbgreat.dldungeons.planner.Dungeon;
+import jaredbgreat.dldungeons.planner.Level;
 import jaredbgreat.dldungeons.rooms.Room;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -17,12 +17,12 @@ import java.util.ArrayList;
 
 public class RoomBFS {
 	private ArrayDeque<Room> roomQueue = new ArrayDeque<Room>();
-	private Dungeon dungeon;
+	private Level dungeon;
 	private ArrayList<Room> nodes;
 	private boolean[] checked;
 	
 
-	public RoomBFS(Dungeon dungeon) {
+	public RoomBFS(Level dungeon) {
 		this.dungeon = dungeon;
 		nodes = new ArrayList<Room>(dungeon.numNodes);
 		checked = new boolean[dungeon.roomCount + 1];

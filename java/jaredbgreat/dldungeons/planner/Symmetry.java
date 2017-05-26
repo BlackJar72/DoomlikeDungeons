@@ -96,7 +96,7 @@ public enum Symmetry {
 	 * @param dungeon
 	 * @return a Symmetry constant repressenting a type of semmetry
 	 */
-	public static Symmetry getSymmetry(Dungeon dungeon) {
+	public static Symmetry getSymmetry(Level dungeon) {
 		int num = 0;
 		if(dungeon.symmetry.use(dungeon.random)) num += 1;
 		if(dungeon.symmetry.use(dungeon.random)) num += 1;

@@ -11,7 +11,7 @@ package jaredbgreat.dldungeons.planner.astar;
 import java.util.EnumMap;
 
 import jaredbgreat.dldungeons.pieces.Doorway;
-import jaredbgreat.dldungeons.planner.Dungeon;
+import jaredbgreat.dldungeons.planner.Level;
 import jaredbgreat.dldungeons.planner.mapping.Tile;
 import jaredbgreat.dldungeons.themes.ThemeFlags;
 
@@ -56,7 +56,7 @@ public class Step extends Tile implements Comparable<Step> {
 	 * @param destination
 	 * @param dungeon
 	 */
-	public Step(int x, int z, Step previous, Tile destination, Dungeon dungeon) {
+	public Step(int x, int z, Step previous, Tile destination, Level dungeon) {
 		super(x, z);
 		distance = previous.distance + 1;
 		heuristic = Math.abs(x - destination.x) + Math.abs(z - destination.z);

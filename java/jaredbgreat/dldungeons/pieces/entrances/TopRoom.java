@@ -9,7 +9,7 @@ package jaredbgreat.dldungeons.pieces.entrances;
 */	
 
 import jaredbgreat.dldungeons.builder.DBlock;
-import jaredbgreat.dldungeons.planner.Dungeon;
+import jaredbgreat.dldungeons.planner.Level;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 
@@ -31,7 +31,7 @@ public class TopRoom extends AbstractEntrance {
 
 	
 	@Override
-	public void build(Dungeon dungeon, World world) {
+	public void build(Level dungeon, World world) {
 		//DoomlikeDungeons.profiler.startTask("Generating Top Room Numbers (TopRoom)");
 		wx = x + (dungeon.map.chunkX * 16) - (dungeon.map.room.length / 2) + 8;
 		wz = z + (dungeon.map.chunkZ * 16) - (dungeon.map.room.length / 2) + 8;
@@ -75,7 +75,7 @@ public class TopRoom extends AbstractEntrance {
 	 * @param dungeon
 	 * @param world
 	 */
-	private void buidBuilding(Dungeon dungeon, World world) {
+	private void buidBuilding(Level dungeon, World world) {
 		//DoomlikeDungeons.profiler.startTask("Generating Building (TopRoom)");
 		//DoomlikeDungeons.profiler.startTask("Generating Floor (TopRoom)");
 		for(int i = xmin + 1; i < xmax; i++) 
@@ -153,7 +153,7 @@ public class TopRoom extends AbstractEntrance {
 	 * @param dungeon
 	 * @param world
 	 */
-	private void buildRuin(Dungeon dungeon, World world) {
+	private void buildRuin(Level dungeon, World world) {
 		//DoomlikeDungeons.profiler.startTask("Generating Ruin (TopRoom)");
 		//DoomlikeDungeons.profiler.startTask("Generating Floor (TopRoom)");
 		for(int i = xmin + 1; i < xmax; i++) 
@@ -231,7 +231,7 @@ public class TopRoom extends AbstractEntrance {
 	 * @param world
 	 * @param dungeon
 	 */
-	private void buildLatter(World world, Dungeon dungeon) {
+	private void buildLatter(World world, Level dungeon) {
 		//DoomlikeDungeons.profiler.startTask("Generating Latter (TopRoom)");
 		top += ydim;
 		int side = dungeon.random.nextInt(4);
@@ -272,7 +272,7 @@ public class TopRoom extends AbstractEntrance {
 	 * @param world
 	 * @param dungeon
 	 */
-	private void buildStair(World world, Dungeon dungeon) {
+	private void buildStair(World world, Level dungeon) {
 		//DoomlikeDungeons.profiler.startTask("Generating Stair (TopRoom)");
 		top++;
 		int side = dungeon.random.nextInt(4);

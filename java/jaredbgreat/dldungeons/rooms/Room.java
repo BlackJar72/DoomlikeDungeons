@@ -18,7 +18,7 @@ import jaredbgreat.dldungeons.pieces.chests.BasicChest;
 import jaredbgreat.dldungeons.pieces.chests.LootCategory;
 import jaredbgreat.dldungeons.pieces.chests.TreasureChest;
 import jaredbgreat.dldungeons.pieces.chests.WeakChest;
-import jaredbgreat.dldungeons.planner.Dungeon;
+import jaredbgreat.dldungeons.planner.Level;
 import jaredbgreat.dldungeons.planner.RoomSeed;
 import jaredbgreat.dldungeons.planner.Route;
 import jaredbgreat.dldungeons.planner.Symmetry;
@@ -102,7 +102,7 @@ public class Room extends AbstractRoom {
 	
 	
 	public Room(int beginX, int endX, int beginZ, int endZ, int floorY, int ceilY, 
-			Dungeon dungeon, Room parent, Room previous) {
+			Level dungeon, Room parent, Room previous) {
 		super(dungeon, previous);		
 		//DoomlikeDungeons.profiler.startTask("Creating a Room");
 		dungeon.rooms.add(this);
@@ -177,7 +177,7 @@ public class Room extends AbstractRoom {
 	 * @param parent
 	 * @return
 	 */
-	public Room plan(Dungeon dungeon, Room parent) {
+	public Room plan(Level dungeon, Room parent) {
 		if(!dungeon.complexity.use(dungeon.random) && !isNode) {
 			hasWholePattern = true;
 			if(dungeon.liquids.use(dungeon.random)) {				
@@ -212,7 +212,7 @@ public class Room extends AbstractRoom {
 	 * @param x
 	 * @param z
 	 */
-	private void assignEdge(Dungeon dungeon, int x, int z) {
+	private void assignEdge(Level dungeon, int x, int z) {
 		if((dungeon.map.room[x][z] == 0) 
 				|| (dungeon.rooms.get(dungeon.map.room[x][z]).sky && !sky)
 				|| (isSubroom)) {
@@ -246,7 +246,7 @@ public class Room extends AbstractRoom {
 	 * 
 	 * @param dungeon
 	 */
-	public void addFeatures(Dungeon dungeon) {
+	public void addFeatures(Level dungeon) {
 		ArrayList<FeatureAdder> features = new ArrayList<FeatureAdder>();
 		features.add(new IslandPlatform(dungeon.verticle));
 		features.add(new Depression(dungeon.verticle));
@@ -274,7 +274,7 @@ public class Room extends AbstractRoom {
 	 * 
 	 * @param dungeon
 	 */
-	protected void addSpawners(Dungeon dungeon) {
+	protected void addSpawners(Level dungeon) {
 		if(ConfigHandler.difficulty == Difficulty.NONE ||
 				(!isNode && !ConfigHandler.difficulty.addmob(dungeon.random)) 
 				|| hasEntrance) return;
@@ -345,7 +345,7 @@ public class Room extends AbstractRoom {
 	 * @param dungeon
 	 * @return
 	 */
-	private int levAdjust(int lev, Dungeon dungeon) {
+	private int levAdjust(int lev, Level dungeon) {
 		while(dungeon.theme.allMobs[lev].isEmpty()) {
 			lev--;
 			if(lev < 0) return -1;
@@ -361,7 +361,7 @@ public class Room extends AbstractRoom {
 	 * 
 	 * @param dungeon
 	 */
-	protected void addChests(Dungeon dungeon) {
+	protected void addChests(Level dungeon) {
 		if((ConfigHandler.difficulty == Difficulty.NONE) || 
 				hasEntrance) return;
 		if((!hasSpawners && (dungeon.random.nextInt(5) > 0))) return;
@@ -406,7 +406,7 @@ public class Room extends AbstractRoom {
 	 * 
 	 * @param dungeon
 	 */
-	protected void doorways(Dungeon dungeon) {
+	protected void doorways(Level dungeon) {
 		int num = dungeon.random.nextInt(2 + ((endX - beginX + endZ - beginZ) / ((sym.level * 8) + 8)) 
 				+ (dungeon.subrooms.value / (2 + sym.level))) + 1;
 		for(int i = 0; i < num; i++) doorway(dungeon);
@@ -421,7 +421,7 @@ public class Room extends AbstractRoom {
 	 * @param z
 	 * @param xOriented
 	 */
-	protected void addDoor(Dungeon dungeon, int x, int z, boolean xOriented) {
+	protected void addDoor(Level dungeon, int x, int z, boolean xOriented) {
 		doors.add(new Doorway(x, z, xOriented));
 		dungeon.map.isDoor[x][z] = true;
 	}
@@ -432,7 +432,7 @@ public class Room extends AbstractRoom {
 	 * 
 	 * @param dungeon
 	 */
-	protected void doorway(Dungeon dungeon) {
+	protected void doorway(Level dungeon) {
 		int xExtend = 0;
 		int zExtend = 0;
 		int xSeedDir = 0;
@@ -573,7 +573,7 @@ public class Room extends AbstractRoom {
 	 * @param source
 	 * @return
 	 */
-	public Room connector(Dungeon dungeon, int dir, int xdim, int zdim, int height, Route source) {
+	public Room connector(Level dungeon, int dir, int xdim, int zdim, int height, Route source) {
 		int xExtend = 0;
 		int zExtend = 0;
 		int xSeedDir = 0;
@@ -649,7 +649,7 @@ public class Room extends AbstractRoom {
 	 * 
 	 * @param dungeon
 	 */
-	private void walkway(Dungeon dungeon) {
+	private void walkway(Level dungeon) {
 		int drop;
 		if(dungeon.theme.type.contains(ThemeType.SWAMP)) drop = 1;
 		else drop = 2;
@@ -670,7 +670,7 @@ public class Room extends AbstractRoom {
 	 * 
 	 * @param dungeon
 	 */
-	private void cutin(Dungeon dungeon) {
+	private void cutin(Level dungeon) {
 		shape = Shapes.wholeShape(sym, dungeon.random);
 		for(int i = beginX; i <= endX; i++) 
 			for(int j = beginZ; j <= endZ; j++) {
@@ -688,7 +688,7 @@ public class Room extends AbstractRoom {
 	 * @param dungeon
 	 * @return
 	 */
-	public boolean plantChildren(Dungeon dungeon) {
+	public boolean plantChildren(Level dungeon) {
 		boolean result = false;
 		for(RoomSeed planted : childSeeds) {
 			if(dungeon.rooms.realSize() >= dungeon.size.maxRooms) return false;

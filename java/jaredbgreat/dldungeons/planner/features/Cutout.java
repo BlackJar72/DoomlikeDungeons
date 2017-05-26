@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 import jaredbgreat.dldungeons.pieces.Shape;
-import jaredbgreat.dldungeons.planner.Dungeon;
+import jaredbgreat.dldungeons.planner.Level;
 import jaredbgreat.dldungeons.rooms.Room;
 import jaredbgreat.dldungeons.themes.Degree;
 
@@ -34,14 +34,14 @@ public class Cutout extends FeatureAdder {
 	}
 
 	@Override
-	public boolean addFeature(Dungeon dungeon, Room room) {
+	public boolean addFeature(Level dungeon, Room room) {
 		boolean built = chance.use(dungeon.random);
 		if(built) buildFeature(dungeon, room);
 		return built;
 	}
 
 	@Override
-	public void buildFeature(Dungeon dungeon, Room room) {
+	public void buildFeature(Level dungeon, Room room) {
 		float centerX, centerZ, oppX, oppZ;
 		float dimX, dimZ;
 		int rotation = dungeon.random.nextInt(4);

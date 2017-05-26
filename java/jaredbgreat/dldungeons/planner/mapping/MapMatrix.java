@@ -15,7 +15,7 @@ package jaredbgreat.dldungeons.planner.mapping;
 import jaredbgreat.dldungeons.DoomlikeDungeons;
 import jaredbgreat.dldungeons.api.DLDEvent;
 import jaredbgreat.dldungeons.builder.DBlock;
-import jaredbgreat.dldungeons.planner.Dungeon;
+import jaredbgreat.dldungeons.planner.Level;
 import jaredbgreat.dldungeons.planner.astar.Step;
 import jaredbgreat.dldungeons.rooms.Room;
 import jaredbgreat.dldungeons.themes.ThemeFlags;
@@ -100,7 +100,7 @@ public class MapMatrix {
 	 * 
 	 * @param dungeon
 	 */
-	public void build(Dungeon dungeon) {		
+	public void build(Level dungeon) {		
 		DoomlikeDungeons.profiler.startTask("Building Dungeon in World");	
 		DoomlikeDungeons.profiler.startTask("Building Dungeon architecture");
 		int shiftX = (chunkX * 16) - (room.length / 2) + 8;

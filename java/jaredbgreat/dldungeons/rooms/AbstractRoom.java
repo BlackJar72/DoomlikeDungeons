@@ -8,7 +8,7 @@ package jaredbgreat.dldungeons.rooms;
  * https://creativecommons.org/licenses/by/4.0/legalcode
 */	
 
-import jaredbgreat.dldungeons.planner.Dungeon;
+import jaredbgreat.dldungeons.planner.Level;
 
 import java.util.Random;
 
@@ -64,7 +64,7 @@ public abstract class AbstractRoom /*extends Shape*/ {
 	 * @param dungeon
 	 * @param previous
 	 */
-	protected AbstractRoom(Dungeon dungeon, AbstractRoom previous) {
+	protected AbstractRoom(Level dungeon, AbstractRoom previous) {
 		if((previous != null) && !dungeon.variability.use(dungeon.random)) {
 			wallBlock1   = previous.wallBlock1;
 			floorBlock   = previous.floorBlock;
@@ -143,7 +143,7 @@ public abstract class AbstractRoom /*extends Shape*/ {
 	 * @return
 	 */
 	public static Room makeRoom(int beginX, int endX, int beginZ, int endZ, int floorY, int ceilY, 
-			Dungeon dungeon, Room parent, Room previous) {		
+			Level dungeon, Room parent, Room previous) {		
 		RoomType type = RoomType.ROOM;
 		if(dungeon.naturals.use(dungeon.random)) {
 			type = RoomType.CAVE;
@@ -184,7 +184,7 @@ public abstract class AbstractRoom /*extends Shape*/ {
 	 * @return
 	 */
 	public static Room makeRoom(int beginX, int endX, int beginZ, int endZ, int floorY, int ceilY, 
-			Dungeon dungeon, Room parent, Room previous, RoomType type) {	
+			Level dungeon, Room parent, Room previous, RoomType type) {	
 		switch(type) {
 			case CAVE: {
 				Cave base = new Cave(beginX, endX, beginZ, endZ, floorY, ceilY, 

@@ -16,7 +16,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */	
 
 
-import jaredbgreat.dldungeons.planner.Dungeon;
+import jaredbgreat.dldungeons.planner.Level;
 import jaredbgreat.dldungeons.rooms.Room;
 import jaredbgreat.dldungeons.themes.Degree;
 
@@ -35,7 +35,7 @@ public class Pillar extends FeatureAdder {
 	
 
 	@Override
-	public void buildFeature(Dungeon dungeon, Room room) {
+	public void buildFeature(Level dungeon, Room room) {
 		int pillarx1 = dungeon.random.nextInt(room.endX - room.beginX - 2) + 1;
 		int pillarz1 = dungeon.random.nextInt(room.endZ - room.beginZ - 2) + 1;
 		if(room.sym.halfX) pillarx1 = ((pillarx1 - 1) / 2) + 1;

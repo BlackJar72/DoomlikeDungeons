@@ -14,7 +14,7 @@ package jaredbgreat.dldungeons.api;
 import java.util.Random;
 
 import jaredbgreat.dldungeons.builder.DBlock;
-import jaredbgreat.dldungeons.planner.Dungeon;
+import jaredbgreat.dldungeons.planner.Level;
 import jaredbgreat.dldungeons.planner.mapping.MapMatrix;
 import jaredbgreat.dldungeons.rooms.Room;
 import net.minecraft.block.Block;
@@ -87,15 +87,15 @@ public class DLDEvent extends Event {
 	}
 
 	public static class DungeonRoom extends DLDEvent {
-		protected final Dungeon dungeon;
+		protected final Level dungeon;
 		protected final Room room;
 
-		public DungeonRoom(Dungeon dungeon, Room room) {
+		public DungeonRoom(Level dungeon, Room room) {
 			this.dungeon = dungeon;
 			this.room = room;
 		}
 
-		public Dungeon getDungeon() {
+		public Level getDungeon() {
 			return dungeon;
 		}
 
@@ -107,7 +107,7 @@ public class DLDEvent extends Event {
 
 	@Cancelable
 	public static class AddChestBlocksToRoom extends DungeonRoom {
-		public AddChestBlocksToRoom(Dungeon dungeon, Room room) {
+		public AddChestBlocksToRoom(Level dungeon, Room room) {
 			super(dungeon, room);
 		}
 	}
@@ -197,14 +197,14 @@ public class DLDEvent extends Event {
 
 	@Cancelable
 	public static class AddTileEntitiesToRoom extends DungeonRoom {
-		public AddTileEntitiesToRoom(Dungeon dungeon, Room room) {
+		public AddTileEntitiesToRoom(Level dungeon, Room room) {
 			super(dungeon, room);
 		}
 	}
 
 	@Cancelable
 	public static class AddEntrance extends DungeonRoom {
-		public AddEntrance(Dungeon dungeon, Room room) {
+		public AddEntrance(Level dungeon, Room room) {
 			super(dungeon, room);
 		}
 	}
@@ -287,14 +287,14 @@ public class DLDEvent extends Event {
 	}
 
 	public static class PlaceDungeonFinish extends PlaceDungeon {
-		private final Dungeon dungeon;
+		private final Level dungeon;
 
-		public PlaceDungeonFinish(Random random, int chunkX, int chunkZ, World world, Dungeon dungeon) {
+		public PlaceDungeonFinish(Random random, int chunkX, int chunkZ, World world, Level dungeon) {
 			super(random, chunkX, chunkZ, world);
 			this.dungeon = dungeon;
 		}
 
-		public Dungeon getDungeon() {
+		public Level getDungeon() {
 			return dungeon;
 		}
 

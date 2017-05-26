@@ -13,7 +13,7 @@ package jaredbgreat.dldungeons.pieces.entrances;
 /**
  * The base class for all that build entrances.
  */
-import jaredbgreat.dldungeons.planner.Dungeon;
+import jaredbgreat.dldungeons.planner.Level;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 
@@ -44,5 +44,5 @@ public abstract class AbstractEntrance {
 	 * @param dungeon
 	 * @param world
 	 */
-	public abstract void build(Dungeon dungeon, World world);
+	public abstract void build(Level dungeon, World world);
 }

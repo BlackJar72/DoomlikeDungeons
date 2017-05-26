@@ -10,7 +10,7 @@ package jaredbgreat.dldungeons.rooms;
 
 
 import jaredbgreat.dldungeons.pieces.Doorway;
-import jaredbgreat.dldungeons.planner.Dungeon;
+import jaredbgreat.dldungeons.planner.Level;
 import jaredbgreat.dldungeons.planner.astar.AStar;
 
 
@@ -35,7 +35,7 @@ public class Cave extends Room {
 	
 	
 	public Cave(int beginX, int endX, int beginZ, int endZ, int floorY,
-			int ceilY, Dungeon dungeon, Room parent, Room previous) {
+			int ceilY, Level dungeon, Room parent, Room previous) {
 		super(beginX, endX, beginZ, endZ, floorY, ceilY, dungeon, previous, previous);
 		this.degenerate = true;
 	}
@@ -48,7 +48,7 @@ public class Cave extends Room {
 	 * cave-like layout.
 	 */
 	@Override
-	public Room plan(Dungeon dungeon, Room parent) {
+	public Room plan(Level dungeon, Room parent) {
 		xSize = endX - beginX;
 		zSize = endZ - beginZ;
 		layers = dungeon.verticle.ordinal();{

@@ -11,7 +11,7 @@ package jaredbgreat.dldungeons.pieces.entrances;
 
 
 import jaredbgreat.dldungeons.builder.DBlock;
-import jaredbgreat.dldungeons.planner.Dungeon;
+import jaredbgreat.dldungeons.planner.Level;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 
@@ -25,7 +25,7 @@ public class SpiralStair extends AbstractEntrance {
 
 	
 	@Override
-	public void build(Dungeon dungeon, World world) {
+	public void build(Level dungeon, World world) {
 		int wx = x + (dungeon.map.chunkX * 16) - (dungeon.map.room.length / 2) + 8;
 		int wz = z + (dungeon.map.chunkZ * 16) - (dungeon.map.room.length / 2) + 8;
 		int bottom = dungeon.map.floorY[x][z];

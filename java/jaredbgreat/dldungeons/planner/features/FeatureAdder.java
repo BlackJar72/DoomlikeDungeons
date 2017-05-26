@@ -16,7 +16,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */	
 
 
-import jaredbgreat.dldungeons.planner.Dungeon;
+import jaredbgreat.dldungeons.planner.Level;
 import jaredbgreat.dldungeons.rooms.Room;
 import jaredbgreat.dldungeons.themes.Degree;
 
@@ -52,7 +52,7 @@ public abstract class FeatureAdder {
 	 * @param room
 	 * @return the result of chance.use()
 	 */
-	public boolean addFeature(Dungeon dungeon, Room room) {
+	public boolean addFeature(Level dungeon, Room room) {
 		boolean built = chance.use(dungeon.random);
 		if(built) buildFeature(dungeon, room);
 		return built;	
@@ -65,6 +65,6 @@ public abstract class FeatureAdder {
 	 * @param dungeon
 	 * @param room
 	 */
-	public abstract void buildFeature(Dungeon dungeon, Room room);
+	public abstract void buildFeature(Level dungeon, Room room);
 
 }

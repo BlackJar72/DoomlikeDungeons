@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 import jaredbgreat.dldungeons.pieces.Shape;
-import jaredbgreat.dldungeons.planner.Dungeon;
+import jaredbgreat.dldungeons.planner.Level;
 import jaredbgreat.dldungeons.rooms.Room;
 import jaredbgreat.dldungeons.themes.Degree;
 
@@ -37,7 +37,7 @@ public class IslandPlatform extends FeatureAdder {
 	
 
 	@Override
-	public void buildFeature(Dungeon dungeon, Room room) {
+	public void buildFeature(Level dungeon, Room room) {
 		int available = room.ceilY - room.floorY;
 		if(available < 4) return;
 		float dimX, dimZ, centerX, centerZ, oppX, oppZ;
