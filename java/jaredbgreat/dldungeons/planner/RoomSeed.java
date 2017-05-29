@@ -146,7 +146,9 @@ public class RoomSeed {
 		}
 		else {
 			dungeon.roomCount++;
-			return AbstractRoom.makeRoom(beginX, endX, beginZ, endZ, y, y + height, dungeon, parent, previous);	
+			return AbstractRoom
+					.makeRoom(beginX, endX, beginZ, endZ, y, 
+							y + height, dungeon, parent, previous);	
 		}
 	}
 	
@@ -232,7 +234,9 @@ public class RoomSeed {
 		}
 		else {
 			dungeon.roomCount++;
-			return AbstractRoom.makeRoom(beginX, endX, beginZ, endZ, y, y + height, dungeon, parent, previous);		
+			return AbstractRoom
+					.makeRoom(beginX, endX, beginZ, endZ, y, 
+							y + height, dungeon, parent, previous);		
 		}
 	}
 }

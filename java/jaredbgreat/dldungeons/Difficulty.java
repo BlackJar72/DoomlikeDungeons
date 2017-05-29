@@ -29,13 +29,29 @@ import java.util.Random;
  */
 public enum Difficulty {
 	
-	NONE  (0, 0, 0, 0, 0, false, "No spawners."),
-	BABY  (3, 0, 0, 0, 0, false, "Baby mode."),
-	NOOB  (4, 1, 1, 1, 1, false, "Not too hard."),
-	NORM  (5, 2, 1, 1, 2, false, "Normal difficulty."),
-	HARD  (6, 3, 2, 2, 3,  true, "Super violent."),
-	NUTS  (7, 5, 2, 2, 4,  true, "Insane horror!");
+	NONE0 (0,   0, 0, 0, 0, false, "No spawners."),	
+	NONE  (0,   0, 0, 0, 0, false, "No spawners."),
+	NONEB (0,   0, 0, 0, 0, false, "No spawners."),
 	
+	BABY0 (5,   0, 0, 0, 0, false, "Baby mode."),
+	BABY  (6,   0, 0, 0, 0, false, "Baby mode."),
+	BABYB (7,   1, 1, 0, 1, false, "Baby mode."),
+	
+	NOOB  (8,   2, 1, 1, 1, false, "Not too hard."),
+	NOOBB (9,   3, 1, 1, 2, false, "Not too hard."),
+	
+	NORM  (10,  4, 1, 1, 2, false, "Normal difficulty."),
+	NORMB (11,  5, 2, 1, 2, false, "Normal difficulty."),
+	
+	HARD  (12,  6, 2, 2, 3,  true, "Super violent."),
+	HARDB (13,  8, 2, 2, 3,  true, "Super violent."),
+	
+	NUTS  (14, 10, 3, 3, 4,  true, "Insane horror!"),
+	NUTSB (15, 12, 3, 4, 4,  true, "Insane horror!");
+
+	
+	private static int pscale   = 20;
+	private static int pscaleX2 = 40;
 	
 	public final int spawners;
 	public final int promote;
@@ -65,7 +81,7 @@ public enum Difficulty {
 	 * @return
 	 */
 	public boolean addmob(Random random) {
-		return(random.nextInt(10) < spawners);
+		return(random.nextInt(pscale) < spawners);
 	}
 	
 	
@@ -77,7 +93,7 @@ public enum Difficulty {
 	 * @return
 	 */
 	public boolean multimob(Random random) {
-		return(random.nextInt(20) < (spawners + promote));
+		return(random.nextInt(pscaleX2) < (spawners + promote));
 	}
 	
 	
@@ -89,7 +105,7 @@ public enum Difficulty {
 	 * @return
 	 */
 	private boolean promote(Random random) {
-		return(random.nextInt(10) < promote);
+		return(random.nextInt(pscale) < promote);
 	}
 	
 	
@@ -103,7 +119,7 @@ public enum Difficulty {
 		int lev = 0;
 		boolean pr = true;
 		while(pr && (lev < maxlev)) {
-			if(random.nextInt(10) < promote) {
+			if(random.nextInt(pscale) < promote) {
 				lev++;
 			} else pr = false;
 		}
@@ -123,7 +139,7 @@ public enum Difficulty {
 		int lev = nodelev;
 		boolean pr = true;
 		while(pr && (lev < bosslev)) {
-			if(random.nextInt(10) < promote) {
+			if(random.nextInt(pscale) < promote) {
 				lev++;
 			} else pr = false;
 		}

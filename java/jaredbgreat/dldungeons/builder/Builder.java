@@ -51,7 +51,8 @@ public class Builder {
 		if(world.isRemote) return; // Do not perform world-gen on the client!
 		if (MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceDungeonBegin(random, chunkX, chunkZ, world))) return;
 		DoomlikeDungeons.profiler.startTask("Create Dungeons");
-		Dungeon dungeon = new Dungeon(1, random, 
+		int levels = (random.nextInt(2) * 2) + 1;
+		Dungeon dungeon = new Dungeon(levels, random, 
 								world.getBiomeGenForCoords(new BlockPos((chunkX * 16), 64, (chunkZ * 16))), 
 								world, chunkX, chunkZ);
 		for(int i = dungeon.getNumLevels() - 1; i >= 0; i--) {
@@ -80,7 +81,8 @@ public class Builder {
 		if(world.isRemote) return; // Do not perform world-gen on the client!
 		if (MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceDungeonBegin(random, chunkX, chunkZ, world))) return;
 		DoomlikeDungeons.profiler.startTask("Create Dungeons");
-		Dungeon dungeon = new Dungeon(1, random, 
+		int levels = (random.nextInt(2) * 2) + 1;
+		Dungeon dungeon = new Dungeon(levels, random, 
 							world.getBiomeGenForCoords(new BlockPos((chunkX * 16), 64, (chunkZ * 16))), 
 						    world, chunkX, chunkZ);
 		for(int i = dungeon.getNumLevels() - 1; i >= 0; i--) {
