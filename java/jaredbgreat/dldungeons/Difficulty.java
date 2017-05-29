@@ -128,7 +128,14 @@ public enum Difficulty {
 			} else pr = false;
 		}
 		return lev;
-	}	
+	}
+	
+	
+	public Difficulty getAdjusted(int offset) {
+		Difficulty[] values = values();
+		return values[Math.min(Math.max(ordinal() + offset, 0), 
+				values.length - 1)];
+	}
 }
 
 

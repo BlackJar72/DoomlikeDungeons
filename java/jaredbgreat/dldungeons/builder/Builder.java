@@ -15,12 +15,13 @@ package jaredbgreat.dldungeons.builder;
 import static jaredbgreat.dldungeons.builder.DBlock.lapis;
 import static jaredbgreat.dldungeons.builder.DBlock.placeBlock;
 import static jaredbgreat.dldungeons.builder.DBlock.quartz;
+import jaredbgreat.dldungeons.DoomlikeDungeons;
+import jaredbgreat.dldungeons.api.DLDEvent;
+import jaredbgreat.dldungeons.planner.Dungeon;
+import jaredbgreat.dldungeons.planner.Level;
 
 import java.util.Random;
 
-import jaredbgreat.dldungeons.DoomlikeDungeons;
-import jaredbgreat.dldungeons.api.DLDEvent;
-import jaredbgreat.dldungeons.planner.Level;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkGenerator;
@@ -50,11 +51,12 @@ public class Builder {
 		if(world.isRemote) return; // Do not perform world-gen on the client!
 		if (MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceDungeonBegin(random, chunkX, chunkZ, world))) return;
 		DoomlikeDungeons.profiler.startTask("Create Dungeons");
-		Level dungeon = new Level(random, 
+		Dungeon dungeon = new Dungeon(1, random, 
 								world.getBiomeGenForCoords(new BlockPos((chunkX * 16), 64, (chunkZ * 16))), 
 								world, chunkX, chunkZ);
-		buildDungeon(dungeon);
-		dungeon.preFinalize();
+		for(int i = dungeon.getNumLevels() - 1; i >= 0; i--) {
+			placeLevel(dungeon.getLevel(i), chunkX, chunkZ, world); 
+		}
 		dungeon = null;
 		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceDungeonFinish(random, chunkX, chunkZ, world, dungeon));
 		DoomlikeDungeons.profiler.endTask("Create Dungeons");
@@ -78,19 +80,27 @@ public class Builder {
 		if(world.isRemote) return; // Do not perform world-gen on the client!
 		if (MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceDungeonBegin(random, chunkX, chunkZ, world))) return;
 		DoomlikeDungeons.profiler.startTask("Create Dungeons");
-		Level dungeon = new Level(random, 
+		Dungeon dungeon = new Dungeon(1, random, 
 							world.getBiomeGenForCoords(new BlockPos((chunkX * 16), 64, (chunkZ * 16))), 
 						    world, chunkX, chunkZ);
-		if(dungeon.theme != null) {
-			if(debugPole) debuggingPole(world, chunkX, chunkZ, dungeon);
-			buildDungeon(dungeon);
+		for(int i = dungeon.getNumLevels() - 1; i >= 0; i--) {
+			placeLevel(dungeon.getLevel(i), chunkX, chunkZ, world); 
 		}
-		dungeon.preFinalize();
 		dungeon = null;
 		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceDungeonFinish(random, chunkX, chunkZ, world, dungeon));
 		DoomlikeDungeons.profiler.endTask("Create Dungeons");
 	}
 	
+	
+	public static void placeLevel(Level level, int chunkX, int chunkZ, World world) 
+				throws Throwable {
+		if(level.theme != null) {
+			if(debugPole) debuggingPole(world, chunkX, chunkZ, level);
+			buildDungeon(level);
+		}
+		level.preFinalize();
+		level = null;
+	}
 	
 	/**
 	 * This will build the dungeon into the world, technically by having the dungeons map

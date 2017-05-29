@@ -11,11 +11,8 @@ package jaredbgreat.dldungeons.planner;
  * https://creativecommons.org/licenses/by/4.0/legalcode
 */	
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Random;
-
 import jaredbgreat.dldungeons.ConfigHandler;
+import jaredbgreat.dldungeons.Difficulty;
 import jaredbgreat.dldungeons.DoomlikeDungeons;
 import jaredbgreat.dldungeons.api.DLDEvent;
 import jaredbgreat.dldungeons.builder.DBlock;
@@ -33,6 +30,11 @@ import jaredbgreat.dldungeons.themes.BiomeSets;
 import jaredbgreat.dldungeons.themes.Degree;
 import jaredbgreat.dldungeons.themes.Sizes;
 import jaredbgreat.dldungeons.themes.Theme;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
+
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.MinecraftForge;
@@ -53,7 +55,6 @@ public class Level {
 	
 	public Theme theme;
 	public Random random;
-	public Biome biome;
 	
 	public MapMatrix map;   // 2D layout of the dungeon
 	public Node[] nodes;    // Main rooms (entrances and destination) which other rooms connect
@@ -61,7 +62,7 @@ public class Level {
 	public int roomCount;
 	public int entrancePref;
 	
-	public int baseHeight;  // Default floor height for the dungeon
+	public int baseHeight = 0;  // Default floor height for the dungeon
 	public int numEntrances = 0;
 	
 	public RoomList rooms;
@@ -102,6 +103,8 @@ public class Level {
 	int shiftX;
 	int shiftZ;
 	
+	public final Difficulty difficulty;
+	
 	
 	/**
 	 * De-links all referenced objects as a safety measure against memory leaks, 
@@ -122,7 +125,6 @@ public class Level {
 		nodes = null;
 		theme =  null;
 		random = null;
-		biome = null;
 		map = null;		
 		size = null;	
 		outside = null;
@@ -143,20 +145,36 @@ public class Level {
 	
 	public Level(Random rnd, Biome biome, World world, int chunkX, int chunkZ) 
 			throws Throwable {
+		random = rnd;
+		difficulty = ConfigHandler.getDifficulty();
+		theme = BiomeSets.getTheme(biome, random);
+		if(theme == null) {
+			return;
+		}
 		DoomlikeDungeons.profiler.startTask("Planning Dungeon");
-		prepare(rnd, biome, world, chunkX, chunkZ);
-		plan(rnd, biome, world, chunkX, chunkZ);
+		prepare(rnd, world, chunkX, chunkZ);
+		plan(rnd, world, chunkX, chunkZ);
 		DoomlikeDungeons.profiler.endTask("Planning Dungeon");
 	}
 
 	
-	protected void prepare(Random rnd, Biome biome, World world, int chunkX, int chunkZ) 
-			throws Throwable {
-		DoomlikeDungeons.profiler.startTask("Preparing theme");
+	public Level(int hardness, Random rnd, Theme theme, World world, 
+			int chunkX, int chunkZ, int y) throws Throwable {
 		random = rnd;
-		this.biome = biome;
-		theme = BiomeSets.getTheme(biome, random);
-		if(theme == null) return;
+		this.theme = theme;
+		baseHeight = y;
+		difficulty = ConfigHandler.getDifficulty().getAdjusted(hardness);
+		DoomlikeDungeons.profiler.startTask("Planning Dungeon");
+		prepare(rnd, world, chunkX, chunkZ);
+		plan(rnd, world, chunkX, chunkZ);
+		DoomlikeDungeons.profiler.endTask("Planning Dungeon");
+	}
+
+	
+	protected void prepare(Random rnd, World world, int chunkX, int chunkZ) 
+			throws Throwable {
+
+		DoomlikeDungeons.profiler.startTask("Preparing theme");
 		
 		applyTheme();
 		entrancePref = random.nextInt(3);		
@@ -182,7 +200,7 @@ public class Level {
 	}
 	
 	
-	protected void plan(Random rnd, Biome biome, World world, int chunkX, int chunkZ) 
+	protected void plan(Random rnd, World world, int chunkX, int chunkZ) 
 			throws Throwable {
 		DoomlikeDungeons.profiler.startTask("Layout dungeon (rough draft)");
 		makeNodes();
@@ -215,7 +233,9 @@ public class Level {
 		entrances	= theme.entrances.select(random);
 		fences		= theme.fences.select(random);
 		naturals    = theme.naturals.select(random);
-		baseHeight  = random.nextInt(theme.maxY - theme.minY) + theme.minY;
+		if(baseHeight <= 0) {
+			baseHeight  = random.nextInt(theme.maxY - theme.minY) + theme.minY;
+		}
 	}
 	
 	

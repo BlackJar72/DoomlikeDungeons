@@ -275,13 +275,13 @@ public class Room extends AbstractRoom {
 	 * @param dungeon
 	 */
 	protected void addSpawners(Level dungeon) {
-		if(ConfigHandler.difficulty == Difficulty.NONE ||
-				(!isNode && !ConfigHandler.difficulty.addmob(dungeon.random)) 
+		if(dungeon.difficulty == Difficulty.NONE ||
+				(!isNode && !dungeon.difficulty.addmob(dungeon.random)) 
 				|| hasEntrance) return;
 		boolean multibonus = false;
 		int x, y, z, tmp, num;
 		String mob;		
-		if(ConfigHandler.difficulty.multimob(dungeon.random) || isNode) {
+		if(dungeon.difficulty.multimob(dungeon.random) || isNode) {
 			tmp = (endX - beginX) > (endZ - beginZ) ? (endX - beginX) : (endZ - beginZ);  
 			num = dungeon.random.nextInt(2 + (tmp / 8)) + 1;
 			for(int i = 0; i < num; i++) {
@@ -291,7 +291,7 @@ public class Room extends AbstractRoom {
 				z = dungeon.random.nextInt(tmp) + beginZ + 2;
 				if(dungeon.random.nextInt(4) == 0) y = dungeon.map.ceilY[x][z];
 				else y = dungeon.map.floorY[x][z];
-				int lev = levAdjust(ConfigHandler.difficulty.moblevel(dungeon.random), dungeon);
+				int lev = levAdjust(dungeon.difficulty.moblevel(dungeon.random), dungeon);
 				if(lev >= 0) {
 					mob = dungeon.theme.allMobs[lev].get(dungeon.random.nextInt(dungeon.theme.allMobs[lev].size()));
 					spawners.add(new Spawner(x, y, z, mob));					
@@ -307,7 +307,7 @@ public class Room extends AbstractRoom {
 			z = dungeon.random.nextInt(tmp) + beginZ + (tmp /2);
 			if(dungeon.random.nextInt(4) == 0) y = dungeon.map.floorY[x][z];
 			else y = dungeon.map.ceilY[x][z];
-			int lev = levAdjust(ConfigHandler.difficulty.moblevel(dungeon.random), dungeon);
+			int lev = levAdjust(dungeon.difficulty.moblevel(dungeon.random), dungeon);
 			if(lev >= 0) {
 				mob = dungeon.theme.allMobs[lev].get(dungeon.random.nextInt(dungeon.theme.allMobs[lev].size()));
 				spawners.add(new Spawner(x, y, z, mob));
@@ -320,7 +320,7 @@ public class Room extends AbstractRoom {
 			z = (int)realZ;
 			if(dungeon.map.hasLiquid[x][z]) {y = dungeon.map.ceilY[x][z];}
 			else {y = dungeon.map.floorY[x][z] - 1;} 
-			int lev = levAdjust(ConfigHandler.difficulty.nodelevel(dungeon.random), dungeon);
+			int lev = levAdjust(dungeon.difficulty.nodelevel(dungeon.random), dungeon);
 			if(lev >= 0) {
 				mob = dungeon.theme.allMobs[lev].get(dungeon.random.nextInt(dungeon.theme.allMobs[lev].size()));
 				spawners.add(new Spawner(x, y, z, mob));
@@ -362,7 +362,7 @@ public class Room extends AbstractRoom {
 	 * @param dungeon
 	 */
 	protected void addChests(Level dungeon) {
-		if((ConfigHandler.difficulty == Difficulty.NONE) || 
+		if((dungeon.difficulty == Difficulty.NONE) || 
 				hasEntrance) return;
 		if((!hasSpawners && (dungeon.random.nextInt(5) > 0))) return;
 		int x, y, z, tmp, num;

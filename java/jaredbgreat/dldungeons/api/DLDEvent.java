@@ -14,6 +14,7 @@ package jaredbgreat.dldungeons.api;
 import java.util.Random;
 
 import jaredbgreat.dldungeons.builder.DBlock;
+import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.planner.Level;
 import jaredbgreat.dldungeons.planner.mapping.MapMatrix;
 import jaredbgreat.dldungeons.rooms.Room;
@@ -287,14 +288,14 @@ public class DLDEvent extends Event {
 	}
 
 	public static class PlaceDungeonFinish extends PlaceDungeon {
-		private final Level dungeon;
+		private final Dungeon dungeon;
 
-		public PlaceDungeonFinish(Random random, int chunkX, int chunkZ, World world, Level dungeon) {
+		public PlaceDungeonFinish(Random random, int chunkX, int chunkZ, World world, Dungeon dungeon2) {
 			super(random, chunkX, chunkZ, world);
-			this.dungeon = dungeon;
+			this.dungeon = dungeon2;
 		}
 
-		public Level getDungeon() {
+		public Dungeon getDungeon() {
 			return dungeon;
 		}
 

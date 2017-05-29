@@ -98,7 +98,7 @@ public final class ConfigHandler {
 	private static final boolean INSTALL_CMD = true;
 	public  static       boolean installCmd = INSTALL_CMD;
 	
-	public static Difficulty difficulty;
+	private static Difficulty difficulty;
 
 	
 	// All methods and data are static. 
@@ -440,5 +440,10 @@ public final class ConfigHandler {
 	 */
 	public static String getConfigDir() {
 		return configDir + File.separator;
+	}
+	
+	
+	public static Difficulty getDifficulty() {
+		return difficulty;
 	}
 }
