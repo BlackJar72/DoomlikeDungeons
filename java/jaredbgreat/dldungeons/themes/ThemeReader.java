@@ -248,8 +248,7 @@ public class ThemeReader {
 			if(!tokens.hasMoreTokens() || (level == 0)) continue;
 			modid = tokens.nextToken();
 			if(modid.toLowerCase().equals("item") 
-					|| modid.toLowerCase().equals("block")
-					|| modid.toLowerCase().equals("minecraft"))
+					|| modid.toLowerCase().equals("block"))
 				modid = "minecraft";
 			if(!tokens.hasMoreTokens()) continue;
 			name = tokens.nextToken();

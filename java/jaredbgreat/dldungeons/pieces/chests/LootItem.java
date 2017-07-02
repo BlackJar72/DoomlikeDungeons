@@ -101,16 +101,16 @@ public class LootItem {
 	 * @param in
 	 */
 	private void metaParse(String in) {
-		Tokenizer tokens = new Tokenizer(in, "({[:]})");
-		String modid = tokens.nextToken();
+		Tokenizer tokens = new Tokenizer(in, "({[]})");
 		String name  = tokens.nextToken();
-		//Hacky, but it might work for now
-		item = Item.REGISTRY.getObject(new ResourceLocation(in));
+		item = Item.REGISTRY.getObject(new ResourceLocation(name));
 		if(item == null) {
 			Logging.LogError("[DLDUNGEONS] ERROR! Item read as \"" + in 
 					+ "\" was was not in registry (returned null).");
 		}
-		if(tokens.hasMoreTokens()) meta = Integer.parseInt(tokens.nextToken());
+		if(tokens.hasMoreTokens()) {
+			meta = Integer.parseInt(tokens.nextToken());
+		}
 	}
 	
 	private static Item getItem(String in) {

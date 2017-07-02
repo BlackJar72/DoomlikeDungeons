@@ -15,7 +15,7 @@ public final class Info {
 	public static final String OLD_ID = "DLDungeonsJBG";
 	public static final String ID = "dldungeonsjdg";
 	public static final String NAME = "Doomlike Dungeons";
-	public static final String VERSION = "1.9.1";
+	public static final String VERSION = "1.9.3";
 	public static final String MINECRAFT = "1.12";
 	public static final String CHANNEL =  "JBGDungeons";	
 	
