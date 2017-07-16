@@ -270,7 +270,7 @@ public final class ConfigHandler {
 	 */
 	public static void listItems() {	
 		BufferedWriter outstream = null;
-		File itemlist = new File(listsDir.toString() + File.separator + "itmes.txt");
+		File itemlist = new File(listsDir.toString() + File.separator + "items.txt");
 		if(itemlist.exists()) itemlist.delete(); 
 		try {
 			outstream = new BufferedWriter(new 
