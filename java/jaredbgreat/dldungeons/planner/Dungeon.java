@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.Random;
 
 import jaredbgreat.dldungeons.ConfigHandler;
+import jaredbgreat.dldungeons.Difficulty;
 import jaredbgreat.dldungeons.DoomlikeDungeons;
 import jaredbgreat.dldungeons.api.DLDEvent;
 import jaredbgreat.dldungeons.builder.DBlock;
@@ -65,7 +66,7 @@ public class Dungeon {
 	public int numEntrances = 0;
 	
 	public RoomList rooms;
-	//public RoomList nodeRooms;
+	public SpawnerCounter spawners;
 	public ArrayList<Room> planter;
 	public ArrayList<Room> grower;
 	
@@ -165,6 +166,7 @@ public class Dungeon {
 		map = new MapMatrix(size.width, world, chunkX, chunkZ);
 		numNodes = random.nextInt(size.maxNodes - size.minNodes + 1) + size.minNodes + 1;
 		nodes = new Node[numNodes];
+		spawners = new SpawnerCounter();
 		
 		shiftX = (map.chunkX * 16) - (map.room.length / 2) + 8;
 		shiftZ = (map.chunkZ * 16) - (map.room.length / 2) + 8;
@@ -172,7 +174,13 @@ public class Dungeon {
 		makeNodes();
 		if((numEntrances < 1) && ConfigHandler.easyFind) addAnEntrance();
 		connectNodes();
-		growthCycle();	
+		growthCycle();
+		if(ConfigHandler.thinSpawners && (ConfigHandler.difficulty != Difficulty.NONE)) { 
+			spawners.fixSpawners(this, rnd);
+			for(Room room : rooms) {
+				room.addChests(this);
+			}
+		}
 		DoomlikeDungeons.profiler.endTask("Layout dungeon (rough draft)");
 		DoomlikeDungeons.profiler.startTask("Fixing room contents");
 		fixRoomContents();

@@ -138,6 +138,9 @@ public class Room extends AbstractRoom {
 		realX = (((float)(endX - beginX)) / 2.0f) + (float)beginX + 1.0f;
 		realZ = (((float)(endZ - beginZ)) / 2.0f) + (float)beginZ + 1.0f;
 		
+
+		dungeon.spawners.addRoom((endX - beginX) * (endZ - beginZ));
+		
 		if(isNode) {
 			degenerateFloors = false;
 			doors.add(new Doorway(midX, midZ, dungeon.random.nextBoolean()));
@@ -197,7 +200,6 @@ public class Room extends AbstractRoom {
 		}
 		if(parent == null) {
 			addSpawners(dungeon);
-			addChests(dungeon);
 		}
 		return this;
 	}
@@ -277,7 +279,7 @@ public class Room extends AbstractRoom {
 	protected void addSpawners(Dungeon dungeon) {
 		if(ConfigHandler.difficulty == Difficulty.NONE ||
 				(!isNode && !ConfigHandler.difficulty.addmob(dungeon.random)) 
-				|| hasEntrance) return;
+				|| (hasEntrance && !ConfigHandler.difficulty.entrancemobs)) return;
 		boolean multibonus = false;
 		int x, y, z, tmp, num;
 		String mob;		
@@ -294,10 +296,9 @@ public class Room extends AbstractRoom {
 				int lev = levAdjust(ConfigHandler.difficulty.moblevel(dungeon.random), dungeon);
 				if(lev >= 0) {
 					mob = dungeon.theme.allMobs[lev].get(dungeon.random.nextInt(dungeon.theme.allMobs[lev].size()));
-					spawners.add(new Spawner(x, y, z, mob));					
-					if(level < lev) level = lev;
-					multibonus = hasSpawners;
-					hasSpawners = true;
+					Spawner s = new Spawner(x, y, z, id, lev, mob);
+					spawners.add(s);
+					dungeon.spawners.addSpawner(s);
 				}
 			}
 		} else  {
@@ -310,9 +311,9 @@ public class Room extends AbstractRoom {
 			int lev = levAdjust(ConfigHandler.difficulty.moblevel(dungeon.random), dungeon);
 			if(lev >= 0) {
 				mob = dungeon.theme.allMobs[lev].get(dungeon.random.nextInt(dungeon.theme.allMobs[lev].size()));
-				spawners.add(new Spawner(x, y, z, mob));
-				hasSpawners = true;
-				level = lev;
+				Spawner s = new Spawner(x, y, z, id, lev, mob);
+				spawners.add(s);
+				dungeon.spawners.addSpawner(s);
 			}
 		}
 		if(isNode) {
@@ -323,11 +324,7 @@ public class Room extends AbstractRoom {
 			int lev = levAdjust(ConfigHandler.difficulty.nodelevel(dungeon.random), dungeon);
 			if(lev >= 0) {
 				mob = dungeon.theme.allMobs[lev].get(dungeon.random.nextInt(dungeon.theme.allMobs[lev].size()));
-				spawners.add(new Spawner(x, y, z, mob));
-				if(level < lev) level = lev;
-				multibonus = hasSpawners;
-				hasSpawners = true;
-				level++;                 // Add destination node bonus
+				spawners.add(new Spawner(x, y, z, id, lev, mob));
 			}
 		}
 		if(multibonus) level++;
@@ -361,9 +358,21 @@ public class Room extends AbstractRoom {
 	 * 
 	 * @param dungeon
 	 */
-	protected void addChests(Dungeon dungeon) {
+	public void addChests(Dungeon dungeon) {
 		if((ConfigHandler.difficulty == Difficulty.NONE) || 
 				hasEntrance) return;
+		hasSpawners = spawners.size() > 0;
+		int lev = 0;
+		int n = spawners.size();
+		for(int i = 0; i < n; i++) {
+			lev = Math.min(lev, spawners.get(i).getLevel());
+		}
+		if(n > 1) {
+			lev++;			
+		}
+		if(isNode && !hasEntrance) {
+			n++;
+		}
 		if((!hasSpawners && (dungeon.random.nextInt(5) > 0))) return;
 		int x, y, z, tmp, num;
 		if(!hasSpawners) {
@@ -381,7 +390,7 @@ public class Room extends AbstractRoom {
 			y = dungeon.map.floorY[x][z];
 			chests.add(new BasicChest(x, y, z, level));
 		} else {
-			int ms = Math.max(spawners.size(), 2);
+			int ms = Math.max(n, 2);
 			if(isNode)num = Math.min(ms, dungeon.random.nextInt(2 + (ms / 2)) + 2);
 			else      num = dungeon.random.nextInt(1 + (ms / 2)) + 1;
 			for(int i = 0; i < num; i++) {

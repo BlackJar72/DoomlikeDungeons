@@ -19,13 +19,15 @@ package jaredbgreat.dldungeons.pieces;
  */
 public class Spawner {
 	
-	private final int x, y, z;
+	private final int x, y, z, room, level;
 	private final String mob;
 	
-	public Spawner(int x, int y, int z, String mob) {
+	public Spawner(int x, int y, int z, int room, int level, String mob) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
+		this.room = room;
+		this.level = level;
 		this.mob = mob;
 	}
 	
@@ -42,6 +44,16 @@ public class Spawner {
 	
 	public int getZ() {
 		return z;
+	}
+	
+	
+	public int getRoom() {
+		return room;
+	}
+	
+	
+	public int getLevel() {
+		return level;
 	}
 	
 	
