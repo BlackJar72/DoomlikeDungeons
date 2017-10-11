@@ -138,7 +138,6 @@ public class Room extends AbstractRoom {
 		realX = (((float)(endX - beginX)) / 2.0f) + (float)beginX + 1.0f;
 		realZ = (((float)(endZ - beginZ)) / 2.0f) + (float)beginZ + 1.0f;
 		
-
 		dungeon.spawners.addRoom((endX - beginX) * (endZ - beginZ));
 		
 		if(isNode) {

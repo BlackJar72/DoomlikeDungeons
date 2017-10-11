@@ -11,10 +11,6 @@ package jaredbgreat.dldungeons.planner;
  * https://creativecommons.org/licenses/by/4.0/legalcode
 */	
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Random;
-
 import jaredbgreat.dldungeons.ConfigHandler;
 import jaredbgreat.dldungeons.Difficulty;
 import jaredbgreat.dldungeons.DoomlikeDungeons;
@@ -34,6 +30,11 @@ import jaredbgreat.dldungeons.themes.BiomeSets;
 import jaredbgreat.dldungeons.themes.Degree;
 import jaredbgreat.dldungeons.themes.Sizes;
 import jaredbgreat.dldungeons.themes.Theme;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
+
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.MinecraftForge;

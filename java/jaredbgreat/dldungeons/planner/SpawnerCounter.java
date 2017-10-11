@@ -45,8 +45,6 @@ public class SpawnerCounter {
 			return;
 		}
 		Collections.shuffle(list, random);
-		System.out.println("Existing: " + existing + "; Target: " + targetNum);
-		System.out.println("Removing " + (existing - targetNum) + " spawners");
 		for(int i = targetNum; i < existing; i++) {
 			Spawner s = list.get(i);
 			dungeon.rooms.get(s.getRoom()).spawners.remove(s);

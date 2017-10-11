@@ -103,7 +103,6 @@ public final class ConfigHandler {
 	public  static       boolean installCmd = INSTALL_CMD;
 	
 	public static Difficulty difficulty;
-
 	
 	// All methods and data are static. 
 	// There is no reason this should ever be instantiated.
@@ -241,7 +240,6 @@ public final class ConfigHandler {
 				"If true reports on dungeon planning and build times will be exproted to files and the commandline")
 				.getBoolean(PROFILE);
 		System.out.println("[DLDUNGEONS] Will self-profile? " + profile);
-		
 		
 		// Saving it all
 		openThemesDir();
