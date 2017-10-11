@@ -29,46 +29,33 @@ import java.util.Random;
  */
 public enum Difficulty {
 	
-	NONE0 (0,   0, 0, 0, 0, false, "No spawners."),	
-	NONE  (0,   0, 0, 0, 0, false, "No spawners."),
-	NONEB (0,   0, 0, 0, 0, false, "No spawners."),
+	NONE  (0, 0, 0, 0, 0,  -1, false, "No spawners."),
+	BABY  (3, 0, 0, 0, 0, 884, false, "Baby mode."),
+	NOOB  (4, 1, 1, 1, 1, 590, false, "Not too hard."),
+	NORM  (5, 2, 1, 1, 2, 427, false, "Normal difficulty."),
+	HARD  (6, 3, 2, 2, 3, 323,  true, "Super violent."),
+	NUTS  (7, 5, 2, 2, 4, 100,  true, "Insane horror!");
 	
-	BABY0 (5,   0, 0, 0, 0, false, "Baby mode."),
-	BABY  (6,   0, 0, 0, 0, false, "Baby mode."),
-	BABYB (7,   1, 1, 0, 1, false, "Baby mode."),
-	
-	NOOB  (8,   2, 1, 1, 1, false, "Not too hard."),
-	NOOBB (9,   3, 1, 1, 2, false, "Not too hard."),
-	
-	NORM  (10,  4, 1, 1, 2, false, "Normal difficulty."),
-	NORMB (11,  5, 2, 1, 2, false, "Normal difficulty."),
-	
-	HARD  (12,  6, 2, 2, 3,  true, "Super violent."),
-	HARDB (13,  8, 2, 2, 3,  true, "Super violent."),
-	
-	NUTS  (14, 10, 3, 3, 4,  true, "Insane horror!"),
-	NUTSB (15, 12, 3, 4, 4,  true, "Insane horror!");
-
-	
-	private static int pscale   = 20;
-	private static int pscaleX2 = 40;
 	
 	public final int spawners;
 	public final int promote;
 	public final int maxlev;
 	public final int nodelev;
 	public final int bosslev;
+	public final int blocksPerSpawner;
 	public final boolean entrancemobs;
 	public final String label;
 	
 	
 	private Difficulty(int spawners, int promote, int mobmax, int nodelev,
-			int bosslev, boolean entrancemobs, String label) {
+			int bosslev, int blocksPerSpawner, boolean entrancemobs, 
+			String label) {
 		this.spawners = spawners;
 		this.promote = promote;
 		this.maxlev = mobmax;
 		this.nodelev = nodelev;
 		this.bosslev = bosslev;
+		this.blocksPerSpawner = blocksPerSpawner;
 		this.entrancemobs = entrancemobs;
 		this.label = label;
 	}
@@ -81,7 +68,7 @@ public enum Difficulty {
 	 * @return
 	 */
 	public boolean addmob(Random random) {
-		return(random.nextInt(pscale) < spawners);
+		return(random.nextInt(10) < spawners);
 	}
 	
 	
@@ -93,7 +80,7 @@ public enum Difficulty {
 	 * @return
 	 */
 	public boolean multimob(Random random) {
-		return(random.nextInt(pscaleX2) < (spawners + promote));
+		return(random.nextInt(20) < (spawners + promote));
 	}
 	
 	
@@ -105,7 +92,7 @@ public enum Difficulty {
 	 * @return
 	 */
 	private boolean promote(Random random) {
-		return(random.nextInt(pscale) < promote);
+		return(random.nextInt(10) < promote);
 	}
 	
 	
@@ -119,7 +106,7 @@ public enum Difficulty {
 		int lev = 0;
 		boolean pr = true;
 		while(pr && (lev < maxlev)) {
-			if(random.nextInt(pscale) < promote) {
+			if(random.nextInt(10) < promote) {
 				lev++;
 			} else pr = false;
 		}
@@ -139,19 +126,12 @@ public enum Difficulty {
 		int lev = nodelev;
 		boolean pr = true;
 		while(pr && (lev < bosslev)) {
-			if(random.nextInt(pscale) < promote) {
+			if(random.nextInt(10) < promote) {
 				lev++;
 			} else pr = false;
 		}
 		return lev;
-	}
-	
-	
-	public Difficulty getAdjusted(int offset) {
-		Difficulty[] values = values();
-		return values[Math.min(Math.max(ordinal() + offset, 0), 
-				values.length - 1)];
-	}
+	}	
 }
 
 

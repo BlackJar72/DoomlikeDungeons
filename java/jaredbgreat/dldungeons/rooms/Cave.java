@@ -102,7 +102,6 @@ public class Cave extends Room {
 		}
 		if(parent == null) {
 			addSpawners(dungeon);
-			addChests(dungeon);
 		}
 		if(dungeon.naturals.use(dungeon.random) || !dungeon.variability.use(dungeon.random)) {
 			for(int i = beginX; i < endX; i++) {

@@ -3,7 +3,7 @@
   "modid": "DLDungeonJBG",
   "name": "Doomlike Dungeons",
   "description": "Algorithmically generates multiroom dungeons resembling Doom levels into the world.",
-  "version": "1.9.2",
+  "version": "1.10.0",
   "mcversion": "1.10",
   "url": "http://www.minecraftforum.net/topic/2382396-152164172-doomlike-dungeons-124-sspsmp/",
   "updateUrl": "",

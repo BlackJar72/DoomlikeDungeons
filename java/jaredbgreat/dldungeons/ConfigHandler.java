@@ -23,6 +23,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.HashSet;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityList;
@@ -61,6 +62,7 @@ public final class ConfigHandler {
 	private static final boolean DEFAULT_OBEY_RULE = true;
 	private static final boolean DEFAULT_POSITIVE_DIMS = true;
 	private static final boolean DEFAULT_ANNOUNCE_COMMANDS = true;
+	private static final boolean DEFAULT_THIN_SPAWNERS = true;
 	
 	// Vanilla loot will not be added in version of Mincraft 1.9+
 	// Instead all dungeons will have some loot enchanted.
@@ -76,7 +78,7 @@ public final class ConfigHandler {
 	
 	private static final String[] NEVER_IN_BIOMES = new String[]{"END"};
 	private static       String[] neverInBiomes   = NEVER_IN_BIOMES;
-	public  static EnumSet<Type>  biomeExclusions = EnumSet.noneOf(Type.class);
+	public  static HashSet<Type>  biomeExclusions = new HashSet<Type>();
 	
 	protected static boolean writeLists = DEFAULT_WRITE_LISTS;	
 	protected static boolean naturalSpawn = DEFAULT_NATURAL_SPAWN;	
@@ -88,6 +90,7 @@ public final class ConfigHandler {
 	public    static boolean announceCommands = DEFAULT_ANNOUNCE_COMMANDS;
 	public    static boolean vanillaLoot = DEFAULT_VANILLA_LOOT;
 	public    static boolean stingyLoot = DEFAULT_STINGY_LOOT;	
+	public    static boolean thinSpawners = DEFAULT_THIN_SPAWNERS;	
 		
 	private   static final boolean PROFILE = false;
 	protected static boolean profile;
@@ -98,7 +101,7 @@ public final class ConfigHandler {
 	private static final boolean INSTALL_CMD = true;
 	public  static       boolean installCmd = INSTALL_CMD;
 	
-	private static Difficulty difficulty;
+	public static Difficulty difficulty;
 
 	
 	// All methods and data are static. 
@@ -116,77 +119,126 @@ public final class ConfigHandler {
 		config.load();
 		
 		// General configuration
-		int freqScale = config.get("General", "FrequencyScale", DEFAULT_SCALE).getInt();
+		int freqScale = config.get("General", "FrequencyScale", DEFAULT_SCALE, 
+				"Determines the average distance between dungeons (+2 is twice as far appart)").getInt();
 		if((freqScale > 30) || (freqScale < 4)) freqScale = DEFAULT_SCALE;
 		GenerationHandler.setFrequency(freqScale);
 		System.out.println("[DLDUNGEONS] Frequency Scaling Factor Set To: " + freqScale);
 		
-		int minXZ = config.get("General", "MinChunkXY", DEFAULT_MINXZ).getInt();
+		int minXZ = config.get("General", "MinChunkXY", DEFAULT_MINXZ, 
+				"Spawn protection: this is the minimum number of chunks from spawn before dungeon generate")
+				.getInt();
 		if(minXZ < 0) minXZ = DEFAULT_MINXZ;
 		GenerationHandler.setMinXZ(minXZ);
 		System.out.println("[DLDUNGEONS] Minimum X Factor Set To: " + minXZ);
 		
-		int diff = config.get("General", "Difficulty", DEFAULT_DIF).getInt();
+		int diff = config.get("General", "Difficulty", DEFAULT_DIF, 
+				"How hard: 0 = empty, 1 = baby, 2 = easy, 3 = normal, 4= hard, 5 = nightmare")
+				.getInt();
 		if((diff < 0) || (diff > 5)) diff = DEFAULT_DIF;
 		parseDiff(diff);
 		System.out.println("[DLDUNGEONS] Difficulty set to: " + difficulty.label);
 		
-		int[] dims = config.get("General", "Dimensions", DEFAULT_DIMS).getIntList();
+		int[] dims = config.get("General", "Dimensions", DEFAULT_DIMS, 
+				"These dimensions either lack dungeons or only they have them "
+				+ "(see OnlySpawnInListedDimensions)")
+				.getIntList();
 		GenerationHandler.setDimensions(dims);
 		System.out.print("[DLDUNGEONS] Dimensions listed in config file: ");
 		for(int i = 0; i < dims.length; i++) System.out.print(dims[i] + ", ");
 		System.out.println();
 		
-		naturalSpawn = config.get("General", "SpawnWithWordgen", DEFAULT_NATURAL_SPAWN).getBoolean(true);
+		naturalSpawn = config.get("General", "SpawnWithWordgen", DEFAULT_NATURAL_SPAWN, 
+				"True to have dungeons generate naturally, false otherwise.").getBoolean(true);
 		System.out.println("[DLDUNGEONS] Will spawn dungeons in with world generation? " + naturalSpawn);
 		
-		obeyRule = config.get("General", "ObeyFeatureSpawningRule", DEFAULT_OBEY_RULE).getBoolean(true);
+		obeyRule = config.get("General", "ObeyFeatureSpawningRule", DEFAULT_OBEY_RULE, 
+				"If true worlds that are set to not generate (vanilla) structures "
+				+ "will also not have these dungesons")
+				.getBoolean(true);
 		System.out.println("[DLDUNGEONS] Will spawn dungeons even with structures disabled? " + !obeyRule);
 		
-		positiveDims = config.get("General", "OnlySpawnInListedDims", DEFAULT_POSITIVE_DIMS).getBoolean(true);
+		positiveDims = config.get("General", "OnlySpawnInListedDims", DEFAULT_POSITIVE_DIMS, 
+				"Determines if the dimesions list is black list of white list; "
+				+ System.lineSeparator() + "if true only listed dimensions have dungeons, "
+				+ System.lineSeparator() + "otherswise all but those will have them").getBoolean(true);
 		if(positiveDims) System.out.print("[DLDUNGEONS] Will only spawn in these dimensions: ");
 		else System.out.print("[DLDUNGEONS] Will never spawn in these dimensions: ");
 		for(int i = 0; i < dims.length; i++) System.out.print(dims[i] + ", ");
 		System.out.println();
 		
-		writeLists = config.get("General", "ExportLists", DEFAULT_WRITE_LISTS).getBoolean(DEFAULT_WRITE_LISTS);
+		writeLists = config.get("General", "ExportLists", DEFAULT_WRITE_LISTS, 
+				"If true a \"lists\" folder will be created and files showing names and ideas for all "
+				+ System.lineSeparator() + "mobs / items / blocks will be made.  This is good for editing "
+				+ System.lineSeparator() + "themes.").getBoolean(DEFAULT_WRITE_LISTS);
 		System.out.println("[DLDUNGEONS] Will export item, block, and mob lists? " + writeLists);
 		
-		announceCommands = config.get("General", "AnnounceCommands", DEFAULT_ANNOUNCE_COMMANDS).getBoolean(DEFAULT_ANNOUNCE_COMMANDS);
+		announceCommands = config.get("General", "AnnounceCommands", DEFAULT_ANNOUNCE_COMMANDS,
+				"If true, console commands from the mod will be annouced in chat")
+				.getBoolean(DEFAULT_ANNOUNCE_COMMANDS);
 		System.out.println("[DLDUNGEONS] Will announce use of OP/cheat commands? " + announceCommands);
 		
-		easyFind = config.get("General", "EasyFind", EASY_FIND).getBoolean(EASY_FIND);
+		easyFind = config.get("General", "EasyFind", EASY_FIND, 
+				"If true dungeons will all have an entrance with a room or ruin, unless the theme "
+				+ System.lineSeparator() + "is one that never has entrances.").getBoolean(EASY_FIND);
 		System.out.println("[DLDUNGEONS] Will dungeons be easy to find? " + easyFind);
 		
-		installThemes = config.get("General", "InstallThemes", INSTALL_THEMES).getBoolean(INSTALL_THEMES);
-		System.out.println("[DLDUNGEONS] Will themes be automatically install if themes folder is empty? " + installThemes);
+		installThemes = config.get("General", "InstallThemes", INSTALL_THEMES, 
+				"If true themes will automaticall be (re)installed if the themes folder is empty.")
+				.getBoolean(INSTALL_THEMES);
+		System.out.println("[DLDUNGEONS] Will themes be automatically install if themes folder is empty? " 
+				+ installThemes);
 		
-		installCmd = config.get("General", "InstallThemesByCommand", INSTALL_CMD).getBoolean(INSTALL_CMD);
+		installCmd = config.get("General", "InstallThemesByCommand", INSTALL_CMD, 
+				"If true themes can be (re)installed by the console commands \"\\dldInstallThemes\" "
+				+ System.lineSeparator() + "and \"\\dldForceInstallThemes.\"").getBoolean(INSTALL_CMD);
 		System.out.println("[DLDUNGEONS] Can themes be (re)installed by command? " + installCmd);
 		
-		stingyLoot = config.get("General", "StingyWithLoot", 
-				DEFAULT_STINGY_LOOT).getBoolean(DEFAULT_STINGY_LOOT);
+		stingyLoot = config.get("General", "StingyWithLoot", DEFAULT_STINGY_LOOT,
+				"If true the dungeons will have less loot (in case you find the default OP).")
+				.getBoolean(DEFAULT_STINGY_LOOT);
 		System.out.println("[DLDUNGEONS] Will be stingy with chests? " + stingyLoot);
 		
+		thinSpawners = config.get("General", "ThinSpawners", DEFAULT_THIN_SPAWNERS,
+				"If true smaller dungeons will have some of there spawners removed to "
+				+ "make them more like larger dungeons.")
+				.getBoolean(DEFAULT_THIN_SPAWNERS);
+		System.out.println("[DLDUNGEONS] Will be stingy with chests? " + stingyLoot);
 		
-		neverInBiomes = config.get("General", "NeverInBiomeTypes", NEVER_IN_BIOMES).getStringList();
+		neverInBiomes = config.get("General", "NeverInBiomeTypes", NEVER_IN_BIOMES, 
+				"Dungeons will not generate in these biome types (uses Forge biome dictionary")
+				.getStringList();
 		processBiomeExclusions(neverInBiomes);
 		
 		
 		// API Stuff
-		disableAPI = config.get("API", "DisableApiCalls", DISABLE_API).getBoolean(DISABLE_API);
+		disableAPI = config.get("API", "DisableApiCalls", DISABLE_API, 
+				"If true the API is disabled")
+				.getBoolean(DISABLE_API);
 		System.out.println("[DLDUNGEONS] Will use API? " + !disableAPI);
 
-		noMobChanges = config.get("API", "DontAllowApiOnMobs", NO_MOB_CHANGES).getBoolean(NO_MOB_CHANGES);
+		noMobChanges = config.get("API", "DontAllowApiOnMobs", NO_MOB_CHANGES, 
+				"If false other mods that use the API can add mobs to the dungeons, if true they cannot.  "
+				+ System.lineSeparator() + "(This is good if hand designing custom themes for a mod pack.)")
+				.getBoolean(NO_MOB_CHANGES);
 		System.out.println("[DLDUNGEONS] Will allow API base mob change? " + !noMobChanges);
 		
 		
 		// Debugging
-		Builder.setDebugPole(config.get("Debugging", "BuildPole", false).getBoolean(false));
+		Builder.setDebugPole(config.get("Debugging", "BuildPole", false, 
+				"CHEAT: If true all dungeons will have a giant quarts pole through the middle and be "
+				+ System.lineSeparator() + "surrounded by a boarder of floating llapis,  This is to make "
+			    + System.lineSeparator() + "them easy to find when testing.")
+			    .getBoolean(false));
 		
-		MapMatrix.setDrawFlyingMap(config.get("Debugging", "BuildFlyingMap", false).getBoolean(false));
+		MapMatrix.setDrawFlyingMap(config.get("Debugging", "BuildFlyingMap", false, 
+				"CHEAT: If true the layout of the dungeon will be built from floating glowstone (etc.) "
+				+ System.lineSeparator() + "-- on some versions it also causes *EXTREME LAG*!")
+				.getBoolean(false));
 		
-		profile = config.get("Debugging", "AutoProfilingOn", PROFILE).getBoolean(PROFILE);
+		profile = config.get("Debugging", "AutoProfilingOn", PROFILE, 
+				"If true reports on dungeon planning and build times will be exproted to files and the commandline")
+				.getBoolean(PROFILE);
 		System.out.println("[DLDUNGEONS] Will self-profile? " + profile);
 		
 		

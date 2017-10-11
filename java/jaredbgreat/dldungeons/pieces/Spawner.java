@@ -1,7 +1,5 @@
 package jaredbgreat.dldungeons.pieces;
 
-import jaredbgreat.dldungeons.parser.Tokenizer;
-
 
 /* 
  * This mod is the creation and copyright (c) 2015 
@@ -21,21 +19,16 @@ import jaredbgreat.dldungeons.parser.Tokenizer;
  */
 public class Spawner {
 	
-	private final int x, y, z;
+	private final int x, y, z, room, level;
 	private final String mob;
-	private final String nbt;
 	
-	public Spawner(int x, int y, int z, String mob) {
+	public Spawner(int x, int y, int z, int room, int level, String mob) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		Tokenizer tokens = new Tokenizer(mob, "([{}])");
-		this.mob = tokens.nextToken();
-		if(tokens.hasMoreTokens()) {
-			this.nbt = tokens.nextToken();
-		} else {
-			this.nbt = null;
-		}
+		this.room = room;
+		this.level = level;
+		this.mob = mob;
 	}
 	
 	
@@ -51,6 +44,16 @@ public class Spawner {
 	
 	public int getZ() {
 		return z;
+	}
+	
+	
+	public int getRoom() {
+		return room;
+	}
+	
+	
+	public int getLevel() {
+		return level;
 	}
 	
 	

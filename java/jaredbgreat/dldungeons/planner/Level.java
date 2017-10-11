@@ -66,7 +66,7 @@ public class Level {
 	public int numEntrances = 0;
 	
 	public RoomList rooms;
-	//public RoomList nodeRooms;
+	public SpawnerCounter spawners;
 	public ArrayList<Room> planter;
 	public ArrayList<Room> grower;
 	
@@ -163,7 +163,7 @@ public class Level {
 		random = rnd;
 		this.theme = theme;
 		baseHeight = y;
-		difficulty = ConfigHandler.getDifficulty().getAdjusted(hardness);
+		difficulty = ConfigHandler.getDifficulty();
 		DoomlikeDungeons.profiler.startTask("Planning Dungeon");
 		prepare(rnd, world, chunkX, chunkZ);
 		plan(rnd, world, chunkX, chunkZ);
@@ -192,6 +192,7 @@ public class Level {
 		map = new MapMatrix(size.width, world, chunkX, chunkZ);
 		numNodes = random.nextInt(size.maxNodes - size.minNodes + 1) + size.minNodes + 1;
 		nodes = new Node[numNodes];
+		spawners = new SpawnerCounter();
 		
 		shiftX = (map.chunkX * 16) - (map.room.length / 2) + 8;
 		shiftZ = (map.chunkZ * 16) - (map.room.length / 2) + 8;
@@ -207,6 +208,12 @@ public class Level {
 		if((numEntrances < 1) && ConfigHandler.easyFind) addAnEntrance();
 		connectNodes();
 		growthCycle();	
+		if(ConfigHandler.thinSpawners && (ConfigHandler.difficulty != Difficulty.NONE)) { 
+			spawners.fixSpawners(this, rnd);
+			for(Room room : rooms) {
+				room.addChests(this);
+			}
+		}
 		DoomlikeDungeons.profiler.endTask("Layout dungeon (rough draft)");
 		DoomlikeDungeons.profiler.startTask("Fixing room contents");
 		fixRoomContents();
