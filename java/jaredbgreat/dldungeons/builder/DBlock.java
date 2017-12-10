@@ -31,8 +31,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public final class DBlock {
 	private final String id;   // The name
-	private final Block block; // The Minecraft block
-	private final int meta;	   // The blocks meta-data
+	private final IBlockState block; // The Minecraft block
 	
 	// Block constants used by the mod for various purposes, usually for placement
 	public static final Block spawner = (Block)Block.getBlockFromName("mob_spawner");
@@ -64,25 +63,6 @@ public final class DBlock {
 	private static Item getItem(String in) {
 		return Item.REGISTRY.getObject(new ResourceLocation(in));
 	}
-	
-	
-	/**
-	 * Construct a dungeon block using an older theme format, from before
-	 * version 1.7 of the mod.
-	 * 
-	 * @param id
-	 */
-	private DBlock(String id) {
-		this.id = id;
-		StringTokenizer nums = new StringTokenizer(id, "({[]})");
-		block = (Block)Block.getBlockFromName(nums.nextToken());
-		if(block == null) {
-			Logging.LogError("[DLDUNGEONS] ERROR! Block read as \"" + id 
-					+ "\" was was not in registry (returned null).");
-		}
-		if(nums.hasMoreElements()) meta = Integer.parseInt(nums.nextToken());
-		else meta = 0;
-	}
 		
 	
 	/**
@@ -91,35 +71,31 @@ public final class DBlock {
 	 * 
 	 * @param id
 	 */
-	private DBlock(String id, float version) throws NoSuchElementException {
+	private DBlock(String id) throws NoSuchElementException {		
 		this.id = id;
-		if(version < 1.7) {
-			StringTokenizer nums = new StringTokenizer(id, "({[]})");
-			block = Block.getBlockFromName(nums.nextToken());
-			if(nums.hasMoreElements()) meta = Integer.parseInt(nums.nextToken());
-			else meta = 0;
+		Block theBlock;
+		int meta;
+		StringTokenizer nums = new StringTokenizer(id, ":({[]})");
+		String modid = nums.nextToken();
+		ResourceLocation name = new ResourceLocation(modid 
+				+ ":" + nums.nextToken());
+		theBlock = GameRegistry.findRegistry(Block.class).getValue(name);
+		if(nums.hasMoreElements()) {
+			meta = Integer.parseInt(nums.nextToken()); 
 		} else {
-			StringTokenizer nums = new StringTokenizer(id, ":({[]})");
-			String modid = nums.nextToken();
-			if(modid.toLowerCase().equals("minecraft") || modid.toLowerCase().equals("vanilla")) {
-				block = Block.getBlockFromName(nums.nextToken());
-				if(nums.hasMoreElements()) meta = Integer.parseInt(nums.nextToken());
-				else meta = 0;
-			} else {
-				block = Block.getBlockFromItem(getItem(nums.nextToken()));
-				if(nums.hasMoreElements()) meta = Integer.parseInt(nums.nextToken());
-				else meta = 0;	
-			}			
+			meta = 0;
 		}
-		if(block == null) {
+		block = theBlock.getStateFromMeta(meta);
+		if(theBlock == null) {
 			String error = "[DLDUNGEONS] ERROR! Block read as \"" + id 
 					+ "\" was was not in registry (returned null).";
 			Logging.LogError(error);
 			throw new NoSuchElementException(error);
 		}
-		if(block == null) {
+		if(block.toString().contains("minecraft:air") 
+				&& !id.contains("minecraft:air")) {
 			String error = "[DLDUNGEONS] ERROR! Block read as \"" + id 
-					+ "\" was was not in registry (returned null).";
+					+ "\" parsed into an air block!";
 			Logging.LogError(error);
 			throw new NoSuchElementException(error);
 		}
@@ -127,20 +103,20 @@ public final class DBlock {
 	
 	
 	/**
-	 * Places a the block into the world at the given coordinates and with meta-data 
-	 * as zero.  This wrapping eases updating with block representation and method
-	 * names change.
+	 * This is the same as just place(), and will use the full block state.  It 
+	 * is maintained for compatibility, but no longer has a real purpose.
 	 * 
 	 * @param world
 	 * @param x
 	 * @param y
 	 * @param z
 	 */
+	@Deprecated
 	public void placeNoMeta(World world, int x, int y, int z) {
 		if(isProtectedBlock(world, x, y, z)) return;
 		BlockPos pos = new BlockPos(x, y, z);
 		if (MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceDBlock(world, pos, this))) return;
-		world.setBlockState(new BlockPos(x, y, z), block.getDefaultState());
+		world.setBlockState(new BlockPos(x, y, z), block);
 	}
 	
 	
@@ -158,7 +134,7 @@ public final class DBlock {
 		if(isProtectedBlock(world, x, y, z)) return;
 		BlockPos pos = new BlockPos(x, y, z);
 		if (MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceDBlock(world, pos, this))) return;
-		world.setBlockState(pos, block.getStateFromMeta(meta));
+		world.setBlockState(pos, block);
 	}
 	
 	
@@ -188,25 +164,6 @@ public final class DBlock {
 	 * its not already present.  It will return the new DBlocks registry index for 
 	 * use as an internal id.
 	 * 
-	 * This is for use with older theme formats from before mod version 1.7.
-	 * 
-	 * @param id
-	 * @return The index of the block in the DBlock registry
-	 */
-	public static int add(String id) {
-		DBlock block = new DBlock(id);
-		if(!registry.contains(block)) {
-			registry.add(block);
-		}
-		return registry.indexOf(block);
-	}	
-	
-	
-	/**
-	 * Turns a string labeling the block into a DBlock and adds it to the registry if 
-	 * its not already present.  It will return the new DBlocks registry index for 
-	 * use as an internal id.
-	 * 
 	 * This is for use with mod versions newer that 1.7.
 	 * 
 	 * 
@@ -215,8 +172,8 @@ public final class DBlock {
 	 * @return
 	 * @throws NoSuchElementException
 	 */
-	public static int add(String id, float version) throws NoSuchElementException {
-		DBlock block = new DBlock(id, version);
+	public static int add(String id) throws NoSuchElementException {
+		DBlock block = new DBlock(id);
 		if(!registry.contains(block)) {
 			registry.add(block);
 		}
@@ -384,7 +341,7 @@ public final class DBlock {
 	@Override
 	public boolean equals(Object other) {
 		if(!(other instanceof DBlock)) return false; 
-		return ((id.hashCode() == ((DBlock)other).id.hashCode()));
+		return (block.equals(((DBlock)other).block));
 	}
 	
 	
@@ -395,9 +352,6 @@ public final class DBlock {
 	 */
 	@Override
 	public int hashCode() {
-		int a = Block.getIdFromBlock(block);
-		a = (a << 4) + meta;
-		a += (a << 16);
-		return a;
+		return block.hashCode();
 	}
 }
