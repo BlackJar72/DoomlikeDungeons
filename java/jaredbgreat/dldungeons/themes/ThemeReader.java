@@ -639,11 +639,7 @@ public class ThemeReader {
 		String nums;
 		while(tokens.hasMoreTokens()) {
 			nums = tokens.nextToken();
-			if(version > 1.6) {
-				values.add(String.valueOf(DBlock.add(nums, version)));
-			} else {
-				values.add(String.valueOf(DBlock.add(nums)));
-			}
+			values.add(String.valueOf(DBlock.add(nums)));
 		}
 		int[] out = new int[values.size() + el.length];
 		for(int i = 0; i < el.length; i++) {
