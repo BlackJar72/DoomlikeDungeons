@@ -370,7 +370,7 @@ public class Room extends AbstractRoom {
 			lev++;			
 		}
 		if(isNode && !hasEntrance) {
-			n++;
+			lev++;
 		}
 		if((!hasSpawners && (dungeon.random.nextInt(5) > 0))) return;
 		int x, y, z, tmp, num;

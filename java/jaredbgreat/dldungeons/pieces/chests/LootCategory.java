@@ -108,7 +108,7 @@ public class LootCategory {
 		case LOOT:
 			if(level > 6 && random.nextBoolean()) {
 					return LootList.special.getLoot(random).getStack(random);
-			} else {
+			} else if(level > 6){
 				level = 6;
 			}
 			if(random.nextInt(10) == 0) {
