@@ -361,7 +361,7 @@ public class Room extends AbstractRoom {
 		if((ConfigHandler.difficulty == Difficulty.NONE) || 
 				hasEntrance) return;
 		hasSpawners = spawners.size() > 0;
-		int lev = 0;
+		int lev = dungeon.random.nextInt(2);
 		int n = spawners.size();
 		for(int i = 0; i < n; i++) {
 			lev = Math.max(lev, spawners.get(i).getLevel());
