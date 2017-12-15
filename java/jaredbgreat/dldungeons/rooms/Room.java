@@ -364,7 +364,7 @@ public class Room extends AbstractRoom {
 		int lev = 0;
 		int n = spawners.size();
 		for(int i = 0; i < n; i++) {
-			lev = Math.min(lev, spawners.get(i).getLevel());
+			lev = Math.max(lev, spawners.get(i).getLevel());
 		}
 		if(n > 1) {
 			lev++;			

@@ -73,7 +73,7 @@ public class TreasureChest extends BasicChest {
 		else num = random.nextInt(3 + (level / 2)) + 2;
 		for(int i = 0; i < num; i++) {
 			treasure = LootCategory.getLoot(LootType.LOOT, 
-					level + 1 + random.nextInt(2), random);
+					level + random.nextInt(2), random);
 			contents.setInventorySlotContents(slots.get(slot).intValue(), treasure);
 			slot++;
 		}
