@@ -107,8 +107,8 @@ public class LootCategory {
 			return heal.levels[level].getLoot(random).getStack(random);
 		case LOOT:
 			if(level > 6 && random.nextBoolean()) {
-					return LootList.special.getLoot(random).getStack(random);
-			} else {
+				return LootList.special.getLoot(random).getStack(random);
+			} else if(level > 6){
 				level = 6;
 			}
 			if(random.nextInt(10) == 0) {
