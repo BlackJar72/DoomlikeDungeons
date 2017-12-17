@@ -30,6 +30,8 @@ import net.minecraft.world.World;
  */
 public class TreasureChest extends BasicChest {
 	
+	private static int A2 = 3, B2 = 2, C2 = 2;
+	
 	static ArrayList<Integer> slots = new ArrayList();	
 	int slot;
 	
@@ -57,23 +59,23 @@ public class TreasureChest extends BasicChest {
 		}
 		TileEntityChest contents = (TileEntityChest)world.getTileEntity(pos);
 		int num;
-		num = random.nextInt(3 + (level / 3)) + 2;
+		num = random.nextInt(A2 + (level / B2)) + C2;
 		for(int i = 0; i < num; i++) {
 			treasure = LootCategory.getLoot(LootType.HEAL, level, random);
 			contents.setInventorySlotContents(slots.get(slot).intValue(), treasure);
 			slot++;
 		}
-		num = random.nextInt(3 + (level / 3)) + 2;
+		num = random.nextInt(A2 + (level / B2)) + C2;
 		for(int i = 0; i < num; i++) {
 			treasure = LootCategory.getLoot(LootType.GEAR, level, random);
 			contents.setInventorySlotContents(slots.get(slot).intValue(), treasure);
 			slot++;
 		}
 		if(ConfigHandler.stingyLoot) num = random.nextInt(3 + (level / 3)) + 2;
-		else num = random.nextInt(3 + (level / 2)) + 2;
+		else num = random.nextInt(A2 + (level / B2)) + C2;
 		for(int i = 0; i < num; i++) {
 			treasure = LootCategory.getLoot(LootType.LOOT, 
-					level + random.nextInt(2), random);
+					level + 1 + random.nextInt(2), random);
 			contents.setInventorySlotContents(slots.get(slot).intValue(), treasure);
 			slot++;
 		}

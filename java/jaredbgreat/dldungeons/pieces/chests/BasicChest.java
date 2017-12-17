@@ -33,6 +33,7 @@ import net.minecraftforge.common.MinecraftForge;
 public class BasicChest {
 	
 	public int mx, my, mz, level;
+	private static int A1 = 2, B1 = 1, C1 = 2;
 	
 	
 	public BasicChest(int x, int y, int z, int level) {
@@ -92,7 +93,7 @@ public class BasicChest {
 	 */
 	protected void fillChest(TileEntityChest chest, LootType kind, Random random) {		
 		int num;
-		if(ConfigHandler.stingyLoot) num = random.nextInt(2 + (level / 2)) + 2;
+		if(ConfigHandler.stingyLoot) num = random.nextInt(A1 + (level / B1)) + C1;
 		else num = random.nextInt(2 + (level)) + 2;
 		for(int i = 0; i < num; i++) {
 			ItemStack treasure = LootCategory.getLoot(kind, level, random);
@@ -102,5 +103,12 @@ public class BasicChest {
 			ItemStack treasure = LootCategory.getLoot(LootType.HEAL, level, random);
 			if(treasure != null) chest.setInventorySlotContents(random.nextInt(27), treasure);
 		}
+	}
+	
+	
+	public static void setBasicLootNumbers(int a, int b, int c) {
+		A1 = a;
+		B1 = b;
+		C1 = c;
 	}
 }
