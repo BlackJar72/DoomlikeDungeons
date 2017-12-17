@@ -58,6 +58,7 @@ import java.util.Collections;
  *
  */
 public class Room extends AbstractRoom {
+	private static int lootBonus = 0;
 	
 	public int id;	// Should be equal to the index in Dungeon.rooms ArrayList.
 	public static final Room roomNull = new Room(); // Areas outside the dungeon (index 0)
@@ -361,7 +362,7 @@ public class Room extends AbstractRoom {
 		if((ConfigHandler.difficulty == Difficulty.NONE) || 
 				hasEntrance) return;
 		hasSpawners = spawners.size() > 0;
-		int lev = dungeon.random.nextInt(2);
+		int lev = 0;
 		int n = spawners.size();
 		for(int i = 0; i < n; i++) {
 			lev = Math.max(lev, spawners.get(i).getLevel());
@@ -372,6 +373,7 @@ public class Room extends AbstractRoom {
 		if(isNode && !hasEntrance) {
 			lev++;
 		}
+		lev += lootBonus + dungeon.random.nextInt(2);
 		if((!hasSpawners && (dungeon.random.nextInt(5) > 0))) return;
 		int x, y, z, tmp, num;
 		if(!hasSpawners) {
@@ -745,6 +747,11 @@ public class Room extends AbstractRoom {
 				connections.add(pq);			
 			}
 		}
+	}
+	
+	
+	public static void setLootBonus(int bonus) {
+		lootBonus = bonus;
 	}
 	
 	

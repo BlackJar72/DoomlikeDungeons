@@ -11,7 +11,10 @@ package jaredbgreat.dldungeons;
 
 
 import jaredbgreat.dldungeons.builder.Builder;
+import jaredbgreat.dldungeons.pieces.chests.BasicChest;
+import jaredbgreat.dldungeons.pieces.chests.TreasureChest;
 import jaredbgreat.dldungeons.planner.mapping.MapMatrix;
+import jaredbgreat.dldungeons.rooms.Room;
 import jaredbgreat.dldungeons.setup.Externalizer;
 import jaredbgreat.dldungeons.themes.ThemeReader;
 
@@ -22,7 +25,6 @@ import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.HashSet;
 
 import net.minecraft.block.Block;
@@ -194,11 +196,6 @@ public final class ConfigHandler {
 				+ System.lineSeparator() + "and \"\\dldForceInstallThemes.\"").getBoolean(INSTALL_CMD);
 		System.out.println("[DLDUNGEONS] Can themes be (re)installed by command? " + installCmd);
 		
-		stingyLoot = config.get("General", "StingyWithLoot", DEFAULT_STINGY_LOOT,
-				"If true the dungeons will have less loot (in case you find the default OP).")
-				.getBoolean(DEFAULT_STINGY_LOOT);
-		System.out.println("[DLDUNGEONS] Will be stingy with chests? " + stingyLoot);
-		
 		thinSpawners = config.get("General", "ThinSpawners", DEFAULT_THIN_SPAWNERS,
 				"If true smaller dungeons will have some of there spawners removed to "
 				+ "make them more like larger dungeons.")
@@ -240,6 +237,49 @@ public final class ConfigHandler {
 				"If true reports on dungeon planning and build times will be exproted to files and the commandline")
 				.getBoolean(PROFILE);
 		System.out.println("[DLDUNGEONS] Will self-profile? " + profile);
+		
+		//Loot
+		stingyLoot = false;
+		int a, b, c;
+		config.addCustomCategoryComment("Loot", 
+				"This will change the value and quantity of loo; be careful, too "
+				+ System.lineSeparator() 
+				+ "could cause a crash if there isn't enough room in the chest.  "
+				+ System.lineSeparator() 
+				+ "The basic chest formula is for the whole cheset, the treasure "
+				+ System.lineSeparator() 
+				+ "chest formula is per loot normal category -- you get 3 time that "
+				+ System.lineSeparator() 
+				+ "many items.");
+		a = config.getInt("A1", "Loot", 2, 0, 9, 
+				"Part of the loot quantity numbers for basic chests; " 
+				+ System.lineSeparator() 
+				+ " random.nextInt(A1 + (RoomDifficulty / B1)) + C1");
+		b = config.getInt("B1", "Loot", 1, 0, 9, 
+				"Part of the loot quantity numbers for basic chests; " 
+						+ System.lineSeparator() 
+						+ " random.nextInt(A1 + (RoomDifficulty / B1)) + C1");
+		c = config.getInt("C1", "Loot", 2, 0, 9, 
+				"Part of the loot quantity numbers for basic chests; " 
+						+ System.lineSeparator() 
+						+ " random.nextInt(A1 + (RoomDifficulty / B1)) + C1");
+		BasicChest.setBasicLootNumbers(a, b, c);
+		a = config.getInt("A2", "Loot", 3, 0, 9, 
+				"Part of the loot quantity numbers for treasure chests; " 
+				+ System.lineSeparator() 
+				+ " random.nextInt(A2 + (RoomDifficulty / B2)) + C2");
+		b = config.getInt("B2", "Loot", 2, 0, 9, 
+				"Part of the loot quantity numbers for treasure chests; " 
+						+ System.lineSeparator() 
+						+ " random.nextInt(A2 + (RoomDifficulty / B2)) + C2");
+		c = config.getInt("C2", "Loot", 2, 0, 9, 
+				"Part of the loot quantity numbers for treasure chests; " 
+						+ System.lineSeparator() 
+						+ " random.nextInt(A2 + (RoomDifficulty / B2)) + C2");
+		TreasureChest.setTreasureLootNumbers(a, b, c);
+		Room.setLootBonus(config.getInt("Loot Bonus", "Loot", 0, -9, 9, 
+				"This modifies the room difficulty, in case you think default is "
+					+ System.lineSeparator() + "too generous or too stingy."));
 		
 		
 		// Saving it all
