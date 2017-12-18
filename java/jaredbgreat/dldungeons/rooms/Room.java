@@ -62,7 +62,7 @@ public class Room extends AbstractRoom {
 	
 	public int id;	// Should be equal to the index in Dungeon.rooms ArrayList.
 	public static final Room roomNull = new Room(); // Areas outside the dungeon (index 0)
-	public int beginX, midX, endX, beginZ, midZ, endZ, floorY, nFloorY, ceilY, nCeilY, y, level;
+	public int beginX, midX, endX, beginZ, midZ, endZ, floorY, nFloorY, ceilY, nCeilY, y;
 	public float realX, realZ;
 	public boolean hasWholePattern;
 	public Symmetry sym;
@@ -131,7 +131,6 @@ public class Room extends AbstractRoom {
 		this.endZ = endZ;
 		this.floorY = floorY;
 		this.ceilY = ceilY;
-		level = 0;		
 
 		midX = beginX + ((endX - beginX) / 2);
 		midZ = beginZ + ((endZ - beginZ) / 2);
@@ -327,10 +326,6 @@ public class Room extends AbstractRoom {
 				spawners.add(new Spawner(x, y, z, id, lev, mob));
 			}
 		}
-		if(multibonus) level++;
-		if(dungeon.theme.flags.contains(ThemeFlags.HARD)) level++;
-		if(dungeon.theme.flags.contains(ThemeFlags.EASY)) level--;
-		if(level >= LootCategory.LEVELS) level = LootCategory.LEVELS - 1;
 	}
 	
 	
@@ -362,6 +357,7 @@ public class Room extends AbstractRoom {
 		if((ConfigHandler.difficulty == Difficulty.NONE) || 
 				hasEntrance) return;
 		hasSpawners = spawners.size() > 0;
+		if((!hasSpawners && (dungeon.random.nextInt(5) > 0))) return;
 		int lev = 0;
 		int n = spawners.size();
 		for(int i = 0; i < n; i++) {
@@ -373,8 +369,12 @@ public class Room extends AbstractRoom {
 		if(isNode && !hasEntrance) {
 			lev++;
 		}
-		lev += lootBonus;
-		if((!hasSpawners && (dungeon.random.nextInt(5) > 0))) return;
+		if(dungeon.theme.flags.contains(ThemeFlags.HARD)) {
+			lev++;
+		} else if(dungeon.theme.flags.contains(ThemeFlags.EASY)) {
+			lev--;
+		}
+		lev += lootBonus + dungeon.random.nextInt(1);
 		int x, y, z, tmp, num;
 		if(!hasSpawners) {
 			tmp = (endX - beginX - 3);
@@ -389,7 +389,7 @@ public class Room extends AbstractRoom {
 			tmp = (endZ - beginZ - 3);
 			z = dungeon.random.nextInt(tmp) + beginZ + 2;
 			y = dungeon.map.floorY[x][z];
-			chests.add(new BasicChest(x, y, z, level));
+			chests.add(new BasicChest(x, y, z, lev));
 		} else {
 			int ms = Math.max(n, 2);
 			if(isNode)num = Math.min(ms, dungeon.random.nextInt(2 + (ms / 2)) + 2);
@@ -400,13 +400,13 @@ public class Room extends AbstractRoom {
 				tmp = (endZ - beginZ - 3);
 				z = dungeon.random.nextInt(tmp) + beginZ + 2;
 				y = dungeon.map.floorY[x][z];
-				chests.add(new BasicChest(x, y, z, level));
+				chests.add(new BasicChest(x, y, z, lev));
 			}
 		} if(isNode) {
 			x = (int)realX;
 			z = (int)realZ;
 			y = dungeon.map.floorY[x][z]; 
-			chests.add(new TreasureChest(x, y, z, level)); // Will be a special chest later
+			chests.add(new TreasureChest(x, y, z, lev)); // Will be a special chest later
 		}
 	}
 	
