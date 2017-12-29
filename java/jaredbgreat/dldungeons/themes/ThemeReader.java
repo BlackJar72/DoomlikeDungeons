@@ -185,6 +185,7 @@ public class ThemeReader {
 		while((line = instream.readLine()) != null) {
 			if(line.length() < 2) continue;
 			if(line.charAt(0) == '#') continue;
+			System.out.println(line);
 			NBTHelper.parseNBTLine(line);
 		}
 	}	

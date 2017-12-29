@@ -138,7 +138,7 @@ public class Tokenizer {
 	private void readEscape() {
 		do {
 			onTokens = true;
-			position++;
+			position++; 
 			if(position >= in.length()) return;
 			next = in.charAt(position);
 			switch(next) {
