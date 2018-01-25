@@ -247,4 +247,101 @@ public class MapMatrix {
 	public static void setDrawFlyingMap(boolean value) {
 		drawFlyingMap = value;
 	}
+	
+	
+
+	
+	
+	/**
+	 * This will build the portion of a dungeon which is found in one chunk.
+	 * 
+	 * @param dungeon
+	 */
+	public void buildInChunk(Dungeon dungeon, int chX, int chZ) {		
+		// TODO:  This needs to get the portion of the dungeon found in a 
+		// specific chunk.  This means being given the offset of the chunk 
+		// and comparing it to the offset of the map to find the correct 
+		// region.
+		DoomlikeDungeons.profiler.startTask("Building Dungeon in World");	
+		DoomlikeDungeons.profiler.startTask("Building Dungeon architecture");
+		int shiftX = ((chunkX - chX) * 16) - 8;
+		int shiftZ = ((chunkZ - chZ) * 16) - 8;
+		int below;
+		boolean flooded = dungeon.theme.flags.contains(ThemeFlags.WATER);
+		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.BeforeBuild(this, shiftX, shiftZ, flooded));
+		
+		for(int i = 0; i < 16; i++)
+			for(int j = 0; j < 16; j++) {
+				if(room[i][j] != 0) {
+					 Room theRoom = dungeon.rooms.get(room[i][j]);
+					 
+					 // Debugging code; should not normally run
+					 if(drawFlyingMap) {
+						 if(astared[i][j]) {
+							 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, lapis);
+						 } else if(isDoor[i][j]) {
+							 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, slab);
+						 } else if(isWall[i][j]) {
+							 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, gold);
+						 } else {
+							 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, glass);
+						 }
+					 }
+					 
+					 // Lower parts of the room
+					 if(nFloorY[i][j] < floorY[i][j])
+						 for(int k = nFloorY[i][j]; k < floorY[i][j]; k++) 
+							 if(noLowDegenerate(theRoom, shiftX + i, k, shiftZ + j, i, j))
+								 DBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
+					 if(nFloorY[i][j] > floorY[i][j])
+						 for(int k = floorY[i][j]; k < nFloorY[i][j]; k++) 
+							 if(noLowDegenerate(theRoom, shiftX + i, k, shiftZ + j, i, j))
+								 DBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
+					 
+					 if(noLowDegenerate(theRoom, shiftX + i, floorY[i][j] - 1, shiftZ + j, i, j)) {
+						 DBlock.place(world, shiftX + i, floorY[i][j] - 1, shiftZ + j, floor[i][j]);
+						 if(dungeon.theme.buildFoundation) {
+							 below = nFloorY[i][j] < floorY[i][j] ? nFloorY[i][j] - 1 : floorY[i][j] - 2;
+							 while(!DBlock.isGroundBlock(world, shiftX + i, below, shiftZ + j)) {
+								 DBlock.place(world, shiftX + i, below, shiftZ + j, dungeon.floorBlock);
+						 		below--;
+						 		if(below < 0) break;						 		
+						 	 }
+						}
+					 }
+					 
+					 // Upper parts of the room
+					 if(!theRoom.sky 
+							 && noHighDegenerate(theRoom, shiftX + i, ceilY[i][j] + 1, shiftZ + j))
+						 DBlock.place(world, shiftX + i, ceilY[i][j] + 1, shiftZ + j, ceiling[i][j]);
+					
+					 for(int k = roomBottom(i, j); k <= ceilY[i][j]; k++)
+						 if(!isWall[i][j])DBlock.deleteBlock(world, shiftX +i, k, shiftZ + j, flooded);
+						 else if(noHighDegenerate(theRoom, shiftX + i, k, shiftZ + j))
+							 DBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
+					 for(int k = nCeilY[i][j]; k < ceilY[i][j]; k++) 
+						 if(noHighDegenerate(theRoom, shiftX + i, k, shiftZ + j))
+							 DBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
+					 if(isFence[i][j]) 
+						 DBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, dungeon.fenceBlock);
+					 
+					 if(isDoor[i][j]) {
+						 DBlock.deleteBlock(world, shiftX + i, floorY[i][j],     shiftZ + j, flooded);
+						 DBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 1, shiftZ + j, flooded);
+						 DBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 2, shiftZ + j, flooded);
+					 }
+					 
+					 // Liquids
+					 if(hasLiquid[i][j] && (!isWall[i][j] && !isDoor[i][j])
+							 && !world.isAirBlock(new BlockPos(shiftX + i, floorY[i][j] - 1, shiftZ + j))) 
+						 DBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, theRoom.liquidBlock);					 
+				}
+			}	
+		
+		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.AfterBuild(this, shiftX, shiftZ, flooded));
+		DoomlikeDungeons.profiler.endTask("Building Dungeon architecture");
+		dungeon.addTileEntities();	
+		dungeon.addEntrances();
+		DoomlikeDungeons.profiler.endTask("Building Dungeon in World");
+	}
 }

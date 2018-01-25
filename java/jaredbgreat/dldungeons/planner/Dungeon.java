@@ -2,12 +2,12 @@ package jaredbgreat.dldungeons.planner;
 
 
 /* 
- * This mod is the creation and copyright (c) 2015 
+ * This mod is the creation and copyright (c) 2014-2018
  * of Jared Blackburn (JaredBGreat).
  * 
  * Forge event code by Charles Howard, 2016.
  * 
- * It is licensed under the creative commons 4.0 attribution license: * 
+ * It is licensed under the creative commons 4.0 attribution license: 
  * https://creativecommons.org/licenses/by/4.0/legalcode
 */	
 
@@ -16,6 +16,8 @@ import jaredbgreat.dldungeons.Difficulty;
 import jaredbgreat.dldungeons.DoomlikeDungeons;
 import jaredbgreat.dldungeons.api.DLDEvent;
 import jaredbgreat.dldungeons.builder.DBlock;
+import jaredbgreat.dldungeons.cache.Coords;
+import jaredbgreat.dldungeons.cache.ICachable;
 import jaredbgreat.dldungeons.pieces.Spawner;
 import jaredbgreat.dldungeons.pieces.chests.BasicChest;
 import jaredbgreat.dldungeons.pieces.entrances.SimpleEntrance;
@@ -35,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.MinecraftForge;
@@ -51,7 +54,7 @@ import net.minecraftforge.common.MinecraftForge;
  * @author Jared Blackburn
  *
  */
-public class Dungeon {
+public class Dungeon implements ICachable {
 	
 	public Theme theme;
 	public Random random;
@@ -102,7 +105,10 @@ public class Dungeon {
 	public int caveBlock;
 	
 	int shiftX;
-	int shiftZ;
+	int shiftZ;	
+
+    private final Coords coords;
+    private long timestamp;
 	
 	
 	/**
@@ -144,6 +150,9 @@ public class Dungeon {
 
 	
 	public Dungeon(Random rnd, Biome biome, World world, int chunkX, int chunkZ) throws Throwable {
+        coords = new Coords(chunkX, chunkZ);
+        timestamp = MinecraftServer.getCurrentTimeMillis();
+    
 		DoomlikeDungeons.profiler.startTask("Planning Dungeon");
 		DoomlikeDungeons.profiler.startTask("Layout dungeon (rough draft)");
 		random = rnd;
@@ -484,6 +493,25 @@ public class Dungeon {
 				map.isWall[i][j] = false;
 		}	
 	}
+    
+    
+    @Override
+    public void use() {
+    	timestamp = MinecraftServer.getCurrentTimeMillis();		
+    }
+    
+    
+    @Override
+    public boolean isOldData() {
+    	long t = MinecraftServer.getCurrentTimeMillis() - timestamp;
+    	return ((t > 300000) || (t < 0));	
+    }
+    
+    
+    @Override
+    public Coords getCoords() {
+        return coords;
+    }
 	
 }
 
