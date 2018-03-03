@@ -68,7 +68,7 @@ public class Cave extends Room {
 		for(int i = 0; i < xSize; i++) {
 			for(int j = 0; j < zSize; j++) {
 				if(cells[0][i][j] == 1) {
-					dungeon.map.isWall[i + beginX][j  + beginZ] = true;
+					dungeon.map.setToWall(i + beginX, j  + beginZ);
 				}
 			}
 		}
@@ -84,10 +84,10 @@ public class Cave extends Room {
 			for(int i = 0; i < xSize; i++) {
 				for(int j = 0; j < zSize; j++) {
 					if(cells[k][i][j] == 0) {
-						dungeon.map.floorY[i + beginX][j  + beginZ] = (byte)tmpFY;
-						dungeon.map.nFloorY[i + beginX][j  + beginZ] = (byte)tmpFY;
-						dungeon.map.ceilY[i + beginX][j  + beginZ] = (byte)tmpCY;
-						dungeon.map.nCeilY[i + beginX][j  + beginZ] = (byte)tmpCY;
+						dungeon.map.setFloorY(i + beginX, j  + beginZ, (byte)tmpFY);
+						dungeon.map.setNFloorY(i + beginX, j  + beginZ, (byte)tmpFY);
+						dungeon.map.setCeilY(i + beginX, j  + beginZ, (byte)tmpCY);
+						dungeon.map.setNCeilY(i + beginX, j  + beginZ, (byte)tmpCY);
 					}
 				}
 			}
@@ -95,9 +95,9 @@ public class Cave extends Room {
 		if(hasEntrance) {
 			for(int i = (int)realX -2; i < ((int)realX + 2); i++)
 					for(int j = (int)realZ - 2; j < ((int)realZ + 2); j++) {
-						dungeon.map.floorY[i][j] = (byte)floorY;
-						dungeon.map.hasLiquid[i][j] = false;
-						dungeon.map.isWall[i][j] = false;
+						dungeon.map.setFloorY(i, j, (byte)floorY);
+						dungeon.map.unsetLiquid(i, j);
+						dungeon.map.unsetWall(i, j);
 					}
 		}
 		if(parent == null) {
@@ -106,9 +106,9 @@ public class Cave extends Room {
 		if(dungeon.naturals.use(dungeon.random) || !dungeon.variability.use(dungeon.random)) {
 			for(int i = beginX; i < endX; i++) {
 				for(int j = beginZ; j < endZ; j++) {				
-					dungeon.map.wall[i][j] = caveBlock;				
-					dungeon.map.floor[i][j] = caveBlock;				
-					dungeon.map.ceiling[i][j] = caveBlock;
+					dungeon.map.setWall(i, j, caveBlock);				
+					dungeon.map.setFloor(i, j, caveBlock);				
+					dungeon.map.setCeiling(i, j, caveBlock);
 				}
 			}
 		}

@@ -63,7 +63,7 @@ public class AStar {
 			z2 = root.z;
 		}
 		
-		spt = dungeon.map.nodedge;
+		spt = dungeon.map.getSteps();
 		for(int i = x1; i <= x2; i++)
 			for(int j = z1; j <= z2; j++)
 				spt[i][j] = null;
@@ -97,22 +97,22 @@ public class AStar {
 		Step child = end, parent = end.parent;
 		if(parent == null) return;		
 
-		dungeon.map.astared[end.x][end.z] = true;
-		if(dungeon.map.isWall[end.x][end.z] ||
-					dungeon.map.isFence[end.x][end.z]) 
-				dungeon.map.isDoor[end.x][end.z] = true;
-		if(dungeon.map.hasLiquid[end.x][end.z]) {
-			dungeon.map.hasLiquid[end.x][end.z] = false;
-			dungeon.map.floorY[end.x][end.z] = 
-					(byte) dungeon.rooms.get(room).floorY;
+		dungeon.map.setAStared(end.x, end.z);
+		if(dungeon.map.isWall(end.x, end.z) ||
+					dungeon.map.isFence(end.x, end.z)) 
+				dungeon.map.setToDoor(end.x, end.z);
+		if(dungeon.map.isLiquid(end.x, end.z)) {
+			dungeon.map.unsetLiquid(end.x, end.z);
+			dungeon.map.setFloorY(end.x, end.z, 
+					(byte) dungeon.rooms.get(room).floorY);
 		}
 		
 		do {
-			dungeon.map.astared[child.x][child.z] = true;
-			if(dungeon.map.isWall[child.x][child.z] ||
-						dungeon.map.isFence[child.x][child.z]) 
+			dungeon.map.setAStared(child.x, child.z);
+			if(dungeon.map.isWall(child.x, child.z) ||
+						dungeon.map.isFence(child.x, child.z)) 
 					addDoor(parent, child);
-			if(dungeon.map.hasLiquid[child.x][child.z]) 
+			if(dungeon.map.isLiquid(child.x, child.z)) 
 					fixLiquid(parent, child, 
 							(byte) dungeon.rooms.get(room).floorY);
 			fixHeights(parent, child);
@@ -120,39 +120,40 @@ public class AStar {
 			parent = child.parent;
 		} while (parent != null);
 		
-		dungeon.map.astared[child.x][child.z] = true;
-		if(dungeon.map.isWall[child.x][child.z] ||
-					dungeon.map.isFence[child.x][child.z]) 
-				dungeon.map.isDoor[child.x][child.z] = true;
-		if(dungeon.map.hasLiquid[child.x][child.z]) {
-			dungeon.map.hasLiquid[child.x][child.z] = false;
-			dungeon.map.floorY[child.x][child.z] = 
-					(byte) dungeon.rooms.get(room).floorY;
+		dungeon.map.setAStared(child.x, child.z);
+		if(dungeon.map.isWall(child.x, child.z) ||
+					dungeon.map.isFence(child.x, child.z)) 
+				dungeon.map.setToDoor(child.x, child.z);
+		if(dungeon.map.isLiquid(child.x, child.z)) {
+			dungeon.map.isLiquid(child.x, child.z);
+			dungeon.map.setFloorY(child.x, child.z, 
+					(byte) dungeon.rooms.get(room).floorY);
 		}
 	}
 	
 	
 	protected void addDoor(Step from, Step to) {
-		dungeon.map.isDoor[to.x][to.z] = true;
-		dungeon.map.isDoor[from.x][from.z] = true;
+		dungeon.map.setToDoor(to.x, to.z);
+		dungeon.map.setToDoor(from.x, from.z);
 	}
 	
 	
 	protected void fixLiquid(Step from, Step to, byte floorY) {
-		dungeon.map.hasLiquid[to.x][to.z] = false;
-		dungeon.map.floorY[to.x][to.z] = 
-				dungeon.map.floorY[from.x][from.z];
-		if(dungeon.map.floorY[to.x][to.z] < floorY) 
-			dungeon.map.floorY[to.x][to.z] = floorY;
+		dungeon.map.unsetLiquid(to.x, to.z);
+		dungeon.map.setFloorY(to.x, to.z,  
+				dungeon.map.getFloorY(from.x, from.z));
+		if(dungeon.map.getFloorY(to.x, to.z) < floorY) 
+			dungeon.map.setFloorY(to.x, to.z, floorY);
 	}
 	
 	
 	protected void fixHeights(Step from, Step to) {
-		int diff = dungeon.map.floorY[to.x][to.z] - dungeon.map.floorY[from.x][from.z];
-		if(diff > 2) dungeon.map.floorY[to.x][to.z] 
-				= (byte) (dungeon.map.floorY[from.x][from.z] - 1);
-		if(diff < -2) dungeon.map.floorY[to.x][to.z] 
-				= (byte) (dungeon.map.floorY[from.x][from.z] + 1);
+		int diff = dungeon.map.getFloorY(to.x, to.z)
+				- dungeon.map.getFloorY(from.x, from.z);
+		if(diff > 2) dungeon.map.setFloorY(to.x, to.z, 
+				(byte) (dungeon.map.getFloorY(from.x, from.z) - 1));
+		if(diff < -2) dungeon.map.setFloorY(to.x, to.z,  
+				(byte) (dungeon.map.getFloorY(from.x, from.z) + 1));
 	}
 	
 	

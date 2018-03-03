@@ -178,8 +178,8 @@ public class Dungeon implements ICachable {
 		nodes = new Node[numNodes];
 		spawners = new SpawnerCounter();
 		
-		shiftX = (map.chunkX * 16) - (map.room.length / 2) + 8;
-		shiftZ = (map.chunkZ * 16) - (map.room.length / 2) + 8;
+		shiftX = (map.getChunkX() * 16) - (map.getWidthRoom() / 2) + 8;
+		shiftZ = (map.getChunkZ() * 16) - (map.getWidthRoom() / 2) + 8;
 		
 		makeNodes();
 		if((numEntrances < 1) && ConfigHandler.easyFind) addAnEntrance();
@@ -388,7 +388,7 @@ public class Dungeon implements ICachable {
 	public void addChestBlocks(Room room) {
 		if(MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.AddChestBlocksToRoom(this, room))) return;
 		for(BasicChest  chest : room.chests) {
-			DBlock.placeChest(map.world, shiftX + chest.mx, chest.my, shiftZ + chest.mz);
+			DBlock.placeChest(map.getWorld(), shiftX + chest.mx, chest.my, shiftZ + chest.mz);
 		}		
 	}
 	
@@ -412,14 +412,15 @@ public class Dungeon implements ICachable {
 	private void addTileEntitesToRoom(Room room) {
 		if(MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.AddTileEntitiesToRoom(this, room))) return;
 			for(Spawner  spawner : room.spawners) {
-					DBlock.placeSpawner(map.world, 
+					DBlock.placeSpawner(map.getWorld(), 
 										shiftX + spawner.getX(), 
 										spawner.getY(), 
 										shiftZ + spawner.getZ(), 
 										spawner.getMob());
 			}
 			for(BasicChest  chest : room.chests) {
-				chest.place(map.world, shiftX + chest.mx, chest.my, shiftZ + chest.mz, random);
+				chest.place(map.getWorld(), shiftX + chest.mx, 
+							chest.my, shiftZ + chest.mz, random);
 			}
 	}
 	
@@ -453,18 +454,18 @@ public class Dungeon implements ICachable {
 		switch (entrance) {
 		case 0:
 			//DoomlikeDungeons.profiler.startTask("Adding Sriral Stair");
-			new SpiralStair((int)room.realX, (int)room.realZ).build(this, map.world);
+			new SpiralStair((int)room.realX, (int)room.realZ).build(this, map.getWorld());
 			//DoomlikeDungeons.profiler.endTask("Adding Sriral Stair");
 			break;
 		case 1:
 			//DoomlikeDungeons.profiler.startTask("Adding Top Room");
-			new TopRoom((int)room.realX, (int)room.realZ).build(this, map.world);
+			new TopRoom((int)room.realX, (int)room.realZ).build(this, map.getWorld());
 			//DoomlikeDungeons.profiler.endTask("Adding Top Room");
 			break;
 		case 2:
 		default:
 			//DoomlikeDungeons.profiler.startTask("Adding Simple Entrance");
-			new SimpleEntrance((int)room.realX, (int)room.realZ).build(this, map.world);
+			new SimpleEntrance((int)room.realX, (int)room.realZ).build(this, map.getWorld());
 			//DoomlikeDungeons.profiler.endTask("Adding Simple Entrance");
 			break;
 		}		
@@ -488,9 +489,9 @@ public class Dungeon implements ICachable {
 		numEntrances = 1;
 		for(int i = (int)it.realX -2; i < ((int)it.realX + 2); i++)
 			for(int j = (int)it.realZ - 2; j < ((int)it.realZ + 2); j++) {
-				map.floorY[i][j] = (byte)it.floorY;
-				map.hasLiquid[i][j] = false;
-				map.isWall[i][j] = false;
+				map.setFloorY(i, j, (byte)it.floorY);
+				map.unsetLiquid(i, j);
+				map.unsetWall(i, j);
 		}	
 	}
     

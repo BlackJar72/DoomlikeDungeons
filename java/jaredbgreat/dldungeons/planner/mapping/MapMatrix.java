@@ -42,33 +42,239 @@ public class MapMatrix {
 	
 	private static boolean drawFlyingMap = false;
 	
-	public final World world;
-	public final int   chunkX, chunkZ, origenX, origenZ;
+	private final World world;
+	private final int   chunkX, chunkZ, origenX, origenZ;
 	
 	// map of heights to build at
-	public byte[][] ceilY;		// Ceiling height
-	public byte[][] floorY;		// Floor Height	
-	public byte[][] nCeilY;		// Height of Neighboring Ceiling	
-	public byte[][] nFloorY;	// Height of Neighboring Floor
+	private byte[][] ceilY;		// Ceiling height
+	private byte[][] floorY;		// Floor Height	
+	private byte[][] nCeilY;		// Height of Neighboring Ceiling	
+	private byte[][] nFloorY;	// Height of Neighboring Floor
 	
 	// Blocks referenced against the DBlock.registry	
-	public int[][] ceiling;
-	public int[][] wall;
-	public int[][] floor;
+	private int[][] ceiling;
+	private int[][] wall;
+	private int[][] floor;
 	
 	// The room id (index of the room in the dungeons main RoomList)
-	public int[][] room;
+	private int[][] room;
 	
 	// Is it a wall?
-	public boolean[][] isWall;	    // Is this coordinate occupied by a wall?
-	public boolean[][] isFence;	    // Is this coordinate occupied by a wall?
-	public boolean[][] hasLiquid;	// Is floor covered by a liquid block?
-	public boolean[][] isDoor;		// Is there a door here?
+	private boolean[][] bWall;	    // Is this coordinate occupied by a wall?
+	private boolean[][] bFence;	    // Is this coordinate occupied by a wall?
+	private boolean[][] bLiquid;	// Is floor covered by a liquid block?
+	private boolean[][] bDoor;		// Is there a door here?
 	
 	//The A* scratch pad
-	public Step    nodedge[][];
-	public boolean astared[][];
+	private Step[][]    nodedge;
+	private boolean[][] astared;
 	
+	/*
+	 * Chunk related getters and setters
+	 */
+	public int getChunkX() {
+		return chunkX;
+	}
+
+	public int getChunkZ() {
+		return chunkZ;
+	}
+
+	public int getOrigenX() {
+		return origenX;
+	}
+
+	public int getOrigenZ() {
+		return origenZ;
+	}
+	
+	public World getWorld() {
+		return world;
+	}
+	
+	public Step getStep(int x, int z) {
+		return nodedge[x][z];
+	}
+	
+	public Step[][] getSteps() {
+		return nodedge;
+	}
+
+	/*
+	 * Setters for heights
+	 */
+	public void setCeilY(int x, int z, byte val) {
+		ceilY[x][z] = val;
+	}
+	
+	public void setFloorY(int x, int z, byte val) {
+		floorY[x][z] = val;
+	}
+	
+	public void setNCeilY(int x, int z, byte val) {
+		nCeilY[x][z] = val;
+	}
+	
+	public void setNFloorY(int x, int z, byte val) {
+		nFloorY[x][z] = val;
+	}
+
+	/*
+	 * Setters for heights
+	 */
+	public byte getCeilY(int x, int z) {
+		return ceilY[x][z];
+	}
+	
+	public byte getFloorY(int x, int z) {
+		return floorY[x][z];
+	}
+	
+	public byte getNCeilY(int x, int z) {
+		return nCeilY[x][z];
+	}
+	
+	public byte getNFloorY(int x, int z) {
+		return nFloorY[x][z];
+	}
+	
+	/*
+	 * Setters for blocks
+	 */
+	
+	public void setWall(int x, int z, int val) {
+		wall[x][z] = val;
+	}
+	
+	public void setFloor(int x, int z, int val) {
+		floor[x][z] = val;
+	}
+	
+	public void setCeiling(int x, int z, int val) {
+		ceiling[x][z] = val;
+	}
+	
+	/*
+	 * Getters for blocks
+	 */
+	
+	public int getWall(int x, int z) {
+		return wall[x][z];
+	}
+	
+	public int getFloor(int x, int z) {
+		return floor[x][z];
+	}
+	
+	public int getCeiling(int x, int z) {
+		return ceiling[x][z];
+	}
+	
+	/**
+	 * Setters and getters for room id
+	 */
+	public void setRoom(int x, int z, int id) {
+		room[x][z] = id;
+	}
+	
+	public int getRoom(int x, int z) {
+		return room[x][z];
+	}
+	
+	public int getWidthRoom() {
+		return room.length;
+	}
+	
+	/*
+	 * Set booleans
+	 */
+	public void setToWall(int x, int z) {
+		bWall[x][z] = true;
+	}
+	
+	public void unsetWall(int x, int z) {
+		bWall[x][z] = false;
+	}
+	
+	public void setIsWall(int x, int z, boolean val) {
+		bWall[x][z] = val;
+	}
+	
+	public void setToFence(int x, int z) {
+		bFence[x][z] = true;
+	}
+	
+	public void unsetFence(int x, int z) {
+		bFence[x][z] = false;
+	}
+	
+	public void setIsFence(int x, int z, boolean val) {
+		bFence[x][z] = val;
+	}
+	
+	public void setToLiquid(int x, int z) {
+		bLiquid[x][z] = true;
+	}
+	
+	public void unsetLiquid(int x, int z) {
+		bLiquid[x][z] = false;
+	}
+	
+	public void setIsLiquid(int x, int z, boolean val) {
+		bLiquid[x][z] = val;
+	}
+	
+	public void setToDoor(int x, int z) {
+		bDoor[x][z] = true;
+	}
+	
+	public void unsetDoor(int x, int z) {
+		bDoor[x][z] = false;
+	}
+	
+	public void setIsDoor(int x, int z, boolean val) {
+		bDoor[x][z] = val;
+	}
+	
+	public void setAStared(int x, int z) {
+		astared[x][z] = true;
+	}
+	
+	public void unsetAStared(int x, int z) {
+		astared[x][z] = false;
+	}
+	
+	public void setIsAStared(int x, int z, boolean val) {
+		astared[x][z] = val;
+	}
+	
+	/*
+	 * Get Booleans
+	 */
+	
+	public boolean isWall(int x, int z) {
+		return bWall[x][z];
+	}
+	
+	public boolean isFence(int x, int z) {
+		return bFence[x][z];
+	}
+	
+	public boolean isLiquid(int x, int z) {
+		return bLiquid[x][z];
+	}
+	
+	public boolean isDoor(int x, int z) {
+		return bDoor[x][z];
+	}
+	
+	public boolean isAStared(int x, int z) {
+		return astared[x][z];
+	}
+	
+	/*
+	 * General stuff
+	 */
 	
 	public MapMatrix(int width, World world, int chunkX, int chunkZ) {
 		this.world = world;
@@ -84,10 +290,10 @@ public class MapMatrix {
 		ceiling   = new int[width][width];
 		wall	  = new int[width][width];
 		floor	  = new int[width][width];
-		isWall	  = new boolean[width][width];
-		isFence	  = new boolean[width][width];
-		hasLiquid = new boolean[width][width];	
-		isDoor    = new boolean[width][width];
+		bWall	  = new boolean[width][width];
+		bFence	  = new boolean[width][width];
+		bLiquid = new boolean[width][width];	
+		bDoor    = new boolean[width][width];
 		nodedge   = new Step[width][width];
 		astared   = new boolean[width][width];
 	}
@@ -118,9 +324,9 @@ public class MapMatrix {
 					 if(drawFlyingMap) {
 						 if(astared[i][j]) {
 							 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, lapis);
-						 } else if(isDoor[i][j]) {
+						 } else if(bDoor[i][j]) {
 							 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, slab);
-						 } else if(isWall[i][j]) {
+						 } else if(bWall[i][j]) {
 							 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, gold);
 						 } else {
 							 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, glass);
@@ -155,23 +361,23 @@ public class MapMatrix {
 						 DBlock.place(world, shiftX + i, ceilY[i][j] + 1, shiftZ + j, ceiling[i][j]);
 					
 					 for(int k = roomBottom(i, j); k <= ceilY[i][j]; k++)
-						 if(!isWall[i][j])DBlock.deleteBlock(world, shiftX +i, k, shiftZ + j, flooded);
+						 if(!bWall[i][j])DBlock.deleteBlock(world, shiftX +i, k, shiftZ + j, flooded);
 						 else if(noHighDegenerate(theRoom, shiftX + i, k, shiftZ + j))
 							 DBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
 					 for(int k = nCeilY[i][j]; k < ceilY[i][j]; k++) 
 						 if(noHighDegenerate(theRoom, shiftX + i, k, shiftZ + j))
 							 DBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
-					 if(isFence[i][j]) 
+					 if(bFence[i][j]) 
 						 DBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, dungeon.fenceBlock);
 					 
-					 if(isDoor[i][j]) {
+					 if(bDoor[i][j]) {
 						 DBlock.deleteBlock(world, shiftX + i, floorY[i][j],     shiftZ + j, flooded);
 						 DBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 1, shiftZ + j, flooded);
 						 DBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 2, shiftZ + j, flooded);
 					 }
 					 
 					 // Liquids
-					 if(hasLiquid[i][j] && (!isWall[i][j] && !isDoor[i][j])
+					 if(bLiquid[i][j] && (!bWall[i][j] && !bDoor[i][j])
 							 && !world.isAirBlock(new BlockPos(shiftX + i, floorY[i][j] - 1, shiftZ + j))) 
 						 DBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, theRoom.liquidBlock);					 
 				}
@@ -234,7 +440,7 @@ public class MapMatrix {
 	 */
 	private int roomBottom(int i, int j) {
 		int b = floorY[i][j];
-		if(isWall[i][j] && !isDoor[i][j]) b--;
+		if(bWall[i][j] && !bDoor[i][j]) b--;
 		return b;		
 	}
 	
@@ -279,9 +485,9 @@ public class MapMatrix {
 					 if(drawFlyingMap) {
 						 if(astared[i][j]) {
 							 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, lapis);
-						 } else if(isDoor[i][j]) {
+						 } else if(bDoor[i][j]) {
 							 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, slab);
-						 } else if(isWall[i][j]) {
+						 } else if(bWall[i][j]) {
 							 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, gold);
 						 } else {
 							 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, glass);
@@ -316,23 +522,23 @@ public class MapMatrix {
 						 DBlock.place(world, shiftX + i, ceilY[i][j] + 1, shiftZ + j, ceiling[i][j]);
 					
 					 for(int k = roomBottom(i, j); k <= ceilY[i][j]; k++)
-						 if(!isWall[i][j])DBlock.deleteBlock(world, shiftX +i, k, shiftZ + j, flooded);
+						 if(!bWall[i][j])DBlock.deleteBlock(world, shiftX +i, k, shiftZ + j, flooded);
 						 else if(noHighDegenerate(theRoom, shiftX + i, k, shiftZ + j))
 							 DBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
 					 for(int k = nCeilY[i][j]; k < ceilY[i][j]; k++) 
 						 if(noHighDegenerate(theRoom, shiftX + i, k, shiftZ + j))
 							 DBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
-					 if(isFence[i][j]) 
+					 if(bFence[i][j]) 
 						 DBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, dungeon.fenceBlock);
 					 
-					 if(isDoor[i][j]) {
+					 if(bDoor[i][j]) {
 						 DBlock.deleteBlock(world, shiftX + i, floorY[i][j],     shiftZ + j, flooded);
 						 DBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 1, shiftZ + j, flooded);
 						 DBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 2, shiftZ + j, flooded);
 					 }
 					 
 					 // Liquids
-					 if(hasLiquid[i][j] && (!isWall[i][j] && !isDoor[i][j])
+					 if(bLiquid[i][j] && (!bWall[i][j] && !bDoor[i][j])
 							 && !world.isAirBlock(new BlockPos(shiftX + i, floorY[i][j] - 1, shiftZ + j))) 
 						 DBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, theRoom.liquidBlock);					 
 				}
