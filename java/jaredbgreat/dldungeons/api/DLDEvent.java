@@ -15,6 +15,7 @@ import java.util.Random;
 
 import jaredbgreat.dldungeons.builder.DBlock;
 import jaredbgreat.dldungeons.planner.Dungeon;
+import jaredbgreat.dldungeons.planner.mapping.ChunkMap;
 import jaredbgreat.dldungeons.planner.mapping.MapMatrix;
 import jaredbgreat.dldungeons.rooms.Room;
 import net.minecraft.block.Block;
@@ -210,20 +211,25 @@ public class DLDEvent extends Event {
 	}
 
 	public static class BeforeBuild extends DLDEvent {
-		protected final MapMatrix mapMatrix;
+		protected final ChunkMap chunkMap;
 		protected final int shiftX;
 		protected final int shiftZ;
 		protected final boolean flooded;
 
-		public BeforeBuild(MapMatrix mapMatrix, int shiftX, int shiftZ, boolean flooded) {
-			this.mapMatrix = mapMatrix;
+		public BeforeBuild(ChunkMap chunkMap, int shiftX, int shiftZ, boolean flooded) {
+			this.chunkMap = chunkMap;
 			this.shiftX = shiftX;
 			this.shiftZ = shiftZ;
 			this.flooded = flooded;
 		}
 
-		public MapMatrix getMapMatrix() {
-			return mapMatrix;
+		@Deprecated
+		public ChunkMap getMapMatrix() {
+			return chunkMap;
+		}
+
+		public ChunkMap getChunkMap() {
+			return chunkMap;
 		}
 
 		public int getShiftX() {
@@ -241,8 +247,8 @@ public class DLDEvent extends Event {
 	}
 
 	public static class AfterBuild extends BeforeBuild {
-		public AfterBuild(MapMatrix mapMatrix, int shiftX, int shiftZ, boolean flooded) {
-			super(mapMatrix, shiftX, shiftZ, flooded);
+		public AfterBuild(ChunkMap chunkMap, int shiftX, int shiftZ, boolean flooded) {
+			super(chunkMap, shiftX, shiftZ, flooded);
 		}
 	}
 
