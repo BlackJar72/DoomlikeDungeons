@@ -34,9 +34,9 @@ public class TopRoom extends AbstractEntrance {
 	public void build(Dungeon dungeon, World world) {
 		//DoomlikeDungeons.profiler.startTask("Generating Top Room Numbers (TopRoom)");
 		wx = x + (dungeon.map.getChunkX() * 16) 
-				- (dungeon.map.getWidthRoom() / 2) + 8;
+				- (dungeon.map.getWidth() / 2) + 8;
 		wz = z + (dungeon.map.getChunkZ() * 16) 
-				- (dungeon.map.getWidthRoom() / 2) + 8;
+				- (dungeon.map.getWidth() / 2) + 8;
 		bottom = dungeon.map.getFloorY(x, z);
 		top = world.getActualHeight();
 		while(!DBlock.isGroundBlock(world, wx, top, wz)) top--;

@@ -178,8 +178,8 @@ public class Dungeon implements ICachable {
 		nodes = new Node[numNodes];
 		spawners = new SpawnerCounter();
 		
-		shiftX = (map.getChunkX() * 16) - (map.getWidthRoom() / 2) + 8;
-		shiftZ = (map.getChunkZ() * 16) - (map.getWidthRoom() / 2) + 8;
+		shiftX = (map.getChunkX() * 16) - (map.getWidth() / 2) + 8;
+		shiftZ = (map.getChunkZ() * 16) - (map.getWidth() / 2) + 8;
 		
 		makeNodes();
 		if((numEntrances < 1) && ConfigHandler.easyFind) addAnEntrance();
@@ -376,6 +376,7 @@ public class Dungeon implements ICachable {
 			if(room instanceof Cave) DoorChecker.caveConnector(this, room);
 		}
 		DoorChecker.checkConnectivity(this);
+		addTileEntities();
 	}
 	
 	
@@ -412,15 +413,10 @@ public class Dungeon implements ICachable {
 	private void addTileEntitesToRoom(Room room) {
 		if(MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.AddTileEntitiesToRoom(this, room))) return;
 			for(Spawner  spawner : room.spawners) {
-					DBlock.placeSpawner(map.getWorld(), 
-										shiftX + spawner.getX(), 
-										spawner.getY(), 
-										shiftZ + spawner.getZ(), 
-										spawner.getMob());
+				map.addSpawner(spawner);
 			}
 			for(BasicChest  chest : room.chests) {
-				chest.place(map.getWorld(), shiftX + chest.mx, 
-							chest.my, shiftZ + chest.mz, random);
+				map.addChest(chest);
 			}
 	}
 	

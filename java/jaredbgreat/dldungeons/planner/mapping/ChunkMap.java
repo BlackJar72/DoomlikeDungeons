@@ -1,8 +1,12 @@
 package jaredbgreat.dldungeons.planner.mapping;
 
+import java.util.ArrayList;
+
 import jaredbgreat.dldungeons.DoomlikeDungeons;
 import jaredbgreat.dldungeons.api.DLDEvent;
 import jaredbgreat.dldungeons.builder.DBlock;
+import jaredbgreat.dldungeons.pieces.Spawner;
+import jaredbgreat.dldungeons.pieces.chests.BasicChest;
 import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.planner.astar.Step;
 import jaredbgreat.dldungeons.rooms.Room;
@@ -17,7 +21,7 @@ public class ChunkMap {
 	static final int ASIZE = CSIZE * CSIZE;
 	
 	private final World world;
-	private final int   origenX, origenZ;
+	private final int   originX, originZ;
 	
 	// map of heights to build at
 	private byte[] ceilY;		// Ceiling height
@@ -39,27 +43,33 @@ public class ChunkMap {
 	private boolean[] bLiquid;	// Is floor covered by a liquid block?
 	private boolean[] bDoor;		// Is there a door here?
 	
-	//The A* scratch pad
+	// The A* scratch pad
 	private boolean[] astared;
+	
+	// The tile-entities to add
+	private ArrayList<Spawner> spawners;
+	private ArrayList<BasicChest> chests;
 	
 	
 	public ChunkMap(World world, int x, int z) {
 		this.world = world;
-		origenX = x;
-		origenZ = z;
-		ceilY   = new byte[ASIZE];
-		floorY  = new byte[ASIZE];
-		nCeilY  = new byte[ASIZE];
-		nFloorY = new byte[ASIZE];
-		wall    = new int[ASIZE];
-		floor   = new int[ASIZE];
-		ceiling = new int[ASIZE];
-		room    = new int[ASIZE];
-		bWall   = new boolean[ASIZE];
-		bFence  = new boolean[ASIZE];
-		bLiquid = new boolean[ASIZE];
-		bDoor   = new boolean[ASIZE];
-		astared = new boolean[ASIZE];
+		originX  = x;
+		originZ  = z;
+		ceilY    = new byte[ASIZE];
+		floorY   = new byte[ASIZE];
+		nCeilY   = new byte[ASIZE];
+		nFloorY  = new byte[ASIZE];
+		wall     = new int[ASIZE];
+		floor    = new int[ASIZE];
+		ceiling  = new int[ASIZE];
+		room     = new int[ASIZE];
+		bWall    = new boolean[ASIZE];
+		bFence   = new boolean[ASIZE];
+		bLiquid  = new boolean[ASIZE];
+		bDoor    = new boolean[ASIZE];
+		astared  = new boolean[ASIZE];
+		spawners = new ArrayList<>();
+		chests   = new ArrayList<>();
 	}
 
 	/*
@@ -235,6 +245,25 @@ public class ChunkMap {
 	}
 	
 	
+	/*
+	 * Adding tile entities 
+	 */
+	
+	
+	public void addChest(BasicChest chest, int x, int z) {
+		chest.mx = x;
+		chest.mz = z;
+		chests.add(chest);
+	}
+	
+	
+	public void addSpawner(Spawner spawner, int x, int z) {
+		spawner.setX(x);
+		spawner.setZ(z);
+		spawners.add(spawner);
+	}
+	
+	
 	/**
 	 * Returns true if a block should be placed in those coordinates; that is 
 	 * the block is not air or the room is not degenerate.
@@ -299,7 +328,7 @@ public class ChunkMap {
 	public void build(Dungeon dungeon) {
 		int below;
 		boolean flooded = dungeon.theme.flags.contains(ThemeFlags.WATER);
-		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.BeforeBuild(this, origenX, origenZ, flooded));
+		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.BeforeBuild(this, originX, originZ, flooded));
 		
 		for(int l = 0; l < ASIZE; l++) {
 				int i = l % CSIZE;
@@ -310,32 +339,32 @@ public class ChunkMap {
 					 // Debugging code; should not normally run
 					 if(drawFlyingMap) {
 						 if(astared[l]) {
-							 DBlock.placeBlock(world, origenX + i, 96, origenZ +j, lapis);
+							 DBlock.placeBlock(world, originX + i, 96, originZ +j, lapis);
 						 } else if(bDoor[l]) {
-							 DBlock.placeBlock(world, origenX + i, 96, origenZ +j, slab);
+							 DBlock.placeBlock(world, originX + i, 96, originZ +j, slab);
 						 } else if(bWall[l]) {
-							 DBlock.placeBlock(world, origenX + i, 96, origenZ +j, gold);
+							 DBlock.placeBlock(world, originX + i, 96, originZ +j, gold);
 						 } else {
-							 DBlock.placeBlock(world, origenX + i, 96, origenZ +j, glass);
+							 DBlock.placeBlock(world, originX + i, 96, originZ +j, glass);
 						 }
 					 }
 					 
 					 // Lower parts of the room
 					 if(nFloorY[l] < floorY[l])
 						 for(int k = nFloorY[l]; k < floorY[l]; k++) 
-							 if(noLowDegenerate(theRoom, origenX + i, k, origenZ + j, l))
-								 DBlock.place(world, origenX + i, k, origenZ + j, wall[l]);
+							 if(noLowDegenerate(theRoom, originX + i, k, originZ + j, l))
+								 DBlock.place(world, originX + i, k, originZ + j, wall[l]);
 					 if(nFloorY[l] > floorY[l])
 						 for(int k = floorY[l]; k < nFloorY[l]; k++) 
-							 if(noLowDegenerate(theRoom, origenX + i, k, origenZ + j, l))
-								 DBlock.place(world, origenX + i, k, origenZ + j, wall[l]);
+							 if(noLowDegenerate(theRoom, originX + i, k, originZ + j, l))
+								 DBlock.place(world, originX + i, k, originZ + j, wall[l]);
 					 
-					 if(noLowDegenerate(theRoom, origenX + i, floorY[l] - 1, origenZ + j, l)) {
-						 DBlock.place(world, origenX + i, floorY[l] - 1, origenZ + j, floor[l]);
+					 if(noLowDegenerate(theRoom, originX + i, floorY[l] - 1, originZ + j, l)) {
+						 DBlock.place(world, originX + i, floorY[l] - 1, originZ + j, floor[l]);
 						 if(dungeon.theme.buildFoundation) {
 							 below = nFloorY[l] < floorY[l] ? nFloorY[l] - 1 : floorY[l] - 2;
-							 while(!DBlock.isGroundBlock(world, origenX + i, below, origenZ + j)) {
-								 DBlock.place(world, origenX + i, below, origenZ + j, dungeon.floorBlock);
+							 while(!DBlock.isGroundBlock(world, originX + i, below, originZ + j)) {
+								 DBlock.place(world, originX + i, below, originZ + j, dungeon.floorBlock);
 						 		below--;
 						 		if(below < 0) break;						 		
 						 	 }
@@ -344,32 +373,43 @@ public class ChunkMap {
 					 
 					 // Upper parts of the room
 					 if(!theRoom.sky 
-							 && noHighDegenerate(theRoom, origenX + i, ceilY[l] + 1, origenZ + j))
-						 DBlock.place(world, origenX + i, ceilY[l] + 1, origenZ + j, ceiling[l]);
+							 && noHighDegenerate(theRoom, originX + i, ceilY[l] + 1, originZ + j))
+						 DBlock.place(world, originX + i, ceilY[l] + 1, originZ + j, ceiling[l]);
 					
 					 for(int k = roomBottom(l); k <= ceilY[l]; k++)
-						 if(!bWall[l])DBlock.deleteBlock(world, origenX +i, k, origenZ + j, flooded);
-						 else if(noHighDegenerate(theRoom, origenX + i, k, origenZ + j))
-							 DBlock.place(world, origenX + i, k, origenZ + j, wall[l]);
+						 if(!bWall[l])DBlock.deleteBlock(world, originX +i, k, originZ + j, flooded);
+						 else if(noHighDegenerate(theRoom, originX + i, k, originZ + j))
+							 DBlock.place(world, originX + i, k, originZ + j, wall[l]);
 					 for(int k = nCeilY[l]; k < ceilY[l]; k++) 
-						 if(noHighDegenerate(theRoom, origenX + i, k, origenZ + j))
-							 DBlock.place(world, origenX + i, k, origenZ + j, wall[l]);
+						 if(noHighDegenerate(theRoom, originX + i, k, originZ + j))
+							 DBlock.place(world, originX + i, k, originZ + j, wall[l]);
 					 if(bFence[l]) 
-						 DBlock.place(world, origenX + i, floorY[l], origenZ + j, dungeon.fenceBlock);
+						 DBlock.place(world, originX + i, floorY[l], originZ + j, dungeon.fenceBlock);
 					 
 					 if(bDoor[l]) {
-						 DBlock.deleteBlock(world, origenX + i, floorY[l],     origenZ + j, flooded);
-						 DBlock.deleteBlock(world, origenX + i, floorY[l] + 1, origenZ + j, flooded);
-						 DBlock.deleteBlock(world, origenX + i, floorY[l] + 2, origenZ + j, flooded);
+						 DBlock.deleteBlock(world, originX + i, floorY[l],     originZ + j, flooded);
+						 DBlock.deleteBlock(world, originX + i, floorY[l] + 1, originZ + j, flooded);
+						 DBlock.deleteBlock(world, originX + i, floorY[l] + 2, originZ + j, flooded);
 					 }
 					 
 					 // Liquids
 					 if(bLiquid[l] && (!bWall[l] && !bDoor[l])
-							 && !world.isAirBlock(new BlockPos(origenX + i, floorY[l] - 1, origenZ + j))) 
-						 DBlock.place(world, origenX + i, floorY[l], origenZ + j, theRoom.liquidBlock);					 
+							 && !world.isAirBlock(new BlockPos(originX + i, floorY[l] - 1, originZ + j))) 
+						 DBlock.place(world, originX + i, floorY[l], originZ + j, theRoom.liquidBlock);					 
 				}
 			}
-		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.AfterBuild(this, origenX, origenZ, flooded));
+		for(Spawner spawner : spawners) {
+				DBlock.placeSpawner(world, 
+									originX + spawner.getX(), 
+									spawner.getY(), 
+									originZ + spawner.getZ(), 
+									spawner.getMob());
+		}
+		for(BasicChest  chest : chests) {
+			chest.place(world, originX + chest.mx, 
+						chest.my, originZ + chest.mz, dungeon.random);
+		}
+		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.AfterBuild(this, originX, originZ, flooded));
 	}
 
 }

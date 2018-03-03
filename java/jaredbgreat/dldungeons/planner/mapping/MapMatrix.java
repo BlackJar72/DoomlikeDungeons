@@ -15,6 +15,8 @@ package jaredbgreat.dldungeons.planner.mapping;
 import jaredbgreat.dldungeons.DoomlikeDungeons;
 import jaredbgreat.dldungeons.api.DLDEvent;
 import jaredbgreat.dldungeons.builder.DBlock;
+import jaredbgreat.dldungeons.pieces.Spawner;
+import jaredbgreat.dldungeons.pieces.chests.BasicChest;
 import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.planner.astar.Step;
 import jaredbgreat.dldungeons.rooms.Room;
@@ -250,7 +252,7 @@ public class MapMatrix {
 		return chunks[cx + (cz * cwidth)].getRoom(bx, bz);
 	}
 	
-	public int getWidthRoom() {
+	public int getWidth() {
 		return cwidth * CSIZE;
 	}
 	
@@ -421,6 +423,29 @@ public class MapMatrix {
 		return chunks[cx + (cz * cwidth)].isAStared(bx, bz);
 	}
 	
+	
+	/*
+	 * Adding tile entities 
+	 */
+	
+	
+	public void addChest(BasicChest chest) {
+		int cx = chest.mx / CSIZE;
+		int cz = chest.mz / CSIZE;
+		int bx = chest.mx - (cx * CSIZE);
+		int bz = chest.mz - (cz * CSIZE);
+		chunks[cx + (cz * cwidth)].addChest(chest, bx, bz);
+	}
+	
+	
+	public void addSpawner(Spawner spawner) {
+		int cx = spawner.getX() / CSIZE;
+		int cz = spawner.getZ() / CSIZE;
+		int bx = spawner.getX() - (cx * CSIZE);
+		int bz = spawner.getZ() - (cz * CSIZE);
+		chunks[cx + (cz * cwidth)].addSpawner(spawner, bx, bz);
+	}
+	
 	/*
 	 * General stuff
 	 */
@@ -450,7 +475,6 @@ public class MapMatrix {
 			chunks[i].build(dungeon);
 		}
 		DoomlikeDungeons.profiler.endTask("Building Dungeon architecture");
-		dungeon.addTileEntities();	
 		dungeon.addEntrances();
 		DoomlikeDungeons.profiler.endTask("Building Dungeon in World");
 	}
