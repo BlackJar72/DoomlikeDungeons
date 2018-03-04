@@ -70,7 +70,8 @@ public class MapMatrix {
 				chunks[i + (j * cwidth)] 
 						= new ChunkMap(world, 
 								       origenX + (i * CSIZE), 
-								       origenZ + (j * CSIZE));
+								       origenZ + (j * CSIZE),
+								       i, j);
 			}
 		nodedge   = new Step[width][width];
 	}
@@ -105,6 +106,26 @@ public class MapMatrix {
 	
 	public Step[][] getSteps() {
 		return nodedge;
+	}
+	
+	public int getNumChunks() {
+		return chunks.length;
+	}
+	
+	public int getChunkMidX(int chunk) {
+		return ((chunk % cwidth) * CSIZE) + 8;
+	}
+	
+	public int getChunkMidZ(int chunk) {
+		return ((chunk / cwidth) * CSIZE) + 8;
+	}
+	
+	public ChunkMap getChunkMap(int index) {
+		return chunks[index];
+	}
+	
+	public void addEntrance(int index) {
+		chunks[index].makeEntrance();
 	}
 
 	/*
@@ -475,7 +496,6 @@ public class MapMatrix {
 			chunks[i].build(dungeon);
 		}
 		DoomlikeDungeons.profiler.endTask("Building Dungeon architecture");
-		dungeon.addEntrances();
 		DoomlikeDungeons.profiler.endTask("Building Dungeon in World");
 	}
 	

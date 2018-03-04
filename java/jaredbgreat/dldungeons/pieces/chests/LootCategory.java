@@ -106,10 +106,12 @@ public class LootCategory {
 			if(level > 6) level = 6;
 			return heal.levels[level].getLoot(random).getStack(random);
 		case LOOT:
-			if(level > 6 && random.nextBoolean()) {
-					return LootList.special.getLoot(random).getStack(random);
-			} else if(level > 6){
-				level = 6;
+			if(level > 6) {
+				if(level > random.nextInt(100)) {
+					return LootList.special.getLoot(random).getStack(random);					
+				} else {
+					level = 6;
+				}
 			}
 			if(random.nextInt(10) == 0) {
 				return getEnchantedBook(level, random);

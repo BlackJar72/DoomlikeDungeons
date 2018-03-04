@@ -2,11 +2,15 @@ package jaredbgreat.dldungeons.planner.mapping;
 
 import java.util.ArrayList;
 
+import jaredbgreat.dldungeons.ConfigHandler;
 import jaredbgreat.dldungeons.DoomlikeDungeons;
 import jaredbgreat.dldungeons.api.DLDEvent;
 import jaredbgreat.dldungeons.builder.DBlock;
 import jaredbgreat.dldungeons.pieces.Spawner;
 import jaredbgreat.dldungeons.pieces.chests.BasicChest;
+import jaredbgreat.dldungeons.pieces.entrances.SimpleEntrance;
+import jaredbgreat.dldungeons.pieces.entrances.SpiralStair;
+import jaredbgreat.dldungeons.pieces.entrances.TopRoom;
 import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.planner.astar.Step;
 import jaredbgreat.dldungeons.rooms.Room;
@@ -21,7 +25,8 @@ public class ChunkMap {
 	static final int ASIZE = CSIZE * CSIZE;
 	
 	private final World world;
-	private final int   originX, originZ;
+	private final int originX, originZ, dcx, dcz;
+	private boolean entrance;
 	
 	// map of heights to build at
 	private byte[] ceilY;		// Ceiling height
@@ -51,8 +56,11 @@ public class ChunkMap {
 	private ArrayList<BasicChest> chests;
 	
 	
-	public ChunkMap(World world, int x, int z) {
+	public ChunkMap(World world, int x, int z, int dcx, int dcz) {
 		this.world = world;
+		this.dcx = dcx;
+		this.dcz = dcz;
+		entrance = false;
 		originX  = x;
 		originZ  = z;
 		ceilY    = new byte[ASIZE];
@@ -70,6 +78,12 @@ public class ChunkMap {
 		astared  = new boolean[ASIZE];
 		spawners = new ArrayList<>();
 		chests   = new ArrayList<>();
+	}
+		
+	public void makeEntrance() {
+		chests.clear();
+		spawners.clear();
+		entrance = true;
 	}
 
 	/*
@@ -319,6 +333,42 @@ public class ChunkMap {
 	
 	
 	/**
+	 * This will added a physical entrance to all entrance nodes.
+	 * 
+	 * @param room
+	 */
+	private void addEntrance(Dungeon dungeon) {		
+		if(!entrance) return;
+		//DoomlikeDungeons.profiler.startTask("Adding Entrances");
+		int entrance;
+		if(dungeon.variability.use(dungeon.random)) entrance = dungeon.random.nextInt(3);
+		else entrance = dungeon.entrancePref; 
+		if(ConfigHandler.easyFind) entrance = 1;
+		if(MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.AddEntrance(dungeon, this))) return;
+		
+		switch (entrance) {
+		case 0:
+			//DoomlikeDungeons.profiler.startTask("Adding Sriral Stair");
+			new SpiralStair((dcx * CSIZE) + 8, (dcz * CSIZE) + 8).build(dungeon, world);
+			//DoomlikeDungeons.profiler.endTask("Adding Sriral Stair");
+			break;
+		case 1:
+			//DoomlikeDungeons.profiler.startTask("Adding Top Room");
+			new TopRoom((dcx * CSIZE) + 8, (dcz * CSIZE) + 8).build(dungeon, world);
+			//DoomlikeDungeons.profiler.endTask("Adding Top Room");
+			break;
+		case 2:
+		default:
+			//DoomlikeDungeons.profiler.startTask("Adding Simple Entrance");
+			new SimpleEntrance((dcx * CSIZE) + 8, (dcz * CSIZE) + 8).build(dungeon, world);
+			//DoomlikeDungeons.profiler.endTask("Adding Simple Entrance");
+			break;
+		}		
+		//DoomlikeDungeons.profiler.endTask("Adding Entrances");
+	}
+	
+	
+	/**
 	 * This will build the dungeon into the world, transforming the information 
 	 * mapped here in 2D arrays into the finished 3D structure in the Minecraft 
 	 * world.
@@ -409,6 +459,7 @@ public class ChunkMap {
 			chest.place(world, originX + chest.mx, 
 						chest.my, originZ + chest.mz, dungeon.random);
 		}
+		addEntrance(dungeon);
 		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.AfterBuild(this, originX, originZ, flooded));
 	}
 

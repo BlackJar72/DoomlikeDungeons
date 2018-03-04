@@ -228,9 +228,25 @@ public class Dungeon implements ICachable {
 	private void makeNodes() {	
 		//DoomlikeDungeons.profiler.startTask("Creating Node Rooms");
 		int i = 0;
+		int n = map.getNumChunks();
+		int c;
+		int[] chunks = new int[n];
+		for(int j = 0; j < n; j++) {
+			chunks[j] = j;
+		}		
 		while(i < numNodes) {
-			nodes[i] = new Node(random.nextInt(size.width), baseHeight, random.nextInt(size.width), random, this);
-			if(nodes[i].hubRoom != null) ++i;
+			// Selecting chunks from those available with removal
+			c = chunks[random.nextInt(n)];
+			chunks[c] = chunks[--n];
+			nodes[i] = new Node(map.getChunkMidX(c), 
+					baseHeight, map.getChunkMidZ(c), random, this, c);
+			if(nodes[i].hubRoom != null) {
+				if(nodes[i].hubRoom.hasEntrance) {
+					map.addEntrance(c);
+				}
+				++i;
+			}
+			
 		}
 		//DoomlikeDungeons.profiler.endTask("Creating Node Rooms");
 	}
@@ -422,54 +438,6 @@ public class Dungeon implements ICachable {
 	
 	
 	/**
-	 * This cycles through all nodes and calls addEntrance on each; 
-	 * entrances will only be added to entrance nodes, but that is 
-	 * checked by addEntrance, not here.
-	 */
-	public void addEntrances() {
-		for(int i = 0; i < nodes.length; i++) {
-			if(nodes[i].hubRoom != null) addEntrance(nodes[i].hubRoom);
-		}
-	}
-	
-	
-	/**
-	 * This will added a physical entrance to all entrance nodes.
-	 * 
-	 * @param room
-	 */
-	private void addEntrance(Room room) {		
-		if(!room.hasEntrance) return;
-		//DoomlikeDungeons.profiler.startTask("Adding Entrances");
-		int entrance;
-		if(variability.use(random)) entrance = random.nextInt(3);
-		else entrance = entrancePref; 
-		if(ConfigHandler.easyFind) entrance = 1;
-		if(MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.AddEntrance(this, room))) return;
-		
-		switch (entrance) {
-		case 0:
-			//DoomlikeDungeons.profiler.startTask("Adding Sriral Stair");
-			new SpiralStair((int)room.realX, (int)room.realZ).build(this, map.getWorld());
-			//DoomlikeDungeons.profiler.endTask("Adding Sriral Stair");
-			break;
-		case 1:
-			//DoomlikeDungeons.profiler.startTask("Adding Top Room");
-			new TopRoom((int)room.realX, (int)room.realZ).build(this, map.getWorld());
-			//DoomlikeDungeons.profiler.endTask("Adding Top Room");
-			break;
-		case 2:
-		default:
-			//DoomlikeDungeons.profiler.startTask("Adding Simple Entrance");
-			new SimpleEntrance((int)room.realX, (int)room.realZ).build(this, map.getWorld());
-			//DoomlikeDungeons.profiler.endTask("Adding Simple Entrance");
-			break;
-		}		
-		//DoomlikeDungeons.profiler.endTask("Adding Entrances");
-	}
-	
-	
-	/**
 	 * This will convert one non-entrance node into an entrance node 
 	 * if and only if the number of entrances has not been set to 
 	 * a degree of NONE by the dungeons theme. 
@@ -482,6 +450,7 @@ public class Dungeon implements ICachable {
 		it.spawners.clear();
 		it.hasEntrance = true;
 		it.hasSpawners = false;
+		map.addEntrance(nodes[which].chunk);
 		numEntrances = 1;
 		for(int i = (int)it.realX -2; i < ((int)it.realX + 2); i++)
 			for(int j = (int)it.realZ - 2; j < ((int)it.realZ + 2); j++) {

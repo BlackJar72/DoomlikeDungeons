@@ -204,10 +204,24 @@ public class DLDEvent extends Event {
 	}
 
 	@Cancelable
-	public static class AddEntrance extends DungeonRoom {
-		public AddEntrance(Dungeon dungeon, Room room) {
-			super(dungeon, room);
+	public static class AddEntrance extends DLDEvent {
+		protected final Dungeon dungeon;
+		protected final ChunkMap chunkMap;
+
+		public AddEntrance(Dungeon dungeon, ChunkMap chunkMap) {
+			this.dungeon  = dungeon;
+			this.chunkMap = chunkMap;
 		}
+		
+		public Dungeon getDungeon() {
+			return dungeon;
+		}
+
+		public ChunkMap getChunkMap() {
+			return chunkMap;
+		}
+
+	
 	}
 
 	public static class BeforeBuild extends DLDEvent {
