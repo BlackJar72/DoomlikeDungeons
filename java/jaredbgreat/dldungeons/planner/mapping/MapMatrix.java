@@ -113,11 +113,11 @@ public class MapMatrix {
 	}
 	
 	public int getChunkMidX(int chunk) {
-		return ((chunk % cwidth) * CSIZE) + 8;
+		return chunks[chunk].getMidX();
 	}
 	
 	public int getChunkMidZ(int chunk) {
-		return ((chunk / cwidth) * CSIZE) + 8;
+		return chunks[chunk].getMidZ();
 	}
 	
 	public ChunkMap getChunkMap(int index) {

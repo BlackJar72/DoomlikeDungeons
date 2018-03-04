@@ -17,10 +17,10 @@ package jaredbgreat.dldungeons.themes;
  */
 public enum Sizes implements Autoselectable {
 	TINY 	(80,	39,		42,	12,	2,	2),
-	SMALL 	(96,	47,		50,	16,	3,	2),
-	MEDIUM	(112,	55,		58,	20,	4,	2),
-	LARGE	(144,	71,		82,	22,	5,	3),
-	HUGE	(176,	87,    112,	24,	6,	4);
+	SMALL 	(112,	55,		50,	16,	3,	2),
+	MEDIUM	(144,	71,		58,	20,	4,	2),
+	LARGE	(176,	87,		82,	22,	5,	3),
+	HUGE	(208,	103,   112,	24,	6,	4);
 	
 	public final int width;		// Distance across the dungeon zone
 	public final int radius;	// Square "radius" around center block (pre-calculated)

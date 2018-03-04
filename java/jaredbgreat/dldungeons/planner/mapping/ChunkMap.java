@@ -1,9 +1,11 @@
 package jaredbgreat.dldungeons.planner.mapping;
 
-import java.util.ArrayList;
-
+import static jaredbgreat.dldungeons.planner.mapping.MapMatrix.drawFlyingMap;
+import static jaredbgreat.dldungeons.planner.mapping.MapMatrix.glass;
+import static jaredbgreat.dldungeons.planner.mapping.MapMatrix.gold;
+import static jaredbgreat.dldungeons.planner.mapping.MapMatrix.lapis;
+import static jaredbgreat.dldungeons.planner.mapping.MapMatrix.slab;
 import jaredbgreat.dldungeons.ConfigHandler;
-import jaredbgreat.dldungeons.DoomlikeDungeons;
 import jaredbgreat.dldungeons.api.DLDEvent;
 import jaredbgreat.dldungeons.builder.DBlock;
 import jaredbgreat.dldungeons.pieces.Spawner;
@@ -12,12 +14,14 @@ import jaredbgreat.dldungeons.pieces.entrances.SimpleEntrance;
 import jaredbgreat.dldungeons.pieces.entrances.SpiralStair;
 import jaredbgreat.dldungeons.pieces.entrances.TopRoom;
 import jaredbgreat.dldungeons.planner.Dungeon;
-import jaredbgreat.dldungeons.planner.astar.Step;
 import jaredbgreat.dldungeons.rooms.Room;
 import jaredbgreat.dldungeons.themes.ThemeFlags;
-import static jaredbgreat.dldungeons.planner.mapping.MapMatrix.*;
+
+import java.util.ArrayList;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
 
 public class ChunkMap {	
@@ -278,6 +282,16 @@ public class ChunkMap {
 	}
 	
 	
+	public int getMidX() {
+		return (dcx * CSIZE) + 8;
+	}
+	
+	
+	public int getMidZ() {
+		return (dcz * CSIZE) + 8;
+	}
+	
+	
 	/**
 	 * Returns true if a block should be placed in those coordinates; that is 
 	 * the block is not air or the room is not degenerate.
@@ -349,18 +363,18 @@ public class ChunkMap {
 		switch (entrance) {
 		case 0:
 			//DoomlikeDungeons.profiler.startTask("Adding Sriral Stair");
-			new SpiralStair((dcx * CSIZE) + 8, (dcz * CSIZE) + 8).build(dungeon, world);
+			new SpiralStair(getMidX(), getMidZ()).build(dungeon, world);
 			//DoomlikeDungeons.profiler.endTask("Adding Sriral Stair");
 			break;
 		case 1:
 			//DoomlikeDungeons.profiler.startTask("Adding Top Room");
-			new TopRoom((dcx * CSIZE) + 8, (dcz * CSIZE) + 8).build(dungeon, world);
+			new TopRoom(getMidX(), getMidZ()).build(dungeon, world);
 			//DoomlikeDungeons.profiler.endTask("Adding Top Room");
 			break;
 		case 2:
 		default:
 			//DoomlikeDungeons.profiler.startTask("Adding Simple Entrance");
-			new SimpleEntrance((dcx * CSIZE) + 8, (dcz * CSIZE) + 8).build(dungeon, world);
+			new SimpleEntrance(getMidX(), getMidZ()).build(dungeon, world);
 			//DoomlikeDungeons.profiler.endTask("Adding Simple Entrance");
 			break;
 		}		
@@ -379,23 +393,23 @@ public class ChunkMap {
 		int below;
 		boolean flooded = dungeon.theme.flags.contains(ThemeFlags.WATER);
 		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.BeforeBuild(this, originX, originZ, flooded));
-		
 		for(int l = 0; l < ASIZE; l++) {
 				int i = l % CSIZE;
-				int j = l / CSIZE;
+				int j = l / CSIZE;	
 				if(room[l] != 0) {
 					 Room theRoom = dungeon.rooms.get(room[l]);
 					 
 					 // Debugging code; should not normally run
 					 if(drawFlyingMap) {
+						 int h = 96 + ((dcx + dcz) % 2);
 						 if(astared[l]) {
-							 DBlock.placeBlock(world, originX + i, 96, originZ +j, lapis);
+							 DBlock.placeBlock(world, originX + i, h, originZ +j, lapis);
 						 } else if(bDoor[l]) {
-							 DBlock.placeBlock(world, originX + i, 96, originZ +j, slab);
+							 DBlock.placeBlock(world, originX + i, h, originZ +j, slab);
 						 } else if(bWall[l]) {
-							 DBlock.placeBlock(world, originX + i, 96, originZ +j, gold);
+							 DBlock.placeBlock(world, originX + i, h, originZ +j, gold);
 						 } else {
-							 DBlock.placeBlock(world, originX + i, 96, originZ +j, glass);
+							 DBlock.placeBlock(world, originX + i, h, originZ +j, glass);
 						 }
 					 }
 					 
