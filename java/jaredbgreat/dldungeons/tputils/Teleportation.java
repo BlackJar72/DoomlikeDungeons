@@ -1,4 +1,4 @@
-package jaredbgreat.dldungeons.tputils;
+package jaredbgreat.testsmod.tputils;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,7 +27,7 @@ public class Teleportation extends Teleporter {
 		entity.setPosition(x, y, z);
 		entity.motionX = 0.0;
 		entity.motionY = 0.0;
-		entity.motionZ = 0.0;	
+		entity.motionZ = 0.0;		
 	}
 	
 	
@@ -40,9 +40,6 @@ public class Teleportation extends Teleporter {
 		if((worldServer == null) || (server == null)) {
 			throw new IllegalArgumentException("ERROR: Trying to teleport to non-existent dimension " 
 					+ dimension + "!");
-//			System.err.println("ERROR: Trying to teleport to non-existent dimension " 
-//								+ dimension + "!");
-//			return;
 		}
 		worldServer.getMinecraftServer().getPlayerList()
 			.transferPlayerToDimension(playerMP, dimension, new Teleportation(worldServer, x, y, z));
@@ -50,23 +47,16 @@ public class Teleportation extends Teleporter {
 	}
 	
 	
-	public static void tpToDimension(EntityPlayer player, int dimension, 
+	public static void tpToBlockPos(EntityPlayer player, int dimension, 
 			int ix, int iy, int iz) {
-		double x = ix + 0.5, y = iy, z = iz + 0.5;
-		int startDimension = player.getEntityWorld().provider.getDimension();
-		EntityPlayerMP playerMP = (EntityPlayerMP)player;		
-		MinecraftServer server = player.getEntityWorld().getMinecraftServer();
-		WorldServer worldServer = server.getWorld(dimension);
-		if((worldServer == null) || (server == null)) {
-			throw new IllegalArgumentException("ERROR: Trying to teleport to non-existent dimension " 
-					+ dimension + "!");
-//			System.err.println("ERROR: Trying to teleport to non-existent dimension " 
-//								+ dimension + "!");
-//			return;
-		}
-		worldServer.getMinecraftServer().getPlayerList()
-			.transferPlayerToDimension(playerMP, dimension, new Teleportation(worldServer, x, y, z));
-		player.setPositionAndUpdate(x, y, z);
+		tpToDimension(player, dimension, ix + 0.5, iy, iz + 0.5);
+	}
+	
+	
+	public static void tpToBlockPos(EntityPlayer player, int dimension, 
+			BlockPos pos) {
+		tpToDimension(player, dimension, ((double)pos.getX()) + 0.5, 
+				((double)pos.getY()), ((double)pos.getZ()) + 0.5);
 	}
 
 }
