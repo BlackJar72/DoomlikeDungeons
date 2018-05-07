@@ -52,7 +52,7 @@ public class Teleportation extends Teleporter {
 	
 	public static void tpToDimension(EntityPlayer player, int dimension, 
 			int ix, int iy, int iz) {
-		double x = ix + 0.5, y = iy + 0.5, z = iz + 0.5;
+		double x = ix + 0.5, y = iy, z = iz + 0.5;
 		int startDimension = player.getEntityWorld().provider.getDimension();
 		EntityPlayerMP playerMP = (EntityPlayerMP)player;		
 		MinecraftServer server = player.getEntityWorld().getMinecraftServer();
