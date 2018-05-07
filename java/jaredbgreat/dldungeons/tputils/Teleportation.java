@@ -27,7 +27,7 @@ public class Teleportation extends Teleporter {
 		entity.setPosition(x, y, z);
 		entity.motionX = 0.0;
 		entity.motionY = 0.0;
-		entity.motionZ = 0.0;		
+		entity.motionZ = 0.0;	
 	}
 	
 	
