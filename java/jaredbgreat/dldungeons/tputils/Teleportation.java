@@ -1,4 +1,4 @@
-package jaredbgreat.testsmod.tputils;
+package jaredbgreat.dldungeons.tputils;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
