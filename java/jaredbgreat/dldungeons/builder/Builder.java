@@ -117,7 +117,7 @@ public class Builder {
 							world.getBiome(new BlockPos((chunkX * 16), 64, (chunkZ * 16))), 
 						    world, chunkX, chunkZ);
 		if(dungeon.theme != null) {
-			if(debugPole) debuggingPole(world, chunkX, chunkZ, dungeon);
+			//if(debugPole) debuggingPole(world, chunkX, chunkZ, dungeon);
 			buildDungeon(dungeon);
 		}
 		dungeon.preFinalize();

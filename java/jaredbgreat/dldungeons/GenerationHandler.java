@@ -84,6 +84,7 @@ public class GenerationHandler implements IWorldGenerator {
 		}
 		if(blockedBiome) return;
 		if((dimensions.contains(Integer.valueOf(world.provider.getDimension())) != ConfigHandler.positiveDims)) return;
+		
 		if((Math.abs(chunkX - (world.getSpawnPoint().getX() / 16)) < minXZ) 
 				|| (Math.abs(chunkZ - (world.getSpawnPoint().getZ() / 16)) < minXZ)) return;
 		
