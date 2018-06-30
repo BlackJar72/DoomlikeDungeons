@@ -185,5 +185,15 @@ public class LootCategory {
 		ItemStack out = new ItemStack(Items.BOOK, 1);
 		out = EnchantmentHelper.addRandomEnchantment(random, out, Math.min(30, (int)(level * 7.5)), true);
 		return out;
+	}
+	
+	
+	public void addEnchantment(ItemStack stack) {
+		int n = rand.nextInt(2) + rand.nextInt(2) + 1;
+		for(int i = 0; i < n; i++) {
+			Enchantment ench = Enchantment.REGISTRY.getRandomObject(rand);
+			int l = ench.getMaxLevel();
+			stack.addEnchantment(ench, l);
+		}
 	}	
 }
