@@ -54,12 +54,61 @@ public class GenerationHandler implements IWorldGenerator {
 	 * and world setting as well as the dimension and biome of the chunk.
 	 * 
 	 * If dungeons are allowed here then it will check if the chunk is the one 
-	 * in its area to have a dungeon.  To do this the map is logically divided 
-	 * into square areas the size of which depend on the frequency scale.  One 
-	 * chunk in each area is the technical center around with a dungeon will 
-	 * generate.  The chunk coordinates are divided by the area's width using 
-	 * integer division to round so that all chunks in the same area are given
-	 * the same two numbers.  These numbers are then used to create a random 
+	 * in its area to have a dungeon.  
+	 */
+	@Override
+	public void generate(Random random, int chunkX, int chunkZ, World world,
+			IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
+		// Prevent bad spawns		
+		if(world.isRemote) return;
+		if(!dungeonsAllowedHere(world, chunkX, chunkZ) return;
+		
+		// Actually determine if a dungeon should generate here		
+		if(dungeonShouldGenerate(world, chunkX, chunkZ)) {
+			try {
+				placeDungeon(random, chunkX, chunkZ, world, chunkGenerator, chunkProvider);
+			} catch (Throwable e) {
+				System.err.println("[DLDUNGEONS] Danger!  Failed to finalize a dungeon after building!");
+				e.printStackTrace();
+			}
+		}
+	}
+
+
+	/**
+	 * This will determine if a dungeon should be able to generate at a given location.
+	 * Specifically, it makes sure that coordinates, biomes, and dimension are all allowed 
+	 * to have dungeons and the dungeons are allowed to generate in the world.
+	 */
+	public boolean dungeonsAllowedHere(World world, int chunkX, int chunkZ) {
+		if((ConfigHandler.obeyRule && !world.getWorldInfo().isMapFeaturesEnabled())
+				|| !ConfigHandler.naturalSpawn) return false; 
+			
+		Set<Type> types = BiomeDictionary.getTypes((world.getBiome(new BlockPos(chunkX * 16, 63, chunkZ * 16))));
+		for(Type type : types) {			
+			if(ConfigHandler.biomeExclusions.contains(type)) {
+				return false;
+			}
+		}
+		if((dimensions.contains(Integer.valueOf(world.provider.getDimension())) 
+			!= ConfigHandler.positiveDims)) return false;
+		
+		if((Math.abs(chunkX - (world.getSpawnPoint().getX() / 16)) < minXZ) 
+				|| (Math.abs(chunkZ - (world.getSpawnPoint().getZ() / 16)) < minXZ)) return false;
+		
+		return true;		
+	}
+
+
+	/**
+	 * This will determine if a dungeon should generate with the given chunk as 
+	 * its logical center. 
+	 *
+	 * To do this the map is logically divided  into square areas the size of which 
+	 * depend on the frequency scale.  One chunk in each area is the technical center 
+	 * around with a dungeon will generate.  The chunk coordinates are divided by the 
+	 * area's width using integer division to round so that all chunks in the same area 
+	 * are given the same two numbers.  These numbers are then used to create a random 
 	 * seeds from which coordinates from 0 to the area width are generated. If
 	 * the coords match the remainder of chunk coordinate divided by the width
 	 * of the area this chunk will have a dungeon; since all chunks in the area
@@ -70,24 +119,7 @@ public class GenerationHandler implements IWorldGenerator {
 	 * This allows dungeons to be placed randomly while ensuring a more consistent
 	 * distribution than simply giving each a random probability to have one.
 	 */
-	@Override
-	public void generate(Random random, int chunkX, int chunkZ, World world,
-			IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
-		// Prevent bad spawns
-		if(world.isRemote) return;
-		if((ConfigHandler.obeyRule && !world.getWorldInfo().isMapFeaturesEnabled())
-				|| !ConfigHandler.naturalSpawn) return; 
-		boolean blockedBiome = false;
-		Set<Type> types = BiomeDictionary.getTypes((world.getBiome(new BlockPos(chunkX * 16, 63, chunkZ * 16))));
-		for(Type type : types) {			
-			blockedBiome = ConfigHandler.biomeExclusions.contains(type) || blockedBiome;
-		}
-		if(blockedBiome) return;
-		if((dimensions.contains(Integer.valueOf(world.provider.getDimension())) != ConfigHandler.positiveDims)) return;
-		
-		if((Math.abs(chunkX - (world.getSpawnPoint().getX() / 16)) < minXZ) 
-				|| (Math.abs(chunkZ - (world.getSpawnPoint().getZ() / 16)) < minXZ)) return;
-		
+	public boolean dungeonShouldGenerate(World world, int chunkX, int chunkZ) {
 		mrand = new Random(world.getSeed() + world.provider.getDimension()
 				+ (2027 * (long)(chunkX / factor)) 
 				+ (1987 * (long)(chunkZ / factor)));
@@ -95,16 +127,8 @@ public class GenerationHandler implements IWorldGenerator {
 		int zrand = mrand.nextInt();
 		int xuse = ((chunkX + xrand) % factor);
 		int zuse = ((chunkZ + zrand) % factor);
-		
-		if((xuse == 0) && (zuse == 0)) {
-			try {
-				placeDungeon(random, chunkX, chunkZ, world, chunkGenerator, chunkProvider);
-			} catch (Throwable e) {
-				System.err.println("[DLDUNGEONS] Danger!  Failed to finalize a dungeon after building!");
-				e.printStackTrace();
-			}
-		}
-	}	
+		return (xuse == 0) && (zuse == 0);
+	}
 	
 	
 	/**
