@@ -26,12 +26,11 @@ import net.minecraftforge.fml.common.IWorldGenerator;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
- * The class responcible for determine where dungeons generate.  More 
+ * The class responsible for determine where dungeons generate.  More 
  * specifically, it will determine if a chunk being generated should be 
  * the technical (not geometric) center of a dungeon.
  * 
  * @author Jared Blackburn
- *
  */
 public class GenerationHandler implements IWorldGenerator {
 	
