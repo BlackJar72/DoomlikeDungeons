@@ -25,6 +25,9 @@ import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fml.common.IWorldGenerator;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import jaredbgreat.dldungeons.themes.Sizes;
+import jaredbgreat.dldungeons.themes.Sizes;
+
 /**
  * The class responcible for determine where dungeons generate.  More 
  * specifically, it will determine if a chunk being generated should be 
@@ -128,6 +131,38 @@ public class GenerationHandler implements IWorldGenerator {
 		int xuse = ((chunkX + xrand) % factor);
 		int zuse = ((chunkZ + zrand) % factor);
 		return (xuse == 0) && (zuse == 0);
+	}
+	
+	
+	/**
+	 * This will check for any dungeons with technical centers close enough 
+	 * to the given chunk to be partially inside it.
+	 *
+	 * If it find it it will ....
+	 */
+	public void checkForDungeonInRange(World world, int chunkX, int chunkZ) {
+		int range = (Sizes.HUGE.width / 32) + 1;
+		for(int i = chunkX - range; i < chunkX + range + 1; i++) 
+			for(int j = chunkZ - range; j < chunkZ + range + 1; j++) {
+				if(dungeonShouldGenerate(world, i, j, chunkX, chunkZ) {
+					
+				}
+			}
+	}
+	
+	
+	/**
+	 * This does something with dungeons that have been found by 
+	 * checkForDungeonsInRange.
+	 *
+	 * What it does is yet to be determined, but it will likely try to find and 
+	 * build them.
+	 */
+	private void getDungeon(World world, int dunX, int dunZ, int atX, int atZ) {
+		// TODO: Find / process / do something with (build?) dungeon
+		//
+		// For now I may use this to print debug-like info to make sure its 
+		// finding correct locations for building dungeons.
 	}
 	
 	
