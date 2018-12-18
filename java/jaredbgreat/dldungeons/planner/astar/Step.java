@@ -61,11 +61,11 @@ public class Step extends Tile implements Comparable<Step> {
 		distance = previous.distance + 1;
 		heuristic = Math.abs(x - destination.x) + Math.abs(z - destination.z);
 		changes = previous.changes;
-		if(dungeon.map.isWall(x, z)) changes++;
-		if(dungeon.map.isFence(x, z)) changes++;
-		if(dungeon.map.isLiquid(x, z)) changes++;
-		if(Math.abs(dungeon.map.getFloorY(x, z) 
-				- dungeon.map.getFloorY(previous.x, previous.z)) > 1) changes++;
+		if(dungeon.map.isWall[x][z]) changes++;
+		if(dungeon.map.isFence[x][z]) changes++;
+		if(dungeon.map.hasLiquid[x][z]) changes++;
+		if(Math.abs(dungeon.map.floorY[x][z] 
+				- dungeon.map.floorY[previous.x][previous.z]) > 1) changes++;
 		value = (changes * 16) + distance + heuristic;
 		parent = previous;		
 	}

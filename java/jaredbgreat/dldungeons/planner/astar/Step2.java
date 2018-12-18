@@ -15,8 +15,8 @@ public class Step2 extends Step {
 
 	public Step2(int x, int z, Step previous, Tile destination, Dungeon dungeon) {
 		super(x, z, previous, destination, dungeon);
-		if(!dungeon.map.isAStared(x, z)) value += 7;
-		if(dungeon.map.getRoom(x, z) == 0) value += 512; 
+		if(!dungeon.map.astared[x][z]) value += 7;
+		if(dungeon.map.room[x][z] == 0) value += 512; 
 	}
 	
 	

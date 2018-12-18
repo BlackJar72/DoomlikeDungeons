@@ -15,14 +15,10 @@ package jaredbgreat.dldungeons.planner.mapping;
 import jaredbgreat.dldungeons.DoomlikeDungeons;
 import jaredbgreat.dldungeons.api.DLDEvent;
 import jaredbgreat.dldungeons.builder.DBlock;
-import jaredbgreat.dldungeons.pieces.Spawner;
-import jaredbgreat.dldungeons.pieces.chests.BasicChest;
 import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.planner.astar.Step;
 import jaredbgreat.dldungeons.rooms.Room;
 import jaredbgreat.dldungeons.themes.ThemeFlags;
-import static jaredbgreat.dldungeons.planner.mapping.ChunkMap.*;
-import static jaredbgreat.dldungeons.planner.mapping.MapMatrix.drawFlyingMap;
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -39,446 +35,61 @@ import net.minecraftforge.common.MinecraftForge;
  *
  */
 public class MapMatrix {
-	static final Block lapis = Block.getBlockFromName("lapis_block");
-	static final Block slab  = Block.getBlockFromName("double_stone_slab");
-	static final Block gold  = Block.getBlockFromName("gold_block");
-	static final Block glass = Block.getBlockFromName("glass");
+	private static final Block lapis = Block.getBlockFromName("lapis_block");
+	private static final Block slab  = Block.getBlockFromName("double_stone_slab");
+	private static final Block gold  = Block.getBlockFromName("gold_block");
+	private static final Block glass = Block.getBlockFromName("glass");
 	
-	static boolean drawFlyingMap = false;
+	private static boolean drawFlyingMap = false;
 	
-	private final World world;
-	private final int   chunkX, chunkZ, origenX, origenZ;
-	private final int   cwidth;
+	public final World world;
+	public final int   chunkX, chunkZ, origenX, origenZ;
 	
-	// New "chunky" way to hold data
-	private ChunkMap[] chunks;
+	// map of heights to build at
+	public byte[][] ceilY;		// Ceiling height
+	public byte[][] floorY;		// Floor Height	
+	public byte[][] nCeilY;		// Height of Neighboring Ceiling	
+	public byte[][] nFloorY;	// Height of Neighboring Floor
+	
+	// Blocks referenced against the DBlock.registry	
+	public int[][] ceiling;
+	public int[][] wall;
+	public int[][] floor;
+	
+	// The room id (index of the room in the dungeons main RoomList)
+	public int[][] room;
+	
+	// Is it a wall?
+	public boolean[][] isWall;	    // Is this coordinate occupied by a wall?
+	public boolean[][] isFence;	    // Is this coordinate occupied by a wall?
+	public boolean[][] hasLiquid;	// Is floor covered by a liquid block?
+	public boolean[][] isDoor;		// Is there a door here?
 	
 	//The A* scratch pad
-	private Step[][]    nodedge;
+	public Step    nodedge[][];
+	public boolean astared[][];
 	
 	
 	public MapMatrix(int width, World world, int chunkX, int chunkZ) {
-		this.world  = world;
+		this.world = world;
 		this.chunkX = chunkX;
 		this.chunkZ = chunkZ;
-		cwidth = width / CSIZE;
-		chunks = new ChunkMap[cwidth * cwidth];
 		origenX   = (chunkX * 16) - (width / 2) + 8;
 		origenZ   = (chunkZ * 16) - (width / 2) + 8;
-		for(int i = 0; i < cwidth; i++)
-			for(int j = 0; j < cwidth; j++) {
-				chunks[i + (j * cwidth)] 
-						= new ChunkMap(world, 
-								       origenX + (i * CSIZE), 
-								       origenZ + (j * CSIZE),
-								       i, j);
-			}
+		ceilY  	  = new byte[width][width];
+		floorY    = new byte[width][width];
+		nCeilY 	  = new byte[width][width];
+		nFloorY   = new byte[width][width];
+		room      = new int[width][width];
+		ceiling   = new int[width][width];
+		wall	  = new int[width][width];
+		floor	  = new int[width][width];
+		isWall	  = new boolean[width][width];
+		isFence	  = new boolean[width][width];
+		hasLiquid = new boolean[width][width];	
+		isDoor    = new boolean[width][width];
 		nodedge   = new Step[width][width];
-	}
-	
-	
-	/*
-	 * Chunk related getters and setters
-	 */
-	public int getChunkX() {
-		return chunkX;
-	}
-
-	public int getChunkZ() {
-		return chunkZ;
-	}
-
-	public int getOrigenX() {
-		return origenX;
-	}
-
-	public int getOrigenZ() {
-		return origenZ;
-	}
-	
-	public World getWorld() {
-		return world;
-	}
-	
-	public Step getStep(int x, int z) {
-		return nodedge[x][z];
-	}
-	
-	public Step[][] getSteps() {
-		return nodedge;
-	}
-	
-	public int getNumChunks() {
-		return chunks.length;
-	}
-	
-	public int getChunkMidX(int chunk) {
-		return chunks[chunk].getMidX();
-	}
-	
-	public int getChunkMidZ(int chunk) {
-		return chunks[chunk].getMidZ();
-	}
-	
-	public ChunkMap getChunkMap(int index) {
-		return chunks[index];
-	}
-	
-	public void addEntrance(int index) {
-		chunks[index].makeEntrance();
-	}
-
-	/*
-	 * Setters for heights
-	 */
-	public void setCeilY(int x, int z, byte val) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		chunks[cx + (cz * cwidth)].setCeilY(bx, bz, val);
-	}
-	
-	public void setFloorY(int x, int z, byte val) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		chunks[cx + (cz * cwidth)].setFloorY(bx, bz, val);
-	}
-	
-	public void setNCeilY(int x, int z, byte val) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		chunks[cx + (cz * cwidth)].setNCeilY(bx, bz, val);
-	}
-	
-	public void setNFloorY(int x, int z, byte val) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		chunks[cx + (cz * cwidth)].setNFloorY(bx, bz, val);
-	}
-
-	/*
-	 * Setters for heights
-	 */
-	public byte getCeilY(int x, int z) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		return chunks[cx + (cz * cwidth)].getCeilY(bx, bz);
-	}
-	
-	public byte getFloorY(int x, int z) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		return chunks[cx + (cz * cwidth)].getFloorY(bx, bz);
-	}
-	
-	public byte getNCeilY(int x, int z) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		return chunks[cx + (cz * cwidth)].getNCeilY(bx, bz);
-	}
-	
-	public byte getNFloorY(int x, int z) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		return chunks[cx + (cz * cwidth)].getNFloorY(bx, bz);
-	}
-	
-	/*
-	 * Setters for blocks
-	 */
-	
-	public void setWall(int x, int z, int val) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		chunks[cx + (cz * cwidth)].setWall(bx, bz, val);
-	}
-	
-	public void setFloor(int x, int z, int val) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		chunks[cx + (cz * cwidth)].setFloor(bx, bz, val);
-	}
-	
-	public void setCeiling(int x, int z, int val) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		chunks[cx + (cz * cwidth)].setCeiling(bx, bz, val);
-	}
-	
-	/*
-	 * Getters for blocks
-	 */
-	
-	public int getWall(int x, int z) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		return chunks[cx + (cz * cwidth)].getWall(bx, bz);
-	}
-	
-	public int getFloor(int x, int z) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		return chunks[cx + (cz * cwidth)].getFloor(bx, bz);
-	}
-	
-	public int getCeiling(int x, int z) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		return chunks[cx + (cz * cwidth)].getCeiling(bx, bz);
-	}
-	
-	/**
-	 * Setters and getters for room id
-	 */
-	public void setRoom(int x, int z, int id) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		chunks[cx + (cz * cwidth)].setRoom(bx, bz, id);
-	}
-	
-	public int getRoom(int x, int z) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		return chunks[cx + (cz * cwidth)].getRoom(bx, bz);
-	}
-	
-	public int getWidth() {
-		return cwidth * CSIZE;
-	}
-	
-	/*
-	 * Set booleans
-	 */
-	public void setToWall(int x, int z) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		chunks[cx + (cz * cwidth)].setToWall(bx, bz);
-	}
-	
-	public void unsetWall(int x, int z) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		chunks[cx + (cz * cwidth)].unsetWall(bx, bz);
-	}
-	
-	public void setIsWall(int x, int z, boolean val) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		chunks[cx + (cz * cwidth)].setIsWall(bx, bz, val);
-	}
-	
-	public void setToFence(int x, int z) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		chunks[cx + (cz * cwidth)].setToFence(bx, bz);
-	}
-	
-	public void unsetFence(int x, int z) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		chunks[cx + (cz * cwidth)].unsetFence(bx, bz);
-	}
-	
-	public void setIsFence(int x, int z, boolean val) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		chunks[cx + (cz * cwidth)].setIsFence(bx, bz, val);
-	}
-	
-	public void setToLiquid(int x, int z) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		chunks[cx + (cz * cwidth)].setToLiquid(bx, bz);
-	}
-	
-	public void unsetLiquid(int x, int z) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		chunks[cx + (cz * cwidth)].unsetLiquid(bx, bz);
-	}
-	
-	public void setIsLiquid(int x, int z, boolean val) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		chunks[cx + (cz * cwidth)].setIsLiquid(bx, bz, val);
-	}
-	
-	public void setToDoor(int x, int z) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		chunks[cx + (cz * cwidth)].setToDoor(bx, bz);
-	}
-	
-	public void unsetDoor(int x, int z) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		chunks[cx + (cz * cwidth)].unsetDoor(bx, bz);
-	}
-	
-	public void setIsDoor(int x, int z, boolean val) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		chunks[cx + (cz * cwidth)].setIsDoor(bx, bz, val);
-	}
-	
-	public void setAStared(int x, int z) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		chunks[cx + (cz * cwidth)].setAStared(bx, bz);
-	}
-	
-	public void unsetAStared(int x, int z) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		chunks[cx + (cz * cwidth)].unsetAStared(bx, bz);
-	}
-	
-	public void setIsAStared(int x, int z, boolean val) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		chunks[cx + (cz * cwidth)].setIsAStared(bx, bz, val);
-	}
-	
-	/*
-	 * Get Booleans
-	 */
-	
-	public boolean isWall(int x, int z) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		return chunks[cx + (cz * cwidth)].isWall(bx, bz);
-	}
-	
-	public boolean isFence(int x, int z) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		return chunks[cx + (cz * cwidth)].isFence(bx, bz);
-	}
-	
-	public boolean isLiquid(int x, int z) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		return chunks[cx + (cz * cwidth)].isLiquid(bx, bz);
-	}
-	
-	public boolean isDoor(int x, int z) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		return chunks[cx + (cz * cwidth)].isDoor(bx, bz);
-	}
-	
-	public boolean isAStared(int x, int z) {
-		int cx = x / CSIZE;
-		int cz = z / CSIZE;
-		int bx = x - (cx * CSIZE);
-		int bz = z - (cz * CSIZE);
-		return chunks[cx + (cz * cwidth)].isAStared(bx, bz);
-	}
-	
-	
-	/*
-	 * Adding tile entities 
-	 */
-	
-	
-	public void addChest(BasicChest chest) {
-		int cx = chest.mx / CSIZE;
-		int cz = chest.mz / CSIZE;
-		int bx = chest.mx - (cx * CSIZE);
-		int bz = chest.mz - (cz * CSIZE);
-		chunks[cx + (cz * cwidth)].addChest(chest, bx, bz);
-	}
-	
-	
-	public void addSpawner(Spawner spawner) {
-		int cx = spawner.getX() / CSIZE;
-		int cz = spawner.getZ() / CSIZE;
-		int bx = spawner.getX() - (cx * CSIZE);
-		int bz = spawner.getZ() - (cz * CSIZE);
-		chunks[cx + (cz * cwidth)].addSpawner(spawner, bx, bz);
-	}
-	
-	/*
-	 * General stuff
-	 */
-	
-	
-	/**
-	 * Sets whether the flying debug map should be drawn.
-	 * 
-	 * @param value
-	 */
-	public static void setDrawFlyingMap(boolean value) {
-		drawFlyingMap = value;
+		astared   = new boolean[width][width];
 	}
 	
 	
@@ -492,11 +103,148 @@ public class MapMatrix {
 	public void build(Dungeon dungeon) {		
 		DoomlikeDungeons.profiler.startTask("Building Dungeon in World");	
 		DoomlikeDungeons.profiler.startTask("Building Dungeon architecture");
-		for(int i = 0; i < (cwidth * cwidth); i++) {
-			chunks[i].build(dungeon);
-		}
+		int shiftX = (chunkX * 16) - (room.length / 2) + 8;
+		int shiftZ = (chunkZ * 16) - (room.length / 2) + 8;
+		int below;
+		boolean flooded = dungeon.theme.flags.contains(ThemeFlags.WATER);
+		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.BeforeBuild(this, shiftX, shiftZ, flooded));
+		
+		for(int i = 0; i < room.length; i++)
+			for(int j = 0; j < room.length; j++) {
+				if(room[i][j] != 0) {
+					 Room theRoom = dungeon.rooms.get(room[i][j]);
+					 
+					 // Debugging code; should not normally run
+					 if(drawFlyingMap) {
+						 if(astared[i][j]) {
+							 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, lapis);
+						 } else if(isDoor[i][j]) {
+							 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, slab);
+						 } else if(isWall[i][j]) {
+							 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, gold);
+						 } else {
+							 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, glass);
+						 }
+					 }
+					 
+					 // Lower parts of the room
+					 if(nFloorY[i][j] < floorY[i][j])
+						 for(int k = nFloorY[i][j]; k < floorY[i][j]; k++) 
+							 if(noLowDegenerate(theRoom, shiftX + i, k, shiftZ + j, i, j))
+								 DBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
+					 if(nFloorY[i][j] > floorY[i][j])
+						 for(int k = floorY[i][j]; k < nFloorY[i][j]; k++) 
+							 if(noLowDegenerate(theRoom, shiftX + i, k, shiftZ + j, i, j))
+								 DBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
+					 
+					 if(noLowDegenerate(theRoom, shiftX + i, floorY[i][j] - 1, shiftZ + j, i, j)) {
+						 DBlock.place(world, shiftX + i, floorY[i][j] - 1, shiftZ + j, floor[i][j]);
+						 if(dungeon.theme.buildFoundation) {
+							 below = nFloorY[i][j] < floorY[i][j] ? nFloorY[i][j] - 1 : floorY[i][j] - 2;
+							 while(!DBlock.isGroundBlock(world, shiftX + i, below, shiftZ + j)) {
+								 DBlock.place(world, shiftX + i, below, shiftZ + j, dungeon.floorBlock);
+						 		below--;
+						 		if(below < 0) break;						 		
+						 	 }
+						}
+					 }
+					 
+					 // Upper parts of the room
+					 if(!theRoom.sky 
+							 && noHighDegenerate(theRoom, shiftX + i, ceilY[i][j] + 1, shiftZ + j))
+						 DBlock.place(world, shiftX + i, ceilY[i][j] + 1, shiftZ + j, ceiling[i][j]);
+					
+					 for(int k = roomBottom(i, j); k <= ceilY[i][j]; k++)
+						 if(!isWall[i][j])DBlock.deleteBlock(world, shiftX +i, k, shiftZ + j, flooded);
+						 else if(noHighDegenerate(theRoom, shiftX + i, k, shiftZ + j))
+							 DBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
+					 for(int k = nCeilY[i][j]; k < ceilY[i][j]; k++) 
+						 if(noHighDegenerate(theRoom, shiftX + i, k, shiftZ + j))
+							 DBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
+					 if(isFence[i][j]) 
+						 DBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, dungeon.fenceBlock);
+					 
+					 if(isDoor[i][j]) {
+						 DBlock.deleteBlock(world, shiftX + i, floorY[i][j],     shiftZ + j, flooded);
+						 DBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 1, shiftZ + j, flooded);
+						 DBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 2, shiftZ + j, flooded);
+					 }
+					 
+					 // Liquids
+					 if(hasLiquid[i][j] && (!isWall[i][j] && !isDoor[i][j])
+							 && !world.isAirBlock(new BlockPos(shiftX + i, floorY[i][j] - 1, shiftZ + j))) 
+						 DBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, theRoom.liquidBlock);					 
+				}
+			}	
+		
+		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.AfterBuild(this, shiftX, shiftZ, flooded));
 		DoomlikeDungeons.profiler.endTask("Building Dungeon architecture");
+		dungeon.addTileEntities();	
+		dungeon.addEntrances();
 		DoomlikeDungeons.profiler.endTask("Building Dungeon in World");
 	}
 	
+	
+	/**
+	 * Returns true if a block should be placed in those coordinates; that is 
+	 * the block is not air or the room is not degenerate.
+	 * 
+	 * This is for use with wall and ceiling blocks; for floor blocks use 
+	 * noLowDegenerate.
+	 * 
+	 * @param theRoom
+	 * @param x world x coordinate
+	 * @param y world y coordinate
+	 * @param z world z coordinate
+	 * @return if the block should be placed here.
+	 */
+	private boolean noHighDegenerate(Room theRoom, int x, int y, int z) {
+		return !(theRoom.degenerate && world.isAirBlock(new BlockPos(x, y, z)));
+	}
+	
+	
+	/**
+	 * Returns true if a floor block should be placed here.  This will be true
+	 * if the block is not air, if the room does not have degenerate floors, or 
+	 * is part of a main path through the room.
+	 * 
+	 * @param theRoom
+	 * @param x world x coordinate
+	 * @param y world y coordinate
+	 * @param z world z coordinate
+	 * @param i dungeon x coordinate
+	 * @param j dungeon z coordinate
+	 * @return
+	 * @return if the block should be placed here.
+	 */
+	private boolean noLowDegenerate(Room theRoom, int x, int y, int z, int i, int j) {
+		return !(theRoom.degenerateFloors 
+				&& world.isAirBlock(new BlockPos(x, y, z))
+				&& !astared[i][j]);
+	}
+	
+	
+	/**
+	 * The lowest height to place air or wall; walls may 
+	 * go one block lower.
+	 * 
+	 * @param i dungeon x coordinate
+	 * @param j dungeon z coordinate
+	 * @return lowest height to place a wall or air/water block.
+	 */
+	private int roomBottom(int i, int j) {
+		int b = floorY[i][j];
+		if(isWall[i][j] && !isDoor[i][j]) b--;
+		return b;		
+	}
+	
+	
+	/**
+	 * Sets whether the flying debug map should be drawn.
+	 * 
+	 * @param value
+	 */
+	public static void setDrawFlyingMap(boolean value) {
+		drawFlyingMap = value;
+	}
 }

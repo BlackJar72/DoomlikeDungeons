@@ -17,14 +17,12 @@ import static jaredbgreat.dldungeons.builder.DBlock.placeBlock;
 import static jaredbgreat.dldungeons.builder.DBlock.quartz;
 import jaredbgreat.dldungeons.DoomlikeDungeons;
 import jaredbgreat.dldungeons.api.DLDEvent;
-import jaredbgreat.dldungeons.cache.Cache;
 import jaredbgreat.dldungeons.planner.Dungeon;
 
 import java.util.Random;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.common.MinecraftForge;
@@ -32,40 +30,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 public class Builder {
 	
-	private static final Cache<Dungeon> dungeonCache = new Cache();
-	
 	private static boolean debugPole = false;
-	
-	
-	/**
-	 * This will return a dungeon from the dungeon cache.  If no such 
-	 * dungeon exists it will create a new dungeon and add it to the 
-	 * cache before returning it.
-	 * 
-	 * It should be remembered that by "dungeon" is meant an object of 
-	 * type Dungeon, i.e., the floor plans for a dungeon.
-	 * 
-	 * The purpose of this is to allow dungeons to be built one chunk 
-	 * at a time, i.e., only in chunks that would normally be built, 
-	 * without having to generate the map each time.
-	 * 
-	 * @param rnd
-	 * @param biome
-	 * @param world
-	 * @param chunkX
-	 * @param chunkZ
-	 * @return
-	 * @throws Throwable
-	 */
-	private static Dungeon getDungoens(Random rnd, Biome biome, World world, int chunkX, int chunkZ) 
-				throws Throwable {
-		Dungeon out = dungeonCache.get(chunkX, chunkZ);
-		if(out == null) {
-			out = new Dungeon(rnd, biome, world, chunkX, chunkZ);
-			dungeonCache.add(out);
-		}
-		return out;
-	}
 	
 	
 	/**
@@ -117,7 +82,7 @@ public class Builder {
 							world.getBiome(new BlockPos((chunkX * 16), 64, (chunkZ * 16))), 
 						    world, chunkX, chunkZ);
 		if(dungeon.theme != null) {
-			//if(debugPole) debuggingPole(world, chunkX, chunkZ, dungeon);
+			if(debugPole) debuggingPole(world, chunkX, chunkZ, dungeon);
 			buildDungeon(dungeon);
 		}
 		dungeon.preFinalize();

@@ -64,7 +64,8 @@ public class DoomlikeDungeons {
     }
     
     @EventHandler
-    public void serverLoad(FMLServerStartingEvent event) {
+    public void serverLoad(FMLServerStartingEvent event)
+    {
     	event.registerServerCommand(new CmdSpawn());
     	event.registerServerCommand(new CmdReload());
     	event.registerServerCommand(new CmdDimID());

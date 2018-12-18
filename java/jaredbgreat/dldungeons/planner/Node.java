@@ -24,10 +24,9 @@ import java.util.Random;
  */
 public class Node {
 	Room hubRoom;
-	int chunk;
 	
 	
-	public Node(int x, int y, int z, Random random, Dungeon dungeon, int chunk) {	
+	public Node(int x, int y, int z, Random random, Dungeon dungeon) {	
 		// Nodes should be on the larger end of the size scale for rooms...
 		int xdim = random.nextInt((dungeon.size.maxRoomSize / 2) - 3) 
 				+ (dungeon.size.maxRoomSize / 2) + 4;
@@ -35,7 +34,7 @@ public class Node {
 				+ (dungeon.size.maxRoomSize / 2) + 4;
 		int ymod = (xdim <= zdim) ? (int) Math.sqrt(xdim) : (int) Math.sqrt(zdim);
 		int height = random.nextInt((dungeon.verticle.value / 2) + ymod + 1) + 2;
-		this.chunk = chunk;
+		
 		// Then plant a seed and try to grow the room
 		hubRoom = new RoomSeed(x, y, z).growRoom(xdim, zdim, height, dungeon, null, null);
 //		if(hubRoom != null) {

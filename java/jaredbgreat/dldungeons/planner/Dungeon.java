@@ -2,12 +2,12 @@ package jaredbgreat.dldungeons.planner;
 
 
 /* 
- * This mod is the creation and copyright (c) 2014-2018
+ * This mod is the creation and copyright (c) 2015 
  * of Jared Blackburn (JaredBGreat).
  * 
  * Forge event code by Charles Howard, 2016.
  * 
- * It is licensed under the creative commons 4.0 attribution license: 
+ * It is licensed under the creative commons 4.0 attribution license: * 
  * https://creativecommons.org/licenses/by/4.0/legalcode
 */	
 
@@ -16,8 +16,6 @@ import jaredbgreat.dldungeons.Difficulty;
 import jaredbgreat.dldungeons.DoomlikeDungeons;
 import jaredbgreat.dldungeons.api.DLDEvent;
 import jaredbgreat.dldungeons.builder.DBlock;
-import jaredbgreat.dldungeons.cache.Coords;
-import jaredbgreat.dldungeons.cache.ICachable;
 import jaredbgreat.dldungeons.pieces.Spawner;
 import jaredbgreat.dldungeons.pieces.chests.BasicChest;
 import jaredbgreat.dldungeons.pieces.entrances.SimpleEntrance;
@@ -37,7 +35,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.MinecraftForge;
@@ -54,7 +51,7 @@ import net.minecraftforge.common.MinecraftForge;
  * @author Jared Blackburn
  *
  */
-public class Dungeon implements ICachable {
+public class Dungeon {
 	
 	public Theme theme;
 	public Random random;
@@ -105,10 +102,7 @@ public class Dungeon implements ICachable {
 	public int caveBlock;
 	
 	int shiftX;
-	int shiftZ;	
-
-    private final Coords coords;
-    private long timestamp;
+	int shiftZ;
 	
 	
 	/**
@@ -150,9 +144,6 @@ public class Dungeon implements ICachable {
 
 	
 	public Dungeon(Random rnd, Biome biome, World world, int chunkX, int chunkZ) throws Throwable {
-        coords = new Coords(chunkX, chunkZ);
-        timestamp = MinecraftServer.getCurrentTimeMillis();
-    
 		DoomlikeDungeons.profiler.startTask("Planning Dungeon");
 		DoomlikeDungeons.profiler.startTask("Layout dungeon (rough draft)");
 		random = rnd;
@@ -178,8 +169,8 @@ public class Dungeon implements ICachable {
 		nodes = new Node[numNodes];
 		spawners = new SpawnerCounter();
 		
-		shiftX = (map.getChunkX() * 16) - (map.getWidth() / 2) + 8;
-		shiftZ = (map.getChunkZ() * 16) - (map.getWidth() / 2) + 8;
+		shiftX = (map.chunkX * 16) - (map.room.length / 2) + 8;
+		shiftZ = (map.chunkZ * 16) - (map.room.length / 2) + 8;
 		
 		makeNodes();
 		if((numEntrances < 1) && ConfigHandler.easyFind) addAnEntrance();
@@ -228,25 +219,9 @@ public class Dungeon implements ICachable {
 	private void makeNodes() {	
 		//DoomlikeDungeons.profiler.startTask("Creating Node Rooms");
 		int i = 0;
-		int n = map.getNumChunks();
-		int c;
-		int[] chunks = new int[n];
-		for(int j = 0; j < n; j++) {
-			chunks[j] = j;
-		}		
 		while(i < numNodes) {
-			// Selecting chunks from those available with removal
-			c = chunks[random.nextInt(n)];
-			chunks[c] = chunks[--n];
-			nodes[i] = new Node(map.getChunkMidX(c), 
-					baseHeight, map.getChunkMidZ(c), random, this, c);
-			if(nodes[i].hubRoom != null) {
-				if(nodes[i].hubRoom.hasEntrance) {
-					map.addEntrance(c);
-				}
-				++i;
-			}
-			
+			nodes[i] = new Node(random.nextInt(size.width), baseHeight, random.nextInt(size.width), random, this);
+			if(nodes[i].hubRoom != null) ++i;
 		}
 		//DoomlikeDungeons.profiler.endTask("Creating Node Rooms");
 	}
@@ -392,7 +367,6 @@ public class Dungeon implements ICachable {
 			if(room instanceof Cave) DoorChecker.caveConnector(this, room);
 		}
 		DoorChecker.checkConnectivity(this);
-		addTileEntities();
 	}
 	
 	
@@ -405,7 +379,7 @@ public class Dungeon implements ICachable {
 	public void addChestBlocks(Room room) {
 		if(MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.AddChestBlocksToRoom(this, room))) return;
 		for(BasicChest  chest : room.chests) {
-			DBlock.placeChest(map.getWorld(), shiftX + chest.mx, chest.my, shiftZ + chest.mz);
+			DBlock.placeChest(map.world, shiftX + chest.mx, chest.my, shiftZ + chest.mz);
 		}		
 	}
 	
@@ -429,11 +403,63 @@ public class Dungeon implements ICachable {
 	private void addTileEntitesToRoom(Room room) {
 		if(MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.AddTileEntitiesToRoom(this, room))) return;
 			for(Spawner  spawner : room.spawners) {
-				map.addSpawner(spawner);
+					DBlock.placeSpawner(map.world, 
+										shiftX + spawner.getX(), 
+										spawner.getY(), 
+										shiftZ + spawner.getZ(), 
+										spawner.getMob());
 			}
 			for(BasicChest  chest : room.chests) {
-				map.addChest(chest);
+				chest.place(map.world, shiftX + chest.mx, chest.my, shiftZ + chest.mz, random);
 			}
+	}
+	
+	
+	/**
+	 * This cycles through all nodes and calls addEntrance on each; 
+	 * entrances will only be added to entrance nodes, but that is 
+	 * checked by addEntrance, not here.
+	 */
+	public void addEntrances() {
+		for(int i = 0; i < nodes.length; i++) {
+			if(nodes[i].hubRoom != null) addEntrance(nodes[i].hubRoom);
+		}
+	}
+	
+	
+	/**
+	 * This will added a physical entrance to all entrance nodes.
+	 * 
+	 * @param room
+	 */
+	private void addEntrance(Room room) {		
+		if(!room.hasEntrance) return;
+		//DoomlikeDungeons.profiler.startTask("Adding Entrances");
+		int entrance;
+		if(variability.use(random)) entrance = random.nextInt(3);
+		else entrance = entrancePref; 
+		if(ConfigHandler.easyFind) entrance = 1;
+		if(MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.AddEntrance(this, room))) return;
+		
+		switch (entrance) {
+		case 0:
+			//DoomlikeDungeons.profiler.startTask("Adding Sriral Stair");
+			new SpiralStair((int)room.realX, (int)room.realZ).build(this, map.world);
+			//DoomlikeDungeons.profiler.endTask("Adding Sriral Stair");
+			break;
+		case 1:
+			//DoomlikeDungeons.profiler.startTask("Adding Top Room");
+			new TopRoom((int)room.realX, (int)room.realZ).build(this, map.world);
+			//DoomlikeDungeons.profiler.endTask("Adding Top Room");
+			break;
+		case 2:
+		default:
+			//DoomlikeDungeons.profiler.startTask("Adding Simple Entrance");
+			new SimpleEntrance((int)room.realX, (int)room.realZ).build(this, map.world);
+			//DoomlikeDungeons.profiler.endTask("Adding Simple Entrance");
+			break;
+		}		
+		//DoomlikeDungeons.profiler.endTask("Adding Entrances");
 	}
 	
 	
@@ -450,34 +476,14 @@ public class Dungeon implements ICachable {
 		it.spawners.clear();
 		it.hasEntrance = true;
 		it.hasSpawners = false;
-		map.addEntrance(nodes[which].chunk);
 		numEntrances = 1;
 		for(int i = (int)it.realX -2; i < ((int)it.realX + 2); i++)
 			for(int j = (int)it.realZ - 2; j < ((int)it.realZ + 2); j++) {
-				map.setFloorY(i, j, (byte)it.floorY);
-				map.unsetLiquid(i, j);
-				map.unsetWall(i, j);
+				map.floorY[i][j] = (byte)it.floorY;
+				map.hasLiquid[i][j] = false;
+				map.isWall[i][j] = false;
 		}	
 	}
-    
-    
-    @Override
-    public void use() {
-    	timestamp = MinecraftServer.getCurrentTimeMillis();		
-    }
-    
-    
-    @Override
-    public boolean isOldData() {
-    	long t = MinecraftServer.getCurrentTimeMillis() - timestamp;
-    	return ((t > 300000) || (t < 0));	
-    }
-    
-    
-    @Override
-    public Coords getCoords() {
-        return coords;
-    }
 	
 }
 

@@ -106,12 +106,10 @@ public class LootCategory {
 			if(level > 6) level = 6;
 			return heal.levels[level].getLoot(random).getStack(random);
 		case LOOT:
-			if(level > 6) {
-				if(level > random.nextInt(100)) {
-					return LootList.special.getLoot(random).getStack(random);					
-				} else {
-					level = 6;
-				}
+			if(level > 6 && random.nextBoolean()) {
+					return LootList.special.getLoot(random).getStack(random);
+			} else if(level > 6){
+				level = 6;
 			}
 			if(random.nextInt(10) == 0) {
 				return getEnchantedBook(level, random);
@@ -185,15 +183,5 @@ public class LootCategory {
 		ItemStack out = new ItemStack(Items.BOOK, 1);
 		out = EnchantmentHelper.addRandomEnchantment(random, out, Math.min(30, (int)(level * 7.5)), true);
 		return out;
-	}
-	
-	
-	public void addEnchantment(ItemStack stack) {
-		int n = rand.nextInt(2) + rand.nextInt(2) + 1;
-		for(int i = 0; i < n; i++) {
-			Enchantment ench = Enchantment.REGISTRY.getRandomObject(rand);
-			int l = ench.getMaxLevel();
-			stack.addEnchantment(ench, l);
-		}
 	}	
 }

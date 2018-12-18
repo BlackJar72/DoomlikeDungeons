@@ -15,7 +15,6 @@ import java.util.Random;
 
 import jaredbgreat.dldungeons.builder.DBlock;
 import jaredbgreat.dldungeons.planner.Dungeon;
-import jaredbgreat.dldungeons.planner.mapping.ChunkMap;
 import jaredbgreat.dldungeons.planner.mapping.MapMatrix;
 import jaredbgreat.dldungeons.rooms.Room;
 import net.minecraft.block.Block;
@@ -204,46 +203,27 @@ public class DLDEvent extends Event {
 	}
 
 	@Cancelable
-	public static class AddEntrance extends DLDEvent {
-		protected final Dungeon dungeon;
-		protected final ChunkMap chunkMap;
-
-		public AddEntrance(Dungeon dungeon, ChunkMap chunkMap) {
-			this.dungeon  = dungeon;
-			this.chunkMap = chunkMap;
+	public static class AddEntrance extends DungeonRoom {
+		public AddEntrance(Dungeon dungeon, Room room) {
+			super(dungeon, room);
 		}
-		
-		public Dungeon getDungeon() {
-			return dungeon;
-		}
-
-		public ChunkMap getChunkMap() {
-			return chunkMap;
-		}
-
-	
 	}
 
 	public static class BeforeBuild extends DLDEvent {
-		protected final ChunkMap chunkMap;
+		protected final MapMatrix mapMatrix;
 		protected final int shiftX;
 		protected final int shiftZ;
 		protected final boolean flooded;
 
-		public BeforeBuild(ChunkMap chunkMap, int shiftX, int shiftZ, boolean flooded) {
-			this.chunkMap = chunkMap;
+		public BeforeBuild(MapMatrix mapMatrix, int shiftX, int shiftZ, boolean flooded) {
+			this.mapMatrix = mapMatrix;
 			this.shiftX = shiftX;
 			this.shiftZ = shiftZ;
 			this.flooded = flooded;
 		}
 
-		@Deprecated
-		public ChunkMap getMapMatrix() {
-			return chunkMap;
-		}
-
-		public ChunkMap getChunkMap() {
-			return chunkMap;
+		public MapMatrix getMapMatrix() {
+			return mapMatrix;
 		}
 
 		public int getShiftX() {
@@ -261,8 +241,8 @@ public class DLDEvent extends Event {
 	}
 
 	public static class AfterBuild extends BeforeBuild {
-		public AfterBuild(ChunkMap chunkMap, int shiftX, int shiftZ, boolean flooded) {
-			super(chunkMap, shiftX, shiftZ, flooded);
+		public AfterBuild(MapMatrix mapMatrix, int shiftX, int shiftZ, boolean flooded) {
+			super(mapMatrix, shiftX, shiftZ, flooded);
 		}
 	}
 

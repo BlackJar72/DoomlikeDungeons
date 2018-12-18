@@ -26,11 +26,9 @@ public class SpiralStair extends AbstractEntrance {
 	
 	@Override
 	public void build(Dungeon dungeon, World world) {
-		int wx = x + (dungeon.map.getChunkX() * 16) 
-				- (dungeon.map.getWidth() / 2) + 8;
-		int wz = z + (dungeon.map.getChunkZ() * 16) 
-				- (dungeon.map.getWidth() / 2) + 8;
-		int bottom = dungeon.map.getFloorY(x, z);
+		int wx = x + (dungeon.map.chunkX * 16) - (dungeon.map.room.length / 2) + 8;
+		int wz = z + (dungeon.map.chunkZ * 16) - (dungeon.map.room.length / 2) + 8;
+		int bottom = dungeon.map.floorY[x][z];
 		int top = world.getActualHeight();
 		//int top = world.getChunkFromChunkCoords(wx / 16, wz / 16).getHeight(wx, wz);
 		while(!DBlock.isGroundBlock(world, wx, top, wz)) top--;
