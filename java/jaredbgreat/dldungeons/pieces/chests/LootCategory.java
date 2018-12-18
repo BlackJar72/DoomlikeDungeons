@@ -37,7 +37,6 @@ import static jaredbgreat.dldungeons.pieces.chests.LootType.LOOT;
 
 import java.util.Random;
 
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -189,7 +188,7 @@ public class LootCategory {
 	}
 	
 	
-	public void addEnchantment(ItemStack stack, Random rand) {
+	public void addEnchantment(ItemStack stack) {
 		int n = rand.nextInt(2) + rand.nextInt(2) + 1;
 		for(int i = 0; i < n; i++) {
 			Enchantment ench = Enchantment.REGISTRY.getRandomObject(rand);

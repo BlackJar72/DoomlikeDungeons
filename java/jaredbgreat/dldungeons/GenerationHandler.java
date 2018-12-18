@@ -11,11 +11,6 @@ package jaredbgreat.dldungeons;
 
 
 import static jaredbgreat.dldungeons.builder.Builder.placeDungeon;
-import static jaredbgreat.dldungeons.builder.DBlock.placeBlock;
-import static jaredbgreat.dldungeons.builder.DBlock.quartz;
-import jaredbgreat.dldungeons.builder.Builder;
-import jaredbgreat.dldungeons.planner.Dungeon;
-import jaredbgreat.dldungeons.themes.Sizes;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -31,11 +26,12 @@ import net.minecraftforge.fml.common.IWorldGenerator;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
- * The class responsible for determine where dungeons generate.  More 
+ * The class responcible for determine where dungeons generate.  More 
  * specifically, it will determine if a chunk being generated should be 
  * the technical (not geometric) center of a dungeon.
  * 
  * @author Jared Blackburn
+ *
  */
 public class GenerationHandler implements IWorldGenerator {
 	
@@ -65,11 +61,7 @@ public class GenerationHandler implements IWorldGenerator {
 			IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
 		// Prevent bad spawns		
 		if(world.isRemote) return;
-		if(!dungeonsAllowedHere(world, chunkX, chunkZ)) return;
-		
-		if((chunkX * chunkX) + (chunkZ * chunkZ) < 1024) {
-			//checkForDungeonInRange(world, chunkX, chunkZ, random);
-		}
+		if(!dungeonsAllowedHere(world, chunkX, chunkZ) return;
 		
 		// Actually determine if a dungeon should generate here		
 		if(dungeonShouldGenerate(world, chunkX, chunkZ)) {
@@ -136,64 +128,6 @@ public class GenerationHandler implements IWorldGenerator {
 		int xuse = ((chunkX + xrand) % factor);
 		int zuse = ((chunkZ + zrand) % factor);
 		return (xuse == 0) && (zuse == 0);
-	}
-	
-	
-	/**
-	 * This will check for any dungeons with technical centers close enough 
-	 * to the given chunk to be partially inside it.
-	 *
-	 * If it find it it will ....
-	 */
-	public void checkForDungeonInRange(World world, int chunkX, int chunkZ, Random rand) {
-		int range = (Sizes.HUGE.width / 32) + 1;
-		for(int i = chunkX - range; i < chunkX + range + 1; i++) 
-			for(int j = chunkZ - range; j < chunkZ + range + 1; j++) {
-				if(dungeonShouldGenerate(world, i, j)) {
-					getDungeon(world, i, j, chunkX, chunkZ, rand);
-				}
-			}
-	}
-	
-	
-	/**
-	 * This does something with dungeons that have been found by 
-	 * checkForDungeonsInRange.
-	 *
-	 * What it does is yet to be determined, but it will likely try to find and 
-	 * build them.
-	 */
-	private void getDungeon(World world, int dunX, int dunZ, int atX, int atZ, Random rand) {
-		// TODO: Find / process / do something with (build?) dungeon
-		//
-		// For now I may use this to print debug-like info to make sure its 
-		// finding correct locations for building dungeons.
-		Dungeon out = Builder.dungeonCache.get(dunX, dunZ);
-		BlockPos pos = new BlockPos((dunX * 16) + 8, 64, (dunZ * 16) + 8);
-		if(out == null) {
-	    	System.out.println("**Dungeon was NULL**");
-			try {
-				out = new Dungeon(rand, world.getBiome(pos), world, dunX, dunZ);
-				Builder.dungeonCache.add(out);
-			} catch (Throwable e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		int range = out.getRadius();
-		
-		String nl = System.lineSeparator();
-		System.out.println(nl
-				           + "*****************************" + nl
-				           + "Chunk Gen at " + atX + ", " + atZ + nl
-				           + "Found dungeon at chunk " + dunX + ", " + dunZ + nl
-				           + "Dungeon: " + out.hashCode() + "; Coord " + out.getCoords() + " hash: " + out.getCoords().hashCode() + nl
-				           // The displacement if from dungeon center to chunk (not chunk to dungeon!)
-				           + "Displacemnt: " + (atX - dunX) + ", " + (atZ - dunZ) + nl
-				           + "*****************************");
-		if((Math.abs(atX - dunX) < range) && (Math.abs(atZ - dunZ) < range)) {
-			for(int y = 16; y <= 241; y++) placeBlock(world, (atX * 16 + 8), y, (atZ * 16 + 8), quartz);
-		}
 	}
 	
 	
