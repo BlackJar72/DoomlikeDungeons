@@ -96,15 +96,13 @@ public class LootCategory {
 		if(level < 0) level = 0;
 		switch(type) {
 		case GEAR:
-			if(level > 6) level = 6;
 			if(random.nextBoolean()) {
 				return getEnchantedGear(level, random);
 			} else {
-				return gear.levels[level].getLoot(random).getStack(random);
+				return gear.levels[Math.min(6, level)].getLoot(random).getStack(random);
 			}
 		case HEAL:
-			if(level > 6) level = 6;
-			return heal.levels[level].getLoot(random).getStack(random);
+			return heal.levels[Math.min(6, level)].getLoot(random).getStack(random);
 		case LOOT:
 			if(level > 6) {
 				if(level > random.nextInt(100)) {
@@ -152,7 +150,7 @@ public class LootCategory {
 			out = item.getStack(random);
 			out = EnchantmentHelper.addRandomEnchantment(random, out, enchPart, true);
 		} else {
-			out = gear.levels[lootLevel].getLoot(random).getStack(random);
+			out = gear.levels[Math.min(6, lootLevel)].getLoot(random).getStack(random);
 		}		
 		return out;
 	}
