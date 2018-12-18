@@ -32,9 +32,9 @@ import net.minecraftforge.common.MinecraftForge;
 
 public class Builder {
 	
-	private static final Cache<Dungeon> dungeonCache = new Cache();
+	public static final Cache<Dungeon> dungeonCache = new Cache<>();
 	
-	private static boolean debugPole = false;
+	private static boolean debugPole = true;
 	
 	
 	/**
@@ -89,6 +89,7 @@ public class Builder {
 								world.getBiome(new BlockPos((chunkX * 16), 64, (chunkZ * 16))), 
 								world, chunkX, chunkZ);
 		buildDungeon(dungeon);
+		debuggingPole(world, chunkX, chunkZ, dungeon);
 		dungeon.preFinalize();
 		dungeon = null;
 		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceDungeonFinish(random, chunkX, chunkZ, world, dungeon));
@@ -119,6 +120,7 @@ public class Builder {
 		if(dungeon.theme != null) {
 			//if(debugPole) debuggingPole(world, chunkX, chunkZ, dungeon);
 			buildDungeon(dungeon);
+			debuggingPole(world, chunkX, chunkZ, dungeon);
 		}
 		dungeon.preFinalize();
 		dungeon = null;
@@ -171,6 +173,6 @@ public class Builder {
 	 * @param val 
 	 */
 	public static void setDebugPole(boolean val) {
-		debugPole = val;
+		debugPole = true; //val;
 	}
 }

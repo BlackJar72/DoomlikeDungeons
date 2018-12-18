@@ -16,13 +16,10 @@ import jaredbgreat.dldungeons.Difficulty;
 import jaredbgreat.dldungeons.DoomlikeDungeons;
 import jaredbgreat.dldungeons.api.DLDEvent;
 import jaredbgreat.dldungeons.builder.DBlock;
+import jaredbgreat.dldungeons.cache.AbstractCachable;
 import jaredbgreat.dldungeons.cache.Coords;
-import jaredbgreat.dldungeons.cache.ICachable;
 import jaredbgreat.dldungeons.pieces.Spawner;
 import jaredbgreat.dldungeons.pieces.chests.BasicChest;
-import jaredbgreat.dldungeons.pieces.entrances.SimpleEntrance;
-import jaredbgreat.dldungeons.pieces.entrances.SpiralStair;
-import jaredbgreat.dldungeons.pieces.entrances.TopRoom;
 import jaredbgreat.dldungeons.planner.astar.DoorChecker;
 import jaredbgreat.dldungeons.planner.mapping.MapMatrix;
 import jaredbgreat.dldungeons.rooms.Cave;
@@ -54,7 +51,7 @@ import net.minecraftforge.common.MinecraftForge;
  * @author Jared Blackburn
  *
  */
-public class Dungeon implements ICachable {
+public class Dungeon extends AbstractCachable {
 	
 	public Theme theme;
 	public Random random;
@@ -106,9 +103,6 @@ public class Dungeon implements ICachable {
 	
 	int shiftX;
 	int shiftZ;	
-
-    private final Coords coords;
-    private long timestamp;
 	
 	
 	/**
@@ -150,8 +144,7 @@ public class Dungeon implements ICachable {
 
 	
 	public Dungeon(Random rnd, Biome biome, World world, int chunkX, int chunkZ) throws Throwable {
-        coords = new Coords(chunkX, chunkZ);
-        timestamp = MinecraftServer.getCurrentTimeMillis();
+		super(chunkX, chunkZ);
     
 		DoomlikeDungeons.profiler.startTask("Planning Dungeon");
 		DoomlikeDungeons.profiler.startTask("Layout dungeon (rough draft)");
@@ -461,22 +454,8 @@ public class Dungeon implements ICachable {
 	}
     
     
-    @Override
-    public void use() {
-    	timestamp = MinecraftServer.getCurrentTimeMillis();		
-    }
-    
-    
-    @Override
-    public boolean isOldData() {
-    	long t = MinecraftServer.getCurrentTimeMillis() - timestamp;
-    	return ((t > 300000) || (t < 0));	
-    }
-    
-    
-    @Override
-    public Coords getCoords() {
-        return coords;
+    public int getRadius() {
+		return (size.width / 32) + 1;
     }
 	
 }

@@ -23,11 +23,19 @@ public class Cache <T extends ICachable> {
      * Creates a cache with a default starting size elements.
      */
     public Cache(int size) {
+    	System.out.println("");
+    	System.out.println("*******************");
+    	System.out.println("**CREATING CACHE**");
         data = new ICachable[size];
+        for(ICachable fuck : data) {
+        	System.out.println(fuck);
+        }
         minSize = size;
         capacity = (size * 3) / 4;
         lowLimit = ((size - minSize) * 3) / 16;
         length = 0;
+    	System.out.println("*******************");
+    	System.out.println("");
     }
     
     
@@ -35,11 +43,19 @@ public class Cache <T extends ICachable> {
      * Creates a cache with a default starting size of 16 elements.
      */
     public Cache() {
+    	System.out.println("");
+    	System.out.println("******************");
+    	System.out.println("**CREATING CACHE**");
         data = new ICachable[16];
+        for(ICachable fuck : data) {
+        	System.out.println(fuck);
+        }
         minSize = 16;
         capacity = 12;
         lowLimit = 0;
         length = 0;
+    	System.out.println("******************");
+    	System.out.println("");
     }
     
     
@@ -49,10 +65,13 @@ public class Cache <T extends ICachable> {
      * @param item the object to be added.
      */
     public void add(T item) {
+    	//System.out.println("**CALLING add on item  " + item + "**");
         int bucket = (item.getCoords().hashCode() & 0x7fffffff) % data.length;
         int offset = 0;
+    	//System.out.println("**TRYING to at item  " + item.getCoords() + "; length = " + data.length + ", offset = " + offset + "**");
         while(offset < data.length) {
             int slot = (bucket + offset) % data.length;
+        	//System.out.println("**USING bucket  " + ((bucket + offset) % data.length) + "; (" + data[slot] +")");
             if(data[slot] == null) {
                 data[slot] = item;
                 data[slot].use();
@@ -61,13 +80,15 @@ public class Cache <T extends ICachable> {
                     grow();
                 }
                 return;
-            } else if(data[slot].equals(item)) {
+            } else if(data[slot].getCoords().equals(item.getCoords())) {
+            	//System.out.println("**Item  " + item + " was already in cache**");
                 data[slot].use();
                 return;
-            }else {
+            } else {
                 offset++;
             }
         }
+    	System.out.println("**CACHE WAS FULL -- WTF!!!**");
     }
     
     
@@ -202,7 +223,7 @@ public class Cache <T extends ICachable> {
             }
         }
         capacity = (data.length * 3) / 4;
-        lowLimit = ((data.length - minSize) * 3) / 16;
+        lowLimit = Math.max(minSize, ((data.length - minSize) * 3) / 16);
     }
     
     
@@ -227,7 +248,7 @@ public class Cache <T extends ICachable> {
         int offset = 0;
         while(offset <= data.length) {
             int slot = (bucket + offset) % data.length;
-            if((data[slot] == null) || (data[slot].equals(item))) {
+            if((data[slot] == null) || (data[slot].getCoords().equals(item.getCoords()))) {
                 data[slot] = item;
                 return;
             }else {

@@ -3,7 +3,7 @@ package jaredbgreat.dldungeons.cache;
 import net.minecraft.server.MinecraftServer;
 
 public abstract class AbstractCachable implements ICachable { 
-    private final Coords coords;
+    protected final Coords coords;
     private long timestamp;
     
     
