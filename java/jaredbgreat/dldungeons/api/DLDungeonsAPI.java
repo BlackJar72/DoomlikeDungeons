@@ -17,26 +17,6 @@ import net.minecraft.world.World;
 */
 
 public class DLDungeonsAPI {
-	// This has been updated to deal with the change to all lower case for the modid.
-	private static final boolean dldloaded = isLoaded();	
-	
-	
-	/**
-	 * This allows mod authors to check if Doomlike Dungeons is running in order to potentially
-	 * register methods or classes the might use it, among other things.
-	 * 
-	 * The results should always be the same as...
-	 *  
-	 * <BLOCKQUOTE><CODE>cpw.mods.fml.common.Loader.isModLoaded("DLDungeonsJBG");</CODE></BLOCKQUOTE>
-	 * 
-	 * ...which should usually be used instead for reason that should be obvious.
-	 * 
-	 * @return boolean true if Doomlike Dungeons has been loaded by FML, false if not.
-	 */
-	public static boolean isLoaded() {
-		return net.minecraftforge.fml.common.Loader.isModLoaded("DLDungeonsJBG") 
-						 || net.minecraftforge.fml.common.Loader.isModLoaded("dldungeonsjbg");	
-	}
 	
 	
 	/**
@@ -48,7 +28,6 @@ public class DLDungeonsAPI {
 	 * @param chunkZ
 	 */
 	public static void spawnDungeon(World world, int chunkX, int chunkZ) {
-		if(!isLoaded()) return;
 		ReadAPI.spawnDungeon(world, chunkX, chunkZ);
 	}
 	
@@ -62,7 +41,6 @@ public class DLDungeonsAPI {
 	 * @param seed
 	 */
 	public static void spawnDungeon(World world, int chunkX, int chunkZ, long seed) {
-		if(!isLoaded()) return;
 		ReadAPI.spawnDungeon(world, chunkX, chunkZ, seed);
 	}
 	
@@ -78,7 +56,6 @@ public class DLDungeonsAPI {
 	 * @param random
 	 */
 	public static void spawnDungeon(World world, int chunkX, int chunkZ, Random random) {
-		if(!isLoaded()) return;
 		ReadAPI.spawnDungeon(world, chunkX, chunkZ, random);
 	}
 	
@@ -89,7 +66,6 @@ public class DLDungeonsAPI {
 	 * @param dim, the id of the dimension being added.
 	 */
 	public static void addDimension(byte dim) {
-		if(!isLoaded()) return;
 		ReadAPI.addDimension(dim);
 	}
 		
@@ -100,7 +76,6 @@ public class DLDungeonsAPI {
 	 * @param dim, the id of the dimension being removed.
 	 */
 	public static void subDimension(byte dim) {
-		if(!isLoaded()) return;
 		ReadAPI.subDimension(dim);
 	}
 	
@@ -114,7 +89,6 @@ public class DLDungeonsAPI {
 	 * @param dims
 	 */
 	public static void setDimensions(int[] dims) {
-		if(!isLoaded()) return;
 		ReadAPI.setDimensions(dims);
 	}
 	
@@ -126,7 +100,6 @@ public class DLDungeonsAPI {
 	 * @param difficulty
 	 */
 	public static void setDifficulty(byte diff) {
-		if(!isLoaded()) return;
 		ReadAPI.setDifficulty(diff);
 	}
 	
@@ -138,7 +111,6 @@ public class DLDungeonsAPI {
 	 * @param file
 	 */
 	public static void loadTheme(String file) {
-		if(!isLoaded()) return;
 		ReadAPI.loadTheme(file);
 	}
 	
@@ -153,7 +125,6 @@ public class DLDungeonsAPI {
 	 */
 	@Deprecated
 	public static void blacklistThemes() {
-		if(!isLoaded()) return;
 		ReadAPI.blacklistDimensions();
 	}
 	
@@ -164,7 +135,6 @@ public class DLDungeonsAPI {
 	 * for reason dealing with mods other than the one calling the method.
 	 */
 	public static void blacklistDimensions() {
-		if(!isLoaded()) return;
 		ReadAPI.blacklistDimensions();
 	}
 	
@@ -175,7 +145,6 @@ public class DLDungeonsAPI {
 	 * for reason dealing with mods other than the one calling the method.
 	 */
 	public static void whitelistDimensions() {
-		if(!isLoaded()) return;
 		ReadAPI.whitelistDimensions();
 	}
 	
@@ -185,7 +154,6 @@ public class DLDungeonsAPI {
 	 * Alternately, if the config has been edited it will bring up the new settings.
 	 */
 	public static void reloadConfig() {
-		if(!isLoaded()) return;
 		ReadAPI.whitelistDimensions();
 	}
 	
@@ -222,8 +190,8 @@ public class DLDungeonsAPI {
      * TECH     (high-tech / sci-fi themes; or mechanical / alien / futuristic mobs);
 	 */
 	public static void addMob(String name, int level, String... types) {
-		if(!isLoaded()) return;
 		for(String type : types) {
+			//System.out.println("Read mob add API: " + name + ", " + level + ", " + type);
 			ThemeType.addMobToType(name, level, type);
 		}
 	}
@@ -237,7 +205,6 @@ public class DLDungeonsAPI {
 	 * For more details see addMod(String name, int level, String... types)
 	 */
 	public static void removeMob(String name, int level, String... types) {
-		if(!isLoaded()) return;
 		for(String type : types) {
 			ThemeType.removeMobFromType(name, level, type);
 		}
@@ -252,7 +219,6 @@ public class DLDungeonsAPI {
 	 * For more details see addMod(String name, int level, String... types)
 	 */
 	public static void removeMob(String name, String... types) {
-		if(!isLoaded()) return;
 		for(String type : types) {
 			for(int i = 0; i < 5; i++)
 				ThemeType.removeMobFromType(name, i, type);

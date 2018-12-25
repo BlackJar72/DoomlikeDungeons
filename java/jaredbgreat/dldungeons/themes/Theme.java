@@ -178,11 +178,20 @@ public class Theme {
 	 */
 	public void fixMobs() {
 		allMobs = new ArrayList[5];
-		allMobs[0] = commonMobs;
-		allMobs[1] = hardMobs;
-		allMobs[2] = bruteMobs;
-		allMobs[3] = eliteMobs;
-		allMobs[4] = bossMobs;
+		allMobs[0] = printListDebug(commonMobs);
+		allMobs[1] = printListDebug(hardMobs);
+		allMobs[2] = printListDebug(bruteMobs);
+		allMobs[3] = printListDebug(eliteMobs);
+		allMobs[4] = printListDebug(bossMobs);
+	}
+	
+	
+	private ArrayList printListDebug(ArrayList list) {/*
+		System.out.println(list);
+		for(Object o : list) {
+			System.out.println(" \t " + o);
+		}*/
+		return list;
 	}
 	
 	

@@ -41,26 +41,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 public enum ThemeType {	
-	DUNGEON		(new ArrayList[4], new ArrayList<Theme>(), new ArrayList[4]),
-	NECRO		(new ArrayList[4], new ArrayList<Theme>(), new ArrayList[4]),
-    URBAN		(new ArrayList[4], new ArrayList<Theme>(), new ArrayList[4]),
-	FOREST		(new ArrayList[4], new ArrayList<Theme>(), new ArrayList[4]),
-    PLAINS		(new ArrayList[4], new ArrayList<Theme>(), new ArrayList[4]),
-    MOUNTAIN	(new ArrayList[4], new ArrayList<Theme>(), new ArrayList[4]),
-    SWAMP		(new ArrayList[4], new ArrayList<Theme>(), new ArrayList[4]),
-    WATER		(new ArrayList[4], new ArrayList<Theme>(), new ArrayList[4]),
-    DESERT		(new ArrayList[4], new ArrayList<Theme>(), new ArrayList[4]),
-    WASTELAND	(new ArrayList[4], new ArrayList<Theme>(), new ArrayList[4]),
-    JUNGLE		(new ArrayList[4], new ArrayList<Theme>(), new ArrayList[4]),
-    FROZEN		(new ArrayList[4], new ArrayList<Theme>(), new ArrayList[4]),
-    FIERY		(new ArrayList[4], new ArrayList<Theme>(), new ArrayList[4]),
-    NETHER		(new ArrayList[4], new ArrayList<Theme>(), new ArrayList[4]),
-    END			(new ArrayList[4], new ArrayList<Theme>(), new ArrayList[4]),
-    MUSHROOM	(new ArrayList[4], new ArrayList<Theme>(), new ArrayList[4]),
-    MAGICAL		(new ArrayList[4], new ArrayList<Theme>(), new ArrayList[4]),
-    SHADOW		(new ArrayList[4], new ArrayList<Theme>(), new ArrayList[4]),
-    PARADISE	(new ArrayList[4], new ArrayList<Theme>(), new ArrayList[4]),
-    TECH   		(new ArrayList[4], new ArrayList<Theme>(), new ArrayList[4]);
+	DUNGEON		(new ArrayList[5], new ArrayList<Theme>(), new ArrayList[5]),
+	NECRO		(new ArrayList[5], new ArrayList<Theme>(), new ArrayList[5]),
+    URBAN		(new ArrayList[5], new ArrayList<Theme>(), new ArrayList[5]),
+	FOREST		(new ArrayList[5], new ArrayList<Theme>(), new ArrayList[5]),
+    PLAINS		(new ArrayList[5], new ArrayList<Theme>(), new ArrayList[5]),
+    MOUNTAIN	(new ArrayList[5], new ArrayList<Theme>(), new ArrayList[5]),
+    SWAMP		(new ArrayList[5], new ArrayList<Theme>(), new ArrayList[5]),
+    WATER		(new ArrayList[5], new ArrayList<Theme>(), new ArrayList[5]),
+    DESERT		(new ArrayList[5], new ArrayList<Theme>(), new ArrayList[5]),
+    WASTELAND	(new ArrayList[5], new ArrayList<Theme>(), new ArrayList[5]),
+    JUNGLE		(new ArrayList[5], new ArrayList<Theme>(), new ArrayList[5]),
+    FROZEN		(new ArrayList[5], new ArrayList<Theme>(), new ArrayList[5]),
+    FIERY		(new ArrayList[5], new ArrayList<Theme>(), new ArrayList[5]),
+    NETHER		(new ArrayList[5], new ArrayList<Theme>(), new ArrayList[5]),
+    END			(new ArrayList[5], new ArrayList<Theme>(), new ArrayList[5]),
+    MUSHROOM	(new ArrayList[5], new ArrayList<Theme>(), new ArrayList[5]),
+    MAGICAL		(new ArrayList[5], new ArrayList<Theme>(), new ArrayList[5]),
+    SHADOW		(new ArrayList[5], new ArrayList<Theme>(), new ArrayList[5]),
+    PARADISE	(new ArrayList[5], new ArrayList<Theme>(), new ArrayList[5]),
+    TECH   		(new ArrayList[5], new ArrayList<Theme>(), new ArrayList[5]);
 	
 	
 	public final ArrayList<String>[] mobs;
@@ -74,7 +74,7 @@ public enum ThemeType {
 		this.mobs 	= mobs;
 		this.themes = themes;
 		this.mobsOut = mobsOut;
-		for(int i = 0; i < 4; i++) {
+		for(int i = 0; i < 5; i++) {
 			this.mobs[i]    = new ArrayList<String>();
 			this.mobsOut[i] = new ArrayList<String>(); 
 		}
@@ -127,7 +127,9 @@ public enum ThemeType {
 	public static void addMobToType(String mob, int level, String theType) {
 		if(ConfigHandler.disableAPI || ConfigHandler.noMobChanges) return;		
 		ArrayList<String> list = type(theType).mobs[level];
-		if(!list.contains(mob))	list.add(mob);
+		if(!list.contains(mob)) {
+			list.add(mob);
+		}
 	}
 	
 	
@@ -184,12 +186,16 @@ public enum ThemeType {
 	 */
 	public static void SyncMobLists() {
 		for(ThemeType current : all) {
+			//System.out.println("[DLD] Trying theme type " + current);
 			if(current.themes.isEmpty()) continue;
+			//System.out.println("[DLD] Adding to theme type " + current);
 			for(Theme theme : current.themes) {
-				for(int i = 0; i < 4; i++) {
+				for(int i = 0; i < 5; i++) {
+					//System.out.println("[DLD] Starting on theme " + theme);
 					if(current.mobs[i].isEmpty()) continue;
 					for(String mob : current.mobs[i]) {
-						theme.addMob(mob, i);
+							//System.out.println("[DLD] Adding " + mob + "to theme " + theme);
+							theme.addMob(mob, i);							
 						}
 					}
 				theme.fixMobs();
@@ -198,7 +204,7 @@ public enum ThemeType {
 		for(ThemeType current : all) {
 			if(current.themes.isEmpty()) continue;
 			for(Theme theme : current.themes) {
-				for(int i = 0; i < 4; i++) {
+				for(int i = 0; i < 5; i++) {
 					if(current.mobsOut[i].isEmpty()) continue;
 					for(String mob : current.mobsOut[i]) {
 						theme.removeMob(mob, i);
