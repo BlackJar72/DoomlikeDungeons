@@ -89,8 +89,7 @@ public class TreasureChest extends BasicChest {
 					contents.setInventorySlotContents(slots.get(slot).intValue(), treasure);
 					slot++;
 				}
-			}
-			else {
+			} else {
 				treasure = LootList.discs.getLoot(random).getStack(random);
 				contents.setInventorySlotContents(slots.get(slot).intValue(), treasure);
 				slot++;

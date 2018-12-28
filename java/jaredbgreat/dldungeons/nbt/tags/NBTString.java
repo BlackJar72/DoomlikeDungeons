@@ -26,6 +26,11 @@ public class NBTString extends ITag {
 	 */
 	NBTString(String label, String name, String data) {
 		super(label, name);
+		System.out.println();
+		System.out.println("*******************");
+		System.out.println(label + ": " + name + " = " + data);
+		System.out.println("*******************");
+		System.out.println();
 		this.data  = data;
 	}
 	
