@@ -23,6 +23,10 @@ import java.util.Arrays;
  *
  */
 public class Tokenizer {
+	private static final CharSet hex = new CharSet(new 
+			char[]{'1', '2', '3', '4', '5', '6', '7', '8', '9', 
+			       'a', 'b', 'c', 'd', 'e', 'f',
+			       'A', 'B', 'C', 'D', 'E', 'F'});
 	private final CharSet  delim;
 	private String[] tokens;
 	private int  token = 0;
@@ -34,6 +38,7 @@ public class Tokenizer {
 	private char next = 0;
 	private char[] scratchpad;
 	boolean onTokens = false;
+	boolean atEnd = false;
 	
 	
 	public Tokenizer(String input, String delims) {
@@ -70,7 +75,7 @@ public class Tokenizer {
 						size = 0;
 					}
 				}				
-				else {
+				else if(!atEnd) {
 					onTokens = true;
 					if(next == '\"') {
 						readQuote();
@@ -169,6 +174,9 @@ public class Tokenizer {
 				case 's':
 					scratchpad[size] = ' ';
 					break;
+				case 'u':
+					scratchpad[size] = parseUnicode();
+					break;
 				// Any character not otherwise defined will be preserved as-is;
 				// this also automatically covers the use of double backslash.
 				default:
@@ -177,8 +185,25 @@ public class Tokenizer {
 			}
 			size++;
 			position++;
+			if(position >= in.length()) {
+				atEnd = true;
+				return;
+			}
 			next = in.charAt(position);
 		} while(next == '\\');
+	}
+	
+	
+	private char parseUnicode() {
+		nextChar();
+		StringBuilder nstring = new StringBuilder();
+		while((position < in.length()) && (hex.contains(in.charAt(position)))) {
+			nextChar();
+			nstring.append(next);
+		}
+		// Without this it will skip ahead.
+		position--;
+		return (char)Integer.parseUnsignedInt(nstring.toString().toLowerCase(), 16);	
 	}
 	
 	
