@@ -27,8 +27,8 @@ import net.minecraft.world.World;
 public class WeakChest extends BasicChest {
 	
 	
-	public WeakChest(int x, int y, int z) {
-		super(x, y, z, 0);		
+	public WeakChest(int x, int y, int z, LootCategory category) {
+		super(x, y, z, 0, category);		
 	}
 	
 	@Override

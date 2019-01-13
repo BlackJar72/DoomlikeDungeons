@@ -18,6 +18,8 @@ import jaredbgreat.dldungeons.api.DLDEvent;
 import jaredbgreat.dldungeons.builder.DBlock;
 import jaredbgreat.dldungeons.pieces.Spawner;
 import jaredbgreat.dldungeons.pieces.chests.BasicChest;
+import jaredbgreat.dldungeons.pieces.chests.LootCategory;
+import jaredbgreat.dldungeons.pieces.chests.LootHandler;
 import jaredbgreat.dldungeons.pieces.entrances.SimpleEntrance;
 import jaredbgreat.dldungeons.pieces.entrances.SpiralStair;
 import jaredbgreat.dldungeons.pieces.entrances.TopRoom;
@@ -100,6 +102,8 @@ public class Dungeon {
 	public int cornerBlock;
 	public int liquidBlock;
 	public int caveBlock;
+	
+	public LootCategory lootCat;
 	
 	int shiftX;
 	int shiftZ;
@@ -210,6 +214,10 @@ public class Dungeon {
 		fences		= theme.fences.select(random);
 		naturals    = theme.naturals.select(random);
 		baseHeight  = random.nextInt(theme.maxY - theme.minY) + theme.minY;
+		lootCat     = LootHandler.getLootHandler().getCategory(theme.lootCat);
+		if(lootCat == null) {
+			lootCat = LootHandler.getLootHandler().getCategory("chest.cfg");
+		}
 	}
 	
 	

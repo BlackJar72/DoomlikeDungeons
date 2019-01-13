@@ -35,8 +35,8 @@ public class TreasureChest extends BasicChest {
 	static ArrayList<Integer> slots = new ArrayList();	
 	int slot;
 	
-	public TreasureChest(int x, int y, int z, int level) {
-		super(x, y, z, level);
+	public TreasureChest(int x, int y, int z, int level, LootCategory category) {
+		super(x, y, z, level, category);
 	}
 	
 
@@ -61,36 +61,36 @@ public class TreasureChest extends BasicChest {
 		int num;
 		num = random.nextInt(A2 + (level / B2)) + C2;
 		for(int i = 0; i < num; i++) {
-			treasure = LootCategory.getLoot(LootType.HEAL, level, random);
+			treasure = category.getLoot(LootType.HEAL, level, random);
 			contents.setInventorySlotContents(slots.get(slot).intValue(), treasure);
 			slot++;
 		}
 		num = random.nextInt(A2 + (level / B2)) + C2;
 		for(int i = 0; i < num; i++) {
-			treasure = LootCategory.getLoot(LootType.GEAR, level, random);
+			treasure = category.getLoot(LootType.GEAR, level, random);
 			contents.setInventorySlotContents(slots.get(slot).intValue(), treasure);
 			slot++;
 		}
 		if(ConfigHandler.stingyLoot) num = random.nextInt(3 + (level / 3)) + 2;
 		else num = random.nextInt(A2 + (level / B2)) + C2;
 		for(int i = 0; i < num; i++) {
-			treasure = LootCategory.getLoot(LootType.LOOT, 
+			treasure = category.getLoot(LootType.LOOT, 
 					level + 1 + random.nextInt(2), random);
 			contents.setInventorySlotContents(slots.get(slot).intValue(), treasure);
 			slot++;
 		}
 		if(random.nextInt(7) < level) {
 			if(level >= 6) {
-				treasure = LootList.special.getLoot(random).getStack(random);
+				treasure = category.getLists().special.getLoot(random).getStack(random);
 				contents.setInventorySlotContents(slots.get(slot).intValue(), treasure);
 				slot++;
 				if(random.nextBoolean()) {
-					treasure = LootList.discs.getLoot(random).getStack(random);
+					treasure = category.getLists().discs.getLoot(random).getStack(random);
 					contents.setInventorySlotContents(slots.get(slot).intValue(), treasure);
 					slot++;
 				}
 			} else {
-				treasure = LootList.discs.getLoot(random).getStack(random);
+				treasure = category.getLists().discs.getLoot(random).getStack(random);
 				contents.setInventorySlotContents(slots.get(slot).intValue(), treasure);
 				slot++;
 			}

@@ -13,8 +13,11 @@ package jaredbgreat.dldungeons.themes;
 import jaredbgreat.dldungeons.builder.DBlock;
 import jaredbgreat.dldungeons.nbt.NBTHelper;
 import jaredbgreat.dldungeons.parser.Tokenizer;
+import jaredbgreat.dldungeons.pieces.chests.LootCategory;
+import jaredbgreat.dldungeons.pieces.chests.LootHandler;
 import jaredbgreat.dldungeons.pieces.chests.LootItem;
 import jaredbgreat.dldungeons.pieces.chests.LootList;
+import jaredbgreat.dldungeons.pieces.chests.LootListSet;
 import jaredbgreat.dldungeons.pieces.chests.TreasureChest;
 import jaredbgreat.dldungeons.setup.Externalizer;
 
@@ -43,6 +46,8 @@ public class ThemeReader {
 	
 	private static File configDir;
 	private static File themesDir;
+	private static File chestDir;
+	private static final String chestDirName = "SpecialChests";
 	private static ArrayList<File> files;
 	
 	private static final String ESTRING = "";
@@ -69,6 +74,7 @@ public class ThemeReader {
 	public static void setConfigDir(File dir) {
 		System.out.println("[DLDUNGEONS] themesdir is " + dir);
 		configDir = dir;
+		
 	}
 	
 	
@@ -108,16 +114,50 @@ public class ThemeReader {
 	 * 
 	 * @return
 	 */
-	private static int findFiles() {
+	private static int findChestFiles(File dir) {
+		int num = 0;
+		files = new ArrayList<File>();
+		String[] fileNames = dir.list();
+		// If still empty somehow don't try to read files!
+		if(fileNames.length < 1) return 0;
+		for(String name : fileNames) {
+			if(name.length() >= 5) {
+				if(name.substring(name.length() - 4).equals(".cfg")) {
+					files.add(new File(name));
+					num++;
+				}
+			}
+		}
+		return num;
+	}
+	
+	
+	/**
+	 * This will look into the themes folder and add theme files 
+	 * to the list of files to read themes from.
+	 * 
+	 * Technically it will treat any file ending in ".cfg" and found 
+	 * inside the theme's directory except for the supplied template 
+	 * as theme, whether it holds valid theme data or not.
+	 * 
+	 * Themes are read as one per file, so no file can contain more 
+	 * than one theme, nor can a theme be split between multiple files.
+	 * 
+	 * If the themes folder is absent of empty it will attempt to fill it 
+	 * by calling exporter.makerThemes.
+	 * 
+	 * @return
+	 */
+	private static int findThemeFiles(File dir) {
 		int num = 0;
 		Externalizer exporter;
 		files = new ArrayList<File>();
-		String[] fileNames = themesDir.list();
+		String[] fileNames = dir.list();
 		if(fileNames.length < 1) {
 			// If the directory is empty, assume first run and fill it
-			exporter = new Externalizer(themesDir.toString() + File.separator);
+			exporter = new Externalizer(dir.toString() + File.separator);
 			exporter.makeThemes();
-			fileNames = themesDir.list();
+			fileNames = dir.list();
 		}
 		// If still empty somehow don't try to read files!
 		if(fileNames.length < 1) return 0;
@@ -143,12 +183,22 @@ public class ThemeReader {
 	 * readTheme and openLoot are called to open the files.
 	 */
 	public static void readThemes() {
+		// Open loot first, so files are available
+		TreasureChest.initSlots();
+		openLoot("chests.cfg", true);
+		chestDir = new File(configDir.toString() + File.separator + chestDirName);
+		if(!chestDir.exists()) {
+			chestDir.mkdir();
+		}
+		int num = findChestFiles(chestDir);
+		System.out.println("[DLDUNGEONS] Found " + num + " special chest configs.");
+		for(File file : files) openLoot(file.toString(), false);
+		
+		// Now the actual themes
 		openNBTConfig();
-		int num = findFiles();
+		num = findThemeFiles(themesDir);
 		System.out.println("[DLDUNGEONS] Found " + num + " themes.");
 		for(File file : files) readTheme(file);
-		TreasureChest.initSlots();
-		openLoot();		
 	}
 	
 	
@@ -188,26 +238,33 @@ public class ThemeReader {
 			if(line.charAt(0) == '#') continue;
 			NBTHelper.parseNBTLine(line);
 		}
-	}	
+	}
 	
 	
 	/**
 	 * Attempts to open chest.cfg, and if successful will call readLoot 
 	 * to read it.
 	 */
-	public static void openLoot() {
+	public static void openLoot(String name, boolean isMain) {
+		LootCategory cat = LootHandler.getLootHandler().createCategory(name);
 		BufferedReader instream = null;
-		File chests = new File(configDir.toString() + File.separator + "chests.cfg");
+		File chests;
+		if(isMain) {
+			chests = new File(configDir.toString() + File.separator + name);
+		} else {
+			chests = new File(configDir.toString() + File.separator 
+							+ chestDirName + File.separator + name);
+		}
 		if(chests.exists()) try {
 			instream = new BufferedReader(new 
 					FileReader(chests.toString()));
-			readLoot(instream);
+			readLoot(instream, name, cat.getLists());
 			if(instream != null) instream.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} else {
-			System.out.println("[DLDUNGEONS] File chests.cfg is missing; will fallabck on default loot");
-			LootList.addDefaultLoot();
+			System.out.println("[DLDUNGEONS] File " + name + " is missing; will fallabck on default loot");
+			cat.getLists().addDefaultLoot();
 		}
 	}
 	
@@ -219,8 +276,8 @@ public class ThemeReader {
 	 * @param instream
 	 * @throws IOException
 	 */
-	public static void readLoot(BufferedReader instream) throws IOException {
-		System.out.println("[DLDUNGEONS] Loading chest loot file (chests.cfg)");
+	public static void readLoot(BufferedReader instream, String filename, LootListSet loots) throws IOException {
+		System.out.println("[DLDUNGEONS] Loading chest loot file (" + filename + ")");
 		
 		Tokenizer tokens = null;
 		String line = null;
@@ -263,10 +320,10 @@ public class ThemeReader {
 					loot.addNbt(tokens.nextToken());
 				}
 				loot.trimNbt();
-				LootList.addItem(loot, type, level);
+				loots.addItem(loot, type, level);
 			}
 		}
-		LootList.addDiscs();
+		loots.addDiscs();
 	}			
 		
 	
@@ -445,6 +502,9 @@ public class ThemeReader {
 				continue;
 			} if(token.equals("notinbiomes")) {
 				theme.notIn = biomeParser(tokens);
+				continue;
+			} if(token.equals("chestsfile")) {
+				theme.lootCat = tokens.nextToken();
 				continue;
 			} if(token.equals("type")) {
 				theme.type = typeParser(tokens);

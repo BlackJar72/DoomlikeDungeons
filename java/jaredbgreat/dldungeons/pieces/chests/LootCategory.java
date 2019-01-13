@@ -10,27 +10,6 @@ package jaredbgreat.dldungeons.pieces.chests;
 */	
 
 
-import static jaredbgreat.dldungeons.pieces.chests.LootList.gear1;
-import static jaredbgreat.dldungeons.pieces.chests.LootList.gear2;
-import static jaredbgreat.dldungeons.pieces.chests.LootList.gear3;
-import static jaredbgreat.dldungeons.pieces.chests.LootList.gear4;
-import static jaredbgreat.dldungeons.pieces.chests.LootList.gear5;
-import static jaredbgreat.dldungeons.pieces.chests.LootList.gear6;
-import static jaredbgreat.dldungeons.pieces.chests.LootList.gear7;
-import static jaredbgreat.dldungeons.pieces.chests.LootList.heal1;
-import static jaredbgreat.dldungeons.pieces.chests.LootList.heal2;
-import static jaredbgreat.dldungeons.pieces.chests.LootList.heal3;
-import static jaredbgreat.dldungeons.pieces.chests.LootList.heal4;
-import static jaredbgreat.dldungeons.pieces.chests.LootList.heal5;
-import static jaredbgreat.dldungeons.pieces.chests.LootList.heal6;
-import static jaredbgreat.dldungeons.pieces.chests.LootList.heal7;
-import static jaredbgreat.dldungeons.pieces.chests.LootList.loot1;
-import static jaredbgreat.dldungeons.pieces.chests.LootList.loot2;
-import static jaredbgreat.dldungeons.pieces.chests.LootList.loot3;
-import static jaredbgreat.dldungeons.pieces.chests.LootList.loot4;
-import static jaredbgreat.dldungeons.pieces.chests.LootList.loot5;
-import static jaredbgreat.dldungeons.pieces.chests.LootList.loot6;
-import static jaredbgreat.dldungeons.pieces.chests.LootList.loot7;
 import static jaredbgreat.dldungeons.pieces.chests.LootType.GEAR;
 import static jaredbgreat.dldungeons.pieces.chests.LootType.HEAL;
 import static jaredbgreat.dldungeons.pieces.chests.LootType.LOOT;
@@ -41,9 +20,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemBook;
 import net.minecraft.item.ItemBow;
-import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.item.ItemTool;
@@ -59,25 +36,23 @@ import net.minecraft.item.ItemTool;
  */
 public class LootCategory {
 	
-	public static final int LEVELS = 7; 	
-	public LootList[] levels = new LootList[LEVELS];
+	public static final int LEVELS = 7;
+	private final LootListSet lists;
+	public LootList[] gear;
+	public LootList[] heal;
+	public LootList[] loot;
 	
-	
-	public LootCategory(LootList[] loots) {
-		levels = loots;
+	public LootCategory(LootListSet listset) {
+		lists = listset;
+		gear = new LootList[]{lists.gear1, lists.gear2, 
+				lists.gear3, lists.gear4, lists.gear5, lists.gear6, lists.gear7};
+		heal = new LootList[]{lists.heal1, lists.heal2, 
+				lists.heal3, lists.heal4, lists.heal5, lists.heal6, lists.heal7};
+		loot = new LootList[]{lists.loot1, lists.loot2, 
+				lists.loot3, lists.loot4, lists.loot5, lists.loot6, lists.loot7};
 	};
 	
 	
-	public static LootCategory gear = new LootCategory(new 
-			LootList[]{gear1, gear2, gear3, gear4, gear5, gear6, gear7});
-	
-	
-	public static LootCategory heal = new LootCategory(new 
-			LootList[]{heal1, heal2, heal3, heal4, heal5, heal6, heal7});
-	
-	
-	public static LootCategory loot = new LootCategory(new 
-			LootList[]{loot1, loot2, loot3, loot4, loot5, loot6, loot7});
 	
 	
 	/**
@@ -89,7 +64,7 @@ public class LootCategory {
 	 * @param random
 	 * @return
 	 */
-	public static ItemStack getLoot(LootType type, int level, Random random) {
+	public ItemStack getLoot(LootType type, int level, Random random) {
 		if(level <= 6) {
 			level = Math.min(6, (level + random.nextInt(2) - random.nextInt(2)));
 		}
@@ -99,14 +74,14 @@ public class LootCategory {
 			if(random.nextBoolean()) {
 				return getEnchantedGear(level, random);
 			} else {
-				return gear.levels[Math.min(6, level)].getLoot(random).getStack(random);
+				return gear[Math.min(6, level)].getLoot(random).getStack(random);
 			}
 		case HEAL:
-			return heal.levels[Math.min(6, level)].getLoot(random).getStack(random);
+			return heal[Math.min(6, level)].getLoot(random).getStack(random);
 		case LOOT:
 			if(level > 6) {
 				if(level > random.nextInt(100)) {
-					return LootList.special.getLoot(random).getStack(random);					
+					return lists.special.getLoot(random).getStack(random);					
 				} else {
 					level = 6;
 				}
@@ -114,7 +89,7 @@ public class LootCategory {
 			if(random.nextInt(10) == 0) {
 				return getEnchantedBook(level, random);
 			} else {
-				return loot.levels[level].getLoot(random).getStack(random);
+				return loot[level].getLoot(random).getStack(random);
 			}
 		case RANDOM:
 		default:
@@ -140,17 +115,17 @@ public class LootCategory {
 	 * @param random
 	 * @return
 	 */
-	private static ItemStack getEnchantedGear(int lootLevel, Random random) {
+	private ItemStack getEnchantedGear(int lootLevel, Random random) {
 		ItemStack out = null;
 		float portion = random.nextFloat() / 2f;
 		int lootPart = Math.min(6, Math.max(0, (int)((((float)lootLevel) * (1f - portion)) + 0.5f)));
 		int enchPart = Math.min(30, Math.max(0, (int)(((float)lootLevel) * portion * 10f)));
-		LootItem item = gear.levels[lootPart].getLoot(random);
+		LootItem item = gear[lootPart].getLoot(random);
 		if(enchPart >= 1 && isEnchantable(item)) {
 			out = item.getStack(random);
 			out = EnchantmentHelper.addRandomEnchantment(random, out, enchPart, true);
 		} else {
-			out = gear.levels[Math.min(6, lootLevel)].getLoot(random).getStack(random);
+			out = gear[Math.min(6, lootLevel)].getLoot(random).getStack(random);
 		}		
 		return out;
 	}
@@ -163,7 +138,7 @@ public class LootCategory {
 	 * @param in
 	 * @return
 	 */
-	private static boolean isEnchantable(LootItem in) {
+	private boolean isEnchantable(LootItem in) {
 		Item item = (Item)in.item;
 		return (item instanceof ItemSword 
 				|| item instanceof ItemTool 
@@ -179,10 +154,15 @@ public class LootCategory {
 	 * @param random
 	 * @return
 	 */
-	private static ItemStack getEnchantedBook(int level, Random random) {
+	private ItemStack getEnchantedBook(int level, Random random) {
 		ItemStack out = new ItemStack(Items.BOOK, 1);
 		out = EnchantmentHelper.addRandomEnchantment(random, out, Math.min(30, (int)(level * 7.5)), true);
 		return out;
-	}	
+	}
+	
+	
+	public LootListSet getLists() {
+		return lists;
+	}
 }
 

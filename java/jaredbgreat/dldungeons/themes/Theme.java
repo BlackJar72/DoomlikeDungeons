@@ -11,6 +11,7 @@ package jaredbgreat.dldungeons.themes;
 
 
 import jaredbgreat.dldungeons.builder.DBlock;
+import jaredbgreat.dldungeons.pieces.chests.LootCategory;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -83,6 +84,8 @@ public class Theme {
 	public ArrayList<String> bossMobs = new ArrayList<String>();
 	public ArrayList<String>[] allMobs;
 	
+	public String lootCat;
+	
 	
 	public Theme() {
 		minY = 10;
@@ -109,6 +112,8 @@ public class Theme {
 		fencing = makeBlockList(new String[]{});
 		liquid = makeBlockList(new String[]{});
 		pillarBlock = makeBlockList(new String[]{});
+		
+		lootCat = "chests.cfg";
 		
 		fixMobs();
 	}

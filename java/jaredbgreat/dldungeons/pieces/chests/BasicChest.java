@@ -32,15 +32,18 @@ import net.minecraftforge.common.MinecraftForge;
  */
 public class BasicChest {
 	
-	public int mx, my, mz, level;
+	public int mx, my, mz;
+	protected int level;
 	private static int A1 = 2, B1 = 1, C1 = 2;
+	protected LootCategory category;
 	
 	
-	public BasicChest(int x, int y, int z, int level) {
+	public BasicChest(int x, int y, int z, int level, LootCategory category) {
 		this.mx = x;
 		this.my = y;
 		this.mz = z;
 		this.level = level;
+		this.category = category;
 	}
 	
 	
@@ -96,11 +99,11 @@ public class BasicChest {
 		if(ConfigHandler.stingyLoot) num = random.nextInt(A1 + (level / B1)) + C1;
 		else num = random.nextInt(2 + (level)) + 2;
 		for(int i = 0; i < num; i++) {
-			ItemStack treasure = LootCategory.getLoot(kind, level, random);
+			ItemStack treasure = category.getLoot(kind, level, random);
 			if(treasure != null) chest.setInventorySlotContents(random.nextInt(27), treasure);
 		}
 		if(!ConfigHandler.vanillaLoot) {
-			ItemStack treasure = LootCategory.getLoot(LootType.HEAL, level, random);
+			ItemStack treasure = category.getLoot(LootType.HEAL, level, random);
 			if(treasure != null) chest.setInventorySlotContents(random.nextInt(27), treasure);
 		}
 	}

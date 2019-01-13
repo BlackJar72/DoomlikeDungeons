@@ -353,7 +353,7 @@ public class Room extends AbstractRoom {
 	 * 
 	 * @param dungeon
 	 */
-	public void addChests(Dungeon dungeon) {
+	public void addChests(Dungeon dungeon) {		
 		if((ConfigHandler.difficulty == Difficulty.NONE) || 
 				hasEntrance) return;
 		hasSpawners = spawners.size() > 0;
@@ -382,14 +382,14 @@ public class Room extends AbstractRoom {
 			tmp = (endZ - beginZ - 3);
 			z = dungeon.random.nextInt(tmp) + beginZ + 2;
 			y = dungeon.map.floorY[x][z];
-			chests.add(new WeakChest(x, y, z));
+			chests.add(new WeakChest(x, y, z, dungeon.lootCat));
 		} else if(dungeon.random.nextBoolean() && !isNode) {
 			tmp = (endX - beginX - 3);
 			x = dungeon.random.nextInt(tmp) + beginX + 2;
 			tmp = (endZ - beginZ - 3);
 			z = dungeon.random.nextInt(tmp) + beginZ + 2;
 			y = dungeon.map.floorY[x][z];
-			chests.add(new BasicChest(x, y, z, lev));
+			chests.add(new BasicChest(x, y, z, lev, dungeon.lootCat));
 		} else {
 			int ms = Math.max(n, 2);
 			if(isNode)num = Math.min(ms, dungeon.random.nextInt(2 + (ms / 2)) + 2);
@@ -400,13 +400,13 @@ public class Room extends AbstractRoom {
 				tmp = (endZ - beginZ - 3);
 				z = dungeon.random.nextInt(tmp) + beginZ + 2;
 				y = dungeon.map.floorY[x][z];
-				chests.add(new BasicChest(x, y, z, lev));
+				chests.add(new BasicChest(x, y, z, lev, dungeon.lootCat));
 			}
 		} if(isNode) {
 			x = (int)realX;
 			z = (int)realZ;
 			y = dungeon.map.floorY[x][z]; 
-			chests.add(new TreasureChest(x, y, z, lev)); // Will be a special chest later
+			chests.add(new TreasureChest(x, y, z, lev, dungeon.lootCat));
 		}
 	}
 	
