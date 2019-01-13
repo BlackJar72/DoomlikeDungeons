@@ -80,18 +80,18 @@ public final class DBlock {
 		ResourceLocation name = new ResourceLocation(modid 
 				+ ":" + nums.nextToken());
 		theBlock = GameRegistry.findRegistry(Block.class).getValue(name);
-		if(nums.hasMoreElements()) {
-			meta = Integer.parseInt(nums.nextToken()); 
-		} else {
-			meta = 0;
-		}
-		block = theBlock.getStateFromMeta(meta);
 		if(theBlock == null) {
 			String error = "[DLDUNGEONS] ERROR! Block read as \"" + id 
 					+ "\" was was not in registry (returned null).";
 			Logging.LogError(error);
 			throw new NoSuchElementException(error);
 		}
+		if(nums.hasMoreElements()) {
+			meta = Integer.parseInt(nums.nextToken()); 
+		} else {
+			meta = 0;
+		}
+		block = theBlock.getStateFromMeta(meta);
 		if(block.toString().contains("minecraft:air") 
 				&& !id.contains("minecraft:air")) {
 			String error = "[DLDUNGEONS] ERROR! Block read as \"" + id 

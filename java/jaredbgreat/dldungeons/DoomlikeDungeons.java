@@ -15,6 +15,7 @@ import jaredbgreat.dldungeons.commands.CmdForceInstallThemes;
 import jaredbgreat.dldungeons.commands.CmdInstallThemes;
 import jaredbgreat.dldungeons.commands.CmdReload;
 import jaredbgreat.dldungeons.commands.CmdSpawn;
+import jaredbgreat.dldungeons.commands.CmdTPDim;
 import jaredbgreat.dldungeons.debug.DLDProfile;
 import jaredbgreat.dldungeons.debug.DoNothing;
 import jaredbgreat.dldungeons.debug.IProfiler;
@@ -69,6 +70,7 @@ public class DoomlikeDungeons {
     	event.registerServerCommand(new CmdSpawn());
     	event.registerServerCommand(new CmdReload());
     	event.registerServerCommand(new CmdDimID());
+    	//event.registerServerCommand(new CmdTPDim());
     	if(ConfigHandler.installCmd) {
     		event.registerServerCommand(new CmdInstallThemes());
     		event.registerServerCommand(new CmdForceInstallThemes());
