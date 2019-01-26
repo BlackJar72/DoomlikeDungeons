@@ -7,7 +7,7 @@ package jaredbgreat.dldungeons.themes;
  * 
  * It is licensed under the creative commons 4.0 attribution license: * 
  * https://creativecommons.org/licenses/by/4.0/legalcode
-*/	
+*/
 
 
 import jaredbgreat.dldungeons.builder.DBlock;
@@ -16,7 +16,6 @@ import jaredbgreat.dldungeons.parser.Tokenizer;
 import jaredbgreat.dldungeons.pieces.chests.LootCategory;
 import jaredbgreat.dldungeons.pieces.chests.LootHandler;
 import jaredbgreat.dldungeons.pieces.chests.LootItem;
-import jaredbgreat.dldungeons.pieces.chests.LootList;
 import jaredbgreat.dldungeons.pieces.chests.LootListSet;
 import jaredbgreat.dldungeons.pieces.chests.TreasureChest;
 import jaredbgreat.dldungeons.setup.Externalizer;
@@ -185,6 +184,7 @@ public class ThemeReader {
 	public static void readThemes() {
 		// Open loot first, so files are available
 		TreasureChest.initSlots();
+		openNBTConfig();
 		openLoot("chests.cfg", true);
 		chestDir = new File(configDir.toString() + File.separator + chestDirName);
 		if(!chestDir.exists()) {
@@ -195,7 +195,6 @@ public class ThemeReader {
 		for(File file : files) openLoot(file.toString(), false);
 		
 		// Now the actual themes
-		openNBTConfig();
 		num = findThemeFiles(themesDir);
 		System.out.println("[DLDUNGEONS] Found " + num + " themes.");
 		for(File file : files) readTheme(file);

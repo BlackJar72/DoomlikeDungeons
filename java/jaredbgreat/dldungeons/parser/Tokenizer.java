@@ -260,4 +260,12 @@ public class Tokenizer {
 			return tokens[index];
 		} else return null;
 	}
+
+	/**
+	 * Gets the raw input string.
+	 * @return the input
+	 */
+	public String getString() {
+		return in;
+	}
 }

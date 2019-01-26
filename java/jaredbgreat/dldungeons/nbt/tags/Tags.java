@@ -14,9 +14,9 @@ import jaredbgreat.dldungeons.parser.Tokenizer;
 import java.util.HashMap;
 
 public final class Tags {
-	static final HashMap<String,ITag> registry = new HashMap<String,ITag>();
+	static final HashMap<String,ITag> registry = new HashMap<>();
 	
-	private Tags(){/*Do not instantiate this*/};
+	private Tags(){/*Do not instantiate this*/}
 	
 	public static ITag makeITag(Tokenizer tokens) {
 		ITag out;
@@ -66,14 +66,21 @@ public final class Tags {
 		case ENCH:
 			out = new Enchantment(tokens.getToken(0), tokens.getToken(2), tokens.getToken(3));
 			break;
+		case JSON:
+			String[] s = tokens.getString().split("\\s+", 3);
+			if(s.length == 3) 
+				out = new NBTFromJsonWrapper(tokens.getToken(0), s[2]);
+			else out = null;
+			break;
 		case END: // Neither supported nor needed. 			
 		default:
 			out = null;
 			break;		
 		}
-		registry.put(tokens.getToken(0), out);
+		if(out != null)
+			registry.put(tokens.getToken(0), out);
 		return out;
-	};
+	}
 	
 	
 	public static ITag getTag(String label) {

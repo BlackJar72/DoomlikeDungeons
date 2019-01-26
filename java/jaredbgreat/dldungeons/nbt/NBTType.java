@@ -37,5 +37,6 @@ public enum NBTType {
 	
 	// Special categories that are not true NBT tags
 	GROUP, /*Used to group several tags without creating a sub-compound*/
-	ENCH;  /*Last ditch attempt to make this work*/
+	ENCH,  /*Last ditch attempt to make this work*/
+	JSON;  /*Wrapper for vanilla json strings*/
 }
