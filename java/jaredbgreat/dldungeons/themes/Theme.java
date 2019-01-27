@@ -76,7 +76,8 @@ public class Theme {
 	public int[] fencing;
 	public int[] liquid;
 	public int[] pillarBlock;
-	
+	public int[] dimensionWhitelist;
+
 	public ArrayList<String> commonMobs = new ArrayList<String>();
 	public ArrayList<String> hardMobs = new ArrayList<String>();
 	public ArrayList<String> bruteMobs = new ArrayList<String>();
@@ -112,7 +113,7 @@ public class Theme {
 		fencing = makeBlockList(new String[]{});
 		liquid = makeBlockList(new String[]{});
 		pillarBlock = makeBlockList(new String[]{});
-		
+		dimensionWhitelist = new int[0];
 		lootCat = "chests.cfg";
 		
 		fixMobs();

@@ -9,23 +9,22 @@ package jaredbgreat.dldungeons.builder;
  * 
  * It is licensed under the creative commons 4.0 attribution license: * 
  * https://creativecommons.org/licenses/by/4.0/legalcode
-*/	
+*/
 
 
-import static jaredbgreat.dldungeons.builder.DBlock.lapis;
-import static jaredbgreat.dldungeons.builder.DBlock.placeBlock;
-import static jaredbgreat.dldungeons.builder.DBlock.quartz;
 import jaredbgreat.dldungeons.DoomlikeDungeons;
 import jaredbgreat.dldungeons.api.DLDEvent;
 import jaredbgreat.dldungeons.planner.Dungeon;
-
-import java.util.Random;
-
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.common.MinecraftForge;
+
+import java.util.Arrays;
+import java.util.Random;
+
+import static jaredbgreat.dldungeons.builder.DBlock.*;
 
 
 public class Builder {
@@ -81,7 +80,10 @@ public class Builder {
 		Dungeon dungeon = new Dungeon(random, 
 							world.getBiome(new BlockPos((chunkX * 16), 64, (chunkZ * 16))), 
 						    world, chunkX, chunkZ);
-		if(dungeon.theme != null) {
+		if(dungeon.theme != null &&
+				(dungeon.theme.dimensionWhitelist.length == 0 ||
+						Arrays.stream(dungeon.theme.dimensionWhitelist)
+								.anyMatch(id -> id == world.provider.getDimension()))) {
 			if(debugPole) debuggingPole(world, chunkX, chunkZ, dungeon);
 			buildDungeon(dungeon);
 		}
