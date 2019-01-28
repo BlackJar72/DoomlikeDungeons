@@ -424,6 +424,9 @@ public class ThemeReader {
 			} if(token.equals("sizes")) {
 				theme.sizes = sizeParser(theme.sizes, tokens);
 				continue;
+			} if(token.equals("dimensionwhitelist")) {
+				theme.dimensionWhitelist = dimensionParser(tokens);
+				continue;
 			} if(token.equals("outside")) {
 				theme.outside = elementParser(theme.outside, tokens);
 				continue;
@@ -577,6 +580,21 @@ public class ThemeReader {
 		}
 		if(valid) return new SizeElement(values[0], values[1], values[2], values[3], values[4]);
 		else return el;
+	}
+
+	/**
+	 * Read a DimensionList tag's data.
+	 * @param tokens Tokenizer
+	 * @return Dimension id array
+	 */
+	private static int[] dimensionParser(Tokenizer tokens) {
+		if (tokens.getToken(1) == null || tokens.getToken(1).equalsIgnoreCase("all"))
+			return new int[0];
+		int[] rtn = new int[tokens.countTokens()-1];
+		int i = 0;
+		while (tokens.hasMoreTokens())
+			rtn[i++] = Integer.parseInt(tokens.nextToken());
+		return rtn;
 	}
 	
 	
