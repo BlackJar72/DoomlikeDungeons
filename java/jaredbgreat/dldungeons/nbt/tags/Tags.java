@@ -18,7 +18,7 @@ public final class Tags {
 	
 	private Tags(){/*Do not instantiate this*/}
 	
-	public static ITag makeITag(Tokenizer tokens) {
+	public static ITag makeITag(String line, Tokenizer tokens) {
 		ITag out;
 		NBTType type = NBTType.valueOf(tokens.getToken(1).toUpperCase());
 		switch(type) {
@@ -67,7 +67,7 @@ public final class Tags {
 			out = new Enchantment(tokens.getToken(0), tokens.getToken(2), tokens.getToken(3));
 			break;
 		case JSON:
-			String[] s = tokens.getString().split("\\s+", 3);
+			String[] s = line.split("\\s+", 3);
 			if(s.length == 3) 
 				out = new NBTFromJsonWrapper(tokens.getToken(0), s[2]);
 			else out = null;

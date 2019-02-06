@@ -84,7 +84,7 @@ public class NBTHelper {
 	public static ITag parseNBTLine(String line) {
 		ITag out;
 		Tokenizer tokens = new Tokenizer(line, " \t");
-		return Tags.makeITag(tokens);
+		return Tags.makeITag(line, tokens);
 	}
 	
 	
