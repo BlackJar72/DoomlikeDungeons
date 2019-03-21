@@ -9,12 +9,9 @@ import net.minecraft.world.World;
 
 
 /* 
- * This API is the creation and copyright (c) 2015 
- * of Jared Blackburn (JaredBGreat).
- * 
- * It is licensed under the creative commons 4.0 attribution license: * 
- * https://creativecommons.org/licenses/by/4.0/legalcode
-*/
+ * Doomlike Dungeons by is licensed the MIT License
+ * Copyright (c) 2014-2018 Jared Blackburn
+ */	
 
 public class DLDungeonsAPI {
 	

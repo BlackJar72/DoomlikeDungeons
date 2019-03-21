@@ -1,15 +1,12 @@
 package jaredbgreat.dldungeons.api;
 
 /* 
- * This mod is the creation and copyright (c) 2015 
- * of Jared Blackburn (JaredBGreat).
+ * Doomlike Dungeons by is licensed the MIT License
+ * Copyright (c) 2014-2018 Jared Blackburn
  * 
  * This class (and all lines calling its methods elsewhere thus far) is by 
  * frodare (Charles Howard), late 2016.
- * 
- * It is licensed under the creative commons 4.0 attribution license: * 
- * https://creativecommons.org/licenses/by/4.0/legalcode
-*/	
+ */	
 
 import java.util.Random;
 

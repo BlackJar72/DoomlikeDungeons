@@ -1,5 +1,10 @@
 package jaredbgreat.dldungeons.nbt.tags;
 
+/* 
+ * Doomlike Dungeons by is licensed the MIT License
+ * Copyright (c) 2014-2018 Jared Blackburn
+ */	
+
 import jaredbgreat.dldungeons.nbt.NBTType;
 
 import java.util.UUID;
@@ -7,13 +12,7 @@ import java.util.UUID;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagLong;
-/* 
- * This mod is the creation and copyright (c) 2015 
- * of Jared Blackburn (JaredBGreat).
- * 
- * It is licensed under the creative commons 4.0 attribution license: 
- * https://creativecommons.org/licenses/by/4.0/legalcode
-*/
+
 
 public class NBTuuid extends ITag {
 	public final UUID   data;  // The data carried by the tag in the NBT

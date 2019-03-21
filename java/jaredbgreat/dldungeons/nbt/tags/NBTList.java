@@ -1,5 +1,11 @@
 package jaredbgreat.dldungeons.nbt.tags;
 
+/* 
+ * Doomlike Dungeons by is licensed the MIT License
+ * Copyright (c) 2014-2018 Jared Blackburn
+ */	
+
+
 import jaredbgreat.dldungeons.nbt.NBTType;
 import jaredbgreat.dldungeons.parser.Tokenizer;
 

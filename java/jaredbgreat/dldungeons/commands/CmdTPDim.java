@@ -1,5 +1,10 @@
 package jaredbgreat.dldungeons.commands;
 
+/* 
+ * Doomlike Dungeons by is licensed the MIT License
+ * Copyright (c) 2014-2018 Jared Blackburn
+ */	
+
 import jaredbgreat.dldungeons.Info;
 import jaredbgreat.dldungeons.tputils.Teleportation;
 

@@ -1,5 +1,10 @@
 package jaredbgreat.dldungeons.pieces.chests;
 
+/* 
+ * Doomlike Dungeons by is licensed the MIT License
+ * Copyright (c) 2014-2018 Jared Blackburn
+ */	
+
 import static jaredbgreat.dldungeons.pieces.chests.LootItem.blazeRod;
 import static jaredbgreat.dldungeons.pieces.chests.LootItem.book;
 import static jaredbgreat.dldungeons.pieces.chests.LootItem.bow;

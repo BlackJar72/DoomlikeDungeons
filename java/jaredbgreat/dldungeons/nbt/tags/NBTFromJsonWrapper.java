@@ -1,5 +1,12 @@
 package jaredbgreat.dldungeons.nbt.tags;
 
+/* 
+ * Doomlike Dungeons by is licensed the MIT License
+ * Copyright (c) 2014-2018 Jared Blackburn
+ * 
+ * This class added by Hubry at GitHub, January 2019
+ */	
+
 import jaredbgreat.dldungeons.nbt.NBTType;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTException;
