@@ -29,6 +29,7 @@ public class TreasureChest extends BasicChest {
 	
 	private static int A2 = 3, B2 = 2, C2 = 2;
 	
+	private boolean withBoss;
 	static ArrayList<Integer> slots = new ArrayList();	
 	int slot;
 	
@@ -56,20 +57,19 @@ public class TreasureChest extends BasicChest {
 		}
 		TileEntityChest contents = (TileEntityChest)world.getTileEntity(pos);
 		int num;
-		num = random.nextInt(A2 + (level / B2)) + C2;
+		num = random.nextInt(Math.max(2, A2 + (level / B2))) + C2;
 		for(int i = 0; i < num; i++) {
 			treasure = category.getLoot(LootType.HEAL, level, random);
 			contents.setInventorySlotContents(slots.get(slot).intValue(), treasure);
 			slot++;
 		}
-		num = random.nextInt(A2 + (level / B2)) + C2;
+		num = random.nextInt(Math.max(2, A2 + (level / B2))) + C2;
 		for(int i = 0; i < num; i++) {
 			treasure = category.getLoot(LootType.GEAR, level, random);
 			contents.setInventorySlotContents(slots.get(slot).intValue(), treasure);
 			slot++;
 		}
-		if(ConfigHandler.stingyLoot) num = random.nextInt(3 + (level / 3)) + 2;
-		else num = random.nextInt(A2 + (level / B2)) + C2;
+		num = random.nextInt(Math.max(2, A2 + (level / B2))) + C2;
 		for(int i = 0; i < num; i++) {
 			treasure = category.getLoot(LootType.LOOT, 
 					level + 1 + random.nextInt(2), random);
@@ -92,6 +92,11 @@ public class TreasureChest extends BasicChest {
 				slot++;
 			}
 		}
+	}
+	
+	
+	public void setWithBoss(boolean bossRoom) {
+		withBoss = bossRoom;
 	}
 	
 	

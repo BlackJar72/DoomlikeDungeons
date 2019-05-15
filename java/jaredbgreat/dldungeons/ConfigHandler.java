@@ -88,7 +88,6 @@ public final class ConfigHandler {
 	
 	public    static boolean announceCommands = DEFAULT_ANNOUNCE_COMMANDS;
 	public    static boolean vanillaLoot = DEFAULT_VANILLA_LOOT;
-	public    static boolean stingyLoot = DEFAULT_STINGY_LOOT;	
 	public    static boolean thinSpawners = DEFAULT_THIN_SPAWNERS;	
 		
 	private   static final boolean PROFILE = false;
@@ -193,16 +192,10 @@ public final class ConfigHandler {
 				+ System.lineSeparator() + "and \"\\dldForceInstallThemes.\"").getBoolean(INSTALL_CMD);
 		System.out.println("[DLDUNGEONS] Can themes be (re)installed by command? " + installCmd);
 		
-		stingyLoot = config.get("General", "StingyWithLoot", DEFAULT_STINGY_LOOT,
-				"This no longer does anything, see \"Loot\" section below (kepts so you see this).")
-				.getBoolean(DEFAULT_STINGY_LOOT);
-		System.out.println("[DLDUNGEONS] Will be stingy with chests? " + stingyLoot);
-		
 		thinSpawners = config.get("General", "ThinSpawners", DEFAULT_THIN_SPAWNERS,
 				"If true smaller dungeons will have some of there spawners removed to "
 				+ "make them more like larger dungeons.")
 				.getBoolean(DEFAULT_THIN_SPAWNERS);
-		System.out.println("[DLDUNGEONS] Will be stingy with chests? " + stingyLoot);
 		
 		neverInBiomes = config.get("General", "NeverInBiomeTypes", NEVER_IN_BIOMES, 
 				"Dungeons will not generate in these biome types (uses Forge biome dictionary")
@@ -247,7 +240,6 @@ public final class ConfigHandler {
 		System.out.println("[DLDUNGEONS] Will self-profile? " + profile);
 		
 		//Loot
-		stingyLoot = false;
 		int a, b, c;
 		config.addCustomCategoryComment("Loot", 
 				"This will change the value and quantity of loo; be careful, too "
@@ -285,8 +277,8 @@ public final class ConfigHandler {
 						+ System.lineSeparator() 
 						+ " random.nextInt(A2 + (RoomDifficulty / B2)) + C2");
 		TreasureChest.setBasicLootNumbers(a, b, c);
-		Room.setLootBonus(config.getInt("Loot Bonus", "Loot", 0, -9, 9, 
-				"This modifies the room difficulty, in case you think default is "
+		Room.setLootBonus(config.getInt("Loot Bonus", "Loot", 1, -9, 9, 
+				"This modifies the value of the loot, in case you think default is "
 					+ System.lineSeparator() + "too generous or too stingy."));
 		
 		// Saving it all

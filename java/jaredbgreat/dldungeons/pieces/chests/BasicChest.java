@@ -88,9 +88,7 @@ public class BasicChest {
 	 * @param random
 	 */
 	protected void fillChest(TileEntityChest chest, LootType kind, Random random) {		
-		int num;
-		if(ConfigHandler.stingyLoot) num = random.nextInt(A1 + (level / B1)) + C1;
-		else num = random.nextInt(2 + (level)) + 2;
+		int num = random.nextInt(Math.max(2, A1 + (level / B1))) + C1;
 		for(int i = 0; i < num; i++) {
 			ItemStack treasure = category.getLoot(kind, level, random);
 			if(treasure != null) chest.setInventorySlotContents(random.nextInt(27), treasure);
