@@ -29,8 +29,8 @@ public enum Difficulty {
 	BABY  (3, 0, 0, 0, 0, 884, false, "Baby mode."),
 	NOOB  (4, 1, 1, 1, 1, 590, false, "Not too hard."),
 	NORM  (5, 2, 1, 1, 2, 427, false, "Normal difficulty."),
-	HARD  (6, 3, 2, 2, 3, 323, false, "Super violent."),
-	NUTS  (7, 5, 2, 2, 4, 100,  true, "Insane horror!");
+	HARD  (6, 3, 2, 2, 3, 323, true, "Super violent."),
+	NUTS  (7, 5, 2, 2, 4, 100, true, "Insane horror!");
 	
 	
 	public final int spawners;

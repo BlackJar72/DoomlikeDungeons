@@ -280,7 +280,7 @@ public class Room extends AbstractRoom {
 		boolean multibonus = false;
 		int x, y, z, tmp, num;
 		String mob;		
-		if(ConfigHandler.difficulty.multimob(dungeon.random) || isNode) {
+		if(!hasEntrance && (ConfigHandler.difficulty.multimob(dungeon.random) || isNode)) {
 			tmp = (endX - beginX) > (endZ - beginZ) ? (endX - beginX) : (endZ - beginZ);  
 			num = dungeon.random.nextInt(2 + (tmp / 8)) + 1;
 			for(int i = 0; i < num; i++) {
@@ -313,7 +313,7 @@ public class Room extends AbstractRoom {
 				dungeon.spawners.addSpawner(s);
 			}
 		}
-		if(isNode) {
+		if(isNode && !hasEntrance) {
 			x = (int)realX;
 			z = (int)realZ;
 			if(dungeon.map.hasLiquid[x][z]) {y = dungeon.map.ceilY[x][z];}
@@ -400,7 +400,7 @@ public class Room extends AbstractRoom {
 				y = dungeon.map.floorY[x][z];
 				chests.add(new BasicChest(x, y, z, lev, dungeon.lootCat));
 			}
-		} if(isNode) {
+		} if(isNode && !hasEntrance) {
 			x = (int)realX;
 			z = (int)realZ;
 			y = dungeon.map.floorY[x][z]; 
