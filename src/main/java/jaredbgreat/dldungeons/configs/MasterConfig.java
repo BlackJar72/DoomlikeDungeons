@@ -16,6 +16,7 @@ public class MasterConfig {
 	public static final ForgeConfigSpec config;
 	
 	static {
+		GeneralConfig.init(builder);
 		config = builder.build();
 	}
 	

@@ -5,6 +5,7 @@ import java.io.File;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import jaredbgreat.dldungeons.configs.ConfigHandler;
 import jaredbgreat.dldungeons.configs.MasterConfig;
 
 /* 
@@ -55,8 +56,7 @@ public class DoomlikeDungeons {
     	//FIXME: Most of this needs to be done better
 		//TODO: Old preInit()
     	logger.info(Info.TAG + Info.NAME + " should now load config.");
-    	//ConfigHandler.configDir = ConfigHandler.findConfigDir(event.getModConfigurationDirectory());
-    	//ConfigHandler.init();
+    	ConfigHandler.init();
 		logger.info(Info.TAG + " Config should now be loaded.");
     	//if(ConfigHandler.profile) profiler = new DLDProfile();
     	//else profiler = new DoNothing();
