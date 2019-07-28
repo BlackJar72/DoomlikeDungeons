@@ -18,6 +18,9 @@ import net.minecraftforge.fml.loading.FMLPaths;
 @EventBusSubscriber
 public class MasterConfig {
 	private static File confDir;
+	private static File themesDir;
+	private static File listsDir;
+	private static File chestsDir;
 		
 	private static final ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 	public static final ForgeConfigSpec config;
@@ -45,14 +48,12 @@ public class MasterConfig {
 	
 	
 	private static Path makeConfDir() {
-    	String dirName = FMLPaths.CONFIGDIR.get().toString() 
-    			+ File.separator + Info.DIR_NAME;
-    	String fileName = dirName + File.separator + Info.DIR_NAME + ".toml";
-    	confDir = new File(dirName);
+    	confDir = makeAppendedDir(FMLPaths.CONFIGDIR.get().toString(), Info.DIR_NAME);
+    	listsDir = makeAppendedDir(confDir.getPath(), "lists");
+		themesDir = makeAppendedDir(confDir.getPath(), "themes");
+		chestsDir = makeAppendedDir(confDir.getPath(), "chests");
+    	String fileName = confDir.getPath() + File.separator + Info.DIR_NAME + ".toml";
     	File file = new File(fileName);
-    	if(!confDir.exists()) {
-    		confDir.mkdir();
-    	}
     	if(!file.exists()) {
     		try {
 				BufferedWriter writer = new BufferedWriter(new FileWriter(file));
@@ -64,7 +65,21 @@ public class MasterConfig {
     	}
     	return file.toPath();
 	}
+
+
+	static File[] getUsedDirs() {
+		return new File[] {confDir, themesDir, listsDir, chestsDir};
+	}
 	
 	
+	public static File makeAppendedDir(String base, String sub) {
+		File out = new File(base + File.separator + sub);
+    	if(!out.exists()) {
+    		out.mkdirs();
+    	}		
+		return out;		
+	}
+
+
 
 }

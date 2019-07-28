@@ -7,11 +7,10 @@ import jaredbgreat.dldungeons.Difficulty;
 import net.minecraftforge.common.BiomeDictionary.Type;
 
 public class ConfigHandler {
-	
-	public static File mainConfig;
-	public static File themesDir;
-	public static File listsDir;
-	public static File configDir;
+	private static File configDir;
+	private static File themesDir;
+	private static File listsDir;
+	private static File chestsDir;
 	
 	public static final int DEFAULT_SCALE  = 8;
 	public static final int DEFAULT_MINXZ  = 16;
@@ -72,6 +71,12 @@ public class ConfigHandler {
 	 * This will read the them file and apply the themes.
 	 */
 	public static void init() {
+		// Get directories to use
+		File[] dirs = MasterConfig.getUsedDirs();
+		configDir = dirs[0];
+		themesDir = dirs[1];
+		listsDir  = dirs[2];
+		chestsDir = dirs[3];
 		
 		// General configuration
 		parseDiff(GeneralConfig.difficulty.get());
