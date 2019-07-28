@@ -1,6 +1,10 @@
 package jaredbgreat.dldungeons;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Path;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -45,8 +49,7 @@ public class DoomlikeDungeons {
 		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MasterConfig.config);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientRegistries);
-		MasterConfig.loadConfig(MasterConfig.config, FMLPaths.CONFIGDIR.get()
-				.resolve(Info.OLD_ID + File.separator + Info.OLD_ID + ".toml").toString());
+		MasterConfig.loadConfig(MasterConfig.config);
 		MinecraftForge.EVENT_BUS.register(this);
 
 	}
@@ -74,9 +77,7 @@ public class DoomlikeDungeons {
     }
 
 
-    private void clientRegistries(final FMLCommonSetupEvent event) {
-
-	}
+    private void clientRegistries(final FMLCommonSetupEvent event) {}
 
 
 	public static Logger getLogger() {
