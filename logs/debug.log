@@ -1,0 +1,30 @@
+[24Apr2019 17:57:54.207] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args []
+[24Apr2019 17:57:54.210] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher starting: java version 1.8.0_201
+[24Apr2019 17:57:54.267] [main/DEBUG] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Found launch services [minecraft,fmldevclient,fmldevserver,fmluserdevserver,testharness,fmlclient,fmluserdevclient,fmlserver]
+[24Apr2019 17:57:54.274] [main/DEBUG] [cpw.mods.modlauncher.TransformationServicesHandler/MODLAUNCHER]: Found transformer services : [fml]
+[24Apr2019 17:57:54.277] [main/DEBUG] [cpw.mods.modlauncher.NameMappingServiceHandler/MODLAUNCHER]: Found naming services : [srgtomcp]
+[24Apr2019 17:57:54.285] [main/DEBUG] [cpw.mods.modlauncher.LaunchPluginHandler/MODLAUNCHER]: Found launch plugins: [eventbus,object_holder_definalize,runtime_enum_extender,field_redirect_net.minecraft.potion.PotionEffect/Lnet/minecraft/potion/Potion;,accesstransformer,capability_inject_definalize,runtimedistcleaner]
+[24Apr2019 17:57:54.286] [main/DEBUG] [cpw.mods.modlauncher.TransformationServicesHandler/MODLAUNCHER]: Transformation services loading
+[24Apr2019 17:57:54.287] [main/DEBUG] [cpw.mods.modlauncher.TransformationServiceDecorator/MODLAUNCHER]: Loading service fml
+[24Apr2019 17:57:54.287] [main/DEBUG] [net.minecraftforge.fml.loading.FMLServiceProvider/]: Injecting tracing printstreams for STDOUT/STDERR.
+[24Apr2019 17:57:54.290] [main/DEBUG] [net.minecraftforge.fml.loading.LauncherVersion/CORE]: Found FMLLauncher version 25.0
+[24Apr2019 17:57:54.290] [main/DEBUG] [net.minecraftforge.fml.loading.FMLLoader/CORE]: FML 25.0 loading
+[24Apr2019 17:57:54.290] [main/DEBUG] [net.minecraftforge.fml.loading.FMLLoader/CORE]: FML found ModLauncher version : 1.0.0+41+745b6f9
+[24Apr2019 17:57:54.290] [main/DEBUG] [net.minecraftforge.fml.loading.FMLLoader/CORE]: Initializing modjar URL handler
+[24Apr2019 17:57:54.291] [main/DEBUG] [net.minecraftforge.fml.loading.FMLLoader/CORE]: FML found AccessTransformer version : 0.16.0+44+853b469
+[24Apr2019 17:57:54.292] [main/DEBUG] [net.minecraftforge.fml.loading.FMLLoader/CORE]: FML found EventBus version : 0.8.1+36+f1a707e
+[24Apr2019 17:57:54.292] [main/DEBUG] [net.minecraftforge.fml.loading.FMLLoader/CORE]: Found Runtime Dist Cleaner
+[24Apr2019 17:57:54.295] [main/DEBUG] [net.minecraftforge.fml.loading.FMLLoader/CORE]: FML found CoreMod version : 0.4.2+19+b96f039
+[24Apr2019 17:57:54.295] [main/DEBUG] [net.minecraftforge.fml.loading.FMLLoader/CORE]: Found ForgeSPI package implementation version 0.11.0+23+39a30e8
+[24Apr2019 17:57:54.295] [main/DEBUG] [net.minecraftforge.fml.loading.FMLLoader/CORE]: Found ForgeSPI package specification 2
+[24Apr2019 17:57:54.464] [main/INFO] [net.minecraftforge.fml.loading.FixSSL/CORE]: Added Lets Encrypt root certificates as additional trust
+[24Apr2019 17:57:54.465] [main/DEBUG] [cpw.mods.modlauncher.TransformationServiceDecorator/MODLAUNCHER]: Loaded service fml
+[24Apr2019 17:57:54.467] [main/DEBUG] [cpw.mods.modlauncher.TransformationServicesHandler/MODLAUNCHER]: Configuring option handling for services
+[24Apr2019 17:57:54.482] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1052]: joptsimple.MissingRequiredOptionsException: Missing required option(s) [fml.forgeVersion, fml.mcVersion, fml.mcpVersion]
+[24Apr2019 17:57:54.482] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1052]: 	at joptsimple.OptionParser.ensureRequiredOptions(OptionParser.java:426)
+[24Apr2019 17:57:54.482] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1052]: 	at joptsimple.OptionParser.parse(OptionParser.java:400)
+[24Apr2019 17:57:54.482] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1052]: 	at cpw.mods.modlauncher.ArgumentHandler.processArguments(ArgumentHandler.java:37)
+[24Apr2019 17:57:54.483] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1052]: 	at cpw.mods.modlauncher.TransformationServicesHandler.processArguments(TransformationServicesHandler.java:48)
+[24Apr2019 17:57:54.483] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1052]: 	at cpw.mods.modlauncher.TransformationServicesHandler.initializeTransformationServices(TransformationServicesHandler.java:32)
+[24Apr2019 17:57:54.483] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1052]: 	at cpw.mods.modlauncher.Launcher.run(Launcher.java:52)
+[24Apr2019 17:57:54.483] [main/INFO] [STDERR/]: [java.lang.ThreadGroup:uncaughtException:1052]: 	at cpw.mods.modlauncher.Launcher.main(Launcher.java:43)
