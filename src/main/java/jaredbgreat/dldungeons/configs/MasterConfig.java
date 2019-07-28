@@ -17,9 +17,11 @@ import net.minecraftforge.fml.loading.FMLPaths;
 
 @EventBusSubscriber
 public class MasterConfig {
-	
+	private static File confDir;
+		
 	private static final ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 	public static final ForgeConfigSpec config;
+	
 	
 	static {
 		GeneralConfig.init(builder);
@@ -44,12 +46,12 @@ public class MasterConfig {
 	
 	private static Path makeConfDir() {
     	String dirName = FMLPaths.CONFIGDIR.get().toString() 
-    			+ File.separator + Info.OLD_ID;
-    	String fileName = dirName + File.separator + Info.OLD_ID + ".toml";
-    	File dir = new File(dirName);
+    			+ File.separator + Info.DIR_NAME;
+    	String fileName = dirName + File.separator + Info.DIR_NAME + ".toml";
+    	confDir = new File(dirName);
     	File file = new File(fileName);
-    	if(!dir.exists()) {
-    		dir.mkdir();
+    	if(!confDir.exists()) {
+    		confDir.mkdir();
     	}
     	if(!file.exists()) {
     		try {

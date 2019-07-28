@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
+import jaredbgreat.dldungeons.configs.ConfigHandler;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
@@ -32,17 +33,13 @@ public class DungeonStructure extends Structure<DungeonFeatureConfig> {
 	 * @see net.minecraft.world.gen.feature.structure.Structure#hasStartAt(net.minecraft.world.gen.IChunkGenerator, java.util.Random, int, int)
 	 */
 	protected boolean hasStartAt(IChunkGenerator world, Random rand, int chunkX, int chunkZ) {
-		// FIXME: This probably belongs in isEnabled();
-		//if((ConfigHandler.obeyRule && !world.getWorldInfo().isMapFeaturesEnabled())
-		//		|| !ConfigHandler.naturalSpawn) return false;; 
 		boolean blockedBiome = false;
 		Set<Type> types = BiomeDictionary.getTypes((world.getBiomeProvider()
 				.getBiome(new BlockPos(chunkX * 16, 63, chunkZ * 16), Biomes.DEFAULT)));
 		for(Type type : types) {
-			// TODO: Restore when there are configs being read.
-			//blockedBiome = ConfigHandler.biomeExclusions.contains(type) || blockedBiome;
+			blockedBiome = ConfigHandler.biomeExclusions.contains(type) || blockedBiome;
+			if(blockedBiome) return false;
 		}
-		if(blockedBiome) return false;
 		// FIXME: See if this can be fixed, otherwise trash it.  Sorry dimension modders....
 		//if((dimensions.contains(Integer.valueOf(world.provider.getDimension())) 
         //				!= ConfigHandler.positiveDims)) return false;
@@ -66,7 +63,7 @@ public class DungeonStructure extends Structure<DungeonFeatureConfig> {
 	
 	@Override
 	protected boolean isEnabledIn(IWorld worldIn) {
-		return true; // FIXME: May change later
+		return ConfigHandler.naturalSpawn; 
 	}
 
 	
