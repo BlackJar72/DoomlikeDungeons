@@ -33,7 +33,7 @@ public class Logging {
 	}
 	
 	
-	public static void LogError(String error) {
+	public static void logError(String error) {
 		if(log == null) {
 			log = new Logging();
 		}
@@ -42,7 +42,7 @@ public class Logging {
 	}
 	
 	
-	public static void LogInfo(String info) {
+	public static void logInfo(String info) {
 		if(log == null) {
 			log = new Logging();
 		}

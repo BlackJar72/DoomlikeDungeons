@@ -25,7 +25,7 @@ public class GeneralConfig {
 				            .defineInRange("general.Difficulty", 3, 0, 5);
 		
 		ArrayList<Integer> dimList = new ArrayList<Integer>();
-		dimList.add(0); dimList.add(-1);
+		dimList.add(0); dimList.add(1);
 		dims = builder.comment("These dimensions either lack dungeons or only they have them "
 				+ "(see OnlySpawnInListedDimensions)")
 				            .define("general.Dimensions", dimList);
