@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.Set;
 
 import jaredbgreat.dldungeons.configs.ConfigHandler;
+import jaredbgreat.dldungeons.debug.Logging;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
@@ -25,6 +26,7 @@ public class DungeonStructure extends Structure<DungeonFeatureConfig> {
 	
 
 	@Override
+	@SuppressWarnings("rawtypes")
 	/* OK, this is analogous to generate in GenerationHandler, at least partly.  It determines 
 	 * if a the structure should generate here, and as such should use most of the same 
 	 * code, but instead of potentially generating a structure it should return true if 
@@ -40,12 +42,6 @@ public class DungeonStructure extends Structure<DungeonFeatureConfig> {
 			blockedBiome = ConfigHandler.biomeExclusions.contains(type) || blockedBiome;
 			if(blockedBiome) return false;
 		}
-		// FIXME: See if this can be fixed, otherwise trash it.  Sorry dimension modders....
-		//if((dimensions.contains(Integer.valueOf(world.provider.getDimension())) 
-        //				!= ConfigHandler.positiveDims)) return false;
-		//if((Math.abs(chunkX - (world.getS.getSpawnPoint().getX() / 16)) < minXZ) 
-		//		|| (Math.abs(chunkZ - (world.getSpawnPoint().getZ() / 16)) < minXZ)) return false;
-		
 		mrand = new Random(world.getSeed() 
 				+ (2027 * (long)(chunkX / factor)) 
 				+ (1987 * (long)(chunkZ / factor)));
@@ -62,14 +58,19 @@ public class DungeonStructure extends Structure<DungeonFeatureConfig> {
 
 	
 	@Override
-	protected boolean isEnabledIn(IWorld worldIn) {
+	protected boolean isEnabledIn(IWorld world) {
+		//if((ConfigHandler.obeyRule && !world.getWorldInfo().isMapFeaturesEnabled())
+		//		|| !ConfigHandler.naturalSpawn) return false;
+		//if((dimensions.contains(Integer.valueOf(world.getDimension().getType().getId())) 
+		//		!= ConfigHandler.positiveDims)) return false;
 		return ConfigHandler.naturalSpawn; 
 	}
 
-	
+
 	@Override
-	protected StructureStart makeStart(IWorld worldIn, IChunkGenerator generator, SharedSeedRandom random, int x,
-			int z) {
+	@SuppressWarnings("rawtypes")
+	protected StructureStart makeStart(IWorld worldIn, IChunkGenerator generator, 
+			SharedSeedRandom random, int x,	int z) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -87,6 +88,67 @@ public class DungeonStructure extends Structure<DungeonFeatureConfig> {
 		//       probably width x 16 (I don't know for sure if this 
 		//       should be in blocks or chunks).
 		return 0;
+	}	
+	
+	
+	/**
+	 * Sets the frequency scale and converts into the 
+	 * width (and height) of the areas for which dungeons
+	 * are generated.
+	 * 
+	 * @param freqScale
+	 */
+	public static void setFrequency(int freqScale) {
+		if((freqScale % 2) == 0) factor = 2;
+		else factor = 3;
+		Logging.logInfo("freqScale = " + freqScale);
+		factor = (1 << (freqScale / 2)) * factor;
+		Logging.logInfo("factor = " + factor);
+	}
+	
+	
+	/**
+	 * Sets the minimum number of chunks from spawn a dungeon center must be.
+	 * 
+	 * @param value
+	 */
+	public static void setMinXZ(int value) {
+		minXZ = value;		
+	}
+	
+	
+	/**
+	 * Sets list of dimension id's to check for dungeons being allowed.
+	 * 
+	 * @param value
+	 */
+	public static void setDimensions(int[] value) {
+		dimensions = new HashSet<Integer>();
+		for(int i = 0; i < value.length; i++) {
+			dimensions.add(Integer.valueOf(value[i]));
+		}
+	}
+	
+	
+	/**
+	 * Add a dimension id to the list of dimension to consider when 
+	 * check if a dungeon is allowed.  (What this means can vary.)
+	 * 
+	 * @param value
+	 */
+	public static void addDimension(int value) {
+		dimensions.add(Integer.valueOf(value));
+	}
+	
+	
+	/**
+	 * Remove a dimension id from the list of those to consider when potentially 
+	 * placing a dungeons.  (What this means can vary.)
+	 * 
+	 * @param value
+	 */
+	public static void subDimension(int value) {
+		dimensions.remove(Integer.valueOf(value));
 	}
 
 }
