@@ -35,6 +35,7 @@ public class DungeonStructure extends Structure<DungeonFeatureConfig> {
 	 * @see net.minecraft.world.gen.feature.structure.Structure#hasStartAt(net.minecraft.world.gen.IChunkGenerator, java.util.Random, int, int)
 	 */
 	protected boolean hasStartAt(IChunkGenerator world, Random rand, int chunkX, int chunkZ) {
+		if(true) return true;
 		boolean blockedBiome = false;
 		Set<Type> types = BiomeDictionary.getTypes((world.getBiomeProvider()
 				.getBiome(new BlockPos(chunkX * 16, 63, chunkZ * 16), Biomes.DEFAULT)));
@@ -63,7 +64,7 @@ public class DungeonStructure extends Structure<DungeonFeatureConfig> {
 		//		|| !ConfigHandler.naturalSpawn) return false;
 		//if((dimensions.contains(Integer.valueOf(world.getDimension().getType().getId())) 
 		//		!= ConfigHandler.positiveDims)) return false;
-		return ConfigHandler.naturalSpawn; 
+		return true; //ConfigHandler.naturalSpawn; 
 	}
 
 
@@ -72,7 +73,7 @@ public class DungeonStructure extends Structure<DungeonFeatureConfig> {
 	protected StructureStart makeStart(IWorld worldIn, IChunkGenerator generator, 
 			SharedSeedRandom random, int x,	int z) {
 		// TODO Auto-generated method stub
-		return null;
+		return new DungeonStart(worldIn, random, z, z, null);
 	}
 
 	
@@ -87,7 +88,7 @@ public class DungeonStructure extends Structure<DungeonFeatureConfig> {
 		// TODO: This needs to be calculated based on dungeon size,
 		//       probably width x 16 (I don't know for sure if this 
 		//       should be in blocks or chunks).
-		return 0;
+		return 16;
 	}	
 	
 	

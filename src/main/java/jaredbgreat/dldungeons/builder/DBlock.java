@@ -23,6 +23,7 @@ import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -100,11 +101,12 @@ public final class DBlock {
 	 * @param z
 	 */
 	@Deprecated
-	public void placeNoMeta(World world, int x, int y, int z) {
+	public void placeNoMeta(IWorld world, int x, int y, int z) {
 		if(isProtectedBlock(world, x, y, z)) return;
 		BlockPos pos = new BlockPos(x, y, z);
+		// FIXME: Event integration is broken now
 		//if (MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceDBlock(world, pos, this))) return;
-		world.setBlockState(new BlockPos(x, y, z), block);
+		world.setBlockState(new BlockPos(x, y, z), block, 3); // Should 3 be 11?
 	}
 	
 	
@@ -118,11 +120,12 @@ public final class DBlock {
 	 * @param y
 	 * @param z
 	 */
-	public void place(World world, int x, int y, int z) {
+	public void place(IWorld world, int x, int y, int z) {
 		if(isProtectedBlock(world, x, y, z)) return;
 		BlockPos pos = new BlockPos(x, y, z);
+		// FIXME: Event integration is broken now
 		//if (MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceDBlock(world, pos, this))) return;
-		world.setBlockState(pos, block);
+		world.setBlockState(pos, block, 3);	// Should 3 be 11?
 	}
 	
 	
@@ -141,7 +144,7 @@ public final class DBlock {
 	 * @param z
 	 * @param block
 	 */
-	public static void place(World world, int x, int y, int z, int block) {
+	public static void place(IWorld world, int x, int y, int z, int block) {
 		if(!isProtectedBlock(world, x, y, z)) 
 				registry.get(block).place(world, x, y, z);
 	}
@@ -180,11 +183,12 @@ public final class DBlock {
 	 * @param z
 	 * @param block
 	 */
-	public static boolean placeBlock(World world, int x, int y, int z, Block block) {
+	public static boolean placeBlock(IWorld world, int x, int y, int z, Block block) {
 		if(isProtectedBlock(world, x, y, z)) return false;
 		BlockPos pos = new BlockPos(x, y, z);
+		// FIXME: Event integration is broken now
 		//if (MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceBlock(world, pos, block))) return false;
-		world.setBlockState(pos, block.getDefaultState());
+		world.setBlockState(pos, block.getDefaultState(), 3); // Should 3 be 11?
 		return true;
 	}
 	
@@ -200,11 +204,12 @@ public final class DBlock {
 	 * @param z
 	 * @param block
 	 */
-	public static boolean placeBlock(World world, int x, int y, int z, IBlockState block) {
+	public static boolean placeBlock(IWorld world, int x, int y, int z, IBlockState block) {
 		if(isProtectedBlock(world, x, y, z)) return false;
 		BlockPos pos = new BlockPos(x, y, z);
+		// FIXME: Event integeration is broken, for now.
 		//if (MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceBlock(world, pos, block))) return false;
-		world.setBlockState(pos, block);
+		world.setBlockState(pos, block, 3);	// Should 3 be 11?
 		return true;
 	}
 	
@@ -220,7 +225,7 @@ public final class DBlock {
 	 * @param z
 	 * @param block
 	 */
-	public static void placeBlock(World world, int x, int y, int z, Block block, int a, int b) {
+	public static void placeBlock(IWorld world, int x, int y, int z, Block block, int a, int b) {
 		if(isProtectedBlock(world, x, y, z)) return; 
 		world.setBlockState(new BlockPos(x, y, z), block.getDefaultState(), b);
 	}
@@ -234,9 +239,10 @@ public final class DBlock {
 	 * @param y
 	 * @param z
 	 */
-	public static void deleteBlock(World world, int x, int y, int z) {
+	public static void deleteBlock(IWorld world, int x, int y, int z) {
 		if(isProtectedBlock(world, x, y, z)) return;
-		world.setBlockState(new BlockPos(x, y, z), air);
+		// Should 3 be 11?
+		world.setBlockState(new BlockPos(x, y, z), air, 3);
 	}
 	
 	
@@ -250,7 +256,7 @@ public final class DBlock {
 	 * @param z
 	 * @param flooded
 	 */
-	public static void deleteBlock(World world, int x, int y, int z, boolean flooded) {
+	public static void deleteBlock(IWorld world, int x, int y, int z, boolean flooded) {
 		if(isProtectedBlock(world, x, y, z)) return;
 		if(flooded) placeBlock(world, x, y, z, water); 
 		else placeBlock(world, x, y, z, air);
@@ -265,7 +271,7 @@ public final class DBlock {
 	 * @param y
 	 * @param z
 	 */
-	public static void placeChest(World world, int x, int y, int z) {
+	public static void placeChest(IWorld world, int x, int y, int z) {
 		placeBlock(world, x, y, z, chest);		
 	}
 	
@@ -279,7 +285,7 @@ public final class DBlock {
 	 * @param z
 	 * @param mob
 	 */
-	public static void placeSpawner(World world, int x, int y, int z, String mob) {
+	public static void placeSpawner(IWorld world, int x, int y, int z, String mob) {
 		// Place spawner block
 		BlockPos pos = new BlockPos(x, y, z);
 		//if (MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.BeforePlaceSpawner(world, pos, mob))) return;
@@ -306,7 +312,7 @@ public final class DBlock {
 	 * @param z
 	 * @return
 	 */
-	public static boolean isGroundBlock(World world, int x, int y, int z) {
+	public static boolean isGroundBlock(IWorld world, int x, int y, int z) {
 		IBlockState bs = world.getBlockState(new BlockPos(x, y, z));
 		Material mat = bs.getMaterial();
 		return 	   (mat == Material.GRASS) 
@@ -330,7 +336,7 @@ public final class DBlock {
 	 * @param z
 	 * @return
 	 */
-	public static boolean isProtectedBlock(World world, int x, int y, int z) {
+	public static boolean isProtectedBlock(IWorld world, int x, int y, int z) {
 		IBlockState block = world.getBlockState(new BlockPos(x, y, z));
 		// FIXME?: At what point does set membership become more efficient that sequential or's?
 		return (block == chest || block == spawner  

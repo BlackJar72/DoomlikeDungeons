@@ -38,7 +38,7 @@ public class DoomlikeDungeons {
 	public  static final String modid = Info.ID;
 	public static final Logger logger = LogManager.getLogger(Info.ID);
 	// TODO: Re-implement these
-	//private static GenerationHandler dungeonPlacer;
+	private static GenerationHandler genHandler;
 	//public  static IProfiler profiler;
 
 
@@ -65,8 +65,7 @@ public class DoomlikeDungeons {
 
 		//FIXME: GenerationHandler won't be what it was! A Feature?  Or a Carver? But not what it has been....
 		//TODO: Old init()
-		//if(ConfigHandler.naturalSpawn) dungeonPlacer = new GenerationHandler();
-
+		genHandler = new GenerationHandler();
 
 		// TODO: Re-Write these -- probably little change here, but some.
 		// TODO: Old postInit()
