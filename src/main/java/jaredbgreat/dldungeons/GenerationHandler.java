@@ -5,11 +5,8 @@ import java.util.Random;
 
 import jaredbgreat.dldungeons.debug.Logging;
 import jaredbgreat.dldungeons.feature.DungeonFeatureConfig;
-import jaredbgreat.dldungeons.feature.DungeonPlacementBS;
-import jaredbgreat.dldungeons.feature.DungeonPlacementConfig;
 import jaredbgreat.dldungeons.feature.DungeonStructure;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.feature.CompositeFeature;
 import net.minecraftforge.registries.ForgeRegistries;
 
 

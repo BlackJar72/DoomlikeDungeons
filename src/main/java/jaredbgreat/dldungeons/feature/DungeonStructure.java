@@ -2,19 +2,12 @@ package jaredbgreat.dldungeons.feature;
 
 import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
 
-import jaredbgreat.dldungeons.configs.ConfigHandler;
 import jaredbgreat.dldungeons.debug.Logging;
-import net.minecraft.init.Biomes;
 import net.minecraft.util.SharedSeedRandom;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructureStart;
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.BiomeDictionary.Type;
 
 public class DungeonStructure extends Structure<DungeonFeatureConfig> {	
 	private static int frequency;

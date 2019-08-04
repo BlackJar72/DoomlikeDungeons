@@ -6,8 +6,7 @@ package jaredbgreat.dldungeons.nbt.tags;
  */		
 
 import jaredbgreat.dldungeons.nbt.NBTType;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
 
 /**
  * This is the basis for creating trees of NBT data, including simple tags,
@@ -39,7 +38,7 @@ public abstract class ITag {
 	 * 
 	 * @param cmp
 	 */
-	public abstract void write(NBTTagCompound cmp);
+	public abstract void write(CompoundNBT cmp);
 
 	
 	/**
@@ -48,7 +47,7 @@ public abstract class ITag {
 	 * @param in
 	 * @return
 	 */
-	public abstract void write(NBTTagList in);
+	public abstract void write(NBTList in);
 	
 	/**
 	 * This will return the NBTType of the tag.

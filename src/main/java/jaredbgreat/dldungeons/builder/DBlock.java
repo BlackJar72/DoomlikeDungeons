@@ -12,37 +12,36 @@ import jaredbgreat.dldungeons.debug.Logging;
  */	
 
 // FIXME: import jaredbgreat.dldungeons.api.DLDEvent;
+
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.MobSpawnerBaseLogic;
-import net.minecraft.tileentity.TileEntityMobSpawner;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.MobSpawnerTileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraft.world.spawner.AbstractSpawner;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public final class DBlock {
 	private final String id;   // The name
-	private final IBlockState block; // The Minecraft block
+	private final BlockState block; // The Minecraft block
 	
 	// Block constants used by the mod for various purposes, usually for placement
-	public static final IBlockState spawner = Blocks.SPAWNER.getDefaultState();
-	public static final IBlockState chest   = Blocks.CHEST.getDefaultState();
-	public static final IBlockState portal1 = Blocks.END_PORTAL_FRAME.getDefaultState();
-	public static final IBlockState portal2 = Blocks.END_PORTAL.getDefaultState();
-	public static final IBlockState portal3 = Blocks.END_GATEWAY.getDefaultState();
-	public static final IBlockState quartz  = Blocks.QUARTZ_BLOCK.getDefaultState();
-	public static final IBlockState lapis   = Blocks.LAPIS_BLOCK.getDefaultState();
-	public static final IBlockState water   = Blocks.WATER.getDefaultState();
-	public static final IBlockState air     = Blocks.AIR.getDefaultState();
+	public static final BlockState spawner = Blocks.SPAWNER.getDefaultState();
+	public static final BlockState chest   = Blocks.CHEST.getDefaultState();
+	public static final BlockState portal1 = Blocks.END_PORTAL_FRAME.getDefaultState();
+	public static final BlockState portal2 = Blocks.END_PORTAL.getDefaultState();
+	public static final BlockState portal3 = Blocks.END_GATEWAY.getDefaultState();
+	public static final BlockState quartz  = Blocks.QUARTZ_BLOCK.getDefaultState();
+	public static final BlockState lapis   = Blocks.LAPIS_BLOCK.getDefaultState();
+	public static final BlockState water   = Blocks.WATER.getDefaultState();
+	public static final BlockState air     = Blocks.AIR.getDefaultState();
 	
 	// All blocks, complete with meta-data used by the mod
 	public static final ArrayList<DBlock> registry = new ArrayList<DBlock>();
@@ -204,7 +203,7 @@ public final class DBlock {
 	 * @param z
 	 * @param block
 	 */
-	public static boolean placeBlock(IWorld world, int x, int y, int z, IBlockState block) {
+	public static boolean placeBlock(IWorld world, int x, int y, int z, BlockState block) {
 		if(isProtectedBlock(world, x, y, z)) return false;
 		BlockPos pos = new BlockPos(x, y, z);
 		// FIXME: Event integeration is broken, for now.
@@ -291,12 +290,12 @@ public final class DBlock {
 		//if (MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.BeforePlaceSpawner(world, pos, mob))) return;
 		if(isProtectedBlock(world, x, y, z)) return;
 		if(!placeBlock(world, x, y, z, spawner)) return;
-		TileEntityMobSpawner theSpawner = (TileEntityMobSpawner)world.getTileEntity(pos);
+		MobSpawnerTileEntity theSpawner = (MobSpawnerTileEntity)world.getTileEntity(pos);
 		
 		// Set up spawner logic
-		MobSpawnerBaseLogic logic = theSpawner.getSpawnerBaseLogic();		
-		NBTTagCompound spawnData = new NBTTagCompound();
-	    spawnData.setString("id", mob);
+		AbstractSpawner logic = theSpawner.getSpawnerBaseLogic();		
+		CompoundNBT spawnData = new CompoundNBT();
+	    spawnData.putString("id", mob);
 	    logic.setNextSpawnData(new WeightedSpawnerEntity(1, spawnData));
 	}
 	
@@ -313,11 +312,11 @@ public final class DBlock {
 	 * @return
 	 */
 	public static boolean isGroundBlock(IWorld world, int x, int y, int z) {
-		IBlockState bs = world.getBlockState(new BlockPos(x, y, z));
+		BlockState bs = world.getBlockState(new BlockPos(x, y, z));
 		Material mat = bs.getMaterial();
-		return 	   (mat == Material.GRASS) 
+		return 	   (mat == Material.PLANTS) 
 				|| (mat == Material.IRON) 
-				|| (mat == Material.GROUND) 
+				|| (mat == Material.EARTH) 
 				|| (mat == Material.SAND) 
 				|| (mat == Material.ROCK) 
 				|| (mat == Material.CLAY
@@ -337,7 +336,7 @@ public final class DBlock {
 	 * @return
 	 */
 	public static boolean isProtectedBlock(IWorld world, int x, int y, int z) {
-		IBlockState block = world.getBlockState(new BlockPos(x, y, z));
+		BlockState block = world.getBlockState(new BlockPos(x, y, z));
 		// FIXME?: At what point does set membership become more efficient that sequential or's?
 		return (block == chest || block == spawner  
 				|| block == portal1 || block == portal2 || block == portal3);
