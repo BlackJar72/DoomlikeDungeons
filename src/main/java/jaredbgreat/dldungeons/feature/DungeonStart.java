@@ -15,18 +15,14 @@ import net.minecraft.world.gen.feature.structure.StructureStart;
 public class DungeonStart extends StructureStart {
 	
 	public DungeonStart(IWorld world, SharedSeedRandom random, int x, int z, Biome biome) {
-		fuckYouConstructor(world, new Random(random.nextLong()), x, z, biome);
-	}	
-	public DungeonStart(IWorld world, Random random, int x, int z, Biome biome) {
-		fuckYouConstructor(world, random, x, z, biome);
-	}
-	private void fuckYouConstructor(IWorld world, Random random, int x, int z, Biome biome) {
-		// TODO?
+		//fuckYouConstructor(world, new Random(random.nextLong()), x, z, biome);
+		super(x, z, biome, random, random.nextLong());
 	}
 	 
 	 
 	@Override
 	public void generateStructure(IWorld world, Random rand, MutableBoundingBox stractBB, ChunkPos cpos) {
+		System.err.println("DEBUGGING POLE!!!");
 		//super.generateStructure(world, rand, stractBB, cpos); // Do this?
 		debuggingPole(world, cpos.getXStart() + 8, cpos.getZStart() + 8);
 		

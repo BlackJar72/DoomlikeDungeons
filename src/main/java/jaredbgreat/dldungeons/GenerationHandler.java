@@ -2,23 +2,14 @@ package jaredbgreat.dldungeons;
 
 import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
 
-import jaredbgreat.dldungeons.configs.ConfigHandler;
 import jaredbgreat.dldungeons.debug.Logging;
 import jaredbgreat.dldungeons.feature.DungeonFeatureConfig;
+import jaredbgreat.dldungeons.feature.DungeonPlacementBS;
 import jaredbgreat.dldungeons.feature.DungeonPlacementConfig;
 import jaredbgreat.dldungeons.feature.DungeonStructure;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraft.world.gen.GenerationStage.Decoration;
-import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.feature.CompositeFeature;
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.BiomeDictionary.Type;
-import net.minecraftforge.fml.common.IWorldGenerator;
 import net.minecraftforge.registries.ForgeRegistries;
 
 
@@ -34,12 +25,10 @@ public class GenerationHandler /*implements IWorldGenerator*/ {
 	private static HashSet<Integer> dimensions;
 
 	public GenerationHandler() {
-		CompositeFeature<DungeonFeatureConfig, DungeonPlacementConfig> 
-				dstruct = new CompositeFeature<DungeonFeatureConfig,
-								// FIXME!!!
-							  	DungeonPlacementConfig>(null, null, null, null);
+		DungeonStructure dstruct = new DungeonStructure();
+		DungeonFeatureConfig dfconf = new DungeonFeatureConfig();
 		for(Biome biome : ForgeRegistries.BIOMES) {
-			biome.addFeature(Decoration.UNDERGROUND_STRUCTURES, dstruct);
+			biome.addStructure(dstruct, dfconf);
 		}
 	}
 	

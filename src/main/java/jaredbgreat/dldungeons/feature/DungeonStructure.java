@@ -26,7 +26,7 @@ public class DungeonStructure extends Structure<DungeonFeatureConfig> {
 	
 
 	@Override
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unused" })
 	/* OK, this is analogous to generate in GenerationHandler, at least partly.  It determines 
 	 * if a the structure should generate here, and as such should use most of the same 
 	 * code, but instead of potentially generating a structure it should return true if 
@@ -35,26 +35,27 @@ public class DungeonStructure extends Structure<DungeonFeatureConfig> {
 	 * @see net.minecraft.world.gen.feature.structure.Structure#hasStartAt(net.minecraft.world.gen.IChunkGenerator, java.util.Random, int, int)
 	 */
 	protected boolean hasStartAt(IChunkGenerator world, Random rand, int chunkX, int chunkZ) {
-		if(true) return true;
-		boolean blockedBiome = false;
-		Set<Type> types = BiomeDictionary.getTypes((world.getBiomeProvider()
-				.getBiome(new BlockPos(chunkX * 16, 63, chunkZ * 16), Biomes.DEFAULT)));
-		for(Type type : types) {
-			blockedBiome = ConfigHandler.biomeExclusions.contains(type) || blockedBiome;
-			if(blockedBiome) return false;
-		}
-		mrand = new Random(world.getSeed() 
-				+ (2027 * (long)(chunkX / factor)) 
-				+ (1987 * (long)(chunkZ / factor)));
-		int xrand = mrand.nextInt();
-		int zrand = mrand.nextInt();
-		int xuse = ((chunkX + xrand) % factor);
-		int zuse = ((chunkZ + zrand) % factor);
-		
-		if((xuse == 0) && (zuse == 0)) {
-			return true;
-		}	
-		return false;
+		System.err.println("Making a DUNGEON!");
+		return true;
+//		boolean blockedBiome = false;
+//		Set<Type> types = BiomeDictionary.getTypes((world.getBiomeProvider()
+//				.getBiome(new BlockPos(chunkX * 16, 63, chunkZ * 16), Biomes.DEFAULT)));
+//		for(Type type : types) {
+//			blockedBiome = ConfigHandler.biomeExclusions.contains(type) || blockedBiome;
+//			if(blockedBiome) return false;
+//		}
+//		mrand = new Random(world.getSeed() 
+//				+ (2027 * (long)(chunkX / factor)) 
+//				+ (1987 * (long)(chunkZ / factor)));
+//		int xrand = mrand.nextInt();
+//		int zrand = mrand.nextInt();
+//		int xuse = ((chunkX + xrand) % factor);
+//		int zuse = ((chunkZ + zrand) % factor);
+//		
+//		if((xuse == 0) && (zuse == 0)) {
+//			return true;
+//		}	
+//		return false;
 	}
 
 	
@@ -73,6 +74,7 @@ public class DungeonStructure extends Structure<DungeonFeatureConfig> {
 	protected StructureStart makeStart(IWorld worldIn, IChunkGenerator generator, 
 			SharedSeedRandom random, int x,	int z) {
 		// TODO Auto-generated method stub
+		System.err.println("Making a dungeon start!");
 		return new DungeonStart(worldIn, random, z, z, null);
 	}
 
