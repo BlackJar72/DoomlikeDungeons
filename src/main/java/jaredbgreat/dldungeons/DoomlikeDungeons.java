@@ -5,6 +5,9 @@ import org.apache.logging.log4j.Logger;
 
 import jaredbgreat.dldungeons.configs.ConfigHandler;
 import jaredbgreat.dldungeons.configs.MasterConfig;
+import jaredbgreat.dldungeons.debug.DLDProfile;
+import jaredbgreat.dldungeons.debug.DoNothing;
+import jaredbgreat.dldungeons.debug.IProfiler;
 
 /* 
  * A procedural multi-room dungeon generator for Minecraft inspired by the 
@@ -29,8 +32,9 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 @Mod(Info.ID)
 public class DoomlikeDungeons {
 	public  static DoomlikeDungeons instance;
+	public  static IProfiler profiler;
 	public  static final String modid = Info.ID;
-	public static final Logger logger = LogManager.getLogger(Info.ID);
+	public  static final Logger logger = LogManager.getLogger(Info.ID);
 	// TODO: Re-implement these
 	private static GenerationHandler genHandler;
 	//public  static IProfiler profiler;
@@ -54,8 +58,8 @@ public class DoomlikeDungeons {
     	logger.info(Info.TAG + Info.NAME + " should now load config.");
     	ConfigHandler.init();
 		logger.info(Info.TAG + " Config should now be loaded.");
-    	//if(ConfigHandler.profile) profiler = new DLDProfile();
-    	//else profiler = new DoNothing();
+    	if(ConfigHandler.profile) profiler = new DLDProfile();
+    	else profiler = new DoNothing();
 
 		//FIXME: GenerationHandler won't be what it was! A Feature?  Or a Carver? But not what it has been....
 		//TODO: Old init()

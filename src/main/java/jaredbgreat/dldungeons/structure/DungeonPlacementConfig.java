@@ -1,11 +1,11 @@
-package jaredbgreat.dldungeons.feature;
+package jaredbgreat.dldungeons.structure;
 
 import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.types.DynamicOps;
 
-import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.placement.IPlacementConfig;
 
-public class DungeonFeatureConfig implements IFeatureConfig {
+public class DungeonPlacementConfig implements IPlacementConfig {
 
 	@Override
 	public <T> Dynamic<T> serialize(DynamicOps<T> ops) {

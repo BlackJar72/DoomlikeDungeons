@@ -1,4 +1,4 @@
-package jaredbgreat.dldungeons.feature;
+package jaredbgreat.dldungeons.structure;
 
 import java.util.HashSet;
 import java.util.Random;

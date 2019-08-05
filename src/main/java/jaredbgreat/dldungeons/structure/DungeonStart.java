@@ -1,4 +1,4 @@
-package jaredbgreat.dldungeons.feature;
+package jaredbgreat.dldungeons.structure;
 
 import static jaredbgreat.dldungeons.builder.DBlock.quartz;
 
