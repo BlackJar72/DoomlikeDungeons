@@ -1,17 +1,16 @@
 package jaredbgreat.dldungeons.nbt.tags;
 
+import java.util.UUID;
+
 /* 
  * Doomlike Dungeons by is licensed the MIT License
  * Copyright (c) 2014-2018 Jared Blackburn
  */	
 
 import jaredbgreat.dldungeons.nbt.NBTType;
-
-import java.util.UUID;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagLong;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.LongNBT;
 
 
 public class NBTuuid extends ITag {
@@ -46,15 +45,15 @@ public class NBTuuid extends ITag {
 	
 	
 	@Override
-	public void write(NBTTagCompound cmp) {
-		cmp.setUniqueId(name, data);
+	public void write(CompoundNBT cmp) {
+		cmp.putUniqueId(name, data);
 	}
 	
 	
 	@Override
-	public void write(NBTTagList cmp) {
-		cmp.add(new NBTTagLong(data.getLeastSignificantBits()));
-		cmp.add(new NBTTagLong(data.getMostSignificantBits()));
+	public void write(ListNBT cmp) {
+		cmp.add(new LongNBT(data.getLeastSignificantBits()));
+		cmp.add(new LongNBT(data.getMostSignificantBits()));
 	}
 
 

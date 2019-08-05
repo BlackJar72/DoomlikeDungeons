@@ -11,8 +11,8 @@ import java.util.List;
 
 import jaredbgreat.dldungeons.nbt.NBTType;
 import jaredbgreat.dldungeons.parser.Tokenizer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 
 public class NBTList extends ITag {
 	private final List<ITag> data;  // The data carried by the tag in the NBT
@@ -35,11 +35,11 @@ public class NBTList extends ITag {
 	
 
 	@Override
-	public void write(NBTTagCompound in) {
-        if (!in.hasKey(name)) {
-            in.setTag(name, new NBTTagList());
+	public void write(CompoundNBT in) {
+        if (!in.contains(name)) {
+            in.put(name, new ListNBT());
         }	
-        NBTTagList list;
+        ListNBT list;
 		for(ITag child : data) {
 			list = in.getList(name, child.getType().ordinal());
 			child.write(list);
@@ -47,12 +47,12 @@ public class NBTList extends ITag {
 	}
 	
 	
-	private void writeHelper(NBTTagCompound in, ITag child) {
+	private void writeHelper(CompoundNBT in, ITag child) {
 	}
 	
 	
 	@Override
-	public void write(NBTTagList in) {
+	public void write(ListNBT in) {
 		for(ITag child : data) {
 			child.write(in);
 		}

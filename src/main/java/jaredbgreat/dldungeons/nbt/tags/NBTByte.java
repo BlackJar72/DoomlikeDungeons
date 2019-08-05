@@ -6,9 +6,9 @@ package jaredbgreat.dldungeons.nbt.tags;
  */		
 
 import jaredbgreat.dldungeons.nbt.NBTType;
-import net.minecraft.nbt.NBTTagByte;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.ByteNBT;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 
 public class NBTByte extends ITag {
 	public final byte   data;  // The data carried by the tag in the NBT
@@ -42,15 +42,15 @@ public class NBTByte extends ITag {
 	
 	
 	@Override
-	public void write(NBTTagCompound cmp) {
-		cmp.setByte(name, data);
+	public void write(CompoundNBT cmp) {
+		cmp.putByte(name, data);
 		
 	}
 	
 	
 	@Override
-	public void write(NBTTagList cmp) {
-		cmp.add(new NBTTagByte(data));
+	public void write(ListNBT cmp) {
+		cmp.add(new ByteNBT(data));
 	}
 
 

@@ -10,8 +10,8 @@ import java.util.List;
 
 import jaredbgreat.dldungeons.nbt.NBTType;
 import jaredbgreat.dldungeons.parser.Tokenizer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 
 public class NBTGroup extends ITag {
 	public final List<ITag> data;  // The data carried by the tag in the NBT
@@ -31,7 +31,7 @@ public class NBTGroup extends ITag {
 	}
 
 	@Override
-	public void write(NBTTagCompound cmp) {
+	public void write(CompoundNBT cmp) {
 		for(ITag child : data) {
 			child.write(cmp);
 		}
@@ -39,7 +39,7 @@ public class NBTGroup extends ITag {
 	
 	
 	@Override
-	public void write(NBTTagList cmp) {
+	public void write(ListNBT cmp) {
 		for(ITag child : data) {
 			child.write(cmp);
 		}

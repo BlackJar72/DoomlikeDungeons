@@ -9,9 +9,9 @@ import java.util.StringTokenizer;
  */	
 
 import jaredbgreat.dldungeons.nbt.NBTType;
-import net.minecraft.nbt.NBTTagByteArray;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.ByteArrayNBT;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 
 public class NBTByteArray extends ITag {
 	public final byte[]    data;  // The data carried by the tag in the NBT
@@ -52,14 +52,14 @@ public class NBTByteArray extends ITag {
 	
 	
 	@Override
-	public void write(NBTTagCompound cmp) {
-		cmp.setByteArray(name, data);
+	public void write(CompoundNBT cmp) {
+		cmp.putByteArray(name, data);
 	}
 	
 	
 	@Override
-	public void write(NBTTagList cmp) {
-		cmp.add(new NBTTagByteArray(data));
+	public void write(ListNBT cmp) {
+		cmp.add(new ByteArrayNBT(data));
 	}
 	
 	

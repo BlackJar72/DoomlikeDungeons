@@ -7,6 +7,7 @@ package jaredbgreat.dldungeons.nbt.tags;
 
 import jaredbgreat.dldungeons.nbt.NBTType;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 
 public class Enchantment extends ITag {
 	private short id;
@@ -21,20 +22,20 @@ public class Enchantment extends ITag {
 	@Override
 	public void write(CompoundNBT cmp) {
         if (!cmp.contains("ench")) {
-            cmp.setTag("ench", new NBTList());
+            cmp.put("ench", new ListNBT());
         }
-        NBTList list = cmp.getList("ench", 10);
+        ListNBT list = cmp.getList("ench", 10);
         CompoundNBT sub = new CompoundNBT();
-        sub.setShort("id", id);
-        sub.setShort("lvl", lvl);
+        sub.putShort("id", id);
+        sub.putShort("lvl", lvl);
         list.add(sub);
     }
 
 	@Override
-	public void write(NBTList in) {
+	public void write(ListNBT in) {
         CompoundNBT sub = new CompoundNBT();
-        sub.setShort("id", id);
-        sub.setShort("lvl", lvl);
+        sub.putShort("id", id);
+        sub.putShort("lvl", lvl);
         in.add(sub);
     }
 

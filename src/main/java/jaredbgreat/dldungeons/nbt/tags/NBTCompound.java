@@ -1,5 +1,8 @@
 package jaredbgreat.dldungeons.nbt.tags;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /* 
  * Doomlike Dungeons by is licensed the MIT License
  * Copyright (c) 2014-2018 Jared Blackburn
@@ -8,12 +11,8 @@ package jaredbgreat.dldungeons.nbt.tags;
 
 import jaredbgreat.dldungeons.nbt.NBTType;
 import jaredbgreat.dldungeons.parser.Tokenizer;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 
 public class NBTCompound extends ITag {
 	public final List<ITag> data;  // The data carried by the tag in the NBT
@@ -33,17 +32,17 @@ public class NBTCompound extends ITag {
 	}
 
 	@Override
-	public void write(NBTTagCompound in) {
-		NBTTagCompound sub = in.getCompound(name);
-		in.setTag(name, sub);
+	public void write(CompoundNBT in) {
+		CompoundNBT sub = in.getCompound(name);
+		in.put(name, sub);
 		for(ITag child : data) {
 			child.write(sub);
 		}
 	}
 
 	@Override
-	public void write(NBTTagList in) {
-        NBTTagCompound sub = new NBTTagCompound();
+	public void write(ListNBT in) {
+        CompoundNBT sub = new CompoundNBT();
 		for(ITag child : data) {
 			child.write(sub);
 		}

@@ -9,7 +9,7 @@ import jaredbgreat.dldungeons.nbt.tags.ITag;
 import jaredbgreat.dldungeons.nbt.tags.Tags;
 import jaredbgreat.dldungeons.parser.Tokenizer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 /**
  * This class should contain helper functions to deal with applying NBT 
@@ -40,7 +40,7 @@ public class NBTHelper {
 			System.err.println("ERROR! null tag on item " + item.getItem().getName());
 		} else {
 			if(!item.hasTag()) {
-				item.setTag(new NBTTagCompound());
+				item.setTag(new CompoundNBT());
 			}
 			tag.write(item.getTag());			
 		}

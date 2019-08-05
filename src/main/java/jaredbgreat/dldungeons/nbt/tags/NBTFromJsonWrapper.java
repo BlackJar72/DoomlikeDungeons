@@ -9,11 +9,11 @@ package jaredbgreat.dldungeons.nbt.tags;
 
 import jaredbgreat.dldungeons.nbt.NBTType;
 import net.minecraft.nbt.JsonToNBT;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 
 public class NBTFromJsonWrapper extends ITag {
-	private NBTTagCompound wrapped;
+	private CompoundNBT wrapped;
 
 	NBTFromJsonWrapper(String label, String data) {
 		super(label, label);
@@ -21,17 +21,17 @@ public class NBTFromJsonWrapper extends ITag {
 			wrapped = JsonToNBT.getTagFromJson(data);
 		} catch (Exception e) {
 			System.err.println("Exception reading json-nbt string: " + e.getMessage());
-			wrapped = new NBTTagCompound();
+			wrapped = new CompoundNBT();
 		}
 	}
 
 	@Override
-	public void write(NBTTagCompound cmp) {
+	public void write(CompoundNBT cmp) {
 		cmp.merge(wrapped);
 	}
 
 	@Override
-	public void write(NBTTagList in) {
+	public void write(ListNBT in) {
 		in.add(wrapped.copy());
 	}
 
