@@ -8,6 +8,8 @@ import jaredbgreat.dldungeons.configs.MasterConfig;
 import jaredbgreat.dldungeons.debug.DLDProfile;
 import jaredbgreat.dldungeons.debug.DoNothing;
 import jaredbgreat.dldungeons.debug.IProfiler;
+import jaredbgreat.dldungeons.themes.ThemeReader;
+import jaredbgreat.dldungeons.themes.ThemeType;
 
 /* 
  * A procedural multi-room dungeon generator for Minecraft inspired by the 
@@ -58,8 +60,11 @@ public class DoomlikeDungeons {
     	logger.info(Info.TAG + Info.NAME + " should now load config.");
     	ConfigHandler.init();
 		logger.info(Info.TAG + " Config should now be loaded.");
-    	if(ConfigHandler.profile) profiler = new DLDProfile();
-    	else profiler = new DoNothing();
+    	if(ConfigHandler.profile) {
+    		profiler = new DLDProfile();
+    	} else {
+    		profiler = new DoNothing();
+    	}
 
 		//FIXME: GenerationHandler won't be what it was! A Feature?  Or a Carver? But not what it has been....
 		//TODO: Old init()
@@ -67,9 +72,9 @@ public class DoomlikeDungeons {
 
 		// TODO: Re-Write these -- probably little change here, but some.
 		// TODO: Old postInit()
-		//ConfigHandler.generateLists();
-		//ThemeReader.readThemes();
-		//ThemeType.SyncMobLists();
+		ConfigHandler.generateLists();
+		ThemeReader.readThemes();
+		ThemeType.SyncMobLists();
     }
 
 

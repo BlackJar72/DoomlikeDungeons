@@ -38,12 +38,11 @@ import net.minecraftforge.common.BiomeDictionary.Type;
  * @author Jared Blackburn
  *
  */
-public class ThemeReader {
-	
+public class ThemeReader {	
 	private static File configDir;
 	private static File themesDir;
 	private static File chestDir;
-	private static final String chestDirName = "SpecialChests";
+	private static final String chestDirName = "chests";
 	private static ArrayList<File> files;
 	
 	private static final String ESTRING = "";

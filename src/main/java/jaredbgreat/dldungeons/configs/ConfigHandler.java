@@ -87,13 +87,14 @@ public class ConfigHandler {
 	public static void init() {
 		// Get directories to use
 		File[] dirs = MasterConfig.getUsedDirs();
-		configDir = dirs[0];
-		themesDir = dirs[1];
+		ThemeReader.setConfigDir(configDir = dirs[0]);
+		ThemeReader.setThemesDir(themesDir = dirs[1]);
 		listsDir  = dirs[2];
 		chestsDir = dirs[3];
 		
 		// General configuration
 		parseDiff(GeneralConfig.difficulty.get());
+		openThemesDir();
 	}
 	
 	
@@ -135,7 +136,7 @@ public class ConfigHandler {
 	 * in editing theme files.
 	 */
 	public static void generateLists() {
-		if(!writeLists) return;
+		//if(!writeLists) return;
 		listsDir = new File(configDir.toString() + File.separator + "lists");
 		
 		if(!listsDir.exists()) {
@@ -252,18 +253,13 @@ public class ConfigHandler {
 	 */
 	private static void openThemesDir() {
 		Externalizer exporter;
-		String themesDirName = configDir.toString() + File.separator 
-				+ "themes" + File.separator;
-		System.out.println("[DLDUNGEONS] themesdir will be set to " + themesDirName);
-		themesDir = new File(themesDirName);
-		System.out.println("[DLDUNGEONS] themesdir File is be set to " + themesDir);
 		if(!themesDir.exists()) {
 			themesDir.mkdir();
 		} 		
 		if(!themesDir.exists()) {
-			System.out.println("[DLDUNGEONS] Warning: Could not create " + themesDirName + ".");
+			System.out.println("[DLDUNGEONS] Warning: Could not create " + themesDir + ".");
 		} else if (!themesDir.isDirectory()) {
-			System.out.println("[DLDUNGEONS] Warning: " + themesDirName 
+			System.out.println("[DLDUNGEONS] Warning: " + themesDir 
 					+ " is not a directory (folder); no themes loaded.");
 		} else ThemeReader.setThemesDir(themesDir);
 		File chests = new File(configDir.toString() + File.separator + "chest.cfg");
@@ -276,30 +272,6 @@ public class ConfigHandler {
 			exporter = new Externalizer(configDir.toString() + File.separator);
 			exporter.makeNBTCfg();
 		}
-	}
-	
-	
-	/**
-	 * This looks for the mods config directory, and attempts to 
-	 * create it if it does not exist.  It will them set this as 
-	 * the config directory and return it as a File.
-	 * 
-	 * @param fd
-	 * @return the config directory / folder
-	 */
-	public static File findConfigDir(File fd) {
-		File out = new File(fd.toString() + File.separator + Info.DIR_NAME);
-		if(!out.exists()) out.mkdir();
-		
-		if(!out.exists()) {
-			System.err.println("[DLDUNGEONS] ERROR: Could not create config directory");
-		} else if(!out.isDirectory()) {
-			System.err.println("[DLDUNGEONS] ERROR: Config directory is not a directory!");
-		} else {
-			configDir = out;
-			ThemeReader.setConfigDir(out);
-		}
-		return out;
 	}
 	
 	
@@ -323,16 +295,6 @@ public class ConfigHandler {
 				e.printStackTrace();
 			}
 		}
-	}
-	
-	
-	/**
-	 * Returns the full path of the config directory as a String.
-	 * 
-	 * @return
-	 */
-	public static String getConfigDir() {
-		return configDir + File.separator;
 	}
 	
 	
