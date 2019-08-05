@@ -72,16 +72,14 @@ public class DungeonStructure extends Structure<DungeonFeatureConfig> {
 	
 	@Override
 	public String getStructureName() {
-		return "DoomlikeDungeon";
+		return "Doomlike_Dungeon";
 	}
 
 	
 	@Override
 	public int getSize() {
-		// TODO: This needs to be calculated based on dungeon size,
-		//       probably width x 16 (I don't know for sure if this 
-		//       should be in blocks or chunks).
-		return 16;
+		// FIXME?: I don't know if this should be constant or specific to the dungeon.
+		return 13;
 	}	
 	
 	
