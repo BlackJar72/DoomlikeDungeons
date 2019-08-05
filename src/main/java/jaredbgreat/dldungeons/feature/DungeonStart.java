@@ -10,26 +10,28 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructureStart;
+import net.minecraft.world.gen.feature.template.TemplateManager;
 
 public class DungeonStart extends StructureStart {
 	
-	public DungeonStart(IWorld world, SharedSeedRandom random, int x, int z, Biome biome) {
-		//fuckYouConstructor(world, new Random(random.nextLong()), x, z, biome);
-		super(x, z, biome, random, random.nextLong());
+	public DungeonStart(Structure<?> p_i51341_1_, int chunkX, int chunkZ, Biome biomeIn, MutableBoundingBox boundsIn,
+			int referenceIn, long seed) {
+		super(p_i51341_1_, chunkX, chunkZ, biomeIn, boundsIn, referenceIn, seed);
+		// TODO Auto-generated constructor stub
 	}
-	 
-	 
+	
+
 	@Override
-	public void generateStructure(IWorld world, Random rand, MutableBoundingBox stractBB, ChunkPos cpos) {
-		System.err.println("DEBUGGING POLE!!!");
-		//super.generateStructure(world, rand, stractBB, cpos); // Do this?
-		debuggingPole(world, cpos.getXStart() + 8, cpos.getZStart() + 8);
+	public void init(ChunkGenerator<?> generator, TemplateManager templateManagerIn, int chunkX, int chunkZ,
+			Biome biomeIn) {
+		// TODO Auto-generated method stub
 		
 	}
-	 
-	 
 	
+
 	/**
 	 * This will build a quartz pillar to appear in the center of the dungeon from y=16 to y=240, 
 	 * and a lapis lazuli boarder to appear around the area allotted for the dungeon at y=80.

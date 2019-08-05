@@ -22,10 +22,8 @@ public class GenerationHandler /*implements IWorldGenerator*/ {
 	private static HashSet<Integer> dimensions;
 
 	public GenerationHandler() {
-		DungeonStructure dstruct = new DungeonStructure();
-		DungeonFeatureConfig dfconf = new DungeonFeatureConfig();
 		for(Biome biome : ForgeRegistries.BIOMES) {
-			biome.addStructure(dstruct, dfconf);
+			//biome.addStructure(dstruct, dfconf);
 		}
 	}
 	

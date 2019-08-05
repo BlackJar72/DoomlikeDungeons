@@ -2,19 +2,27 @@ package jaredbgreat.dldungeons.feature;
 
 import java.util.HashSet;
 import java.util.Random;
+import java.util.function.Function;
+
+import com.mojang.datafixers.Dynamic;
 
 import jaredbgreat.dldungeons.debug.Logging;
-import net.minecraft.util.SharedSeedRandom;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.gen.feature.structure.StructureStart;
 
-public class DungeonStructure extends Structure<DungeonFeatureConfig> {	
+public class DungeonStructure extends Structure<DungeonFeatureConfig> {
 	private static int frequency;
 	private static int factor = 6;
 	private static int minXZ;
 	private static Random mrand;
 	private static HashSet<Integer> dimensions;
+		
+
+	public DungeonStructure(Function<Dynamic<?>, ? extends DungeonFeatureConfig> p_i51427_1_) {
+		super(p_i51427_1_);
+		// TODO Auto-generated constructor stub
+	}
 	
 	
 
@@ -27,7 +35,7 @@ public class DungeonStructure extends Structure<DungeonFeatureConfig> {
 	 * 
 	 * @see net.minecraft.world.gen.feature.structure.Structure#hasStartAt(net.minecraft.world.gen.IChunkGenerator, java.util.Random, int, int)
 	 */
-	protected boolean hasStartAt(IChunkGenerator world, Random rand, int chunkX, int chunkZ) {
+	public boolean hasStartAt(ChunkGenerator<?> chunkGen, Random rand, int chunkPosX, int chunkPosZ) {
 		System.err.println("Making a DUNGEON!");
 		return true;
 //		boolean blockedBiome = false;
@@ -50,30 +58,20 @@ public class DungeonStructure extends Structure<DungeonFeatureConfig> {
 //		}	
 //		return false;
 	}
-
 	
-	@Override
-	protected boolean isEnabledIn(IWorld world) {
+	
+	
+	protected boolean isEnabledIn(World world) {
 		//if((ConfigHandler.obeyRule && !world.getWorldInfo().isMapFeaturesEnabled())
 		//		|| !ConfigHandler.naturalSpawn) return false;
 		//if((dimensions.contains(Integer.valueOf(world.getDimension().getType().getId())) 
 		//		!= ConfigHandler.positiveDims)) return false;
 		return true; //ConfigHandler.naturalSpawn; 
 	}
-
-
-	@Override
-	@SuppressWarnings("rawtypes")
-	protected StructureStart makeStart(IWorld worldIn, IChunkGenerator generator, 
-			SharedSeedRandom random, int x,	int z) {
-		// TODO Auto-generated method stub
-		System.err.println("Making a dungeon start!");
-		return new DungeonStart(worldIn, random, z, z, null);
-	}
-
+	
 	
 	@Override
-	protected String getStructureName() {
+	public String getStructureName() {
 		return "DoomlikeDungeon";
 	}
 
@@ -145,6 +143,13 @@ public class DungeonStructure extends Structure<DungeonFeatureConfig> {
 	 */
 	public static void subDimension(int value) {
 		dimensions.remove(Integer.valueOf(value));
+	}
+
+
+	@Override
+	public IStartFactory getStartFactory() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
