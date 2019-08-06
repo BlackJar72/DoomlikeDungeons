@@ -2,16 +2,14 @@ package jaredbgreat.dldungeons.structure;
 
 import java.util.HashSet;
 import java.util.Random;
-import java.util.function.Function;
-
-import com.mojang.datafixers.Dynamic;
 
 import jaredbgreat.dldungeons.debug.Logging;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
 
-public class DungeonStructure extends Structure<DungeonFeatureConfig> {
+public class DungeonStructure extends Structure<NoFeatureConfig> {
 	private static int frequency;
 	private static int factor = 6;
 	private static int minXZ;
@@ -19,9 +17,8 @@ public class DungeonStructure extends Structure<DungeonFeatureConfig> {
 	private static HashSet<Integer> dimensions;
 		
 
-	public DungeonStructure(Function<Dynamic<?>, ? extends DungeonFeatureConfig> p_i51427_1_) {
-		super(p_i51427_1_);
-		// TODO Auto-generated constructor stub
+	public DungeonStructure() {
+		super(NoFeatureConfig::deserialize);
 	}
 	
 	
@@ -146,8 +143,7 @@ public class DungeonStructure extends Structure<DungeonFeatureConfig> {
 
 	@Override
 	public IStartFactory getStartFactory() {
-		// TODO Auto-generated method stub
-		return null;
+		return DungeonStart::new;
 	}
 
 }

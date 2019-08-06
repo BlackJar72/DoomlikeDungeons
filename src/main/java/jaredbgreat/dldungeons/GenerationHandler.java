@@ -6,15 +6,19 @@ import java.util.Set;
 
 import jaredbgreat.dldungeons.configs.ConfigHandler;
 import jaredbgreat.dldungeons.debug.Logging;
+import jaredbgreat.dldungeons.structure.DungeonStructure;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.AbstractChunkProvider;
 import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.GenerationStage.Decoration;
+import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fml.common.IWorldGenerator;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.ForgeRegistries;
 
 
@@ -28,10 +32,13 @@ public class GenerationHandler implements IWorldGenerator {
 	private static int minXZ;
 	private static Random mrand;
 	private static HashSet<Integer> dimensions;
+	Structure<NoFeatureConfig> dstruct;
 
 	public GenerationHandler() {
+		dstruct = new DungeonStructure();
+		dstruct.setRegistryName(Info.ID, "doomlike_dungeon");
 		for(Biome biome : ForgeRegistries.BIOMES) {
-			//biome.addStructure(dstruct, dfconf);
+			biome.addStructure(dstruct, IFeatureConfig.NO_FEATURE_CONFIG);
 		}
 	}
 	
