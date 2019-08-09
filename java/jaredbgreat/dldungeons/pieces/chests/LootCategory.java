@@ -145,7 +145,7 @@ public class LootCategory {
 	private LootResult enchantedLowerLevel(LootItem item, int level, Random random) {
 		ItemStack out;
 		int diff = level - item.level;
-		if(diff > random.nextInt(2)) {
+		if(isEnchantable(item) && (diff > random.nextInt(2))) {
 			int enchPart = ((level - item.level) * 5) + 5;
 			out = item.getStack(random);
 			out = EnchantmentHelper.addRandomEnchantment(random, out, enchPart, true);
