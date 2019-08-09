@@ -118,16 +118,14 @@ public class LootCategory {
 		ItemStack out;
 		float portion = random.nextFloat() / 2f;
 		int lootPart = Math.min(6, Math.max(0, (int)((((float)lootLevel) * (1f - portion)) + 0.5f)));
-		int enchPart = Math.min(30, Math.max(0, (int)(((float)lootLevel) * portion * 10f)));
 		LootItem item = gear[lootPart].getLoot(random);
-		if(lootPart > item.level) {
-			enchPart += ((lootPart - item.level) * 5) + 5;
-		}
+		int diff = lootLevel - item.level + 1;
+		int enchPart =Math.min((5 + (diff * (diff + 1) / 2) * 5), diff * 10);
 		if(enchPart >= 1 && isEnchantable(item)) {
 			out = item.getStack(random);
 			out = EnchantmentHelper.addRandomEnchantment(random, out, enchPart, true);
 		} else {
-			out = gear[Math.min(6, lootLevel)].getLoot(random).getStack(random);
+			return enchantedLowerLevel(gear[Math.min(6, lootLevel)].getLoot(random), lootLevel, random);
 		}		
 		return new LootResult(out, Math.min(lootLevel, 6));
 	}
@@ -146,7 +144,7 @@ public class LootCategory {
 		ItemStack out;
 		int diff = level - item.level;
 		if(isEnchantable(item) && (diff > random.nextInt(2))) {
-			int enchPart = ((level - item.level) * 5) + 5;
+			int enchPart = Math.min((5 + (level * (level + 1) / 2) * 5), level * 10);
 			out = item.getStack(random);
 			out = EnchantmentHelper.addRandomEnchantment(random, out, enchPart, true);
 		} else {
@@ -165,10 +163,11 @@ public class LootCategory {
 	 */
 	private boolean isEnchantable(LootItem in) {
 		Item item = (Item)in.item;
-		return (item instanceof ItemSword 
+		return (((in.nbtData == null) || in.nbtData.isEmpty()) 
+				&& (item instanceof ItemSword 
 				|| item instanceof ItemTool 
 				|| item instanceof ItemArmor
-				|| item instanceof ItemBow);
+				|| item instanceof ItemBow));
 	}
 	
 	
