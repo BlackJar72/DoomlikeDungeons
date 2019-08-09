@@ -310,7 +310,7 @@ public class ThemeReader {
 			if(!tokens.hasMoreTokens() || (min < 1)) continue;
 			max = intParser(tokens);
 			item = modid + ":" + name;
-			loot = new LootItem(item, min, max);
+			loot = new LootItem(item, min, max, level);
 			if(item != null && loot != null) {
 				while(tokens.hasMoreTokens()) {
 					loot.addNbt(tokens.nextToken());

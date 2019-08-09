@@ -13,6 +13,8 @@ import jaredbgreat.dldungeons.nbt.tags.ITag;
 import jaredbgreat.dldungeons.parser.Tokenizer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -34,10 +36,38 @@ import net.minecraftforge.registries.IForgeRegistry;
  */
 public class LootItem {
 	private static IForgeRegistry ItemRegistry;
+	private static Map<ItemPrototype, Integer> prototypes;
 	
 	Item item;
-	int min, max, meta;
+	int min, max, meta, level;
 	ArrayList<ITag> nbtData;
+	
+	
+	private static class ItemPrototype {
+		public final Item item;
+		public final int meta;
+		public ItemPrototype(Item i, int m) {
+			item = i;
+			meta = m;
+		}
+		@Override
+		public boolean equals(Object obj) {
+			if(!(obj instanceof ItemPrototype)) {
+				return false;
+			}
+			ItemPrototype p = (ItemPrototype)obj;
+			return (p.item == item) && (p.meta == meta); 
+		}
+		@Override
+		public int hashCode() {
+			return item.hashCode() + (meta * 102181);
+		}
+	}
+	
+	
+	static {
+		prototypes = new HashMap<>();
+	}
 	
 	
 	/**
@@ -48,17 +78,19 @@ public class LootItem {
 	 * @param min
 	 * @param max
 	 */
-	public LootItem(String id, int min, int max) {
+	public LootItem(String id, int min, int max, int level) {
 		metaParse(id);
 		if(min > max) min = max;
 		this.min = min;
 		this.max = max;
+		this.level = level;
 		if(item == null) {
 			Logging.LogError("[DLDUNGEONS] ERROR! Item read as \"" + id 
 					+ "\" was was not in registry (returned null).");
 		}
+		fixLevel();
 	}
-	
+		
 	
 	/**
 	 * Create a LootItem using Item.
@@ -72,6 +104,8 @@ public class LootItem {
 		if(min > max) min = max;
 		this.min = min;
 		this.max = max;
+		// For these items, don't care about level
+		this.level = 6;
 	}
 	
 	
@@ -87,7 +121,29 @@ public class LootItem {
 		if(min > max) min = max;
 		this.min = min;
 		this.max = max;
+		// For these items, don't care about level
+		this.level = 6;
 	}
+	
+	
+	private void fixLevel() {
+		// Only set level on non-stacked items like tools / weapons
+		if(max == 1) {
+			ItemPrototype p = new ItemPrototype(item, meta);
+			if(prototypes.containsKey(p)) {
+				int l = prototypes.get(p);
+				if(l < level) {
+					level = l;
+				}
+				if(l > level) {
+					prototypes.put(p, level);
+				}
+			} else {
+				prototypes.put(p, level);
+			}
+		}		
+	}
+	
 	
 	
 	/**

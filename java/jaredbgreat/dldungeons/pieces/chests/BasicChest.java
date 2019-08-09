@@ -90,11 +90,12 @@ public class BasicChest {
 	protected void fillChest(TileEntityChest chest, LootType kind, Random random) {		
 		int num = random.nextInt(Math.max(2, A1 + (level / B1))) + C1;
 		for(int i = 0; i < num; i++) {
-			ItemStack treasure = category.getLoot(kind, level, random);
+			ItemStack treasure = category.getLoot(kind, level, random).getLoot();
 			if(treasure != null) chest.setInventorySlotContents(random.nextInt(27), treasure);
 		}
 		if(!ConfigHandler.vanillaLoot) {
-			ItemStack treasure = category.getLoot(LootType.HEAL, level, random);
+			ItemStack treasure = category.getLoot(LootType.LOOT, 
+					Math.min(6, level), random).getLoot();
 			if(treasure != null) chest.setInventorySlotContents(random.nextInt(27), treasure);
 		}
 	}

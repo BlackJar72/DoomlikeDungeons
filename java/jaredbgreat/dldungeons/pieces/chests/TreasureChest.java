@@ -59,21 +59,25 @@ public class TreasureChest extends BasicChest {
 		int num;
 		num = random.nextInt(Math.max(2, A2 + (level / B2))) + C2;
 		for(int i = 0; i < num; i++) {
-			treasure = category.getLoot(LootType.HEAL, level, random);
+			treasure = category.getLoot(LootType.HEAL, level, random).getLoot();
 			contents.setInventorySlotContents(slots.get(slot).intValue(), treasure);
 			slot++;
 		}
 		num = random.nextInt(Math.max(2, A2 + (level / B2))) + C2;
 		for(int i = 0; i < num; i++) {
-			treasure = category.getLoot(LootType.GEAR, level, random);
+			treasure = category.getLoot(LootType.GEAR, level, random).getLoot();
 			contents.setInventorySlotContents(slots.get(slot).intValue(), treasure);
 			slot++;
 		}
 		num = random.nextInt(Math.max(2, A2 + (level / B2))) + C2;
 		for(int i = 0; i < num; i++) {
-			treasure = category.getLoot(LootType.LOOT, 
+			LootResult lootResult = category.getLoot(LootType.LOOT, 
 					level + 1 + random.nextInt(2), random);
+			treasure = lootResult.getLoot();
 			contents.setInventorySlotContents(slots.get(slot).intValue(), treasure);
+			if((lootResult.getLevel() > 6) && !withBoss) {
+				level--;
+			}
 			slot++;
 		}
 		if(random.nextInt(7) < level) {
@@ -95,8 +99,9 @@ public class TreasureChest extends BasicChest {
 	}
 	
 	
-	public void setWithBoss(boolean bossRoom) {
+	public TreasureChest setWithBoss(boolean bossRoom) {
 		withBoss = bossRoom;
+		return this;
 	}
 	
 	

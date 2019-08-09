@@ -66,7 +66,6 @@ public final class ConfigHandler {
 	// Vanilla loot will not be added in version of Mincraft 1.9+
 	// Instead all dungeons will have some loot enchanted.
 	private static final boolean DEFAULT_VANILLA_LOOT = false;	
-	private static final boolean DEFAULT_STINGY_LOOT = false;	
 	private static final boolean EASY_FIND = false;
 
 	private static final boolean DISABLE_API = false;
@@ -251,7 +250,7 @@ public final class ConfigHandler {
 				+ "chest formula is per loot normal category -- you get 3 time that "
 				+ System.lineSeparator() 
 				+ "many items.");
-		a = config.getInt("A1", "Loot", 2, 0, 9, 
+		a = config.getInt("A1", "Loot", 3, 0, 9, 
 				"Part of the loot quantity numbers for basic chests; " 
 				+ System.lineSeparator() 
 				+ " random.nextInt(A1 + (RoomDifficulty / B1)) + C1");
@@ -259,7 +258,7 @@ public final class ConfigHandler {
 				"Part of the loot quantity numbers for basic chests; " 
 						+ System.lineSeparator() 
 						+ " random.nextInt(A1 + (RoomDifficulty / B1)) + C1");
-		c = config.getInt("C1", "Loot", 2, 0, 9, 
+		c = config.getInt("C1", "Loot", 3, 0, 9, 
 				"Part of the loot quantity numbers for basic chests; " 
 						+ System.lineSeparator() 
 						+ " random.nextInt(A1 + (RoomDifficulty / B1)) + C1");

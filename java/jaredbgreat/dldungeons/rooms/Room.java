@@ -361,6 +361,7 @@ public class Room extends AbstractRoom {
 		for(int i = 0; i < n; i++) {
 			lev = Math.max(lev, spawners.get(i).getLevel());
 		}
+		boolean trueBoss = lev > 3;
 		if(n > 1) {
 			lev++;			
 		}
@@ -404,7 +405,7 @@ public class Room extends AbstractRoom {
 			x = (int)realX;
 			z = (int)realZ;
 			y = dungeon.map.floorY[x][z]; 
-			chests.add(new TreasureChest(x, y, z, lev, dungeon.lootCat));
+			chests.add(new TreasureChest(x, y, z, lev, dungeon.lootCat).setWithBoss(trueBoss));
 		}
 	}
 	

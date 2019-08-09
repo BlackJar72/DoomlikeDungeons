@@ -24,19 +24,19 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
  * The class responcible for determine where dungeons generate.  More 
- * specifically, it will determine if a chunk being generated should be 
+ * specifically, it wil(IWorldGenerator) l determine if a chunk being generated should be 
  * the technical (not geometric) center of a dungeon.
  * 
  * @author Jared Blackburn
  *
  */
-public class GenerationHandler implements IWorldGenerator {
-	
+public class GenerationHandler implements IWorldGenerator {	
 	private static int frequency;
 	private static int factor = 6;
 	private static int minXZ;
 	private static Random mrand;
 	private static HashSet<Integer> dimensions;
+	
 	
 	public GenerationHandler() {
 		GameRegistry.registerWorldGenerator(this, 100);

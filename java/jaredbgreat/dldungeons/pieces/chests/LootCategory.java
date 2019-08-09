@@ -61,7 +61,7 @@ public class LootCategory {
 	 * @param random
 	 * @return
 	 */
-	public ItemStack getLoot(LootType type, int level, Random random) {
+	public LootResult getLoot(LootType type, int level, Random random) {
 		if(level <= 6) {
 			level = Math.min(6, (level + random.nextInt(2) - random.nextInt(2)));
 		}
@@ -71,14 +71,16 @@ public class LootCategory {
 			if(random.nextBoolean()) {
 				return getEnchantedGear(level, random);
 			} else {
-				return gear[Math.min(6, level)].getLoot(random).getStack(random);
+				int l = Math.min(6, level);
+				return enchantedLowerLevel(gear[Math.min(6, l)].getLoot(random), l, random);
 			}
 		case HEAL:
-			return heal[Math.min(6, level)].getLoot(random).getStack(random);
+			int l = Math.min(6, level);
+			return new LootResult(heal[Math.min(6, l)].getLoot(random).getStack(random), l);
 		case LOOT:
 			if(level > 6) {
 				if(level > random.nextInt(100)) {
-					return lists.special.getLoot(random).getStack(random);					
+					return new LootResult(lists.special.getLoot(random).getStack(random), 7);					
 				} else {
 					level = 6;
 				}
@@ -86,7 +88,7 @@ public class LootCategory {
 			if(random.nextInt(10) == 0) {
 				return getEnchantedBook(level, random);
 			} else {
-				return loot[level].getLoot(random).getStack(random);
+				return new LootResult(loot[level].getLoot(random).getStack(random), level);
 			}
 		case RANDOM:
 		default:
@@ -112,19 +114,45 @@ public class LootCategory {
 	 * @param random
 	 * @return
 	 */
-	private ItemStack getEnchantedGear(int lootLevel, Random random) {
-		ItemStack out = null;
+	private LootResult getEnchantedGear(int lootLevel, Random random) {
+		ItemStack out;
 		float portion = random.nextFloat() / 2f;
 		int lootPart = Math.min(6, Math.max(0, (int)((((float)lootLevel) * (1f - portion)) + 0.5f)));
 		int enchPart = Math.min(30, Math.max(0, (int)(((float)lootLevel) * portion * 10f)));
 		LootItem item = gear[lootPart].getLoot(random);
+		if(lootPart > item.level) {
+			enchPart += ((lootPart - item.level) * 5) + 5;
+		}
 		if(enchPart >= 1 && isEnchantable(item)) {
 			out = item.getStack(random);
 			out = EnchantmentHelper.addRandomEnchantment(random, out, enchPart, true);
 		} else {
 			out = gear[Math.min(6, lootLevel)].getLoot(random).getStack(random);
 		}		
-		return out;
+		return new LootResult(out, Math.min(lootLevel, 6));
+	}
+	
+	
+	/**
+	 * Returns an item stack from the gear list with some of the items value
+	 * (in terms of loot level) possibly converted to random enchantments and
+	 * the remained used as the loot level of the item itself.
+	 * 
+	 * @param lootLevel
+	 * @param random
+	 * @return
+	 */
+	private LootResult enchantedLowerLevel(LootItem item, int level, Random random) {
+		ItemStack out;
+		int diff = level - item.level;
+		if(diff > random.nextInt(2)) {
+			int enchPart = ((level - item.level) * 5) + 5;
+			out = item.getStack(random);
+			out = EnchantmentHelper.addRandomEnchantment(random, out, enchPart, true);
+		} else {
+			out = item.getStack(random);
+		}
+		return new LootResult(out, level);
 	}
 	
 	
@@ -151,10 +179,10 @@ public class LootCategory {
 	 * @param random
 	 * @return
 	 */
-	private ItemStack getEnchantedBook(int level, Random random) {
+	private LootResult getEnchantedBook(int level, Random random) {
 		ItemStack out = new ItemStack(Items.BOOK, 1);
 		out = EnchantmentHelper.addRandomEnchantment(random, out, Math.min(30, (int)(level * 7.5)), true);
-		return out;
+		return new LootResult(out, Math.min(level, 6));
 	}
 	
 	
