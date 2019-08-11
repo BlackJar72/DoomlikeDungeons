@@ -90,7 +90,10 @@ public final class ConfigHandler {
 	public    static boolean thinSpawners = DEFAULT_THIN_SPAWNERS;	
 		
 	private   static final boolean PROFILE = false;
-	protected static boolean profile;
+	protected static boolean profile;	
+	
+	private   static final boolean FAILFAST = false;
+	public static boolean failfast = FAILFAST;
 	
 	private static final boolean INSTALL_THEMES = true;
 	public  static       boolean installThemes = INSTALL_THEMES;
@@ -232,6 +235,11 @@ public final class ConfigHandler {
 				"CHEAT: If true the layout of the dungeon will be built from floating glowstone (etc.) "
 				+ System.lineSeparator() + "-- on some versions it also causes *EXTREME LAG*!")
 				.getBoolean(false));
+		
+		failfast = config.get("Debugging", "FailfastLoot", false, 
+				"If true this will cause the system to crash on loot config errors."
+				+ System.lineSeparator() + "This is good for debugging modpac.")
+			    .getBoolean(false);
 		
 		profile = config.get("Debugging", "AutoProfilingOn", PROFILE, 
 				"If true reports on dungeon planning and build times will be exproted to files and the commandline")

@@ -7,6 +7,7 @@ package jaredbgreat.dldungeons.pieces.chests;
  */		
 
 
+import jaredbgreat.dldungeons.ConfigHandler;
 import jaredbgreat.dldungeons.debug.Logging;
 import jaredbgreat.dldungeons.nbt.NBTHelper;
 import jaredbgreat.dldungeons.nbt.tags.ITag;
@@ -15,6 +16,7 @@ import jaredbgreat.dldungeons.parser.Tokenizer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -85,8 +87,12 @@ public class LootItem {
 		this.max = max;
 		this.level = level;
 		if(item == null) {
-			Logging.LogError("[DLDUNGEONS] ERROR! Item read as \"" + id 
-					+ "\" was was not in registry (returned null).");
+			String error = "[DLDUNGEONS] ERROR! Item read as \"" + id 
+					+ "\" was was not in registry (returned null).";
+			Logging.LogError(error);
+			if(ConfigHandler.failfast) {
+				throw new NoSuchElementException(error);
+			}
 		} else {
 			fixLevel();
 		}
