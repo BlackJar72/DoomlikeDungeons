@@ -87,8 +87,9 @@ public class LootItem {
 		if(item == null) {
 			Logging.LogError("[DLDUNGEONS] ERROR! Item read as \"" + id 
 					+ "\" was was not in registry (returned null).");
+		} else {
+			fixLevel();
 		}
-		fixLevel();
 	}
 		
 	
@@ -127,7 +128,7 @@ public class LootItem {
 	
 	
 	private void fixLevel() {
-		// Only set level on non-stacked items like tools / weapons
+		// Only set level on non-stacked items like tools / weapons		
 		if(max == 1) {
 			ItemPrototype p = new ItemPrototype(item, meta);
 			if(prototypes.containsKey(p)) {
