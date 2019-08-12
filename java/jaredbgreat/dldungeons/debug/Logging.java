@@ -5,7 +5,10 @@ package jaredbgreat.dldungeons.debug;
  * Copyright (c) 2014-2018 Jared Blackburn
  */	
 
-import java.util.logging.Logger;
+import jaredbgreat.dldungeons.Info;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * A mostly unused wrapper for the Java logger, to make getting a logger easier.
@@ -17,8 +20,8 @@ public class Logging {
 	private static Logger logger;
 	private static Logging log;
 	
-	private Logging() {
-		logger = Logger.getGlobal();
+	private Logging() {		
+		logger = LogManager.getLogger(Info.LOG_NAME);
 	}
 	
 	
@@ -30,21 +33,19 @@ public class Logging {
 	}
 	
 	
-	public static void LogError(String error) {
+	public static void logError(String error) {
 		if(log == null) {
 			log = new Logging();
 		}
 		System.err.println(error);
-		Logger logger = Logger.getGlobal();
-		logger.severe(error);
+		logger.error(error);
 	}
 	
 	
-	public static void LogInfo(String info) {
+	public static void logInfo(String info) {
 		if(log == null) {
 			log = new Logging();
 		}
-		Logger logger = Logger.getGlobal();
 		logger.info(info);
 	}
 

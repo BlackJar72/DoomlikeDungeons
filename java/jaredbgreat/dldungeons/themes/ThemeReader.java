@@ -8,6 +8,7 @@ package jaredbgreat.dldungeons.themes;
 
 
 import jaredbgreat.dldungeons.builder.DBlock;
+import jaredbgreat.dldungeons.debug.Logging;
 import jaredbgreat.dldungeons.nbt.NBTHelper;
 import jaredbgreat.dldungeons.parser.Tokenizer;
 import jaredbgreat.dldungeons.pieces.chests.LootCategory;
@@ -55,7 +56,7 @@ public class ThemeReader {
 	 * @param dir
 	 */
 	public static void setThemesDir(File dir) {
-		System.out.println("[DLDUNGEONS] themesdir is " + dir);
+		Logging.logInfo("themesdir is " + dir);
 		themesDir = dir;
 	}
 	
@@ -68,7 +69,7 @@ public class ThemeReader {
 	 * @param dir
 	 */
 	public static void setConfigDir(File dir) {
-		System.out.println("[DLDUNGEONS] themesdir is " + dir);
+		Logging.logInfo("themesdir is " + dir);
 		configDir = dir;
 		
 	}
@@ -188,12 +189,12 @@ public class ThemeReader {
 			chestDir.mkdir();
 		}
 		int num = findChestFiles(chestDir);
-		System.out.println("[DLDUNGEONS] Found " + num + " special chest configs.");
+		Logging.logInfo("Found " + num + " special chest configs.");
 		for(File file : files) openLoot(file.toString(), false);
 		
 		// Now the actual themes
 		num = findThemeFiles(themesDir);
-		System.out.println("[DLDUNGEONS] Found " + num + " themes.");
+		Logging.logInfo("Found " + num + " themes.");
 		for(File file : files) readTheme(file);
 	}
 	
@@ -213,7 +214,7 @@ public class ThemeReader {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} else {
-			System.out.println("[DLDUNGEONS] File nbt.cfg is missing; will fallabck on default loot");
+			Logging.logInfo("File nbt.cfg is missing; will fallabck on default loot");
 		}
 	}
 	
@@ -226,7 +227,7 @@ public class ThemeReader {
 	 * @throws IOException
 	 */
 	public static void readNBT(BufferedReader instream) throws IOException {
-		System.out.println("[DLDUNGEONS] Loading custom NBT tags (nbt.cfg)");		
+		Logging.logInfo("Loading custom NBT tags (nbt.cfg)");		
 		Tokenizer tokens = null;
 		String line = null;		
 		while((line = instream.readLine()) != null) {
@@ -259,7 +260,7 @@ public class ThemeReader {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} else {
-			System.out.println("[DLDUNGEONS] File " + name + " is missing; will fallabck on default loot");
+			Logging.logInfo("File " + name + " is missing; will fallabck on default loot");
 			cat.getLists().addDefaultLoot();
 		}
 	}
@@ -273,7 +274,7 @@ public class ThemeReader {
 	 * @throws IOException
 	 */
 	public static void readLoot(BufferedReader instream, String filename, LootListSet loots) throws IOException {
-		System.out.println("[DLDUNGEONS] Loading chest loot file (" + filename + ")");
+		Logging.logInfo("Loading chest loot file (" + filename + ")");
 		
 		Tokenizer tokens = null;
 		String line = null;
@@ -346,7 +347,7 @@ public class ThemeReader {
 					e1.printStackTrace();
 				}
 			}
-			System.err.println("[DLDUNGEONS] Theme " + file.toString() 
+			Logging.logError("Theme " + file.toString() 
 					+ " contained a fatal error!");
 			e.printStackTrace();
 			File broken = new File(themesDir.toString() 
@@ -370,12 +371,12 @@ public class ThemeReader {
                             }
                         }			
 			if(errorFile.exists()) {
-				System.err.println("[DLDUNGEONS] Theme " + errorFile
+				Logging.logError("Theme " + errorFile
 					+ " was renamed to prevent "
 					+ " further reading attempts; please fix it.");
 				 
 			} else {
-				System.err.println("[DLDUNGEONS] Theme " + errorFile
+				Logging.logError("Theme " + errorFile
 						+ " was NOT renamed to prevent "
 						+ " further reading attempts (please fix it);"
 						+ " something went wrong!");					 
@@ -615,8 +616,8 @@ public class ThemeReader {
 				if((value > 5) && (value < 224)) valid = true;
 			}
 		} catch(Exception e) {
-			System.err.println("[DLDUNGEONS] ThemeReader.intParser(int el, Tokenizer tokens) tried to read non-number as integer");
-			System.err.println("[DLDUNGEONS] Value passed as and integer was: " + num);
+			Logging.logError("ThemeReader.intParser(int el, Tokenizer tokens) tried to read non-number as integer");
+			Logging.logError("Value passed as and integer was: " + num);
 			e.printStackTrace();
 			return el;
 		}
@@ -641,8 +642,8 @@ public class ThemeReader {
 				value = Float.parseFloat(num);
 			}
 		} catch(Exception e) {
-			System.err.println("[DLDUNGEONS] ThemeReader.floatParser(float el, Tokenizer tokens) tried to read non-number as float");
-			System.err.println("[DLDUNGEONS] Value passed as and foat was: " + num);
+			Logging.logError("ThemeReader.floatParser(float el, Tokenizer tokens) tried to read non-number as float");
+			Logging.logError("Value passed as and foat was: " + num);
 			return el;
 		}
 		return value;
@@ -667,8 +668,8 @@ public class ThemeReader {
 				value = Integer.parseInt(num);
 			}
 		} catch(Exception e) {
-			System.err.println("[DLDUNGEONS] ThemeReader.intParser(Tokenizer tokens) tried to read non-number as integer");
-			System.err.println("[DLDUNGEONS] Value passed as and integer was: " + num);
+			Logging.logError("ThemeReader.intParser(Tokenizer tokens) tried to read non-number as integer");
+			Logging.logError("Value passed as and integer was: " + num);
 			return -1;
 		}
 		return value;

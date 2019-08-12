@@ -89,7 +89,7 @@ public class LootItem {
 		if(item == null) {
 			String error = "[DLDUNGEONS] ERROR! Item read as \"" + id 
 					+ "\" was was not in registry (returned null).";
-			Logging.LogError(error);
+			Logging.logError(error);
 			if(ConfigHandler.failfast) {
 				throw new NoSuchElementException(error);
 			}
@@ -164,7 +164,7 @@ public class LootItem {
 		String name  = tokens.nextToken();
 		item = Item.REGISTRY.getObject(new ResourceLocation(name));
 		if(item == null) {
-			Logging.LogError("[DLDUNGEONS] ERROR! Item read as \"" + in 
+			Logging.logError("[DLDUNGEONS] ERROR! Item read as \"" + in 
 					+ "\" was was not in registry (returned null).");
 		}
 		if(tokens.hasMoreTokens()) {

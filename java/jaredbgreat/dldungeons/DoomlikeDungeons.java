@@ -13,10 +13,10 @@ import jaredbgreat.dldungeons.commands.CmdForceInstallThemes;
 import jaredbgreat.dldungeons.commands.CmdInstallThemes;
 import jaredbgreat.dldungeons.commands.CmdReload;
 import jaredbgreat.dldungeons.commands.CmdSpawn;
-import jaredbgreat.dldungeons.commands.CmdTPDim;
 import jaredbgreat.dldungeons.debug.DLDProfile;
 import jaredbgreat.dldungeons.debug.DoNothing;
 import jaredbgreat.dldungeons.debug.IProfiler;
+import jaredbgreat.dldungeons.debug.Logging;
 import jaredbgreat.dldungeons.themes.ThemeReader;
 import jaredbgreat.dldungeons.themes.ThemeType;
 import net.minecraftforge.fml.common.Mod;
@@ -42,10 +42,10 @@ public class DoomlikeDungeons {
     
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-    	System.out.println(Info.NAME + " is in preInit, should now load config.");
+    	Logging.logInfo(Info.NAME + " is in preInit, should now load config.");
     	ConfigHandler.configDir = ConfigHandler.findConfigDir(event.getModConfigurationDirectory());
     	ConfigHandler.init();
-    	System.out.println("[DLDUNGEONS] Config should now be loaded.");  
+    	Logging.logInfo("Config should now be loaded.");  
     	if(ConfigHandler.profile) profiler = new DLDProfile();
     	else profiler = new DoNothing();
     }

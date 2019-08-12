@@ -80,7 +80,7 @@ public final class DBlock {
 		if(theBlock == null) {
 			String error = "[DLDUNGEONS] ERROR! Block read as \"" + id 
 					+ "\" was was not in registry (returned null).";
-			Logging.LogError(error);
+			Logging.logError(error);
 			throw new NoSuchElementException(error);
 		}
 		if(nums.hasMoreElements()) {
@@ -93,7 +93,7 @@ public final class DBlock {
 				&& !id.contains("minecraft:air")) {
 			String error = "[DLDUNGEONS] ERROR! Block read as \"" + id 
 					+ "\" parsed into an air block!";
-			Logging.LogError(error);
+			Logging.logError(error);
 			throw new NoSuchElementException(error);
 		}
 	}

@@ -172,7 +172,8 @@ public class Dungeon {
 		shiftZ = (map.chunkZ * 16) - (map.room.length / 2) + 8;
 		
 		makeNodes();
-		if((numEntrances < 1) && ConfigHandler.easyFind) addAnEntrance();
+		if((numEntrances < 1) 
+				&& (ConfigHandler.easyFind || ConfigHandler.tradStyle)) addAnEntrance();
 		connectNodes();
 		growthCycle();
 		if(ConfigHandler.thinSpawners && (ConfigHandler.difficulty != Difficulty.NONE)) { 
