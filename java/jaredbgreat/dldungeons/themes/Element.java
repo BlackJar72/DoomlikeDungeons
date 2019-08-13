@@ -34,16 +34,16 @@ public class Element implements Autoselecting {
 		this.none 	= Degree.NONE;
 		this.prob1 	= prob1;
 		this.few 	= Degree.FEW;
-		this.prob2 	= prob2;
+		this.prob2 	= this.prob1 + prob2;
 		this.some 	= Degree.SOME;
-		this.prob3 	= prob3;
+		this.prob3 	= this.prob2 + prob3;
 		this.plenty = Degree.PLENTY;
-		this.prob4 	= prob4;
+		this.prob4 	= this.prob3 + prob4;
 		this.heaps 	= Degree.HEAPS;
-		this.prob5 	= prob5;
+		this.prob5 	= this.prob4 + prob5;
 		this.all 	= Degree.ALL;
-		this.prob6 	= prob6;
-		probScale = prob1 + prob2 + prob3 + prob4 + prob5 + prob6;
+		this.prob6 	= this.prob5 + prob6;
+		probScale = this.prob6 + 1;
 	}
 	
 	
@@ -54,16 +54,11 @@ public class Element implements Autoselecting {
 	public Degree select(Random random) {
 		int roll = random.nextInt(probScale);
 		if(roll < prob1) return Degree.NONE;
-		else roll -= prob1;
-		if(roll < prob2) return Degree.FEW;
-		else roll -= prob2;
-		if(roll < prob3) return Degree.SOME;
-		else roll -= prob3;
-		if(roll < prob4) return Degree.PLENTY;
-		else roll -= prob4;
-		if(roll < prob5) return Degree.HEAPS;
-		else roll -= prob5;
-		if(roll < prob6) return Degree.ALL;
+		else if(roll < prob2) return Degree.FEW;
+		else if(roll < prob3) return Degree.SOME;
+		else if(roll < prob4) return Degree.PLENTY;
+		else if(roll < prob5) return Degree.HEAPS;
+		else if(roll < prob6) return Degree.ALL;
 		else return Degree.NONE;
 	}
 	
@@ -77,12 +72,11 @@ public class Element implements Autoselecting {
 	 * @return
 	 */
 	public boolean never() {
-		return    ((prob1 !=0) 
-				&& (prob2 ==0) 
-				&& (prob3 ==0) 
-				&& (prob4 ==0) 
-				&& (prob5 ==0) 
-				&& (prob6 ==0));     
+		return    ((prob2 == 0) 
+				&& (prob3 == 0) 
+				&& (prob4 == 0) 
+				&& (prob5 == 0) 
+				&& (prob6 == 0));     
 	}
 	
 

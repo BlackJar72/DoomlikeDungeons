@@ -187,9 +187,9 @@ public final class ConfigHandler {
 		Logging.logInfo("Will dungeons be easy to find? " + easyFind);
 		
 		singleEntrance = config.get("General", "SingleEntrances", SINGLE_ENTRANCE, 
-				"If true all dungeons will exactly one entrance, no more, no less, "
+				"If true all dungeons will exactly one entrance (if the theme allows entrances), "
 				+ System.lineSeparator() 
-				+ "like a typical dungeon crawler (Dungeons will be harder but much "
+				+ "like a typical dungeon crawler (Dungeons will be harder but much no more, no less, "
 				+ System.lineSeparator() 
 				+ "better loot.) If false entrance are random (how the mod originally worked). ")
 				.getBoolean(SINGLE_ENTRANCE);
