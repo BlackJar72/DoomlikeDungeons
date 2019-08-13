@@ -173,7 +173,7 @@ public class Dungeon {
 		
 		makeNodes();
 		if((numEntrances < 1) 
-				&& (ConfigHandler.easyFind || ConfigHandler.tradStyle)) addAnEntrance();
+				&& (ConfigHandler.easyFind || ConfigHandler.singleEntrance)) addAnEntrance();
 		connectNodes();
 		growthCycle();
 		if(ConfigHandler.thinSpawners && (ConfigHandler.difficulty != Difficulty.NONE)) { 
@@ -224,7 +224,8 @@ public class Dungeon {
 		//DoomlikeDungeons.profiler.startTask("Creating Node Rooms");
 		int i = 0;
 		while(i < numNodes) {
-			nodes[i] = new Node(random.nextInt(size.width), baseHeight, random.nextInt(size.width), random, this);
+			nodes[i] = new Node(random.nextInt(size.width), baseHeight, 
+					random.nextInt(size.width), random, this);
 			if(nodes[i].hubRoom != null) ++i;
 		}
 		//DoomlikeDungeons.profiler.endTask("Creating Node Rooms");

@@ -114,7 +114,7 @@ public class Room extends AbstractRoom {
 		dungeon.planter.add(this);
 		isNode = (previous == null);
 		isSubroom = (parent != null);
-		hasEntrance = (isNode && !ConfigHandler.tradStyle 
+		hasEntrance = (isNode && !ConfigHandler.singleEntrance 
 				&& dungeon.entrances.use(dungeon.random));
 		if(hasEntrance) dungeon.numEntrances++;
 		hasSpawners = false;		

@@ -67,8 +67,8 @@ public final class ConfigHandler {
 	// Vanilla loot will not be added in version of Mincraft 1.9+
 	// Instead all dungeons will have some loot enchanted.
 	private static final boolean DEFAULT_VANILLA_LOOT = false;	
-	private static final boolean EASY_FIND = false;	
-	private static final boolean TRAD_STYLE = false;
+	private static final boolean EASY_FIND  = true;	
+	private static final boolean SINGLE_ENTRANCE = true;
 
 	private static final boolean DISABLE_API = false;
 	private static final boolean NO_MOB_CHANGES = false;
@@ -86,7 +86,7 @@ public final class ConfigHandler {
 	protected static boolean positiveDims = DEFAULT_POSITIVE_DIMS;
 	
 	public    static boolean easyFind = EASY_FIND;
-	public    static boolean tradStyle = TRAD_STYLE;
+	public    static boolean singleEntrance = SINGLE_ENTRANCE;
 	
 	public    static boolean announceCommands = DEFAULT_ANNOUNCE_COMMANDS;
 	public    static boolean vanillaLoot = DEFAULT_VANILLA_LOOT;
@@ -186,14 +186,14 @@ public final class ConfigHandler {
 				+ System.lineSeparator() + "is one that never has entrances.").getBoolean(EASY_FIND);
 		Logging.logInfo("Will dungeons be easy to find? " + easyFind);
 		
-		tradStyle = config.get("General", "TraditionalProgression", TRAD_STYLE, 
+		singleEntrance = config.get("General", "SingleEntrances", SINGLE_ENTRANCE, 
 				"If true all dungeons will exactly one entrance, no more, no less, "
 				+ System.lineSeparator() 
 				+ "like a typical dungeon crawler (Dungeons will be harder but much "
 				+ System.lineSeparator() 
-				+ "better loot.)")
-				.getBoolean(TRAD_STYLE);
-		Logging.logInfo("Will dungeon all have single entrances? " + easyFind);
+				+ "better loot.) If false entrance are random (how the mod originally worked). ")
+				.getBoolean(SINGLE_ENTRANCE);
+		Logging.logInfo("Will dungeon all have single entrances? " + singleEntrance);
 		
 		installThemes = config.get("General", "InstallThemes", INSTALL_THEMES, 
 				"If true themes will automaticall be (re)installed if the themes folder is empty.")
