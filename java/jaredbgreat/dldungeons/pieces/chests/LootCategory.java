@@ -123,7 +123,7 @@ public class LootCategory {
 		int enchPart =Math.min((5 + (diff * (diff + 1) / 2) * 5), diff * 10);
 		if(enchPart >= 1 && isEnchantable(item)) {
 			out = item.getStack(random);
-			out = EnchantmentHelper.addRandomEnchantment(random, out, enchPart, true);
+			out = EnchantmentHelper.addRandomEnchantment(random, out, enchPart, random.nextBoolean());
 		} else {
 			return enchantedLowerLevel(gear[Math.min(6, lootLevel)].getLoot(random), lootLevel, random);
 		}		
@@ -146,7 +146,7 @@ public class LootCategory {
 		if(isEnchantable(item) && (diff > random.nextInt(2))) {
 			int enchPart = Math.min((5 + (level * (level + 1) / 2) * 5), level * 10);
 			out = item.getStack(random);
-			out = EnchantmentHelper.addRandomEnchantment(random, out, enchPart, true);
+			out = EnchantmentHelper.addRandomEnchantment(random, out, enchPart, random.nextBoolean());
 		} else {
 			out = item.getStack(random);
 		}
