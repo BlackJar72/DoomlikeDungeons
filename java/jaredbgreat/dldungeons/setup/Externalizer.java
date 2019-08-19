@@ -58,8 +58,20 @@ public class Externalizer {
 	 * @param name
 	 */
 	public void copyOut(String name) {
+		copyOut(name, name);
+	}
+	
+	
+	/**
+	 * Exports a theme file by reading it from the jar and 
+	 * writing it to the hard drive, but only if a file with 
+	 * that path does not already exist on the drive.
+	 * 
+	 * @param name
+	 */
+	public void copyOut(String name, String outloc) {
 		try {
-			outFile = new File(outDirectory + name);
+			outFile = new File(outDirectory + outloc);
 			if(outFile.exists()) return;
 			instream = new BufferedReader(new InputStreamReader(getClass()
 					.getResourceAsStream(baseLocation + name)));
@@ -88,9 +100,21 @@ public class Externalizer {
 	 * @param name
 	 */
 	public boolean forceOut(String name) {
+		return forceOut(name, name);
+	}
+	
+	
+	/**
+	 * Exports a theme file by reading it from the jar and 
+	 * writing it to the hard drive, over-writing any file 
+	 * with the same path.
+	 * 
+	 * @param name
+	 */
+	public boolean forceOut(String name, String outloc) {
 		boolean result = true;
 		try {
-			outFile = new File(outDirectory + name);
+			outFile = new File(outDirectory + outloc);
 			if(outFile.exists()) {
 				if(outFile.canWrite() && !outFile.isDirectory()) {
 					outFile.delete();
@@ -151,6 +175,7 @@ public class Externalizer {
 		System.out.println("[DLDUNGEONS] Installing files "	+ outDirectory + "chests.cfg");
 		copyOut("nbt.cfg");
 		copyOut("chests.cfg");
+		copyOut("oceanic_chests.cfg", "SpecialChests" + File.separator + "oceanic_chests.cfg");
 	}
 	
 	
@@ -160,11 +185,12 @@ public class Externalizer {
 	public void forceChestCfg() {
 		System.out.println("[DLDUNGEONS] Installing files "	+ outDirectory + "chests.cfg");
 		forceOut("chests.cfg");
+		forceOut("SpecialChests" + File.separator + "oceanic_chests.cfg");
 	}
 	
 	
 	/**
-	 * Export the chest.cfg file if it doesn't currently exist.
+	 * Export the nbt.cfg file if it doesn't currently exist.
 	 */
 	public void makeNBTCfg() {
 		System.out.println("[DLDUNGEONS] Installing files " + outDirectory + "nbt.cfg and " );
@@ -173,7 +199,7 @@ public class Externalizer {
 	
 	
 	/**
-	 * Export the chest.cfg file, over-writing it if it already exists.
+	 * Export the nbt.cfg file, over-writing it if it already exists.
 	 */
 	public void forceNBTCfg() {
 		System.out.println("[DLDUNGEONS] Installing files "  + outDirectory + "nbt.cfg and " );

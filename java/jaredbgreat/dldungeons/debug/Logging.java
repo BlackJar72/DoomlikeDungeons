@@ -46,6 +46,7 @@ public class Logging {
 		if(log == null) {
 			log = new Logging();
 		}
+		//new Exception().printStackTrace();
 		logger.info(info);
 	}
 

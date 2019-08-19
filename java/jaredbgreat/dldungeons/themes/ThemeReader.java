@@ -44,7 +44,7 @@ public class ThemeReader {
 	private static File configDir;
 	private static File themesDir;
 	private static File chestDir;
-	private static final String chestDirName = "SpecialChests";
+	public static final String chestDirName = "SpecialChests";
 	private static ArrayList<File> files;
 	
 	private static final String ESTRING = "";

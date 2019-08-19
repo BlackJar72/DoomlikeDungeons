@@ -18,12 +18,22 @@ import java.util.Random;
  * @author Jared Blackurn
  *
  */
-public class Element implements Autoselecting {
+public final class Element implements Autoselecting {
 	
-	private Degree none, few, some, plenty, heaps, all;
-	private int prob1, prob2, prob3, prob4, prob5, prob6;
-	private int probScale;
+	private static final Degree NONE, FEW, SOME, PLENTY, HEAPS, ALWAYS;
+	private final int prob1, prob2, prob3, prob4, prob5, prob6;
+	private final int probScale;
+	private final boolean never;
 	
+	static {
+		NONE 	= Degree.NONE;
+		FEW 	= Degree.FEW;
+		SOME 	= Degree.SOME;
+		PLENTY =  Degree.PLENTY;
+		HEAPS 	= Degree.HEAPS;
+		ALWAYS 	= Degree.ALWAYS;
+		
+	}
 	
 	public Element (int prob1,
 					int prob2,
@@ -31,19 +41,14 @@ public class Element implements Autoselecting {
 					int prob4,
 					int prob5,
 					int prob6) {
-		this.none 	= Degree.NONE;
 		this.prob1 	= prob1;
-		this.few 	= Degree.FEW;
 		this.prob2 	= this.prob1 + prob2;
-		this.some 	= Degree.SOME;
 		this.prob3 	= this.prob2 + prob3;
-		this.plenty = Degree.PLENTY;
 		this.prob4 	= this.prob3 + prob4;
-		this.heaps 	= Degree.HEAPS;
 		this.prob5 	= this.prob4 + prob5;
-		this.all 	= Degree.ALL;
 		this.prob6 	= this.prob5 + prob6;
 		probScale = this.prob6 + 1;
+		never = this.prob6 == this.prob1;
 	}
 	
 	
@@ -58,7 +63,7 @@ public class Element implements Autoselecting {
 		else if(roll < prob3) return Degree.SOME;
 		else if(roll < prob4) return Degree.PLENTY;
 		else if(roll < prob5) return Degree.HEAPS;
-		else if(roll < prob6) return Degree.ALL;
+		else if(roll < prob6) return Degree.ALWAYS;
 		else return Degree.NONE;
 	}
 	
@@ -72,11 +77,7 @@ public class Element implements Autoselecting {
 	 * @return
 	 */
 	public boolean never() {
-		return    ((prob2 == 0) 
-				&& (prob3 == 0) 
-				&& (prob4 == 0) 
-				&& (prob5 == 0) 
-				&& (prob6 == 0));     
+		return never;     
 	}
 	
 

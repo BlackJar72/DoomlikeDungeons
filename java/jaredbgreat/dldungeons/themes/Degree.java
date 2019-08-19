@@ -26,7 +26,7 @@ public enum Degree implements Autoselectable {
 	SOME	( 3),
 	PLENTY	( 5),
 	HEAPS	( 9),
-	ALL		(10);
+	ALWAYS		(10);
 	
 	
 	public final int value;
