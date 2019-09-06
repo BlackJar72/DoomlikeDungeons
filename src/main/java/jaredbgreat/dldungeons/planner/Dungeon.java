@@ -162,8 +162,8 @@ public class Dungeon {
 		nodes = new Node[numNodes];
 		spawners = new SpawnerCounter();
 		
-		shiftX = (map.chunkX * 16) - (map.room.length / 2) + 8;
-		shiftZ = (map.chunkZ * 16) - (map.room.length / 2) + 8;
+		shiftX = (map.chunkX * 16) - (map.width / 2) + 8;
+		shiftZ = (map.chunkZ * 16) - (map.width / 2) + 8;
 		
 		makeNodes();
 		if((numEntrances < 1) && ConfigHandler.easyFind) addAnEntrance();
@@ -476,9 +476,9 @@ public class Dungeon {
 		numEntrances = 1;
 		for(int i = (int)it.realX -2; i < ((int)it.realX + 2); i++)
 			for(int j = (int)it.realZ - 2; j < ((int)it.realZ + 2); j++) {
-				map.floorY[i][j] = (byte)it.floorY;
-				map.hasLiquid[i][j] = false;
-				map.isWall[i][j] = false;
+				map.setFloorY((byte)it.floorY, i, j);
+				map.setHasLiquid(false, i, j);
+				map.setIsWall(false, i, j);
 		}	
 	}
 	

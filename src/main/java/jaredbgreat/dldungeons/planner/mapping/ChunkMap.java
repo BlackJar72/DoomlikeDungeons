@@ -95,7 +95,7 @@ public class ChunkMap {
 		isDoor[(x % WIDTH) + z] = val;
 	}
 	
-	public void setAStarted(boolean val, int x, int z) {
+	public void setAStared(boolean val, int x, int z) {
 		astared[(x % WIDTH) + z] = val;
 	}
 	
@@ -152,7 +152,7 @@ public class ChunkMap {
 		return isDoor[(x % WIDTH) + z];
 	}
 	
-	public boolean getAStarted(int x, int z) {
+	public boolean getAStared(int x, int z) {
 		return astared[(x % WIDTH) + z];
 	}
 	

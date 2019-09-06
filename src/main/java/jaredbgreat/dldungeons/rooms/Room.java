@@ -139,14 +139,16 @@ public class Room extends AbstractRoom {
 		}
 		for(int i = beginX + 1; i < endX; i++)
 			for(int j = beginZ + 1; j < endZ; j++) {
-				if(dungeon.map.room[i][j] == 0) dungeon.map.room[i][j] = id;
-				dungeon.map.ceilY[i][j] = dungeon.map.nCeilY[i][j] = (byte)ceilY;
-				dungeon.map.floorY[i][j] = dungeon.map.nFloorY[i][j] = (byte)floorY;
-				if(!sky) dungeon.map.ceiling[i][j] = cielingBlock;
-				dungeon.map.floor[i][j] = floorBlock;
-				dungeon.map.wall[i][j] = wallBlock1;	
-				dungeon.map.hasLiquid[i][j] = false;	
-				dungeon.map.isWall[i][j] = false;					
+				if(dungeon.map.getRoom(i, j) == 0) dungeon.map.setRoom(id, i, j);
+				dungeon.map.setCeilY((byte)ceilY, i, j);
+				dungeon.map.setNCeilY((byte)ceilY, i, j);
+				dungeon.map.setFloorY((byte)floorY, i, j);
+				dungeon.map.setNFloorY((byte)floorY, i, j);
+				if(!sky) dungeon.map.setCeiling(cielingBlock, i, j);
+				dungeon.map.setFloor(floorBlock, i, j);
+				dungeon.map.setWall(wallBlock1, i, j);	
+				dungeon.map.setHasLiquid(false, i, j);	
+				dungeon.map.setIsWall(false, i, j);					
 			}
 		for(int i = beginX; i <= endX; i++) {
 			assignEdge(dungeon, i, beginZ);
@@ -181,9 +183,9 @@ public class Room extends AbstractRoom {
 		if(hasEntrance) {
 			for(int i = (int)realX -2; i < ((int)realX + 2); i++)
 					for(int j = (int)realZ - 2; j < ((int)realZ + 2); j++) {
-						dungeon.map.floorY[i][j] = (byte)floorY;
-						dungeon.map.hasLiquid[i][j] = false;
-						dungeon.map.isWall[i][j] = false;
+						dungeon.map.setFloorY((byte)floorY, i, j);
+						dungeon.map.setHasLiquid(false, i, j);
+						dungeon.map.setIsWall(false, i, j);
 					}
 		}
 		if(parent == null) {
@@ -203,22 +205,26 @@ public class Room extends AbstractRoom {
 	 * @param z
 	 */
 	private void assignEdge(Dungeon dungeon, int x, int z) {
-		if((dungeon.map.room[x][z] == 0) 
-				|| (dungeon.rooms.get(dungeon.map.room[x][z]).sky && !sky)
+		if((dungeon.map.getRoom(x, z) == 0) 
+				|| (dungeon.rooms.get(dungeon.map.getRoom(x, z)).sky && !sky)
 				|| (isSubroom)) {
-			dungeon.map.room[x][z] = id;
-			if(!sky) dungeon.map.ceiling[x][z] = cielingBlock;
-			dungeon.map.floor[x][z] = floorBlock;
-			dungeon.map.wall[x][z] = wallBlock1;	
-			dungeon.map.hasLiquid[x][z] = false;
-			dungeon.map.isWall[x][z] = !sky;
-			dungeon.map.isFence[x][z] = fenced;
+			dungeon.map.setRoom(id, x, z);
+			if(!sky) dungeon.map.setCeiling(cielingBlock, x, z);
+			dungeon.map.setFloor(floorBlock, x, z);
+			dungeon.map.setWall(wallBlock1, x, z);	
+			dungeon.map.setHasLiquid(false, x, z);
+			dungeon.map.setIsWall(!sky, x, z);
+			dungeon.map.setIsFence(fenced, x, z);
 		}
-		if(dungeon.map.ceilY[x][z] < (byte)ceilY)  dungeon.map.ceilY[x][z] = (byte)ceilY;
-		if(dungeon.map.nCeilY[x][z] < (byte)ceilY) dungeon.map.nCeilY[x][z] = (byte)ceilY;
-		if(dungeon.map.floorY[x][z] < (byte)floorY) dungeon.map.floorY[x][z] = (byte)floorY;
-		if((dungeon.map.nFloorY[x][z] > (byte)nFloorY) || (dungeon.map.nFloorY[x][z] == 0)) 
-			dungeon.map.nFloorY[x][z] = (byte)floorY;				
+		if(dungeon.map.getCeilY(x, z) < (byte)ceilY) 
+			dungeon.map.setCeilY((byte)ceilY, x, z);
+		if(dungeon.map.getNCeilY(x, z) < (byte)ceilY) 
+			dungeon.map.setNCeilY((byte)ceilY, x, z);
+		if(dungeon.map.getFloorY(x, z) < (byte)floorY) 
+			dungeon.map.setFloorY((byte)floorY, x, z);
+		if((dungeon.map.getNFloorY(x, z) > (byte)nFloorY) 
+				|| (dungeon.map.getNFloorY(x, z) == 0)) 
+			dungeon.map.setNFloorY((byte)floorY, x, z);				
 	}
 	
 	
@@ -234,7 +240,7 @@ public class Room extends AbstractRoom {
 	 * that can be thought of as the room character or a room equivalent to 
 	 * the dungeons wide theme-based probabilities.
 	 * 
-	 * @param dungeon
+	 * @param dungeon] = 
 	 */
 	public void addFeatures(Dungeon dungeon) {
 		ArrayList<FeatureAdder> features = new ArrayList<FeatureAdder>();
@@ -279,8 +285,8 @@ public class Room extends AbstractRoom {
 				x = dungeon.random.nextInt(tmp) + beginX + 2;
 				tmp = (endZ - beginZ - 3);
 				z = dungeon.random.nextInt(tmp) + beginZ + 2;
-				if(dungeon.random.nextInt(4) == 0) y = dungeon.map.ceilY[x][z];
-				else y = dungeon.map.floorY[x][z];
+				if(dungeon.random.nextInt(4) == 0) y = dungeon.map.getCeilY(x, z);
+				else y = dungeon.map.getFloorY(x, z);
 				int lev = levAdjust(ConfigHandler.difficulty.moblevel(dungeon.random), dungeon);
 				if(lev >= 0) {
 					mob = dungeon.theme.allMobs[lev].get(dungeon.random.nextInt(dungeon.theme.allMobs[lev].size()));
@@ -294,8 +300,8 @@ public class Room extends AbstractRoom {
 			x = dungeon.random.nextInt(tmp) + beginX + (tmp /2);
 			tmp = (endZ - beginZ) / 2;
 			z = dungeon.random.nextInt(tmp) + beginZ + (tmp /2);
-			if(dungeon.random.nextInt(4) == 0) y = dungeon.map.floorY[x][z];
-			else y = dungeon.map.ceilY[x][z];
+			if(dungeon.random.nextInt(4) == 0) y = dungeon.map.getFloorY(x, z);
+			else y = dungeon.map.getCeilY(x, z);
 			int lev = levAdjust(ConfigHandler.difficulty.moblevel(dungeon.random), dungeon);
 			if(lev >= 0) {
 				mob = dungeon.theme.allMobs[lev].get(dungeon.random.nextInt(dungeon.theme.allMobs[lev].size()));
@@ -307,8 +313,12 @@ public class Room extends AbstractRoom {
 		if(isNode && !hasEntrance) {
 			x = (int)realX;
 			z = (int)realZ;
-			if(dungeon.map.hasLiquid[x][z]) {y = dungeon.map.ceilY[x][z];}
-			else {y = dungeon.map.floorY[x][z] - 1;} 
+			if(dungeon.map.getHasLiquid(x, z)) {
+				y = dungeon.map.getCeilY(x, z);
+			}
+			else {
+				y = dungeon.map.getFloorY(x, z) - 1;
+			} 
 			int lev = levAdjust(ConfigHandler.difficulty.nodelevel(dungeon.random), dungeon);
 			if(lev >= 0) {
 				mob = dungeon.theme.allMobs[lev].get(dungeon.random.nextInt(dungeon.theme.allMobs[lev].size()));
@@ -370,14 +380,14 @@ public class Room extends AbstractRoom {
 			x = dungeon.random.nextInt(tmp) + beginX + 2;
 			tmp = (endZ - beginZ - 3);
 			z = dungeon.random.nextInt(tmp) + beginZ + 2;
-			y = dungeon.map.floorY[x][z];
+			y = dungeon.map.getFloorY(x, z);
 			chests.add(new WeakChest(x, y, z, dungeon.lootCat));
 		} else if(dungeon.random.nextBoolean() && !isNode) {
 			tmp = (endX - beginX - 3);
 			x = dungeon.random.nextInt(tmp) + beginX + 2;
 			tmp = (endZ - beginZ - 3);
 			z = dungeon.random.nextInt(tmp) + beginZ + 2;
-			y = dungeon.map.floorY[x][z];
+			y = dungeon.map.getFloorY(x, z);
 			chests.add(new BasicChest(x, y, z, lev, dungeon.lootCat));
 		} else {
 			int ms = Math.max(n, 2);
@@ -388,13 +398,13 @@ public class Room extends AbstractRoom {
 				x = dungeon.random.nextInt(tmp) + beginX + 2;
 				tmp = (endZ - beginZ - 3);
 				z = dungeon.random.nextInt(tmp) + beginZ + 2;
-				y = dungeon.map.floorY[x][z];
+				y = dungeon.map.getFloorY(x, z);
 				chests.add(new BasicChest(x, y, z, lev, dungeon.lootCat));
 			}
 		} if(isNode && !hasEntrance) {
 			x = (int)realX;
 			z = (int)realZ;
-			y = dungeon.map.floorY[x][z]; 
+			y = dungeon.map.getFloorY(x, z); 
 			chests.add(new TreasureChest(x, y, z, lev, dungeon.lootCat));
 		}
 	}
@@ -422,7 +432,7 @@ public class Room extends AbstractRoom {
 	 */
 	protected void addDoor(Dungeon dungeon, int x, int z, boolean xOriented) {
 		doors.add(new Doorway(x, z, xOriented));
-		dungeon.map.isDoor[x][z] = true;
+		dungeon.map.setIsDoor(true, x, z);
 	}
 	
 	
@@ -632,8 +642,8 @@ public class Room extends AbstractRoom {
 				((x + xSeedDir) < 0) ||
 				((z + zSeedDir) >= dungeon.size.width) ||
 				((z + zSeedDir) < 0)) return null;
-		if(dungeon.map.room[x + xSeedDir][z + zSeedDir] != 0) {
-				return dungeon.rooms.get(dungeon.map.room[x + xSeedDir][z + zSeedDir]);
+		if(dungeon.map.getRoom(x + xSeedDir, z + zSeedDir) != 0) {
+				return dungeon.rooms.get(dungeon.map.getRoom(x + xSeedDir, z + zSeedDir));
 			}
 		else if((dir % 2) == 0) return new RoomSeed(x + xSeedDir, floorY, z + zSeedDir)
 				.growRoomZ(xdim, zdim, height, dungeon, null, this);
@@ -655,8 +665,8 @@ public class Room extends AbstractRoom {
 		shape = Shapes.wholeShape(sym, dungeon.random);
 		for(int i = beginX; i <= endX; i++) 
 			for(int j = beginZ; j <= endZ; j++) {
-				dungeon.map.floorY[i][j] -= drop;
-				dungeon.map.hasLiquid[i][j] = true;
+				dungeon.map.setFloorY((byte)(dungeon.map.getFloorY(i, j) - drop), i, j);
+				dungeon.map.setHasLiquid(true, i, j);
 			}
 		shape.family[orientation].drawWalkway(dungeon, this, realX, realZ, 
 				(byte)(endX - beginX + 1), (byte)(endZ - beginZ + 1), XFlip, ZFlip);
@@ -673,7 +683,7 @@ public class Room extends AbstractRoom {
 		shape = Shapes.wholeShape(sym, dungeon.random);
 		for(int i = beginX; i <= endX; i++) 
 			for(int j = beginZ; j <= endZ; j++) {
-				dungeon.map.isWall[i][j] = true;
+				dungeon.map.setIsWall(true, i, j);
 			}
 		shape.family[orientation].drawCutin(dungeon, this, realX, realZ, 
 				(byte)(endX - beginX - 1), (byte)(endZ - beginZ - 1), XFlip, ZFlip);

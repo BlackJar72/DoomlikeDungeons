@@ -38,54 +38,54 @@ public class Pillar extends FeatureAdder {
 		switch (room.sym) {
 		case NONE: break;
 		case TR1:
-			dungeon.map.isWall[pillarx1][pillarz1] = true;
-			dungeon.map.isWall[pillarz1][pillarx1] = true;
-			dungeon.map.wall[pillarx1][pillarz1]   = room.pillarBlock;
-			dungeon.map.wall[pillarz1][pillarx1]   = room.pillarBlock;
+			dungeon.map.setIsWall(true, pillarx1, pillarz1);
+			dungeon.map.setIsWall(true, pillarz1, pillarx1);
+			dungeon.map.setWall(room.pillarBlock, pillarx1, pillarz1);
+			dungeon.map.setWall(room.pillarBlock, pillarz1, pillarx1);
 			break;
 		case TR2:
-			dungeon.map.isWall[pillarx1][pillarz1]  = true;
-			dungeon.map.isWall[pillarz1][pillarx1]  = true;
-			dungeon.map.wall[pillarx2][pillarz1]    = room.pillarBlock;
-			dungeon.map.wall[pillarz2][pillarx1]    = room.pillarBlock;
+			dungeon.map.setIsWall(true, pillarx1, pillarz1);
+			dungeon.map.setIsWall(true, pillarz1, pillarx1);
+			dungeon.map.setWall(room.pillarBlock, pillarx2, pillarz1);
+			dungeon.map.setWall(room.pillarBlock, pillarz2, pillarx1);
 			break;
 		case X:
-			dungeon.map.isWall[pillarx1][pillarz1] = true;
-			dungeon.map.isWall[pillarx2][pillarz1] = true;
-			dungeon.map.wall[pillarx1][pillarz1]   = room.pillarBlock;
-			dungeon.map.wall[pillarx2][pillarz1]   = room.pillarBlock;
+			dungeon.map.setIsWall(true, pillarx1, pillarz1);
+			dungeon.map.setIsWall(true, pillarx2, pillarz1);
+			dungeon.map.setWall(room.pillarBlock, pillarx1, pillarz1);
+			dungeon.map.setWall(room.pillarBlock, pillarx2, pillarz1);
 			break;
 		case Z:
-			dungeon.map.isWall[pillarx1][pillarz1] = true;
-			dungeon.map.isWall[pillarx1][pillarz2] = true;
-			dungeon.map.wall[pillarx1][pillarz1]   = room.pillarBlock;
-			dungeon.map.wall[pillarx1][pillarz2]   = room.pillarBlock;
+			dungeon.map.setIsWall(true, pillarx1, pillarz1);
+			dungeon.map.setIsWall(true, pillarx1, pillarz2);
+			dungeon.map.setWall(room.pillarBlock, pillarx1, pillarz1);
+			dungeon.map.setWall(room.pillarBlock, pillarx1, pillarz2);
 			break;
 		case XZ:
-			dungeon.map.isWall[pillarx1][pillarz1] = true;
-			dungeon.map.isWall[pillarx1][pillarz2] = true;
-			dungeon.map.isWall[pillarx2][pillarz1] = true;
-			dungeon.map.isWall[pillarx2][pillarz2] = true;
-			dungeon.map.wall[pillarx1][pillarz1]   = room.pillarBlock;
-			dungeon.map.wall[pillarx1][pillarz2]   = room.pillarBlock;
-			dungeon.map.wall[pillarx2][pillarz1]   = room.pillarBlock;
-			dungeon.map.wall[pillarx2][pillarz2]   = room.pillarBlock;
+			dungeon.map.setIsWall(true, pillarx1, pillarz1);
+			dungeon.map.setIsWall(true, pillarx1, pillarz2);
+			dungeon.map.setIsWall(true, pillarx2, pillarz1);
+			dungeon.map.setIsWall(true, pillarx2, pillarz2);
+			dungeon.map.setWall(room.pillarBlock, pillarx1, pillarz1);
+			dungeon.map.setWall(room.pillarBlock, pillarx1, pillarz2);
+			dungeon.map.setWall(room.pillarBlock, pillarx2, pillarz1);
+			dungeon.map.setWall(room.pillarBlock, pillarx2, pillarz2);
 			break;
 		case R:
-			dungeon.map.isWall[pillarx1][pillarz1] = true;
-			dungeon.map.isWall[pillarx2][pillarz2] = true;
-			dungeon.map.wall[pillarx1][pillarz1]   = room.pillarBlock;
-			dungeon.map.wall[pillarx2][pillarz2]   = room.pillarBlock;
+			dungeon.map.setIsWall(true, pillarx1, pillarz1);
+			dungeon.map.setIsWall(true, pillarx2, pillarz2);
+			dungeon.map.setWall(room.pillarBlock, pillarx1, pillarz1);
+			dungeon.map.setWall(room.pillarBlock, pillarx2, pillarz2);
 			break;
 		case SW:
-			dungeon.map.isWall[pillarx1][pillarz1] = true;
-			dungeon.map.isWall[pillarx1][pillarz2] = true;
-			dungeon.map.isWall[pillarx2][pillarz1] = true;
-			dungeon.map.isWall[pillarx2][pillarz2] = true;
-			dungeon.map.wall[pillarx1][pillarz1]   = room.pillarBlock;
-			dungeon.map.wall[pillarx1][pillarz2]   = room.pillarBlock;
-			dungeon.map.wall[pillarx2][pillarz1]   = room.pillarBlock;
-			dungeon.map.wall[pillarx2][pillarz2]   = room.pillarBlock;
+			dungeon.map.setIsWall(true, pillarx1, pillarz1);
+			dungeon.map.setIsWall(true, pillarx1, pillarz2);
+			dungeon.map.setIsWall(true, pillarx2, pillarz1);
+			dungeon.map.setIsWall(true, pillarx2, pillarz2);
+			dungeon.map.setWall(room.pillarBlock, pillarx1, pillarz1);
+			dungeon.map.setWall(room.pillarBlock, pillarx1, pillarz2);
+			dungeon.map.setWall(room.pillarBlock, pillarx2, pillarz1);
+			dungeon.map.setWall(room.pillarBlock, pillarx2, pillarz2);
 		}
 	}
 }

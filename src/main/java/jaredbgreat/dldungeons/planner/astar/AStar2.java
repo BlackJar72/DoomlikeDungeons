@@ -70,57 +70,56 @@ public class AStar2 extends AStar {
 	 */
 	@Override
 	public void makeRoute(Step end) {
-		int roomid = dungeon.map.room[end.x][end.z];
-		byte floory = dungeon.map.floorY[end.x][end.z];
+		int roomid = dungeon.map.getRoom(end.x, end.z);
+		byte floory = dungeon.map.getFloorY(end.x, end.z);
 		byte ceily  = (byte)(dungeon.baseHeight + 2);
 		int size = dungeon.random.nextInt(2) + 1;
 		Step child = end, parent = end.parent;
 		if(parent == null) return;
 		do {
-			if(dungeon.map.room[child.x][child.z] != 0) {
-				roomid = dungeon.map.room[child.x][child.z];
-				floory = dungeon.map.floorY[child.x][child.z];
+			if(dungeon.map.getRoom(child.x, child.z) != 0) {
+				roomid = dungeon.map.getRoom(child.x, child.z);
+				floory = dungeon.map.getFloorY(child.x, child.z);
 				ceily  = (byte)(floory + 2);
 			} else {
 				for(int i = -size; i <= size; i++) 
 					for(int j = -size; j <= size; j++) {
-						dungeon.map.floorY[child.x+i][child.z+j] = floory;
-						dungeon.map.ceilY[child.x+i][child.z+j] = ceily;
-						dungeon.map.hasLiquid[child.x+i][child.z+j] = false;
-						if(dungeon.map.room[child.x+i][child.z+j] < 1) {
-							dungeon.map.room[child.x+i][child.z+j] = roomid;
-							dungeon.map.isWall[child.x+i][child.z+j] = true;
-							dungeon.map.floor[child.x+i][child.z+j] = dungeon.floorBlock;
-							dungeon.map.ceiling[child.x+i][child.z+j] = dungeon.cielingBlock;
-							dungeon.map.wall[child.x+i][child.z+j] = dungeon.wallBlock1;
-						
+						dungeon.map.setFloorY(floory, child.x+i, child.z+j);
+						dungeon.map.setCeilY(ceily, child.x+i, child.z+j);
+						dungeon.map.setHasLiquid(false, child.x+i, child.z+j);
+						if(dungeon.map.getRoom(child.x+i, child.z+j) < 1) {
+							dungeon.map.setRoom(roomid, child.x+i, child.z+j);
+							dungeon.map.setIsWall(true, child.x+i, child.z+j);
+							dungeon.map.setFloor(dungeon.floorBlock, child.x+i, child.z+j);
+							dungeon.map.setCeiling(dungeon.cielingBlock, child.x+i, child.z+j);
+							dungeon.map.setWall(dungeon.wallBlock1, child.x+i, child.z+j);						
 						}
-						if(dungeon.map.astared[child.x+i][child.z+j] || 
+						if(dungeon.map.getAStared(child.x+i, child.z+j) || 
 								((Math.abs(i) < size) && (Math.abs(j) < size))) {
-							dungeon.map.isDoor[child.x+i][child.z+j] = true;
-							dungeon.map.isWall[child.x+i][child.z+j] = false;
+							dungeon.map.setIsDoor(true, child.x+i, child.z+j);
+							dungeon.map.setIsWall(false, child.x+i, child.z+j);
 						}
 					}
 			}
-			dungeon.map.astared[child.x][child.z] = true;
-			if(dungeon.map.isWall[child.x][child.z] ||
-						dungeon.map.isFence[child.x][child.z]) 
+			dungeon.map.setAStared(true, child.x, child.z);
+			if(dungeon.map.getIsWall(child.x, child.z) ||
+						dungeon.map.getIsFence(child.x,child.z)) 
 					addDoor(parent, child);
-			if(dungeon.map.hasLiquid[child.x][child.z]) 
+			if(dungeon.map.getHasLiquid(child.x, child.z)) 
 					fixLiquid(parent, child, 
 							(byte) dungeon.rooms.get(room).floorY);
 			fixHeights(parent, child);
 			child = parent;
 			parent = child.parent;
 		} while (parent != null);
-		dungeon.map.astared[child.x][child.z] = true;
-		if(dungeon.map.isWall[child.x][child.z] ||
-					dungeon.map.isFence[child.x][child.z]) 
-				dungeon.map.isDoor[child.x][child.z] = true;
-		if(dungeon.map.hasLiquid[child.x][child.z]) {
-			dungeon.map.hasLiquid[child.x][child.z] = false;
-			dungeon.map.floorY[child.x][child.z] = 
-					(byte) dungeon.rooms.get(room).floorY;
+		dungeon.map.setAStared(true, child.x, child.z);
+		if(dungeon.map.getIsWall(child.x, child.z) ||
+					dungeon.map.getIsFence(child.x, child.z)) 
+				dungeon.map.setIsDoor(true, child.x, child.z);
+		if(dungeon.map.getHasLiquid(child.x, child.z)) {
+			dungeon.map.setHasLiquid(false, child.x, child.z);
+			dungeon.map.setFloorY((byte) dungeon.rooms.get(room).floorY, 
+					child.x, child.z);
 		}
 	}
 	

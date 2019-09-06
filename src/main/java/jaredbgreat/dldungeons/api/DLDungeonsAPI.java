@@ -3,10 +3,6 @@ package jaredbgreat.dldungeons.api;
 import jaredbgreat.dldungeons.ReadAPI;
 import jaredbgreat.dldungeons.themes.ThemeType;
 
-import java.util.Random;
-
-import net.minecraft.world.World;
-
 
 /* 
  * Doomlike Dungeons by is licensed the MIT License
@@ -16,45 +12,45 @@ import net.minecraft.world.World;
 public class DLDungeonsAPI {
 	
 	
-	/**
-	 * This will spawn a dungeon at the given chunk coordinates.  The dungeon will not use the world seed; 
-	 * this is the same as using the /dldspawn command.
-	 * 
-	 * @param world
-	 * @param chunkX
-	 * @param chunkZ
-	 */
-	public static void spawnDungeon(World world, int chunkX, int chunkZ) {
-		ReadAPI.spawnDungeon(world, chunkX, chunkZ);
-	}
-	
-	
-	/** This will spawn a dungeon at the given chunk coordinates.  It will use the seed given, 
-	 * which should typically be derived in some way from the world seed.
-	 * 
-	 * @param world
-	 * @param chunkX
-	 * @param chunkZ
-	 * @param seed
-	 */
-	public static void spawnDungeon(World world, int chunkX, int chunkZ, long seed) {
-		ReadAPI.spawnDungeon(world, chunkX, chunkZ, seed);
-	}
-	
-	
-	/** This will spawn a dungeon at the given chunk coordinates.   It will use the seed given, 
-	 * which should typically be derived in some way from the world seed, but should NEVER be
-	 * the actual world seed itself.  A simple way to do this is to use nextLong() on an instance
-	 * of Random that is itself based on the world seed.
-	 * 
-	 * @param world
-	 * @param chunkX
-	 * @param chunkZ
-	 * @param random
-	 */
-	public static void spawnDungeon(World world, int chunkX, int chunkZ, Random random) {
-		ReadAPI.spawnDungeon(world, chunkX, chunkZ, random);
-	}
+//	/**
+//	 * This will spawn a dungeon at the given chunk coordinates.  The dungeon will not use the world seed; 
+//	 * this is the same as using the /dldspawn command.
+//	 * 
+//	 * @param world
+//	 * @param chunkX
+//	 * @param chunkZ
+//	 */
+//	public static void spawnDungeon(World world, int chunkX, int chunkZ) {
+//		ReadAPI.spawnDungeon(world, chunkX, chunkZ);
+//	}
+//	
+//	
+//	/** This will spawn a dungeon at the given chunk coordinates.  It will use the seed given, 
+//	 * which should typically be derived in some way from the world seed.
+//	 * 
+//	 * @param world
+//	 * @param chunkX
+//	 * @param chunkZ
+//	 * @param seed
+//	 */
+//	public static void spawnDungeon(World world, int chunkX, int chunkZ, long seed) {
+//		ReadAPI.spawnDungeon(world, chunkX, chunkZ, seed);
+//	}
+//	
+//	
+//	/** This will spawn a dungeon at the given chunk coordinates.   It will use the seed given, 
+//	 * which should typically be derived in some way from the world seed, but should NEVER be
+//	 * the actual world seed itself.  A simple way to do this is to use nextLong() on an instance
+//	 * of Random that is itself based on the world seed.
+//	 * 
+//	 * @param world
+//	 * @param chunkX
+//	 * @param chunkZ
+//	 * @param random
+//	 */
+//	public static void spawnDungeon(World world, int chunkX, int chunkZ, Random random) {
+//		ReadAPI.spawnDungeon(world, chunkX, chunkZ, random);
+//	}
 	
 	
 	/**

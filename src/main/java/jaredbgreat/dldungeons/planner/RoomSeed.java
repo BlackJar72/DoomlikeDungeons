@@ -94,17 +94,17 @@ public class RoomSeed {
 			w = 1;
 		}
 		if((x >= dungeon.size.width) || (x < 0) || (z >= dungeon.size.width) || (z < 0)) return null;
-		if(dungeon.map.room[x][z] != container) return null;
+		if(dungeon.map.getRoom(x, z) != container) return null;
 			while((canAddX || canSubX) && grownX < xdim) {
 				if((endX+1) >= dungeon.size.width) canAddX = false;
 				if((beginX-1) < 0) canSubX = false;
 				if(canAddX) {
-					if(dungeon.map.room[endX+w][z] == container) {
+					if(dungeon.map.getRoom(endX+w, z) == container) {
 						grownX += 1;
 						endX += 1;
 					} else canAddX = false;
 				} if(canSubX) {
-					if(dungeon.map.room[beginX-w][z] == container) {
+					if(dungeon.map.getRoom(beginX-w, z) == container) {
 						grownX += 1;
 						beginX -= 1;
 					} else canSubX = false;
@@ -116,11 +116,11 @@ public class RoomSeed {
 				for(int i = lowEdge; i <= highEdge; i++) {
 					if((endZ+1) >= dungeon.size.width) canAddZ = false;
 					else {
-						if(dungeon.map.room[i][endZ+w] != container) canAddZ = false;
+						if(dungeon.map.getRoom(i, endZ+w) != container) canAddZ = false;
 					}
 					if((beginZ-1) < 0) canSubZ = false;
 					else {
-						if(dungeon.map.room[i][beginZ-w] != container) canSubZ = false;								
+						if(dungeon.map.getRoom(i, beginZ-w) != container) canSubZ = false;								
 					}
 				}
 				if(canAddZ) {
@@ -154,7 +154,7 @@ public class RoomSeed {
 	 * 
 	 * If either dimension is less the five blocks in length null will be returned,
 	 * otherwise AbstractRoom.makeRoom is called to create a Room to return.
-	 * 
+	 * ] = false
 	 * The code for this and growRoomX with some variables reversed, since this was 
 	 * the only simple solution to present itself when this class was designed and
 	 * written.
@@ -180,17 +180,17 @@ public class RoomSeed {
 			w = 1;
 		}
 		if((x >= dungeon.size.width) || (x < 0) || (z >= dungeon.size.width) || (z < 0)) return null;
-		if(dungeon.map.room[x][z] != container) return null;
+		if(dungeon.map.getRoom(x, z) != container) return null;
 			while((canAddZ || canSubZ) && grownZ < zdim) {
 				if((endZ+1) >= dungeon.size.width) canAddZ = false;
 				if((beginZ-1) < 0) canSubZ = false;
 				if(canAddZ) {
-					if(dungeon.map.room[x][endZ+w] == container) {
+					if(dungeon.map.getRoom(x, endZ+w) == container) {
 						grownZ += 1;
 						endZ += 1;
 					} else canAddZ = false;
 				} if(canSubZ) {
-					if(dungeon.map.room[x][beginZ-w] == container) {
+					if(dungeon.map.getRoom(x, beginZ-w) == container) {
 						grownZ += 1;
 						beginZ -= 1;
 					} else canSubZ = false;
@@ -202,11 +202,11 @@ public class RoomSeed {
 				for(int i = lowEdge; i <= highEdge; i++) {
 					if((endX+1) >= dungeon.size.width) canAddX = false;
 					else {
-						if(dungeon.map.room[endX+w][i] != container) canAddX = false;
+						if(dungeon.map.getRoom(endX+w, i) != container) canAddX = false;
 					}
 					if((beginX-1) < 0) canSubX = false;
 					else {
-						if(dungeon.map.room[beginX-w][i] != container) canSubX = false;								
+						if(dungeon.map.getRoom(beginX-w, i) != container) canSubX = false;								
 					}
 				}
 				if(canAddX) {

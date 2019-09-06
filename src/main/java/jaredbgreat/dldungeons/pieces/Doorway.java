@@ -73,17 +73,17 @@ public class Doorway extends Tile implements Comparable<Doorway> {
 	 */
 	public void prioritize(Dungeon dungeon, int start) {
 		if(xOriented) {
-			if(dungeon.map.hasLiquid[x+1][z]) priority++;
-			if(dungeon.map.hasLiquid[x-1][z]) priority++;
-			if(dungeon.map.room[x+1][z] == start) 
-				otherside = dungeon.map.room[x-1][z];
-			else otherside = dungeon.map.room[x+1][z];
+			if(dungeon.map.getHasLiquid(x+1, z)) priority++;
+			if(dungeon.map.getHasLiquid(x-1, z)) priority++;
+			if(dungeon.map.getRoom(x+1, z) == start) 
+				otherside = dungeon.map.getRoom(x-1, z);
+			else otherside = dungeon.map.getRoom(x+1, z);
 		} else {
-			if(dungeon.map.hasLiquid[x][z+1]) priority++;
-			if(dungeon.map.hasLiquid[x][z-1]) priority++;
-			if(dungeon.map.room[x][z+1] == start) 
-				otherside = dungeon.map.room[x][z-1];
-			else otherside = dungeon.map.room[x][z+1];			
+			if(dungeon.map.getHasLiquid(x, z+1)) priority++;
+			if(dungeon.map.getHasLiquid(x, z-1)) priority++;
+			if(dungeon.map.getRoom(x, z+1) == start) 
+				otherside = dungeon.map.getRoom(x, z-1);
+			else otherside = dungeon.map.getRoom(x, z+1);			
 		}
 	}
 

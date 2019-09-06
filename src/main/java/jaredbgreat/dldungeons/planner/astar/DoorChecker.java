@@ -46,7 +46,7 @@ public class DoorChecker {
 	public static boolean validateTile(Dungeon dungeon, int x, int z) {
 		if(x < 0 || x >= dungeon.size.width) return false;
 		if(z < 0 || z >= dungeon.size.width) return false;
-		return (dungeon.map.room[x][z] > 0);
+		return (dungeon.map.getRoom(x, z) > 0);
 	}
 	
 	
@@ -98,15 +98,15 @@ public class DoorChecker {
 	 */
 	public static int getOtherRoom(Doorway exit, Room room, Dungeon dungeon) {
 		if(exit.xOriented) {
-			if(dungeon.map.room[exit.x+1][exit.z] == room.id)
-				return dungeon.map.room[exit.x-1][exit.z];
-			if(dungeon.map.room[exit.x-1][exit.z] == room.id)
-				return dungeon.map.room[exit.x+1][exit.z];
+			if(dungeon.map.getRoom(exit.x+1, exit.z) == room.id)
+				return dungeon.map.getRoom(exit.x-1, exit.z);
+			if(dungeon.map.getRoom(exit.x-1, exit.z) == room.id)
+				return dungeon.map.getRoom(exit.x+1, exit.z);
 		} else {
-			if(dungeon.map.room[exit.x][exit.z+1] == room.id)
-				return dungeon.map.room[exit.x][exit.z-1];
-			if(dungeon.map.room[exit.x][exit.z-1] == room.id)
-				return dungeon.map.room[exit.x][exit.z+1];
+			if(dungeon.map.getRoom(exit.x, exit.z+1) == room.id)
+				return dungeon.map.getRoom(exit.x, exit.z-1);
+			if(dungeon.map.getRoom(exit.x, exit.z-1) == room.id)
+				return dungeon.map.getRoom(exit.x, exit.z+1);
 		}
 		return 0; // This will result in a error (fail-fast -- should not be the nullRoom)
 	}
@@ -138,32 +138,32 @@ public class DoorChecker {
 			return;
 		}
 		for(Doorway door : room.doors) {
-			if(dungeon.map.astared[door.x][door.z]) continue;
+			if(dungeon.map.getAStared(door.x, door.z)) continue;
 			if(door.xOriented) {
-				if(dungeon.map.isWall[door.x+1][door.z] || 
-						dungeon.map.isWall[door.x-1][door.z])
-					dungeon.map.isDoor[door.x][door.z] = false;
-				if(dungeon.map.hasLiquid[door.x+1][door.z] != 
-						dungeon.map.hasLiquid[door.x-1][door.z])
-					dungeon.map.isDoor[door.x][door.z] = false;
-				if(dungeon.map.hasLiquid[door.x+1][door.z]) {
-					dungeon.map.hasLiquid[door.x][door.z] = true;
+				if(dungeon.map.getIsWall(door.x+1, door.z) || 
+						dungeon.map.getIsWall(door.x-1, door.z))
+					dungeon.map.setIsDoor(false, door.x, door.z);
+				if(dungeon.map.getHasLiquid(door.x+1, door.z) != 
+						dungeon.map.getHasLiquid(door.x-1, door.z))
+					dungeon.map.setIsDoor(false, door.x, door.z);
+				if(dungeon.map.getHasLiquid(door.x+1, door.z)) {
+					dungeon.map.setHasLiquid(true, door.x, door.z);
 					if(dungeon.theme.flags.contains(ThemeFlags.SWAMPY)) 
-							dungeon.map.floorY[door.x][door.z] = (byte) (room.floorY - 1);
-					else dungeon.map.floorY[door.x][door.z] = (byte) (room.floorY - 2);
+							dungeon.map.setFloorY((byte) (room.floorY - 1), door.x, door.z);
+					else dungeon.map.setFloorY((byte)(room.floorY - 2), door.x, door.z);
 				}
 			} else {
-				if(dungeon.map.isWall[door.x][door.z+1] || 
-						dungeon.map.isWall[door.x][door.z-1])
-					dungeon.map.isDoor[door.x][door.z] = false;
-				if(dungeon.map.hasLiquid[door.x][door.z+1] != 
-						dungeon.map.hasLiquid[door.x][door.z-1])
-					dungeon.map.isDoor[door.x][door.z] = false;
-				if(dungeon.map.hasLiquid[door.x][door.z+1]) {
-					dungeon.map.hasLiquid[door.x][door.z] = true;
+				if(dungeon.map.getIsWall(door.x, door.z+1) || 
+						dungeon.map.getIsWall(door.x, door.z-1))
+					dungeon.map.setIsDoor(false, door.x, door.z);
+				if(dungeon.map.getHasLiquid(door.x, door.z+1) != 
+						dungeon.map.getHasLiquid(door.x, door.z-1))
+					dungeon.map.setIsDoor(false, door.x, door.z);
+				if(dungeon.map.getHasLiquid(door.x, door.z+1)) {
+					dungeon.map.setHasLiquid(true, door.x, door.z);
 					if(dungeon.theme.flags.contains(ThemeFlags.SWAMPY)) 
-							dungeon.map.floorY[door.x][door.z] = (byte) (room.floorY - 1);
-					else dungeon.map.floorY[door.x][door.z] = (byte) (room.floorY - 2);
+							dungeon.map.setFloorY((byte)(room.floorY - 1), door.x, door.z);
+					else dungeon.map.setFloorY((byte)(room.floorY - 2), door.x, door.z);
 				}
 			}
 		}
@@ -177,7 +177,7 @@ public class DoorChecker {
 			valid = validateDoor(dungeon, door);
 			if(!valid) {
 				invalid.add(door);
-				dungeon.map.isDoor[door.x][door.z] = false;
+				dungeon.map.setIsDoor(false, door.x, door.z);
 			} else {
 				door.prioritize(dungeon, room.id); // Will only be run on valid doors
 				room.addToConnections(door);

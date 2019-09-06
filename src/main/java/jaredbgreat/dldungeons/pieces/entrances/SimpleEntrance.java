@@ -19,9 +19,9 @@ public class SimpleEntrance extends AbstractEntrance {
 
 	@Override
 	public void build(Dungeon dungeon, World world) {
-		int wx = x + (dungeon.map.chunkX * 16) - (dungeon.map.room.length / 2) + 8;
-		int wz = z + (dungeon.map.chunkZ * 16) - (dungeon.map.room.length / 2) + 8;
-		int bottom = dungeon.map.floorY[x][z];
+		int wx = x + (dungeon.map.chunkX * 16) - (dungeon.map.width / 2) + 8;
+		int wz = z + (dungeon.map.chunkZ * 16) - (dungeon.map.width / 2) + 8;
+		int bottom = dungeon.map.getFloorY(x, z);
 		int top = world.getActualHeight();
 		while(!DBlock.isGroundBlock(world, wx, top, wz)) top--;
 		top++;

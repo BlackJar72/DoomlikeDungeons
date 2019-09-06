@@ -24,7 +24,7 @@ public class MapMatrix {
 	
 	private static boolean drawFlyingMap = false;
 	
-	private final int width;
+	public final int width;
 	
 	public final World world;
 	public final int   chunkX, chunkZ, origenX, origenZ;
@@ -110,8 +110,8 @@ public class MapMatrix {
 		chunks[(x % width) + z].setIsDoor(val, x % ChunkMap.WIDTH, z % ChunkMap.WIDTH);
 	}
 	
-	public void setAStarted(boolean val, int x, int z) {
-		chunks[(x % width) + z].setAStarted(val, x % ChunkMap.WIDTH, z % ChunkMap.WIDTH);
+	public void setAStared(boolean val, int x, int z) {
+		chunks[(x % width) + z].setAStared(val, x % ChunkMap.WIDTH, z % ChunkMap.WIDTH);
 	}
 	
 	/*------------------------------------------------------------*/
@@ -167,8 +167,8 @@ public class MapMatrix {
 		return chunks[(x % width) + z].getIsDoor(x % ChunkMap.WIDTH, z % ChunkMap.WIDTH);
 	}
 	
-	public boolean getAStarted(int x, int z) {
-		return chunks[(x % width) + z].getAStarted(x % ChunkMap.WIDTH, z % ChunkMap.WIDTH);
+	public boolean getAStared(int x, int z) {
+		return chunks[(x % width) + z].getAStared(x % ChunkMap.WIDTH, z % ChunkMap.WIDTH);
 	}
 	
 	
