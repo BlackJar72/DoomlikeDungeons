@@ -89,7 +89,7 @@ public class AStar {
 		Step child = end, parent = end.parent;
 		if(parent == null) return;		
 
-		dungeon.map.astared[end.x][end.z] = true;
+		dungeon.map.setAStarted(true, end.x, end.z);
 		if(dungeon.map.isWall[end.x][end.z] ||
 					dungeon.map.isFence[end.x][end.z]) 
 				dungeon.map.isDoor[end.x][end.z] = true;

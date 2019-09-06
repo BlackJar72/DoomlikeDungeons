@@ -100,7 +100,64 @@ public class ChunkMap {
 	}
 	
 	/*------------------------------------------------------------*/
-	/*                        SETTERS                             */
+	/*                        GETTERS                             */
+	/*------------------------------------------------------------*/
+	
+	// map of heights to build at
+	public byte getCeilY(int x, int z) {
+		return ceilY[(x % WIDTH) + z];
+	}	
+	
+	public byte getFloorY(int x, int z) {
+		return floorY[(x % WIDTH) + z];
+	}
+	
+	public byte getNCeilY(int x, int z) {
+		return nCeilY[(x % WIDTH) + z];
+	}
+	
+	public byte getNFloorY(int x, int z) {
+		return nFloorY[(x % WIDTH) + z];
+	}
+	
+	public int getCeiling(int x, int z) {
+		return ceiling[(x % WIDTH) + z];
+	}
+	
+	public int getWall(int x, int z) {
+		return wall[(x % WIDTH) + z];
+	}
+	
+	public int getFloor(int x, int z) {
+		return floor[(x % WIDTH) + z];
+	}
+	
+	public int getRoom(int x, int z) {
+		return room[(x % WIDTH) + z];
+	}
+	
+	public boolean getIsWall( int x, int z) {
+		return isWall[(x % WIDTH) + z];
+	}
+	
+	public boolean getIsFence(int x, int z) {
+		return isFence[(x % WIDTH) + z];
+	}
+	
+	public boolean getHasLiquid(int x, int z) {
+		return hasLiquid[(x % WIDTH) + z];
+	}
+	
+	public boolean getIsDoor(int x, int z) {
+		return isDoor[(x % WIDTH) + z];
+	}
+	
+	public boolean getAStarted(int x, int z) {
+		return astared[(x % WIDTH) + z];
+	}
+	
+	/*------------------------------------------------------------*/
+	/*                        BUILDING                            */
 	/*------------------------------------------------------------*/
 	
 	

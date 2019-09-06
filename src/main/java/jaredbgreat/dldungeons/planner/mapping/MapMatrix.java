@@ -1,24 +1,10 @@
 package jaredbgreat.dldungeons.planner.mapping;
 
 
-/* 
- * Doomlike Dungeons by is licensed the MIT License
- * Copyright (c) 2014-2018 Jared Blackburn
- */	
-
-
-import jaredbgreat.dldungeons.DoomlikeDungeons;
-import jaredbgreat.dldungeons.api.DLDEvent;
-import jaredbgreat.dldungeons.builder.DBlock;
-import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.planner.astar.Step;
-import jaredbgreat.dldungeons.rooms.Room;
-import jaredbgreat.dldungeons.themes.ThemeFlags;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 
 /**
  * A two dimensional map of the dungeon, including heights, blocks, and 
@@ -126,6 +112,63 @@ public class MapMatrix {
 	
 	public void setAStarted(boolean val, int x, int z) {
 		chunks[(x % width) + z].setAStarted(val, x % ChunkMap.WIDTH, z % ChunkMap.WIDTH);
+	}
+	
+	/*------------------------------------------------------------*/
+	/*                        GETTERS                             */
+	/*------------------------------------------------------------*/
+	
+	// map of heights to build at
+	public byte getCeilY(int x, int z) {
+		return chunks[(x % width) + z].getCeilY(x % ChunkMap.WIDTH, z % ChunkMap.WIDTH);
+	}	
+	
+	public byte getFloorY(int x, int z) {
+		return chunks[(x % width) + z].getFloorY(x % ChunkMap.WIDTH, z % ChunkMap.WIDTH);
+	}
+	
+	public byte getNCeilY(int x, int z) {
+		return chunks[(x % width) + z].getNCeilY(x % ChunkMap.WIDTH, z % ChunkMap.WIDTH);
+	}
+	
+	public byte getNFloorY(int x, int z) {
+		return chunks[(x % width) + z].getNFloorY(x % ChunkMap.WIDTH, z % ChunkMap.WIDTH);
+	}
+	
+	public int getCeiling(int x, int z) {
+		return chunks[(x % width) + z].getCeiling(x % ChunkMap.WIDTH, z % ChunkMap.WIDTH);
+	}
+	
+	public int getWall(int x, int z) {
+		return chunks[(x % width) + z].getWall(x % ChunkMap.WIDTH, z % ChunkMap.WIDTH);
+	}
+	
+	public int getFloor(int x, int z) {
+		return chunks[(x % width) + z].getFloor(x % ChunkMap.WIDTH, z % ChunkMap.WIDTH);
+	}
+	
+	public int getRoom(int x, int z) {
+		return chunks[(x % width) + z].getRoom(x % ChunkMap.WIDTH, z % ChunkMap.WIDTH);
+	}
+	
+	public boolean getIsWall( int x, int z) {
+		return chunks[(x % width) + z].getIsWall(x % ChunkMap.WIDTH, z % ChunkMap.WIDTH);
+	}
+	
+	public boolean getIsFence(int x, int z) {
+		return chunks[(x % width) + z].getIsFence(x % ChunkMap.WIDTH, z % ChunkMap.WIDTH);
+	}
+	
+	public boolean getHasLiquid(int x, int z) {
+		return chunks[(x % width) + z].getHasLiquid(x % ChunkMap.WIDTH, z % ChunkMap.WIDTH);
+	}
+	
+	public boolean getIsDoor(int x, int z) {
+		return chunks[(x % width) + z].getIsDoor(x % ChunkMap.WIDTH, z % ChunkMap.WIDTH);
+	}
+	
+	public boolean getAStarted(int x, int z) {
+		return chunks[(x % width) + z].getAStarted(x % ChunkMap.WIDTH, z % ChunkMap.WIDTH);
 	}
 	
 	
