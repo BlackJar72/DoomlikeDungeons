@@ -10,10 +10,11 @@ package jaredbgreat.dldungeons.pieces;
 import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.rooms.Room;
 
+import static jaredbgreat.dldungeons.pieces.Rectangle.*;
+
 import java.util.ArrayList;
 
 import net.minecraft.world.World;
-import static jaredbgreat.dldungeons.pieces.Rectangle.*;
 
 
 /**

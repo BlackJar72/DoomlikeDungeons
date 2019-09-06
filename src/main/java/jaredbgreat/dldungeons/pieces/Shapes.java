@@ -9,10 +9,10 @@ package jaredbgreat.dldungeons.pieces;
 
 import jaredbgreat.dldungeons.planner.Symmetry;
 
+import static jaredbgreat.dldungeons.pieces.Shape.*;
+
 import java.util.EnumSet;
 import java.util.Random;
-
-import static jaredbgreat.dldungeons.pieces.Shape.*;
 
 
 /**

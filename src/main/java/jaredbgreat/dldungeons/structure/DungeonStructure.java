@@ -1,15 +1,26 @@
 package jaredbgreat.dldungeons.structure;
 
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Random;
 
 import jaredbgreat.dldungeons.debug.Logging;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
 
 public class DungeonStructure extends Structure<NoFeatureConfig> {
+	public static final String NAME = "doomlike_dungeon";
+	public static final DungeonStructure DUNGEON = new DungeonStructure();
+	public static final Structure<NoFeatureConfig> DUNGEON_FEATURE 
+		= registerFeature(NAME.toLowerCase(Locale.ROOT), DUNGEON);
+	public static final Structure<?> DUNGEON_STRUCTURE 
+		= registerStructure(NAME, DUNGEON_FEATURE);
+	
 	private static int frequency;
 	private static int factor = 6;
 	private static int minXZ;
@@ -19,6 +30,17 @@ public class DungeonStructure extends Structure<NoFeatureConfig> {
 
 	public DungeonStructure() {
 		super(NoFeatureConfig::deserialize);
+	}
+	
+
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public static <C extends IFeatureConfig, F extends Feature<C>> F registerFeature(String key, F value) {
+		return (F) (Registry.<Feature<?>>register(Registry.FEATURE, key, value));
+	}
+	
+	
+	public static Structure<?> registerStructure(String key, Structure<?> p_215141_1_) {
+		return Registry.register(Registry.STRUCTURE_FEATURE, key.toLowerCase(Locale.ROOT), p_215141_1_);
 	}
 	
 	

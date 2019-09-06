@@ -1,12 +1,6 @@
 package jaredbgreat.dldungeons.planner;
 
 
-/* 
- * Doomlike Dungeons by is licensed the MIT License
- * Copyright (c) 2014-2018 Jared Blackburn
- */	
-
-
 import jaredbgreat.dldungeons.pieces.Shape;
 import jaredbgreat.dldungeons.rooms.AbstractRoom;
 import jaredbgreat.dldungeons.rooms.Room;

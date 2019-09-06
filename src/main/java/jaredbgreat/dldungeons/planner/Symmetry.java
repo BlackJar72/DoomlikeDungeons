@@ -1,16 +1,10 @@
 package jaredbgreat.dldungeons.planner;
 
 
-/* 
- * Doomlike Dungeons by is licensed the MIT License
- * Copyright (c) 2014-2018 Jared Blackburn
- */	
-
+import java.util.EnumSet;
 
 import jaredbgreat.dldungeons.pieces.Shape;
 import jaredbgreat.dldungeons.pieces.Shapes;
-
-import java.util.EnumSet;
 
 
 /**

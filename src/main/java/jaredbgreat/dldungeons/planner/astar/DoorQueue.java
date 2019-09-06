@@ -1,12 +1,8 @@
 package jaredbgreat.dldungeons.planner.astar;
 
-/* 
- * Doomlike Dungeons by is licensed the MIT License
- * Copyright (c) 2014-2018 Jared Blackburn
- */	
+import java.util.PriorityQueue;
 
 import jaredbgreat.dldungeons.pieces.Doorway;
-import java.util.PriorityQueue;
 
 /**
  * A priority queue for storing doors which should sort
