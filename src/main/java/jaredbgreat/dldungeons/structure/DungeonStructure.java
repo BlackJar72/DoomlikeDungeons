@@ -4,32 +4,41 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Random;
 
+import jaredbgreat.dldungeons.Info;
 import jaredbgreat.dldungeons.debug.Logging;
+import jaredbgreat.dldungeons.pieces.DebugPole;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.feature.structure.Structure;
 
 public class DungeonStructure extends Structure<NoFeatureConfig> {
 	public static final String NAME = "doomlike_dungeon";
+	
 	public static final DungeonStructure DUNGEON = new DungeonStructure();
 	public static final Structure<NoFeatureConfig> DUNGEON_FEATURE 
-		= registerFeature(NAME.toLowerCase(Locale.ROOT), DUNGEON);
-	public static final Structure<?> DUNGEON_STRUCTURE 
+		= registerFeature(Info.ID + ":" + NAME.toLowerCase(Locale.ROOT), DUNGEON);
+		public static final Structure<?> DUNGEON_STRUCTURE 
 		= registerStructure(NAME, DUNGEON_FEATURE);
+	
+	public static final IStructurePieceType DEBUG_POLE 
+		= IStructurePieceType.register(DebugPole::new, "DebugPole");
 	
 	private static int frequency;
 	private static int factor = 6;
 	private static int minXZ;
 	private static Random mrand;
 	private static HashSet<Integer> dimensions;
-		
+	
+	
 
 	public DungeonStructure() {
 		super(NoFeatureConfig::deserialize);
+		
 	}
 	
 
@@ -44,7 +53,6 @@ public class DungeonStructure extends Structure<NoFeatureConfig> {
 	}
 	
 	
-
 	@Override
 	@SuppressWarnings({ "rawtypes", "unused" })
 	/* OK, this is analogous to generate in GenerationHandler, at least partly.  It determines 
@@ -55,7 +63,7 @@ public class DungeonStructure extends Structure<NoFeatureConfig> {
 	 * @see net.minecraft.world.gen.feature.structure.Structure#hasStartAt(net.minecraft.world.gen.IChunkGenerator, java.util.Random, int, int)
 	 */
 	public boolean hasStartAt(ChunkGenerator<?> chunkGen, Random rand, int chunkPosX, int chunkPosZ) {
-		System.err.println("Making a DUNGEON!");
+		//System.err.println("Making a DUNGEON!");
 		return true;
 //		boolean blockedBiome = false;
 //		Set<Type> types = BiomeDictionary.getTypes((world.getBiomeProvider()

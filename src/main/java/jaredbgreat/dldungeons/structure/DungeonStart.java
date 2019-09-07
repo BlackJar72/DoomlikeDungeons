@@ -1,11 +1,10 @@
 package jaredbgreat.dldungeons.structure;
 
-import static jaredbgreat.dldungeons.builder.DBlock.quartz;
-
 import java.util.Random;
 
-import jaredbgreat.dldungeons.builder.DBlock;
-import net.minecraft.util.SharedSeedRandom;
+import jaredbgreat.dldungeons.DoomlikeDungeons;
+import jaredbgreat.dldungeons.pieces.DebugPole;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
@@ -20,59 +19,36 @@ public class DungeonStart extends StructureStart {
 	public DungeonStart(Structure<?> p_i51341_1_, int chunkX, int chunkZ, Biome biomeIn, MutableBoundingBox boundsIn,
 			int referenceIn, long seed) {
 		super(p_i51341_1_, chunkX, chunkZ, biomeIn, boundsIn, referenceIn, seed);
-		// TODO Auto-generated constructor stub
 	}
 	
 
 	@Override
 	public void init(ChunkGenerator<?> generator, TemplateManager templateManagerIn, int chunkX, int chunkZ,
 			Biome biomeIn) {
+		//DoomlikeDungeons.logger.info("Building Debug Pole at " + chunkX + ", " + chunkZ);
+		CompoundNBT nbt = new CompoundNBT();
+		nbt.putInt("x", (chunkX * 16) + 8);
+		nbt.putInt("y", 16);
+		nbt.putInt("z", (chunkZ * 16) + 8);
+		DebugPole dp = new DebugPole(null, nbt);
+		components.add(dp);	
+		recalculateStructureSize();
+	}
+	
+	
+	@Override
+	public void generateStructure(IWorld worldIn, Random rand, MutableBoundingBox structurebb, ChunkPos pos) {
 		// TODO Auto-generated method stub
+		super.generateStructure(worldIn, rand, structurebb, pos);
 		
-	}
-	
 
-	/**
-	 * This will build a quartz pillar to appear in the center of the dungeon from y=16 to y=240, 
-	 * and a lapis lazuli boarder to appear around the area allotted for the dungeon at y=80.
-	 * 
-	 * This is only called if debugPole == true.
-	 * 
-	 * @param world
-	 * @param chunkX
-	 * @param chunkZ
-	 * @param dungeon
-	 */
-	public static void debuggingPole(IWorld world, int chunkX, int chunkZ) {
-		int x = chunkX;
-		int z = chunkZ;
-		//int x = (chunkX * 16) + 8;
-		//int z = (chunkZ * 16) + 8;
-		for(int y = 16; y <= 241; y++) DBlock.placeBlock(world, x, y, z, quartz);
+//		DebugPole dp = new DebugPole(null, new CompoundNBT());
+//		dp.x = pos.getXStart() + 8;
+//		dp.y = 0; // doesnt matter in this case
+//		dp.z = pos.getZStart() + 8;
 	}
-	 
-	 
 	
-//	/**
-//	 * This will build a quartz pillar to appear in the center of the dungeon from y=16 to y=240, 
-//	 * and a lapis lazuli boarder to appear around the area allotted for the dungeon at y=80.
-//	 * 
-//	 * This is only called if debugPole == true.
-//	 * 
-//	 * @param world
-//	 * @param chunkX
-//	 * @param chunkZ
-//	 * @param dungeon
-//	 */
-//	public static void debuggingBox(IWorld world, int chunkX, int chunkZ, Dungeon dungeon) {
-//		int x = (chunkX * 16) + 8;
-//		int z = (chunkZ * 16) + 8;
-//		for(int i = -dungeon.size.radius; i <= dungeon.size.radius; i++) {
-//			placeBlock(world, x - dungeon.size.radius, 80, z + i, lapis);
-//			placeBlock(world, x + dungeon.size.radius, 80, z + i, lapis);
-//			placeBlock(world, x + i, 80, z - dungeon.size.radius, lapis);
-//			placeBlock(world, x + i, 80, z + dungeon.size.radius, lapis);
-//		}		
-//	}
+	
+	
 
 }
