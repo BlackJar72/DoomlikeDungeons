@@ -1,52 +1,157 @@
 package jaredbgreat.dldungeons.planner.mapping;
 
+import java.util.Random;
+
 import jaredbgreat.dldungeons.DoomlikeDungeons;
-import jaredbgreat.dldungeons.api.DLDEvent;
 import jaredbgreat.dldungeons.builder.DBlock;
 import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.rooms.Room;
+import jaredbgreat.dldungeons.structure.DungeonStructure;
 import jaredbgreat.dldungeons.themes.ThemeFlags;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraft.world.gen.feature.structure.StructurePiece;
+import net.minecraft.world.gen.feature.template.TemplateManager;
 
-public class ChunkMap {
+public class ChunkMap extends StructurePiece {
 	public static final int WIDTH = 16;
 	public static final int SIZE = WIDTH * WIDTH;
 	
-	private int chunkX, chunkZ; // offsets, world coords for 0,0 in the chunk	
+	private int wx,  wz;  // X and Z coords of chunk (lower corner)
+	private int cdx, cdz; // Chunk coords of the dungeon center	
 	
 	// map of heights to build at
-	private byte[] ceilY   = new byte[SIZE];		// Ceiling height
-	private byte[] floorY  = new byte[SIZE];		// Floor Height	
-	private byte[] nCeilY  = new byte[SIZE];		// Height of Neighboring Ceiling	
-	private byte[] nFloorY = new byte[SIZE];	    // Height of Neighboring Floor
+	private byte[] ceilY;		// Ceiling height
+	private byte[] floorY;		// Floor Height	
+	private byte[] nCeilY;		// Height of Neighboring Ceiling	
+	private byte[] nFloorY;	    // Height of Neighboring Floor
 	
 	// Blocks referenced against the DBlock.registry	
-	private int[] ceiling = new int[SIZE];
-	private int[] wall    = new int[SIZE];
-	private int[] floor   = new int[SIZE];
+	private int[] ceiling;
+	private int[] wall;
+	private int[] floor;
 	
 	// The room id (index of the room in the dungeons main RoomList)
 	private int[] room;
 	
 	// Is it a wall?
-	private boolean[] isWall    = new boolean[SIZE];	    // Is this coordinate occupied by a wall?
-	private boolean[] isFence   = new boolean[SIZE];	    // Is this coordinate occupied by a wall?
-	private boolean[] hasLiquid = new boolean[SIZE];	// Is floor covered by a liquid block?
-	private boolean[] isDoor    = new boolean[SIZE];		// Is there a door here?
+	private boolean[] isWall;	    // Is this coordinate occupied by a wall?
+	private boolean[] isFence;	    // Is this coordinate occupied by a wall?
+	private boolean[] hasLiquid;	// Is floor covered by a liquid block?
+	private boolean[] isDoor;		// Is there a door here?
 	
 	//The A* scratch pad
-	private boolean astared[] = new boolean[SIZE];
+	private boolean[] astared;
 	
 	
-	public ChunkMap() {/*TODO*/}
+	public ChunkMap(TemplateManager tm, CompoundNBT nbt) {
+		super(DungeonStructure.CHUNK_MAP, nbt);
+		wx = nbt.getInt("x");
+		wz = nbt.getInt("z");
+		cdx = nbt.getInt("cdx");
+		cdz = nbt.getInt("cdz");
+		ceilY     = getByteArray(nbt, "ceily");
+		floorY    = getByteArray(nbt, "floory");	
+		nCeilY    = getByteArray(nbt, "nceily");	
+		nFloorY   = getByteArray(nbt, "nfloory");	
+		ceiling   = getIntArray(nbt, "ceiling");
+		wall      = getIntArray(nbt, "wall");
+		floor     = getIntArray(nbt, "floor");
+		room      = getIntArray(nbt, "room");
+		isWall    = getBooleanArray(nbt, "iswall");
+		isFence   = getBooleanArray(nbt, "isfence");
+		hasLiquid = getBooleanArray(nbt, "hasliquid");
+		isDoor    = getBooleanArray(nbt, "isdoor");
+		astared   = getBooleanArray(nbt, "astared");
+	}
+	
+
+
+	@Override
+	protected void readAdditional(CompoundNBT nbt) {
+	    nbt.putInt("x", wx);
+	    nbt.putInt("y", 64);
+	    nbt.putInt("z", wz);
+	    nbt.putInt("cdx", cdx);
+	    nbt.putInt("cdz", cdz);
+		nbt.putByteArray("ceily", ceilY);
+		nbt.putByteArray("floory", floorY);	
+		nbt.putByteArray("nceily", nCeilY);	
+		nbt.putByteArray("nfloory", nFloorY);	
+		nbt.putIntArray("ceiling", ceiling);
+		nbt.putIntArray("wall", wall);
+		nbt.putIntArray("floor", floor);
+		nbt.putIntArray("room", room);
+		putBooleanArray(nbt, "iswall", isWall);
+		putBooleanArray(nbt, "isfence", isFence);
+		putBooleanArray(nbt, "hasliquid", hasLiquid);
+		putBooleanArray(nbt, "isdoor", isDoor);
+		putBooleanArray(nbt, "astared", astared);
+	}
+	
+	
+	private byte[] getByteArray(CompoundNBT nbt, String key) {
+		byte[] out = nbt.getByteArray(key);
+		if(out.length < SIZE) {
+			out = new byte[SIZE];
+		}
+		return out;
+	}
+	
+	
+	private int[] getIntArray(CompoundNBT nbt, String key) {
+		int[] out = nbt.getIntArray(key);
+		if(out.length < SIZE) {
+			out = new int[SIZE];
+		}
+		return out;
+	}
+	
+	
+	private boolean[] getBooleanArray(CompoundNBT nbt, String key) {
+		boolean[] out = new boolean[SIZE];
+		byte[] data = nbt.getByteArray(key);
+		if(data.length == SIZE) {
+			for(int i = 0; i < SIZE; i++) {
+				out[i] = data[i] != 0;
+			}
+		}
+		return out;
+	}
+	
+	
+	private void putBooleanArray(CompoundNBT nbt, String key, boolean[] value) {
+		byte[] out = new byte[value.length];
+		for(int i = 0; i < value.length; i++) {
+			// C or C++ would do this so much better!
+			if(value[i]) out[i] = 1;
+		}
+		nbt.putByteArray(key, out);
+	}
+	
+	
+	public void doBB() {
+		boundingBox = new MutableBoundingBox(wx, 0, wz, wx + 15, 256, wz + 15);
+	}
+	
 	
 	/*------------------------------------------------------------*/
 	/*                        SETTERS                             */
 	/*------------------------------------------------------------*/
 	
-	// map of heights to build at
+	
+	public void setLocationData(int chunkX, int chunkZ, int dungeonX, int dungeonZ) {
+		wx  = chunkX * 16;
+		wz  = chunkZ * 16;
+		cdx = dungeonX;
+		cdz = dungeonZ;
+	}
+	
+	
 	public void setCeilY(byte val, int x, int z) {
 		ceilY[(x % WIDTH) + z] = val;
 	}	
@@ -159,6 +264,18 @@ public class ChunkMap {
 	/*------------------------------------------------------------*/
 	/*                        BUILDING                            */
 	/*------------------------------------------------------------*/
+		
+	
+	@Override
+	public boolean addComponentParts(IWorld world, Random random, MutableBoundingBox sbb,
+			ChunkPos cpos) {
+		doBB(); // Can this be called from here?  Too late?  I'll see...!
+		// TODO: Auto-generated method stub
+		// TODO: I need a way to catalogue and store dungeons for retrieval
+		// TODO: Once I can get the dungeon this belongs to I need to do this:
+		//       build(dungeon, world);
+		return false;
+	}
 	
 	
 	/**
@@ -171,8 +288,6 @@ public class ChunkMap {
 	public void build(Dungeon dungeon, World world) {		
 		DoomlikeDungeons.profiler.startTask("Building Dungeon in World");	
 		DoomlikeDungeons.profiler.startTask("Building Dungeon architecture");
-		int shiftX = (chunkX * 16) - (room.length / 2) + 8;
-		int shiftZ = (chunkZ * 16) - (room.length / 2) + 8;
 		int below;
 		boolean flooded = dungeon.theme.flags.contains(ThemeFlags.WATER);
 		//MinecraftForge.EVENT_BUS.post(new DLDEvent.BeforeBuild(this, shiftX, shiftZ, flooded));
@@ -198,19 +313,19 @@ public class ChunkMap {
 					 // Lower parts of the room
 					 if(nFloorY[(i * WIDTH) + j] < floorY[(i * WIDTH) + j])
 						 for(int k = nFloorY[(i * WIDTH) + j]; k < floorY[(i * WIDTH) + j]; k++) 
-							 if(noLowDegenerate(theRoom, world, shiftX + i, k, shiftZ + j, i, j))
-								 DBlock.place(world, shiftX + i, k, shiftZ + j, wall[(i * WIDTH) + j]);
+							 if(noLowDegenerate(theRoom, world, wx + i, k, wz + j, i, j))
+								 DBlock.place(world, wx + i, k, wz + j, wall[(i * WIDTH) + j]);
 					 if(nFloorY[(i * WIDTH) + j] > floorY[(i * WIDTH) + j])
 						 for(int k = floorY[(i * WIDTH) + j]; k < nFloorY[(i * WIDTH) + j]; k++) 
-							 if(noLowDegenerate(theRoom, world, shiftX + i, k, shiftZ + j, i, j))
-								 DBlock.place(world, shiftX + i, k, shiftZ + j, wall[(i * WIDTH) + j]);
+							 if(noLowDegenerate(theRoom, world, wx + i, k, wz + j, i, j))
+								 DBlock.place(world, wx + i, k, wz + j, wall[(i * WIDTH) + j]);
 					 
-					 if(noLowDegenerate(theRoom, world, shiftX + i, floorY[(i * WIDTH) + j] - 1, shiftZ + j, i, j)) {
-						 DBlock.place(world, shiftX + i, floorY[(i * WIDTH) + j] - 1, shiftZ + j, floor[(i * WIDTH) + j]);
+					 if(noLowDegenerate(theRoom, world, wx + i, floorY[(i * WIDTH) + j] - 1, wz + j, i, j)) {
+						 DBlock.place(world, wx + i, floorY[(i * WIDTH) + j] - 1, wz + j, floor[(i * WIDTH) + j]);
 						 if(dungeon.theme.buildFoundation) {
 							 below = nFloorY[(i * WIDTH) + j] < floorY[(i * WIDTH) + j] ? nFloorY[(i * WIDTH) + j] - 1 : floorY[(i * WIDTH) + j] - 2;
-							 while(!DBlock.isGroundBlock(world, shiftX + i, below, shiftZ + j)) {
-								 DBlock.place(world, shiftX + i, below, shiftZ + j, dungeon.floorBlock);
+							 while(!DBlock.isGroundBlock(world, wx + i, below, wz + j)) {
+								 DBlock.place(world, wx + i, below, wz + j, dungeon.floorBlock);
 						 		below--;
 						 		if(below < 0) break;						 		
 						 	 }
@@ -219,29 +334,29 @@ public class ChunkMap {
 					 
 					 // Upper parts of the room
 					 if(!theRoom.sky 
-							 && noHighDegenerate(theRoom, world, shiftX + i, ceilY[(i * WIDTH) + j] + 1, shiftZ + j))
-						 DBlock.place(world, shiftX + i, ceilY[(i * WIDTH) + j] + 1, shiftZ + j, ceiling[(i * WIDTH) + j]);
+							 && noHighDegenerate(theRoom, world, wx + i, ceilY[(i * WIDTH) + j] + 1, wz + j))
+						 DBlock.place(world, wx + i, ceilY[(i * WIDTH) + j] + 1, wz + j, ceiling[(i * WIDTH) + j]);
 					
 					 for(int k = roomBottom(i, j); k <= ceilY[(i * WIDTH) + j]; k++)
-						 if(!isWall[(i * WIDTH) + j])DBlock.deleteBlock(world, shiftX +i, k, shiftZ + j, flooded);
-						 else if(noHighDegenerate(theRoom, world, shiftX + i, k, shiftZ + j))
-							 DBlock.place(world, shiftX + i, k, shiftZ + j, wall[(i * WIDTH) + j]);
+						 if(!isWall[(i * WIDTH) + j])DBlock.deleteBlock(world, wx +i, k, wz + j, flooded);
+						 else if(noHighDegenerate(theRoom, world, wx + i, k, wz + j))
+							 DBlock.place(world, wx + i, k, wz + j, wall[(i * WIDTH) + j]);
 					 for(int k = nCeilY[(i * WIDTH) + j]; k < ceilY[(i * WIDTH) + j]; k++) 
-						 if(noHighDegenerate(theRoom, world, shiftX + i, k, shiftZ + j))
-							 DBlock.place(world, shiftX + i, k, shiftZ + j, wall[(i * WIDTH) + j]);
+						 if(noHighDegenerate(theRoom, world, wx + i, k, wz + j))
+							 DBlock.place(world, wx + i, k, wz + j, wall[(i * WIDTH) + j]);
 					 if(isFence[(i * WIDTH) + j]) 
-						 DBlock.place(world, shiftX + i, floorY[(i * WIDTH) + j], shiftZ + j, dungeon.fenceBlock);
+						 DBlock.place(world, wx + i, floorY[(i * WIDTH) + j], wz + j, dungeon.fenceBlock);
 					 
 					 if(isDoor[(i * WIDTH) + j]) {
-						 DBlock.deleteBlock(world, shiftX + i, floorY[(i * WIDTH) + j],     shiftZ + j, flooded);
-						 DBlock.deleteBlock(world, shiftX + i, floorY[(i * WIDTH) + j] + 1, shiftZ + j, flooded);
-						 DBlock.deleteBlock(world, shiftX + i, floorY[(i * WIDTH) + j] + 2, shiftZ + j, flooded);
+						 DBlock.deleteBlock(world, wx + i, floorY[(i * WIDTH) + j],     wz + j, flooded);
+						 DBlock.deleteBlock(world, wx + i, floorY[(i * WIDTH) + j] + 1, wz + j, flooded);
+						 DBlock.deleteBlock(world, wx + i, floorY[(i * WIDTH) + j] + 2, wz + j, flooded);
 					 }
 					 
 					 // Liquids
 					 if(hasLiquid[(i * WIDTH) + j] && (!isWall[(i * WIDTH) + j] && !isDoor[(i * WIDTH) + j])
-							 && !world.isAirBlock(new BlockPos(shiftX + i, floorY[(i * WIDTH) + j] - 1, shiftZ + j))) 
-						 DBlock.place(world, shiftX + i, floorY[(i * WIDTH) + j], shiftZ + j, theRoom.liquidBlock);					 
+							 && !world.isAirBlock(new BlockPos(wx + i, floorY[(i * WIDTH) + j] - 1, wz + j))) 
+						 DBlock.place(world, wx + i, floorY[(i * WIDTH) + j], wz + j, theRoom.liquidBlock);					 
 				}
 			}	
 		

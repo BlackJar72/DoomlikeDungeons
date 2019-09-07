@@ -25,7 +25,6 @@ public class DungeonStart extends StructureStart {
 	@Override
 	public void init(ChunkGenerator<?> generator, TemplateManager templateManagerIn, int chunkX, int chunkZ,
 			Biome biomeIn) {
-		//DoomlikeDungeons.logger.info("Building Debug Pole at " + chunkX + ", " + chunkZ);
 		CompoundNBT nbt = new CompoundNBT();
 		nbt.putInt("x", (chunkX * 16) + 8);
 		nbt.putInt("y", 16);

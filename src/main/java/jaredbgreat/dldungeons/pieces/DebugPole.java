@@ -16,7 +16,7 @@ import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
 public class DebugPole extends StructurePiece {
-	BlockState quartz = Blocks.CHISELED_QUARTZ_BLOCK.getDefaultState();
+	BlockState quartz = Blocks.QUARTZ_BLOCK.getDefaultState();
 	public int x, y, z;
 	
 	public DebugPole(TemplateManager tm, CompoundNBT nbt) {
@@ -24,7 +24,12 @@ public class DebugPole extends StructurePiece {
 		x = nbt.getInt("x");
 		y = nbt.getInt("y");
 		z = nbt.getInt("z");
-		this.boundingBox = new MutableBoundingBox(x, y, z, x + 15, y + 15, z + 15);
+		boundingBox = new MutableBoundingBox(x, y, z, x + 15, y + 15, z + 15);
+	}
+	
+	
+	public void doBB() {
+		boundingBox = new MutableBoundingBox(x, y, z, x + 15, y + 15, z + 15);
 	}
 	
 	

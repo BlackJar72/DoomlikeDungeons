@@ -28,6 +28,9 @@ public class DungeonStructure extends Structure<NoFeatureConfig> {
 	public static final IStructurePieceType DEBUG_POLE 
 		= IStructurePieceType.register(DebugPole::new, "DebugPole");
 	
+	public static final IStructurePieceType CHUNK_MAP 
+		= IStructurePieceType.register(DebugPole::new, "DebugPole");
+	
 	private static int frequency;
 	private static int factor = 6;
 	private static int minXZ;
