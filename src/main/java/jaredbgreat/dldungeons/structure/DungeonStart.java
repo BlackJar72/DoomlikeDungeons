@@ -23,8 +23,10 @@ public class DungeonStart extends StructureStart {
 	
 
 	@Override
-	public void init(ChunkGenerator<?> generator, TemplateManager templateManagerIn, int chunkX, int chunkZ,
-			Biome biomeIn) {
+	public void init(ChunkGenerator<?> generator, TemplateManager tempman, 
+				int chunkX, int chunkZ, Biome biome) {
+		long seed = ((long)chunkX + (((long)chunkZ) << 32)) ^ generator.getSeed();
+		Random random = new Random(seed);
 		CompoundNBT nbt = new CompoundNBT();
 		nbt.putInt("x", (chunkX * 16) + 8);
 		nbt.putInt("y", 16);

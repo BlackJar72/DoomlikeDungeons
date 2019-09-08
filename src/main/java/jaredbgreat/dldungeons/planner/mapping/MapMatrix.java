@@ -1,10 +1,14 @@
 package jaredbgreat.dldungeons.planner.mapping;
 
 
+import java.util.List;
+
 import jaredbgreat.dldungeons.planner.astar.Step;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.gen.feature.structure.StructurePiece;
+import net.minecraft.world.gen.feature.template.TemplateManager;
 
 /**
  * A two dimensional map of the dungeon, including heights, blocks, and 
@@ -26,7 +30,6 @@ public class MapMatrix {
 	
 	public final int width;
 	
-	public final World world;
 	public final int   chunkX, chunkZ, origenX, origenZ;
 	
 	//That Chunks
@@ -36,15 +39,24 @@ public class MapMatrix {
 	public Step    nodedge[][];
 	
 	
-	public MapMatrix(int width, World world, int chunkX, int chunkZ) {
+	public MapMatrix(TemplateManager tm, int width, int chunkX, int chunkZ) {
 		this.width = width;
-		this.world = world;
 		this.chunkX = chunkX;
 		this.chunkZ = chunkZ;
 		origenX   = (chunkX * 16) - (width / 2) + 8;
 		origenZ   = (chunkZ * 16) - (width / 2) + 8;
 		chunks    = new ChunkMap[(width * width) / ChunkMap.SIZE]; 
 		nodedge   = new Step[width][width];
+		int r = width / 2;
+		for(int i = 0; i < width; i++) 
+			for(int j = 0; j < width; j++) {
+				CompoundNBT nbt = new CompoundNBT();
+				nbt.putInt("x", chunkX - r + i);
+				nbt.putInt("z", chunkZ - r + j);
+				nbt.putInt("cdz", chunkZ);
+				nbt.putInt("cdz", chunkZ);
+				chunks[(i * width) + j] = new ChunkMap(tm, nbt);
+			}
 	}
 	
 	
@@ -56,6 +68,14 @@ public class MapMatrix {
 	public static void setDrawFlyingMap(boolean value) {
 		drawFlyingMap = value;
 	}
+	
+	
+	public void addChunkMaps(List<StructurePiece> components) {
+		for(int i = 0; i < chunks.length; i++) {
+			components.add(chunks[i]);
+		}
+	}
+	
 	
 	/*------------------------------------------------------------*/
 	/*                        SETTERS                             */

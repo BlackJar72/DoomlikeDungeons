@@ -3,20 +3,14 @@ package jaredbgreat.dldungeons.planner;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import jaredbgreat.dldungeons.Difficulty;
 import jaredbgreat.dldungeons.DoomlikeDungeons;
-import jaredbgreat.dldungeons.api.DLDEvent;
-import jaredbgreat.dldungeons.builder.DBlock;
 import jaredbgreat.dldungeons.configs.ConfigHandler;
-import jaredbgreat.dldungeons.pieces.Spawner;
-import jaredbgreat.dldungeons.pieces.chests.BasicChest;
 import jaredbgreat.dldungeons.pieces.chests.LootCategory;
 import jaredbgreat.dldungeons.pieces.chests.LootHandler;
-import jaredbgreat.dldungeons.pieces.entrances.SimpleEntrance;
-import jaredbgreat.dldungeons.pieces.entrances.SpiralStair;
-import jaredbgreat.dldungeons.pieces.entrances.TopRoom;
 import jaredbgreat.dldungeons.planner.astar.DoorChecker;
 import jaredbgreat.dldungeons.planner.mapping.MapMatrix;
 import jaredbgreat.dldungeons.rooms.Cave;
@@ -26,9 +20,9 @@ import jaredbgreat.dldungeons.themes.BiomeSets;
 import jaredbgreat.dldungeons.themes.Degree;
 import jaredbgreat.dldungeons.themes.Sizes;
 import jaredbgreat.dldungeons.themes.Theme;
-import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraft.world.gen.feature.structure.StructurePiece;
+import net.minecraft.world.gen.feature.template.TemplateManager;
 
 
 /**
@@ -136,7 +130,7 @@ public class Dungeon {
 	}
 
 	
-	public Dungeon(Random rnd, Biome biome, World world, int chunkX, int chunkZ) throws Throwable {
+	public Dungeon(Random rnd, Biome biome, TemplateManager tm, int chunkX, int chunkZ) throws Throwable {
 		DoomlikeDungeons.profiler.startTask("Planning Dungeon");
 		DoomlikeDungeons.profiler.startTask("Layout dungeon (rough draft)");
 		random = rnd;
@@ -157,7 +151,7 @@ public class Dungeon {
 		
 		rooms = new RoomList(size.maxRooms + 1);
 		planter = new ArrayList<Room>();
-		map = new MapMatrix(size.width, world, chunkX, chunkZ);
+		map = new MapMatrix(tm, size.width, chunkX, chunkZ);
 		numNodes = random.nextInt(size.maxNodes - size.minNodes + 1) + size.minNodes + 1;
 		nodes = new Node[numNodes];
 		spawners = new SpawnerCounter();
@@ -180,6 +174,13 @@ public class Dungeon {
 		fixRoomContents();
 		DoomlikeDungeons.profiler.endTask("Fixing room contents");
 		DoomlikeDungeons.profiler.endTask("Planning Dungeon");
+	}
+	
+	
+	public List<StructurePiece> addPiecesToStructure(List<StructurePiece> components) {
+		map.addChunkMaps(components);
+		// TODO: Add spawners, chests, and entrances
+		return components;
 	}
 	
 	
@@ -373,12 +374,12 @@ public class Dungeon {
 	 * 
 	 * @param room
 	 */
-	public void addChestBlocks(Room room) {
+	public void addChestBlocks(Room room) {/* //FIXME!
 		if(MinecraftForge.EVENT_BUS.post(new DLDEvent.AddChestBlocksToRoom(this, room))) return;
 		for(BasicChest  chest : room.chests) {
 			DBlock.placeChest(map.world, shiftX + chest.mx, chest.my, shiftZ + chest.mz);
 		}		
-	}
+	*/}
 	
 	
 	/**
@@ -397,7 +398,7 @@ public class Dungeon {
 	 * 
 	 * @param room
 	 */
-	private void addTileEntitesToRoom(Room room) {
+	private void addTileEntitesToRoom(Room room) {/* //FIXME!
 		if(MinecraftForge.EVENT_BUS.post(new DLDEvent.AddTileEntitiesToRoom(this, room))) return;
 			for(Spawner  spawner : room.spawners) {
 					DBlock.placeSpawner(map.world, 
@@ -409,7 +410,7 @@ public class Dungeon {
 			for(BasicChest  chest : room.chests) {
 				chest.place(map.world, shiftX + chest.mx, chest.my, shiftZ + chest.mz, random);
 			}
-	}
+	*/}
 	
 	
 	/**
@@ -429,7 +430,7 @@ public class Dungeon {
 	 * 
 	 * @param room
 	 */
-	private void addEntrance(Room room) {		
+	private void addEntrance(Room room) {/* //FIXME!		
 		if(!room.hasEntrance) return;
 		//DoomlikeDungeons.profiler.startTask("Adding Entrances");
 		int entrance;
@@ -457,7 +458,7 @@ public class Dungeon {
 			break;
 		}		
 		//DoomlikeDungeons.profiler.endTask("Adding Entrances");
-	}
+	*/}
 	
 	
 	/**

@@ -269,7 +269,6 @@ public class ChunkMap extends StructurePiece {
 	@Override
 	public boolean addComponentParts(IWorld world, Random random, MutableBoundingBox sbb,
 			ChunkPos cpos) {
-		doBB(); // Can this be called from here?  Too late?  I'll see...!
 		// TODO: Auto-generated method stub
 		// TODO: I need a way to catalogue and store dungeons for retrieval
 		// TODO: Once I can get the dungeon this belongs to I need to do this:
