@@ -3,18 +3,24 @@ package jaredbgreat.dldungeons.structure;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Random;
+import java.util.Set;
 
 import jaredbgreat.dldungeons.Info;
+import jaredbgreat.dldungeons.configs.ConfigHandler;
 import jaredbgreat.dldungeons.debug.Logging;
 import jaredbgreat.dldungeons.pieces.DebugPole;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeDictionary.Type;
 
 public class DungeonStructure extends Structure<NoFeatureConfig> {
 	public static final String NAME = "doomlike_dungeon";
@@ -65,28 +71,27 @@ public class DungeonStructure extends Structure<NoFeatureConfig> {
 	 * 
 	 * @see net.minecraft.world.gen.feature.structure.Structure#hasStartAt(net.minecraft.world.gen.IChunkGenerator, java.util.Random, int, int)
 	 */
-	public boolean hasStartAt(ChunkGenerator<?> chunkGen, Random rand, int chunkPosX, int chunkPosZ) {
+	public boolean hasStartAt(ChunkGenerator<?> chunkGen, Random rand, int chunkX, int chunkZ) {
 		//System.err.println("Making a DUNGEON!");
-		return true;
-//		boolean blockedBiome = false;
-//		Set<Type> types = BiomeDictionary.getTypes((world.getBiomeProvider()
-//				.getBiome(new BlockPos(chunkX * 16, 63, chunkZ * 16), Biomes.DEFAULT)));
-//		for(Type type : types) {
-//			blockedBiome = ConfigHandler.biomeExclusions.contains(type) || blockedBiome;
-//			if(blockedBiome) return false;
-//		}
-//		mrand = new Random(world.getSeed() 
-//				+ (2027 * (long)(chunkX / factor)) 
-//				+ (1987 * (long)(chunkZ / factor)));
-//		int xrand = mrand.nextInt();
-//		int zrand = mrand.nextInt();
-//		int xuse = ((chunkX + xrand) % factor);
-//		int zuse = ((chunkZ + zrand) % factor);
-//		
-//		if((xuse == 0) && (zuse == 0)) {
-//			return true;
-//		}	
-//		return false;
+		boolean blockedBiome = false;
+		Set<Type> types = BiomeDictionary.getTypes((chunkGen.getBiomeProvider()
+				.getBiome(new BlockPos(chunkX * 16, 63, chunkZ * 16))));
+		for(Type type : types) {
+			blockedBiome = ConfigHandler.biomeExclusions.contains(type) || blockedBiome;
+			if(blockedBiome) return false;
+		}
+		mrand = new Random(chunkGen.getSeed() 
+				+ (2027 * (long)(chunkX / factor)) 
+				+ (1987 * (long)(chunkZ / factor)));
+		int xrand = mrand.nextInt();
+		int zrand = mrand.nextInt();
+		int xuse = ((chunkX + xrand) % factor);
+		int zuse = ((chunkZ + zrand) % factor);
+		
+		if((xuse == 0) && (zuse == 0)) {
+			return true;
+		}	
+		return false;
 	}
 	
 	

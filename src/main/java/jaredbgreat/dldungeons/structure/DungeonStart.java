@@ -27,12 +27,21 @@ public class DungeonStart extends StructureStart {
 				int chunkX, int chunkZ, Biome biome) {
 		long seed = ((long)chunkX + (((long)chunkZ) << 32)) ^ generator.getSeed();
 		Random random = new Random(seed);
-		CompoundNBT nbt = new CompoundNBT();
-		nbt.putInt("x", (chunkX * 16) + 8);
-		nbt.putInt("y", 16);
-		nbt.putInt("z", (chunkZ * 16) + 8);
-		DebugPole dp = new DebugPole(null, nbt);
-		components.add(dp);	
+		try {/*
+			Dungeon dungeon = new Dungeon(random, biome, tempman, chunkX, chunkZ);
+			dungeon.addPiecesToStructure(components);
+		*/} catch (Throwable e) {
+			DoomlikeDungeons.getLogger().error("Dungeon creation failes", e);
+			e.printStackTrace();
+		}
+		if(true/*TODO: Base this on config*/) {
+			CompoundNBT nbt = new CompoundNBT();
+			nbt.putInt("x", (chunkX * 16) + 8);
+			nbt.putInt("y", 16);
+			nbt.putInt("z", (chunkZ * 16) + 8);
+			DebugPole dp = new DebugPole(null, nbt);
+			components.add(dp);	
+		}
 		recalculateStructureSize();
 	}
 	
