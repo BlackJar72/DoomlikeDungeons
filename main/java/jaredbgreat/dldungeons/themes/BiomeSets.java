@@ -306,7 +306,7 @@ public class BiomeSets {
      * @param random
      * @return
      */
-    public static Theme getTheme(Biome biome, Random random) {
+    public static Theme getTheme(Biome biome, Random random, int dimID) {
     	HashSet<Theme> set = new HashSet<Theme>();
     	ArrayList<Theme> use = new ArrayList<Theme>();
     	set.clear();
@@ -472,6 +472,19 @@ public class BiomeSets {
 		if(BiomeDictionary.hasType(biome, Type.SANDY)) {
 			set.removeAll(nsandy);
 		}
+		
+		HashSet<Theme> remove = new HashSet<>();
+		
+		for(Theme theme : use) {
+			if(theme.dimensionWhitelist.length > 0) {
+				boolean allowed = false;
+				for(int dim : theme.dimensionWhitelist) {
+					allowed = allowed || (dim == dimID);
+				}
+			}
+		}
+		
+		use.removeAll(remove);
 		
     	if(set.isEmpty()) {
     		return null;

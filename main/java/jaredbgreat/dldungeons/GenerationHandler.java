@@ -113,9 +113,7 @@ public class GenerationHandler implements IWorldGenerator {
 	public static void setFrequency(int freqScale) {
 		if((freqScale % 2) == 0) factor = 2;
 		else factor = 3;
-		System.out.println("freqScale = " + freqScale);
-		factor = (1 << (freqScale / 2)) * factor;
-		System.out.println("factor = " + factor);
+		factor = (factor << (freqScale / 2));
 	}
 	
 	

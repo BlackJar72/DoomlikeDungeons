@@ -124,7 +124,7 @@ public final class ConfigHandler {
 		config.addCustomCategoryComment("General", "Main config settings");
 		int freqScale = config.get("General", "FrequencyScale", DEFAULT_SCALE, 
 				"Determines the average distance between dungeons (+2 is twice as far appart)").getInt();
-		if((freqScale > 30) || (freqScale < 4)) freqScale = DEFAULT_SCALE;
+		if((freqScale > 30) || (freqScale < 6)) freqScale = DEFAULT_SCALE;
 		GenerationHandler.setFrequency(freqScale);
 		Logging.logInfo("Frequency Scaling Factor Set To: " + freqScale);
 		

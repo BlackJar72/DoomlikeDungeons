@@ -147,7 +147,7 @@ public class Dungeon {
 		DoomlikeDungeons.profiler.startTask("Layout dungeon (rough draft)");
 		random = rnd;
 		this.biome = biome;
-		theme = BiomeSets.getTheme(biome, random);
+		theme = BiomeSets.getTheme(biome, random, world.provider.getDimension());
 		if(theme == null) return;
 		
 		applyTheme();
