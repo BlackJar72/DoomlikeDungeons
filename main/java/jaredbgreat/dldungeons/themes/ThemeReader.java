@@ -119,7 +119,7 @@ public class ThemeReader {
 		if(fileNames.length < 1) return 0;
 		for(String name : fileNames) {
 			if(name.length() >= 5) {
-				if(name.substring(name.length() - 4).equals(".cfg")) {
+				if(name.substring(name.length() - 4).equalsIgnoreCase(".cfg")) {
 					files.add(new File(name));
 					num++;
 				}
@@ -161,7 +161,7 @@ public class ThemeReader {
 		for(String name : fileNames) {
 			if(name.length() >= 5) {
 				if(name.equals("template.cfg")) continue;
-				else if(name.substring(name.length() - 4).equals(".cfg")) {
+				else if(name.substring(name.length() - 4).equalsIgnoreCase(".cfg")) {
 					files.add(new File(name));
 					num++;
 				}
@@ -301,8 +301,8 @@ public class ThemeReader {
 			level = intParser(tokens);
 			if(!tokens.hasMoreTokens() || (level == 0)) continue;
 			modid = tokens.nextToken();
-			if(modid.toLowerCase().equals("item") 
-					|| modid.toLowerCase().equals("block"))
+			if(modid.toLowerCase().equalsIgnoreCase("item") 
+					|| modid.toLowerCase().equalsIgnoreCase("block"))
 				modid = "minecraft";
 			if(!tokens.hasMoreTokens()) continue;
 			name = tokens.nextToken();
@@ -410,103 +410,103 @@ public class ThemeReader {
 			tokens = new Tokenizer(line, delimeters);
 			if(!tokens.hasMoreTokens()) continue;
 			token = tokens.nextToken().toLowerCase();
-			if(token.equals("miny")) {
+			if(token.equalsIgnoreCase("miny")) {
 				theme.minY = intParser(theme.minY, tokens);
 				continue;
-			} if(token.equals("maxy")) {
+			} if(token.equalsIgnoreCase("maxy")) {
 				theme.maxY = intParser(theme.maxY, tokens);
 				continue;
-			} if(token.equals("buildfoundation")) {
+			} if(token.equalsIgnoreCase("buildfoundation")) {
 				theme.buildFoundation = booleanParser(theme.buildFoundation, tokens);
 				continue;
-			} if(token.equals("sizes")) {
+			} if(token.equalsIgnoreCase("sizes")) {
 				theme.sizes = sizeParser(theme.sizes, tokens);
 				continue;
-			} if(token.equals("dimensionwhitelist")) {
+			} if(token.equalsIgnoreCase("dimensionwhitelist")) {
 				theme.dimensionWhitelist = dimensionParser(tokens);
 				continue;
-			} if(token.equals("outside")) {
+			} if(token.equalsIgnoreCase("outside")) {
 				theme.outside = elementParser(theme.outside, tokens);
 				continue;
-			} if(token.equals("liquids")) {
+			} if(token.equalsIgnoreCase("liquids")) {
 				theme.liquids = elementParser(theme.liquids, tokens);
 				continue;
-			} if(token.equals("subrooms")) {
+			} if(token.equalsIgnoreCase("subrooms")) {
 				theme.subrooms = elementParser(theme.subrooms, tokens);
 				continue;
-			} if(token.equals("islands")) {
+			} if(token.equalsIgnoreCase("islands")) {
 				theme.islands = elementParser(theme.islands, tokens);
 				continue;
-			} if(token.equals("pillars")) {
+			} if(token.equalsIgnoreCase("pillars")) {
 				theme.pillars = elementParser(theme.pillars, tokens);
 				continue;
-			} if(token.equals("symmetry")) {
+			} if(token.equalsIgnoreCase("symmetry")) {
 				theme.symmetry = elementParser(theme.symmetry, tokens);
 				continue;
-			} if(token.equals("variability")) {
+			} if(token.equalsIgnoreCase("variability")) {
 				theme.variability = elementParser(theme.variability, tokens);
 				continue;
-			} if(token.equals("degeneracy")) {
+			} if(token.equalsIgnoreCase("degeneracy")) {
 				theme.degeneracy = elementParser(theme.degeneracy, tokens);
 				continue;
-			} if(token.equals("complexity")) {
+			} if(token.equalsIgnoreCase("complexity")) {
 				theme.complexity = elementParser(theme.complexity, tokens);
 				continue;
-			} if(token.equals("verticle")) {
+			} if(token.equalsIgnoreCase("verticle")) {
 				theme.verticle = elementParser(theme.verticle, tokens);
 				continue;
-			} if(token.equals("naturals")) {
+			} if(token.equalsIgnoreCase("naturals")) {
 				theme.naturals = elementParser(theme.naturals, tokens);
 				continue;
-			} if(token.equals("entrances")) {
+			} if(token.equalsIgnoreCase("entrances")) {
 				theme.entrances = elementParser(theme.entrances, tokens);
 				continue;
-			} if(token.equals("walls")) {
+			} if(token.equalsIgnoreCase("walls")) {
 				theme.walls = blockParser(theme.walls, tokens, theme.version);
 				continue;
-			} if(token.equals("caveblock")) {
+			} if(token.equalsIgnoreCase("caveblock")) {
 				theme.caveWalls = blockParser(theme.caveWalls, tokens, theme.version);
 				continue;
-			} if(token.equals("floors")) {
+			} if(token.equalsIgnoreCase("floors")) {
 				theme.floors = blockParser(theme.floors, tokens, theme.version);
 				continue;
-			} if(token.equals("ceilings")) {
+			} if(token.equalsIgnoreCase("ceilings")) {
 				theme.ceilings = blockParser(theme.ceilings, tokens, theme.version);
 				continue;
-			} if(token.equals("fencing")) {
+			} if(token.equalsIgnoreCase("fencing")) {
 				theme.fencing = blockParser(theme.fencing, tokens, theme.version);
 				continue;
-			} if(token.equals("liquid")) {
+			} if(token.equalsIgnoreCase("liquid")) {
 				theme.liquid = blockParser(theme.liquid, tokens, theme.version);
 				continue;
-			} if(token.equals("pillarblock")) {
+			} if(token.equalsIgnoreCase("pillarblock")) {
 				theme.pillarBlock = blockParser(theme.pillarBlock, tokens, theme.version);
 				continue;
-			} if(token.equals("commonmobs")) {
+			} if(token.equalsIgnoreCase("commonmobs")) {
 				theme.commonMobs = parseMobs(theme.commonMobs, tokens);
 				continue;
-			} if(token.equals("hardmobs")) {
+			} if(token.equalsIgnoreCase("hardmobs")) {
 				theme.hardMobs = parseMobs(theme.hardMobs, tokens);
 				continue;
-			} if(token.equals("brutemobs")) {
+			} if(token.equalsIgnoreCase("brutemobs")) {
 				theme.bruteMobs = parseMobs(theme.bruteMobs, tokens);
 				continue;
-			} if(token.equals("elitemobs")) {
+			} if(token.equalsIgnoreCase("elitemobs")) {
 				theme.eliteMobs = parseMobs(theme.eliteMobs, tokens);
 				continue;
-			} if(token.equals("bossmobs")) {
+			} if(token.equalsIgnoreCase("bossmobs")) {
 				theme.bossMobs = parseMobs(theme.bossMobs, tokens);
 				continue;
-			} if(token.equals("biomes")) {
+			} if(token.equalsIgnoreCase("biomes")) {
 				theme.biomes = biomeParser(tokens);
 				continue;
-			} if(token.equals("notinbiomes")) {
+			} if(token.equalsIgnoreCase("notinbiomes")) {
 				theme.notIn = biomeParser(tokens);
 				continue;
-			} if(token.equals("chestsfile")) {
+			} if(token.equalsIgnoreCase("chestsfile")) {
 				theme.lootCat = tokens.nextToken();
 				continue;
-			} if(token.equals("type")) {
+			} if(token.equalsIgnoreCase("type")) {
 				theme.type = typeParser(tokens);
 				for(ThemeType type : theme.type) {
 					type.addThemeToType(theme, type);
@@ -516,10 +516,10 @@ public class ThemeReader {
 					if(theme.type.contains(ThemeType.SWAMP)) theme.flags.add(ThemeFlags.SWAMPY);
 				}
 				continue;
-			} if(token.equals("flags")) {
+			} if(token.equalsIgnoreCase("flags")) {
 				theme.flags = flagParser(tokens);
 				continue;
-			} if(token.equals("version")) {
+			} if(token.equalsIgnoreCase("version")) {
 				theme.version = floatParser(theme.version, tokens);
 				if(theme.version > 1.6) {
 					delimeters = " ,;\t\n\r\f=";
@@ -762,34 +762,34 @@ public class ThemeReader {
 		while(tokens.hasMoreTokens()) {		
 			name = tokens.nextToken().toUpperCase();
 			// Old biome types
-			if(name.equals("FOREST")) biomes.add(Type.FOREST);
-			else if(name.equals("PLAINS")) biomes.add(Type.PLAINS);
-			else if(name.equals("MOUNTAINS")) biomes.add(Type.MOUNTAIN);
-			else if(name.equals("HILLS")) biomes.add(Type.HILLS);
-			else if(name.equals("SWAMP")) biomes.add(Type.SWAMP);
-			else if(name.equals("WATER")) biomes.add(Type.WATER);
-			else if(name.equals("JUNGLE")) biomes.add(Type.JUNGLE);
-			else if(name.equals("WASTELAND")) biomes.add(Type.WASTELAND);
-			else if(name.equals("BEACH")) biomes.add(Type.BEACH);
-			else if(name.equals("NETHER")) biomes.add(Type.NETHER);
-			else if(name.equals("END")) biomes.add(Type.END);
-			else if(name.equals("MUSHROOM")) biomes.add(Type.MUSHROOM);
-			else if(name.equals("MAGICAL")) biomes.add(Type.MAGICAL);
+			if(name.equalsIgnoreCase("FOREST")) biomes.add(Type.FOREST);
+			else if(name.equalsIgnoreCase("PLAINS")) biomes.add(Type.PLAINS);
+			else if(name.equalsIgnoreCase("MOUNTAINS")) biomes.add(Type.MOUNTAIN);
+			else if(name.equalsIgnoreCase("HILLS")) biomes.add(Type.HILLS);
+			else if(name.equalsIgnoreCase("SWAMP")) biomes.add(Type.SWAMP);
+			else if(name.equalsIgnoreCase("WATER")) biomes.add(Type.WATER);
+			else if(name.equalsIgnoreCase("JUNGLE")) biomes.add(Type.JUNGLE);
+			else if(name.equalsIgnoreCase("WASTELAND")) biomes.add(Type.WASTELAND);
+			else if(name.equalsIgnoreCase("BEACH")) biomes.add(Type.BEACH);
+			else if(name.equalsIgnoreCase("NETHER")) biomes.add(Type.NETHER);
+			else if(name.equalsIgnoreCase("END")) biomes.add(Type.END);
+			else if(name.equalsIgnoreCase("MUSHROOM")) biomes.add(Type.MUSHROOM);
+			else if(name.equalsIgnoreCase("MAGICAL")) biomes.add(Type.MAGICAL);
 			// New biome types
-			else if(name.equals("HOT")) biomes.add(Type.HOT);
-			else if(name.equals("COLD")) biomes.add(Type.COLD);
-			else if(name.equals("DENSE")) biomes.add(Type.DENSE);
-			else if(name.equals("SPARSE")) biomes.add(Type.SPARSE);
-			else if(name.equals("WET")) biomes.add(Type.WET);
-			else if(name.equals("DRY")) biomes.add(Type.DRY);
-			else if(name.equals("SAVANNA")) biomes.add(Type.SAVANNA);
-			else if(name.equals("CONIFEROUS")) biomes.add(Type.CONIFEROUS);
-			else if(name.equals("SPOOKY")) biomes.add(Type.SPOOKY);
-			else if(name.equals("DEAD")) biomes.add(Type.DEAD);
-			else if(name.equals("LUSH")) biomes.add(Type.LUSH);
-			else if(name.equals("MESA")) biomes.add(Type.MESA);
-			else if(name.equals("SANDY")) biomes.add(Type.SANDY);
-			else if(name.equals("SNOWY")) biomes.add(Type.SNOWY);			
+			else if(name.equalsIgnoreCase("HOT")) biomes.add(Type.HOT);
+			else if(name.equalsIgnoreCase("COLD")) biomes.add(Type.COLD);
+			else if(name.equalsIgnoreCase("DENSE")) biomes.add(Type.DENSE);
+			else if(name.equalsIgnoreCase("SPARSE")) biomes.add(Type.SPARSE);
+			else if(name.equalsIgnoreCase("WET")) biomes.add(Type.WET);
+			else if(name.equalsIgnoreCase("DRY")) biomes.add(Type.DRY);
+			else if(name.equalsIgnoreCase("SAVANNA")) biomes.add(Type.SAVANNA);
+			else if(name.equalsIgnoreCase("CONIFEROUS")) biomes.add(Type.CONIFEROUS);
+			else if(name.equalsIgnoreCase("SPOOKY")) biomes.add(Type.SPOOKY);
+			else if(name.equalsIgnoreCase("DEAD")) biomes.add(Type.DEAD);
+			else if(name.equalsIgnoreCase("LUSH")) biomes.add(Type.LUSH);
+			else if(name.equalsIgnoreCase("MESA")) biomes.add(Type.MESA);
+			else if(name.equalsIgnoreCase("SANDY")) biomes.add(Type.SANDY);
+			else if(name.equalsIgnoreCase("SNOWY")) biomes.add(Type.SNOWY);			
 		}
 		return biomes;
 	}
@@ -806,26 +806,26 @@ public class ThemeReader {
 		EnumSet<ThemeType> types = EnumSet.noneOf(ThemeType.class);
 		while(tokens.hasMoreTokens()) {
 			name = tokens.nextToken().toUpperCase();
-			if(name.equals("FOREST")) types.add(ThemeType.FOREST);
-			else if(name.equals("PLAINS")) types.add(ThemeType.PLAINS);
-			else if(name.equals("MOUNTAINS")) types.add(ThemeType.MOUNTAIN);
-			else if(name.equals("SWAMP")) types.add(ThemeType.SWAMP);
-			else if(name.equals("WATER")) types.add(ThemeType.WATER);
-			else if(name.equals("DESERT")) types.add(ThemeType.DESERT);
-			else if(name.equals("FROZEN")) types.add(ThemeType.FROZEN);
-			else if(name.equals("JUNGLE")) types.add(ThemeType.JUNGLE);
-			else if(name.equals("WASTELAND")) types.add(ThemeType.WASTELAND);
-			else if(name.equals("NETHER")) types.add(ThemeType.NETHER);
-			else if(name.equals("END")) types.add(ThemeType.END);
-			else if(name.equals("MUSHROOM")) types.add(ThemeType.MUSHROOM);
-			else if(name.equals("MAGICAL")) types.add(ThemeType.MAGICAL);
-			else if(name.equals("DUNGEON")) types.add(ThemeType.DUNGEON);
-			else if(name.equals("URBAN")) types.add(ThemeType.URBAN);
-			else if(name.equals("NECRO")) types.add(ThemeType.NECRO);
-			else if(name.equals("FIERY")) types.add(ThemeType.FIERY);
-			else if(name.equals("SHADOW")) types.add(ThemeType.SHADOW);
-			else if(name.equals("TECH")) types.add(ThemeType.TECH);
-			else if(name.equals("PARADISE")) types.add(ThemeType.PARADISE);
+			if(name.equalsIgnoreCase("FOREST")) types.add(ThemeType.FOREST);
+			else if(name.equalsIgnoreCase("PLAINS")) types.add(ThemeType.PLAINS);
+			else if(name.equalsIgnoreCase("MOUNTAINS")) types.add(ThemeType.MOUNTAIN);
+			else if(name.equalsIgnoreCase("SWAMP")) types.add(ThemeType.SWAMP);
+			else if(name.equalsIgnoreCase("WATER")) types.add(ThemeType.WATER);
+			else if(name.equalsIgnoreCase("DESERT")) types.add(ThemeType.DESERT);
+			else if(name.equalsIgnoreCase("FROZEN")) types.add(ThemeType.FROZEN);
+			else if(name.equalsIgnoreCase("JUNGLE")) types.add(ThemeType.JUNGLE);
+			else if(name.equalsIgnoreCase("WASTELAND")) types.add(ThemeType.WASTELAND);
+			else if(name.equalsIgnoreCase("NETHER")) types.add(ThemeType.NETHER);
+			else if(name.equalsIgnoreCase("END")) types.add(ThemeType.END);
+			else if(name.equalsIgnoreCase("MUSHROOM")) types.add(ThemeType.MUSHROOM);
+			else if(name.equalsIgnoreCase("MAGICAL")) types.add(ThemeType.MAGICAL);
+			else if(name.equalsIgnoreCase("DUNGEON")) types.add(ThemeType.DUNGEON);
+			else if(name.equalsIgnoreCase("URBAN")) types.add(ThemeType.URBAN);
+			else if(name.equalsIgnoreCase("NECRO")) types.add(ThemeType.NECRO);
+			else if(name.equalsIgnoreCase("FIERY")) types.add(ThemeType.FIERY);
+			else if(name.equalsIgnoreCase("SHADOW")) types.add(ThemeType.SHADOW);
+			else if(name.equalsIgnoreCase("TECH")) types.add(ThemeType.TECH);
+			else if(name.equalsIgnoreCase("PARADISE")) types.add(ThemeType.PARADISE);
 		}
 		return types;
 	}
@@ -842,9 +842,9 @@ public class ThemeReader {
 		EnumSet<ThemeFlags> flags = EnumSet.noneOf(ThemeFlags.class);
 		while(tokens.hasMoreTokens()) {
 			name = tokens.nextToken().toUpperCase();
-			if(name.equals("SWAMPY")) flags.add(ThemeFlags.SWAMPY);
-			else if(name.equals("WATER")) flags.add(ThemeFlags.WATER);
-			else if(name.equals("SURFACE")) flags.add(ThemeFlags.SURFACE);
+			if(name.equalsIgnoreCase("SWAMPY")) flags.add(ThemeFlags.SWAMPY);
+			else if(name.equalsIgnoreCase("WATER")) flags.add(ThemeFlags.WATER);
+			else if(name.equalsIgnoreCase("SURFACE")) flags.add(ThemeFlags.SURFACE);
 		}
 		return flags;
 	}

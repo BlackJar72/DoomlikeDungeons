@@ -475,16 +475,19 @@ public class BiomeSets {
 		
 		HashSet<Theme> remove = new HashSet<>();
 		
-		for(Theme theme : use) {
+		for(Theme theme : set) {
 			if(theme.dimensionWhitelist.length > 0) {
 				boolean allowed = false;
 				for(int dim : theme.dimensionWhitelist) {
 					allowed = allowed || (dim == dimID);
 				}
+				if(!allowed) {
+					remove.add(theme);
+				}
 			}
 		}
 		
-		use.removeAll(remove);
+		set.removeAll(remove);
 		
     	if(set.isEmpty()) {
     		return null;
