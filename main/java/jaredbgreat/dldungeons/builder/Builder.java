@@ -19,7 +19,7 @@ import net.minecraftforge.common.MinecraftForge;
 import java.util.Arrays;
 import java.util.Random;
 
-import static jaredbgreat.dldungeons.builder.DBlock.*;
+import static jaredbgreat.dldungeons.builder.RegisteredBlock.*;
 
 
 public class Builder {

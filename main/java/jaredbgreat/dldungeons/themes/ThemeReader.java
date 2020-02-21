@@ -7,7 +7,7 @@ package jaredbgreat.dldungeons.themes;
  */	
 
 
-import jaredbgreat.dldungeons.builder.DBlock;
+import jaredbgreat.dldungeons.builder.RegisteredBlock;
 import jaredbgreat.dldungeons.debug.Logging;
 import jaredbgreat.dldungeons.nbt.NBTHelper;
 import jaredbgreat.dldungeons.parser.Tokenizer;
@@ -714,7 +714,7 @@ public class ThemeReader {
 		String nums;
 		while(tokens.hasMoreTokens()) {
 			nums = tokens.nextToken();
-			values.add(String.valueOf(DBlock.add(nums)));
+			values.add(String.valueOf(RegisteredBlock.add(nums)));
 		}
 		int[] out = new int[values.size() + el.length];
 		for(int i = 0; i < el.length; i++) {

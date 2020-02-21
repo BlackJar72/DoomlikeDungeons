@@ -6,7 +6,7 @@ package jaredbgreat.dldungeons.pieces.entrances;
  * Copyright (c) 2014-2018 Jared Blackburn
  */	
 
-import jaredbgreat.dldungeons.builder.DBlock;
+import jaredbgreat.dldungeons.builder.RegisteredBlock;
 import jaredbgreat.dldungeons.planner.Dungeon;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
@@ -27,56 +27,56 @@ public class SpiralStair extends AbstractEntrance {
 		int bottom = dungeon.map.floorY[x][z];
 		int top = world.getActualHeight();
 		//int top = world.getChunkFromChunkCoords(wx / 16, wz / 16).getHeight(wx, wz);
-		while(!DBlock.isGroundBlock(world, wx, top, wz)) top--;
+		while(!RegisteredBlock.isGroundBlock(world, wx, top, wz)) top--;
 		top++;
 		int side = dungeon.random.nextInt(4);
 		for(int i = bottom; i < top; i++) {
 			int sx, sz;
-			DBlock.place(world, wx, i, wz, dungeon.wallBlock1);
+			RegisteredBlock.place(world, wx, i, wz, dungeon.wallBlock1);
 			switch (side) {
 			case 0:
-				DBlock.placeBlock(world, wx+1, i, wz,   stairSlab, 0, 3);
-				DBlock.placeBlock(world, wx+1, i, wz+1, stairSlab, 8, 3);
+				RegisteredBlock.placeBlock(world, wx+1, i, wz,   stairSlab, 0, 3);
+				RegisteredBlock.placeBlock(world, wx+1, i, wz+1, stairSlab, 8, 3);
 				// Empty space
-				DBlock.deleteBlock(world, wx,    i, wz+1);
-				DBlock.deleteBlock(world, wx-1,  i, wz+1);
-				DBlock.deleteBlock(world, wx-1,  i,   wz);
-				DBlock.deleteBlock(world, wx-1,  i, wz-1);
-				DBlock.deleteBlock(world, wx,    i, wz-1);
-				DBlock.deleteBlock(world, wx+1,  i, wz-1);
+				RegisteredBlock.deleteBlock(world, wx,    i, wz+1);
+				RegisteredBlock.deleteBlock(world, wx-1,  i, wz+1);
+				RegisteredBlock.deleteBlock(world, wx-1,  i,   wz);
+				RegisteredBlock.deleteBlock(world, wx-1,  i, wz-1);
+				RegisteredBlock.deleteBlock(world, wx,    i, wz-1);
+				RegisteredBlock.deleteBlock(world, wx+1,  i, wz-1);
 				break;
 			case 1:
-				DBlock.placeBlock(world, wx,   i, wz+1, stairSlab, 0, 3);
-				DBlock.placeBlock(world, wx-1, i, wz+1, stairSlab, 8, 3);
+				RegisteredBlock.placeBlock(world, wx,   i, wz+1, stairSlab, 0, 3);
+				RegisteredBlock.placeBlock(world, wx-1, i, wz+1, stairSlab, 8, 3);
 				// Empty space
-				DBlock.deleteBlock(world, wx+1, i,   wz);
-				DBlock.deleteBlock(world, wx+1, i, wz+1);
-				DBlock.deleteBlock(world, wx-1, i,   wz);
-				DBlock.deleteBlock(world, wx-1, i, wz-1);
-				DBlock.deleteBlock(world, wx,   i, wz-1);
-				DBlock.deleteBlock(world, wx+1, i, wz-1);
+				RegisteredBlock.deleteBlock(world, wx+1, i,   wz);
+				RegisteredBlock.deleteBlock(world, wx+1, i, wz+1);
+				RegisteredBlock.deleteBlock(world, wx-1, i,   wz);
+				RegisteredBlock.deleteBlock(world, wx-1, i, wz-1);
+				RegisteredBlock.deleteBlock(world, wx,   i, wz-1);
+				RegisteredBlock.deleteBlock(world, wx+1, i, wz-1);
 				break;
 			case 2:
-				DBlock.placeBlock(world, wx-1, i, wz,   stairSlab, 0, 3);
-				DBlock.placeBlock(world, wx-1, i, wz-1, stairSlab, 8, 3);
+				RegisteredBlock.placeBlock(world, wx-1, i, wz,   stairSlab, 0, 3);
+				RegisteredBlock.placeBlock(world, wx-1, i, wz-1, stairSlab, 8, 3);
 				// Empty space
-				DBlock.deleteBlock(world, wx+1, i,   wz);
-				DBlock.deleteBlock(world, wx+1, i, wz+1);
-				DBlock.deleteBlock(world, wx,   i, wz+1);
-				DBlock.deleteBlock(world, wx-1, i, wz+1);
-				DBlock.deleteBlock(world, wx,   i, wz-1);
-				DBlock.deleteBlock(world, wx+1, i, wz-1);
+				RegisteredBlock.deleteBlock(world, wx+1, i,   wz);
+				RegisteredBlock.deleteBlock(world, wx+1, i, wz+1);
+				RegisteredBlock.deleteBlock(world, wx,   i, wz+1);
+				RegisteredBlock.deleteBlock(world, wx-1, i, wz+1);
+				RegisteredBlock.deleteBlock(world, wx,   i, wz-1);
+				RegisteredBlock.deleteBlock(world, wx+1, i, wz-1);
 				break;
 			case 3:
-				DBlock.placeBlock(world, wx,   i, wz-1, stairSlab, 0, 3);
-				DBlock.placeBlock(world, wx+1, i, wz-1, stairSlab, 8, 3);
+				RegisteredBlock.placeBlock(world, wx,   i, wz-1, stairSlab, 0, 3);
+				RegisteredBlock.placeBlock(world, wx+1, i, wz-1, stairSlab, 8, 3);
 				// Empty space
-				DBlock.deleteBlock(world, wx+1, i,   wz);
-				DBlock.deleteBlock(world, wx+1, i, wz+1);
-				DBlock.deleteBlock(world, wx,   i, wz+1);
-				DBlock.deleteBlock(world, wx-1, i, wz+1);
-				DBlock.deleteBlock(world, wx-1, i,   wz);
-				DBlock.deleteBlock(world, wx-1, i, wz-1);
+				RegisteredBlock.deleteBlock(world, wx+1, i,   wz);
+				RegisteredBlock.deleteBlock(world, wx+1, i, wz+1);
+				RegisteredBlock.deleteBlock(world, wx,   i, wz+1);
+				RegisteredBlock.deleteBlock(world, wx-1, i, wz+1);
+				RegisteredBlock.deleteBlock(world, wx-1, i,   wz);
+				RegisteredBlock.deleteBlock(world, wx-1, i, wz-1);
 				break;
 			}
 			side = (side + 1) % 4; 

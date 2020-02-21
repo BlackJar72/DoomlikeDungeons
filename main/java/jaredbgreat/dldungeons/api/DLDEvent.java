@@ -10,7 +10,7 @@ package jaredbgreat.dldungeons.api;
 
 import java.util.Random;
 
-import jaredbgreat.dldungeons.builder.DBlock;
+import jaredbgreat.dldungeons.builder.IBlockPlacer;
 import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.planner.mapping.MapMatrix;
 import jaredbgreat.dldungeons.rooms.Room;
@@ -54,14 +54,14 @@ public class DLDEvent extends Event {
 	@Cancelable
 	public static class PlaceDBlock extends Place {
 
-		protected final DBlock block;
+		protected final IBlockPlacer block;
 
-		public PlaceDBlock(World world, BlockPos pos, DBlock block) {
+		public PlaceDBlock(World world, BlockPos pos, IBlockPlacer block) {
 			super(world, pos);
 			this.block = block;
 		}
 
-		public DBlock getBlock() {
+		public IBlockPlacer getBlock() {
 			return block;
 		}
 

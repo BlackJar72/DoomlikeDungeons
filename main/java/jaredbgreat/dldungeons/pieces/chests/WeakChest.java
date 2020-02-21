@@ -6,7 +6,7 @@ package jaredbgreat.dldungeons.pieces.chests;
  */	
 
 import jaredbgreat.dldungeons.ConfigHandler;
-import jaredbgreat.dldungeons.builder.DBlock;
+import jaredbgreat.dldungeons.builder.AbstractBlock;
 
 import java.util.Random;
 
@@ -32,7 +32,7 @@ public class WeakChest extends BasicChest {
 	public void place(World world, int x, int y, int z, Random random) {
 		BlockPos pos = new BlockPos(x, y, z);
 		TileEntityChest contents = (TileEntityChest)world.getTileEntity(pos);
-		if(world.getBlockState(pos).getBlock() != DBlock.chest) {
+		if(world.getBlockState(pos).getBlock() != AbstractBlock.chest) {
 			System.err.println("[DLDUNGEONS] ERROR! Trying to put loot into non-chest at " 
 									+ x + ", " + y + ", " + z + " (basic chest).");
 			return;

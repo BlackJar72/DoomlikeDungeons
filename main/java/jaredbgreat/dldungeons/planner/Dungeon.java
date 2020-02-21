@@ -10,7 +10,7 @@ import jaredbgreat.dldungeons.ConfigHandler;
 import jaredbgreat.dldungeons.Difficulty;
 import jaredbgreat.dldungeons.DoomlikeDungeons;
 import jaredbgreat.dldungeons.api.DLDEvent;
-import jaredbgreat.dldungeons.builder.DBlock;
+import jaredbgreat.dldungeons.builder.RegisteredBlock;
 import jaredbgreat.dldungeons.pieces.Spawner;
 import jaredbgreat.dldungeons.pieces.chests.BasicChest;
 import jaredbgreat.dldungeons.pieces.chests.LootCategory;
@@ -384,7 +384,7 @@ public class Dungeon {
 	public void addChestBlocks(Room room) {
 		if(MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.AddChestBlocksToRoom(this, room))) return;
 		for(BasicChest  chest : room.chests) {
-			DBlock.placeChest(map.world, shiftX + chest.mx, chest.my, shiftZ + chest.mz);
+			RegisteredBlock.placeChest(map.world, shiftX + chest.mx, chest.my, shiftZ + chest.mz);
 		}		
 	}
 	
@@ -408,7 +408,7 @@ public class Dungeon {
 	private void addTileEntitesToRoom(Room room) {
 		if(MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.AddTileEntitiesToRoom(this, room))) return;
 			for(Spawner  spawner : room.spawners) {
-					DBlock.placeSpawner(map.world, 
+					RegisteredBlock.placeSpawner(map.world, 
 										shiftX + spawner.getX(), 
 										spawner.getY(), 
 										shiftZ + spawner.getZ(), 

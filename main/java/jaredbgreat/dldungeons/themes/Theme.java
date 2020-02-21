@@ -6,7 +6,7 @@ package jaredbgreat.dldungeons.themes;
  */		
 
 
-import jaredbgreat.dldungeons.builder.DBlock;
+import jaredbgreat.dldungeons.builder.RegisteredBlock;
 import jaredbgreat.dldungeons.pieces.chests.LootCategory;
 
 import java.util.ArrayList;
@@ -222,7 +222,7 @@ public class Theme {
 	 * @return
 	 */
 	private static int makeDBlock(String block) {
-		return DBlock.add(block);
+		return RegisteredBlock.add(block);
 	}
 	
 	

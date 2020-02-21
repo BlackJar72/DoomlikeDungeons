@@ -7,7 +7,7 @@ package jaredbgreat.dldungeons.pieces.chests;
 
 import jaredbgreat.dldungeons.ConfigHandler;
 import jaredbgreat.dldungeons.api.DLDEvent;
-import jaredbgreat.dldungeons.builder.DBlock;
+import jaredbgreat.dldungeons.builder.AbstractBlock;
 
 import java.util.Random;
 
@@ -55,7 +55,7 @@ public class BasicChest {
 		BlockPos pos = new BlockPos(x, y, z);
 		level += random.nextInt(2);
 		if(level >= LootCategory.LEVELS) level = LootCategory.LEVELS - 1;
-		if(world.getBlockState(pos).getBlock() != DBlock.chest) {
+		if(world.getBlockState(pos).getBlock() != AbstractBlock.chest) {
 			System.err.println("[DLDUNGEONS] ERROR! Trying to put loot into non-chest at " 
 									+ x + ", " + y + ", " + z + " (basic chest).");
 			return;

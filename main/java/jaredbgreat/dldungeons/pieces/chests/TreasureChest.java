@@ -6,7 +6,7 @@ package jaredbgreat.dldungeons.pieces.chests;
  */	
 
 import jaredbgreat.dldungeons.ConfigHandler;
-import jaredbgreat.dldungeons.builder.DBlock;
+import jaredbgreat.dldungeons.builder.AbstractBlock;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,7 +50,7 @@ public class TreasureChest extends BasicChest {
 		level += random.nextInt(2);
 		if(level >= LootCategory.LEVELS) level = LootCategory.LEVELS - 1;
 		ItemStack treasure;
-		if(world.getBlockState(pos).getBlock() != DBlock.chest) {
+		if(world.getBlockState(pos).getBlock() != AbstractBlock.chest) {
 			System.err.println("[DLDUNGEONS] ERROR! Trying to put loot into non-chest at " 
 					+ x + ", " + y + ", " + z + " (treasure chest).");
 			return;

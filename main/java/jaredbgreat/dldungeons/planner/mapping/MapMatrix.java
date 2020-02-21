@@ -9,7 +9,7 @@ package jaredbgreat.dldungeons.planner.mapping;
 
 import jaredbgreat.dldungeons.DoomlikeDungeons;
 import jaredbgreat.dldungeons.api.DLDEvent;
-import jaredbgreat.dldungeons.builder.DBlock;
+import jaredbgreat.dldungeons.builder.RegisteredBlock;
 import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.planner.astar.Step;
 import jaredbgreat.dldungeons.rooms.Room;
@@ -112,13 +112,13 @@ public class MapMatrix {
 					 // Debugging code; should not normally run
 					 if(drawFlyingMap) {
 						 if(astared[i][j]) {
-							 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, lapis);
+							 RegisteredBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, lapis);
 						 } else if(isDoor[i][j]) {
-							 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, slab);
+							 RegisteredBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, slab);
 						 } else if(isWall[i][j]) {
-							 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, gold);
+							 RegisteredBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, gold);
 						 } else {
-							 DBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, glass);
+							 RegisteredBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, glass);
 						 }
 					 }
 					 
@@ -126,18 +126,18 @@ public class MapMatrix {
 					 if(nFloorY[i][j] < floorY[i][j])
 						 for(int k = nFloorY[i][j]; k < floorY[i][j]; k++) 
 							 if(noLowDegenerate(theRoom, shiftX + i, k, shiftZ + j, i, j))
-								 DBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
+								 RegisteredBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
 					 if(nFloorY[i][j] > floorY[i][j])
 						 for(int k = floorY[i][j]; k < nFloorY[i][j]; k++) 
 							 if(noLowDegenerate(theRoom, shiftX + i, k, shiftZ + j, i, j))
-								 DBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
+								 RegisteredBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
 					 
 					 if(noLowDegenerate(theRoom, shiftX + i, floorY[i][j] - 1, shiftZ + j, i, j)) {
-						 DBlock.place(world, shiftX + i, floorY[i][j] - 1, shiftZ + j, floor[i][j]);
+						 RegisteredBlock.place(world, shiftX + i, floorY[i][j] - 1, shiftZ + j, floor[i][j]);
 						 if(dungeon.theme.buildFoundation) {
 							 below = nFloorY[i][j] < floorY[i][j] ? nFloorY[i][j] - 1 : floorY[i][j] - 2;
-							 while(!DBlock.isGroundBlock(world, shiftX + i, below, shiftZ + j)) {
-								 DBlock.place(world, shiftX + i, below, shiftZ + j, dungeon.floorBlock);
+							 while(!RegisteredBlock.isGroundBlock(world, shiftX + i, below, shiftZ + j)) {
+								 RegisteredBlock.place(world, shiftX + i, below, shiftZ + j, dungeon.floorBlock);
 						 		below--;
 						 		if(below < 0) break;						 		
 						 	 }
@@ -147,28 +147,28 @@ public class MapMatrix {
 					 // Upper parts of the room
 					 if(!theRoom.sky 
 							 && noHighDegenerate(theRoom, shiftX + i, ceilY[i][j] + 1, shiftZ + j))
-						 DBlock.place(world, shiftX + i, ceilY[i][j] + 1, shiftZ + j, ceiling[i][j]);
+						 RegisteredBlock.place(world, shiftX + i, ceilY[i][j] + 1, shiftZ + j, ceiling[i][j]);
 					
 					 for(int k = roomBottom(i, j); k <= ceilY[i][j]; k++)
-						 if(!isWall[i][j])DBlock.deleteBlock(world, shiftX +i, k, shiftZ + j, flooded);
+						 if(!isWall[i][j])RegisteredBlock.deleteBlock(world, shiftX +i, k, shiftZ + j, flooded);
 						 else if(noHighDegenerate(theRoom, shiftX + i, k, shiftZ + j))
-							 DBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
+							 RegisteredBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
 					 for(int k = nCeilY[i][j]; k < ceilY[i][j]; k++) 
 						 if(noHighDegenerate(theRoom, shiftX + i, k, shiftZ + j))
-							 DBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
+							 RegisteredBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
 					 if(isFence[i][j]) 
-						 DBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, dungeon.fenceBlock);
+						 RegisteredBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, dungeon.fenceBlock);
 					 
 					 if(isDoor[i][j]) {
-						 DBlock.deleteBlock(world, shiftX + i, floorY[i][j],     shiftZ + j, flooded);
-						 DBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 1, shiftZ + j, flooded);
-						 DBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 2, shiftZ + j, flooded);
+						 RegisteredBlock.deleteBlock(world, shiftX + i, floorY[i][j],     shiftZ + j, flooded);
+						 RegisteredBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 1, shiftZ + j, flooded);
+						 RegisteredBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 2, shiftZ + j, flooded);
 					 }
 					 
 					 // Liquids
 					 if(hasLiquid[i][j] && (!isWall[i][j] && !isDoor[i][j])
 							 && !world.isAirBlock(new BlockPos(shiftX + i, floorY[i][j] - 1, shiftZ + j))) 
-						 DBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, theRoom.liquidBlock);					 
+						 RegisteredBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, theRoom.liquidBlock);					 
 				}
 			}	
 		
