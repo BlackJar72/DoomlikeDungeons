@@ -839,7 +839,37 @@ public class ThemeReader {
 		while(tokens.hasMoreTokens()) {		
 			name = tokens.nextToken().toUpperCase();
 			// Old biome types
-			if(name.equalsIgnoreCase("FOREST")) biomes.add(Type.FOREST);
+			if(name.equalsIgnoreCase("ALL")) { 
+				biomes.add(Type.FOREST);
+				biomes.add(Type.PLAINS);
+				biomes.add(Type.MOUNTAIN);
+				biomes.add(Type.HILLS);
+				biomes.add(Type.SWAMP);
+				biomes.add(Type.WATER);
+				biomes.add(Type.JUNGLE);
+				biomes.add(Type.WASTELAND);
+				biomes.add(Type.BEACH);
+				biomes.add(Type.NETHER);
+				biomes.add(Type.END);
+				biomes.add(Type.MUSHROOM);
+				biomes.add(Type.MAGICAL);
+				// New biome types
+				biomes.add(Type.HOT);
+				biomes.add(Type.COLD);
+				biomes.add(Type.DENSE);
+				biomes.add(Type.SPARSE);
+				biomes.add(Type.WET);
+				biomes.add(Type.DRY);
+				biomes.add(Type.SAVANNA);
+				biomes.add(Type.CONIFEROUS);
+				biomes.add(Type.SPOOKY);
+				biomes.add(Type.DEAD);
+				biomes.add(Type.LUSH);
+				biomes.add(Type.MESA);
+				biomes.add(Type.SANDY);
+				biomes.add(Type.SNOWY);
+			}
+			else if(name.equalsIgnoreCase("FOREST")) biomes.add(Type.FOREST);
 			else if(name.equalsIgnoreCase("PLAINS")) biomes.add(Type.PLAINS);
 			else if(name.equalsIgnoreCase("MOUNTAINS")) biomes.add(Type.MOUNTAIN);
 			else if(name.equalsIgnoreCase("HILLS")) biomes.add(Type.HILLS);
