@@ -7,6 +7,7 @@ package jaredbgreat.dldungeons.themes;
  */	
 
 
+import jaredbgreat.dldungeons.builder.BlockFamily;
 import jaredbgreat.dldungeons.builder.RegisteredBlock;
 import jaredbgreat.dldungeons.debug.Logging;
 import jaredbgreat.dldungeons.nbt.NBTHelper;
@@ -20,6 +21,7 @@ import jaredbgreat.dldungeons.setup.Externalizer;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -44,7 +46,9 @@ public class ThemeReader {
 	private static File configDir;
 	private static File themesDir;
 	private static File chestDir;
-	public static final String chestDirName = "SpecialChests";
+	private static File blocksDir;
+	public static final String CHESTS_DIR = "SpecialChests";
+	public static final String BLOCKS_DIR = "BlockFamilies";
 	private static ArrayList<File> files;
 	
 	private static final String ESTRING = "";
@@ -96,18 +100,10 @@ public class ThemeReader {
 	
 	
 	/**
-	 * This will look into the themes folder and add theme files 
-	 * to the list of files to read themes from.
-	 * 
-	 * Technically it will treat any file ending in ".cfg" and found 
-	 * inside the theme's directory except for the supplied template 
-	 * as theme, whether it holds valid theme data or not.
-	 * 
-	 * Themes are read as one per file, so no file can contain more 
-	 * than one theme, nor can a theme be split between multiple files.
-	 * 
-	 * If the themes folder is absent of empty it will attempt to fill it 
-	 * by calling exporter.makerThemes.
+	 * This will find all the extra chest files in a directory and return the 
+	 * number.  Technically this simply looks for any file ending in ".cfg" and 
+	 * thus must be applied to the correct folder as this method assumes you 
+	 * have passed in the folder for extra chests.
 	 * 
 	 * @return
 	 */
@@ -184,7 +180,7 @@ public class ThemeReader {
 		TreasureChest.initSlots();
 		openNBTConfig();
 		openLoot("chests.cfg", true);
-		chestDir = new File(configDir.toString() + File.separator + chestDirName);
+		chestDir = new File(configDir.toString() + File.separator + CHESTS_DIR);
 		if(!chestDir.exists()) {
 			chestDir.mkdir();
 		}
@@ -192,10 +188,52 @@ public class ThemeReader {
 		Logging.logInfo("Found " + num + " special chest configs.");
 		for(File file : files) openLoot(file.toString(), false);
 		
+		// Load block families
+		blocksDir = new File(configDir.toString() + File.separator + BLOCKS_DIR);
+		readBlockFamilies(blocksDir);
+		
 		// Now the actual themes
 		num = findThemeFiles(themesDir);
 		Logging.logInfo("Found " + num + " themes.");
 		for(File file : files) readTheme(file);
+	}
+	
+	
+	/**
+	 * Load block familes.
+	 * 
+	 * @param dir folder where block familes are stored.
+	 */
+	private static void readBlockFamilies(File dir) {
+		if(!dir.exists()) {
+			dir.mkdirs();
+		}
+		if(!(dir.exists() && dir.isDirectory() && dir.canRead())) {
+			Logging.logInfo("WARNING: " + dir 
+					+ " did not exist or was not a valid directory!");
+			return;
+		}
+		StringBuilder json;
+		BufferedReader instream = null;
+		String[] fileNames = dir.list();
+		for(String fn : fileNames) {
+			if(fn.substring(fn.length() - 5).equalsIgnoreCase(".json")) {
+				json = new StringBuilder();				
+				fn = dir.toString() + File.separator + fn;				
+				try {
+					instream = new BufferedReader(new FileReader(fn));
+					while(instream.ready()) {
+						json.append(instream.readLine());
+					}
+					instream.close();
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}				
+				RegisteredBlock.add(BlockFamily.makeBlockFamily(json.toString()));
+			}
+		}
 	}
 	
 	
@@ -250,7 +288,7 @@ public class ThemeReader {
 			chests = new File(configDir.toString() + File.separator + name);
 		} else {
 			chests = new File(configDir.toString() + File.separator 
-							+ chestDirName + File.separator + name);
+							+ CHESTS_DIR + File.separator + name);
 		}
 		if(chests.exists()) try {
 			instream = new BufferedReader(new 

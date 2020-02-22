@@ -80,21 +80,24 @@ public class BlockFamily implements IBlockPlacer {
 		JsonObject data = parser.parse(json).getAsJsonObject();		
 		String name;
 		List<IBlockPlacer> blocks = new LinkedList<>(); 
-		if(data.has("Name")) {
-			name = "$" + data.get("Name").getAsString();
+		if(data.has("name")) {
+			name = "$" + data.get("name").getAsString();
 		} else {
 			throw new RuntimeException(Info.OLD_ID + " tried to load BlockFamily with no Name!");
 		}
-		if(data.has("Blocks")) {
-			data.get("Blocks").getAsJsonArray().forEach(new Consumer<JsonElement>(){
+		if(data.has("blocks")) {
+			data.get("blocks").getAsJsonArray().forEach(new Consumer<JsonElement>(){
 				@Override
 				public void accept(JsonElement t) {
 					int id = RegisteredBlock.add(t.getAsString());
 					blocks.add(RegisteredBlock.getPlacer(id));
 				}});;
 		} else {
-			throw new RuntimeException(Info.OLD_ID + " tried to load BlockFamily with no Blocks!");			
+			throw new RuntimeException(Info.OLD_ID + " tried to load BlockFamily with no blocks!");			
 		}
+		if(blocks.isEmpty()) {
+			throw new RuntimeException(Info.OLD_ID + " tried to load BlockFamily empty block list!");			
+		}		
 		BlockFamily out = new BlockFamily(name, blocks); 
 		FAMILIES.put(name, out);
 		return out;

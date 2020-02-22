@@ -452,7 +452,7 @@ public final class ConfigHandler {
 			Logging.logInfo("Warning: " + themesDirName 
 					+ " is not a directory (folder); no themes loaded.");
 		} else ThemeReader.setThemesDir(themesDir);
-		File chestDir = new File(configDir.toString() + File.separator + ThemeReader.chestDirName);
+		File chestDir = new File(configDir.toString() + File.separator + ThemeReader.CHESTS_DIR);
 		if(!chestDir.exists()) {
 			chestDir.mkdir();
 		}
