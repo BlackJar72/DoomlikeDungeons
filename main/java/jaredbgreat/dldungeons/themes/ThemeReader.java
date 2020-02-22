@@ -471,11 +471,11 @@ public class ThemeReader {
 		//DoomlikeDungeons.profiler.startTask("Parsing theme " + name);		
 		Theme theme = new Theme();
 		theme.name = name;
-		theme.version = 1.0f; // Assume old version until a newer version number is detected
+		theme.version = 2; // Don't assume old version now; that version can't work since MC1.8
 		Tokenizer tokens = null;
 		String line = null;
 		String token;
-		String delimeters = " ,:;\t\n\r\f="; // Assume old version until a newer version number is detected
+		String delimeters = " ,;\t\n\r\f="; // Don't assume old version now; that version can't work since MC1.8
 		while((line = instream.readLine()) != null) {
 			if(line.length() < 2) continue;
 			if(line.charAt(0) == '#') continue;
@@ -592,23 +592,15 @@ public class ThemeReader {
 				for(ThemeType type : theme.type) {
 					type.addThemeToType(theme, type);
 				}
-				if(!(theme.version > 1.4f)) {
-					if(theme.type.contains(ThemeType.WATER)) 
-						theme.air = new int[]{RegisteredBlock.add("minecraft:water")};
-					if(theme.type.contains(ThemeType.SWAMP)) theme.flags.add(ThemeFlags.SWAMPY);
-				}
+				if(theme.type.contains(ThemeType.WATER)) 
+					theme.air = new int[]{RegisteredBlock.add("minecraft:water")};
+				if(theme.type.contains(ThemeType.SWAMP)) theme.flags.add(ThemeFlags.SWAMPY);
 				continue;
 			} if(token.equalsIgnoreCase("flags")) {
 				theme.flags = flagParser(tokens);
 				continue;
 			} if(token.equalsIgnoreCase("version")) {
-				theme.version = floatParser(theme.version, tokens);
-				if(theme.version > 1.6) {
-					delimeters = " ,;\t\n\r\f=";
-				} else {
-					delimeters = " ,;:\t\n\r\f=";
-				}
-				continue;
+				theme.version = (int)floatParser(theme.version, tokens);
 			} 
 		}
 		if(theme.air.length < 1) {

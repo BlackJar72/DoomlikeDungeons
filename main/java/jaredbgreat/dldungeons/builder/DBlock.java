@@ -63,26 +63,31 @@ public class DBlock extends AbstractBlock {
 	}
 	
 	
-	public static DBlock makeDBlock(String id) {	
-		Block theBlock;
-		int meta;
-		StringTokenizer nums = new StringTokenizer(id, ":({[]})");
-		String modid = nums.nextToken();
-		ResourceLocation name = new ResourceLocation(modid 
-				+ ":" + nums.nextToken());
-		theBlock = GameRegistry.findRegistry(Block.class).getValue(name);
-		if(theBlock == null) {
-			String error = "[DLDUNGEONS] ERROR! Block read as \"" + id 
-					+ "\" was was not in registry (returned null).";
-			Logging.logError(error);
-			throw new NoSuchElementException(error);
+	public static DBlock makeDBlock(String id) {
+		try {
+			Block theBlock;
+			int meta;
+			StringTokenizer nums = new StringTokenizer(id, ":({[]})");
+			String modid = nums.nextToken();
+			ResourceLocation name = new ResourceLocation(modid 
+					+ ":" + nums.nextToken());
+			theBlock = GameRegistry.findRegistry(Block.class).getValue(name);
+			if(theBlock == null) {
+				String error = "[DLDUNGEONS] ERROR! Block read as \"" + id 
+						+ "\" was was not in registry (returned null).";
+				Logging.logError(error);
+				throw new NoSuchElementException(error);
+			}
+			if(nums.hasMoreElements()) {
+				meta = Integer.parseInt(nums.nextToken()); 
+			} else {
+				meta = 0;
+			}
+			return new DBlock(theBlock.getStateFromMeta(meta));
+		} catch (NoSuchElementException ex) {
+			throw new NoSuchElementException("Something was wrong with " + id 
+					+ "; could not find all elements.");
 		}
-		if(nums.hasMoreElements()) {
-			meta = Integer.parseInt(nums.nextToken()); 
-		} else {
-			meta = 0;
-		}
-		return new DBlock(theBlock.getStateFromMeta(meta));
 	}
 
 

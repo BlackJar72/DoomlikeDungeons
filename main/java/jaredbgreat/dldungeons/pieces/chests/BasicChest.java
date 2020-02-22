@@ -74,7 +74,6 @@ public class BasicChest {
 			break;
 		}
 		
-		
 		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.AfterChestTileEntity(world, contents, which, x, y, z, random, level));
 		
 	}

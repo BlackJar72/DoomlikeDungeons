@@ -37,7 +37,7 @@ import net.minecraftforge.common.BiomeDictionary.Type;
 public class Theme {
 	
 	public String name;
-	public float version = 0f;
+	public int version = 0;
 	
 	public HashSet<Type> biomes = new HashSet<Type>(); // Biome type white list
 	public HashSet<Type> notIn  = new HashSet<Type>(); // Biome type black list
