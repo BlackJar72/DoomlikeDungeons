@@ -29,8 +29,10 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 
 /**
@@ -336,6 +338,7 @@ public final class ConfigHandler {
 			listMobs();
 			listItems();
 			listBlocks();
+			listBiomes();
 		}
 	}
 	
@@ -427,7 +430,36 @@ public final class ConfigHandler {
 			e.printStackTrace();
 		}		
 	}
+
 	
+	
+	/**
+	 * This will list all biomes using their correct, unlocalized names, complete with 
+	 * mod id's, and write them to the file lists/blocks.txt.  This is useful for editing 
+	 * theme files.
+	 */
+	public static void listBiomes() {	
+		BufferedWriter outstream = null;
+		File itemlist = new File(listsDir.toString() + File.separator + "biomes.txt");
+		if(itemlist.exists()) itemlist.delete(); 
+		try {
+			outstream = new BufferedWriter(new 
+					FileWriter(itemlist.toString()));	
+			
+			for(Biome biome : ForgeRegistries.BIOMES){ 
+				String name = ForgeRegistries.BIOMES.getKey(biome).toString();
+				if(true) {;
+					outstream.write(name);
+					outstream.newLine();
+				}
+			}
+			
+			if(outstream != null) outstream.close();
+		} catch (IOException e) {
+			System.err.println("Error: Could not write file blocks.txt");
+			e.printStackTrace();
+		}		
+	}
 	
 	/**
 	 * This will open the theme's directory for some general housekeeping 
