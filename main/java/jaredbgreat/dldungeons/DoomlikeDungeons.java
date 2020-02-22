@@ -8,6 +8,7 @@ package jaredbgreat.dldungeons;
  * Copyright (c) 2014-2018 Jared Blackburn
  */	
 
+import jaredbgreat.dldungeons.builder.RegisteredBlock;
 import jaredbgreat.dldungeons.commands.CmdDimID;
 import jaredbgreat.dldungeons.commands.CmdForceInstallThemes;
 import jaredbgreat.dldungeons.commands.CmdInstallThemes;
@@ -53,6 +54,7 @@ public class DoomlikeDungeons {
     @EventHandler 
     public void init(FMLInitializationEvent event) {
     	if(ConfigHandler.naturalSpawn) dungeonPlacer = new GenerationHandler();
+    	RegisteredBlock.add("minecraft:air");
     }
     
     @EventHandler

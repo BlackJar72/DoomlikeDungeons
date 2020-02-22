@@ -22,6 +22,7 @@ import net.minecraft.block.Block;
 public abstract class AbstractRoom /*extends Shape*/ {
 
 
+	public int airBlock;
 	public int wallBlock1;
 	public int floorBlock;
 	public int cielingBlock;
@@ -63,6 +64,7 @@ public abstract class AbstractRoom /*extends Shape*/ {
 	 */
 	protected AbstractRoom(Dungeon dungeon, AbstractRoom previous) {
 		if((previous != null) && !dungeon.variability.use(dungeon.random)) {
+			airBlock     = previous.airBlock;
 			wallBlock1   = previous.wallBlock1;
 			floorBlock   = previous.floorBlock;
 			cielingBlock = previous.cielingBlock;
@@ -72,6 +74,7 @@ public abstract class AbstractRoom /*extends Shape*/ {
 			caveBlock    = previous.caveBlock;
 		} else if(dungeon.variability.use(dungeon.random)) {
 			if(dungeon.variability.use(dungeon.random)) {
+				airBlock   = dungeon.theme.air[dungeon.random.nextInt(dungeon.theme.air.length)];
 				wallBlock1 = dungeon.theme.walls[dungeon.random.nextInt(dungeon.theme.walls.length)];
 				floorBlock = dungeon.theme.floors[dungeon.random.nextInt(dungeon.theme.floors.length)];
 				cielingBlock = dungeon.theme.ceilings[dungeon.random.nextInt(dungeon.theme.ceilings.length)];
@@ -80,6 +83,9 @@ public abstract class AbstractRoom /*extends Shape*/ {
 				liquidBlock = dungeon.theme.liquid[dungeon.random.nextInt(dungeon.theme.liquid.length)];
 				caveBlock   = dungeon.theme.caveWalls[dungeon.random.nextInt(dungeon.theme.caveWalls.length)];
 			} else {
+				if(!dungeon.variability.use(dungeon.random)) 
+					airBlock = dungeon.airBlock;
+				else airBlock = dungeon.theme.air[dungeon.random.nextInt(dungeon.theme.air.length)];
 				if(!dungeon.variability.use(dungeon.random)) 
 					wallBlock1 = dungeon.wallBlock1;
 				else wallBlock1 = dungeon.theme.walls[dungeon.random.nextInt(dungeon.theme.walls.length)];
@@ -103,6 +109,7 @@ public abstract class AbstractRoom /*extends Shape*/ {
 				else caveBlock = dungeon.theme.caveWalls[dungeon.random.nextInt(dungeon.theme.caveWalls.length)];
 			}
 		} else {
+			airBlock     = dungeon.airBlock;
 			wallBlock1   = dungeon.wallBlock1;
 			floorBlock   = dungeon.floorBlock;
 			cielingBlock = dungeon.cielingBlock;

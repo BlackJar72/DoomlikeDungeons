@@ -108,4 +108,10 @@ public class BlockFamily implements IBlockPlacer {
 		return FAMILIES.get(name);
 	}
 
+
+	@Override
+	public Object getContents() {
+		return blocks;
+	}
+
 }

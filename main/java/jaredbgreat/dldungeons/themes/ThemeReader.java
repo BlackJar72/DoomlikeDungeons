@@ -8,6 +8,7 @@ package jaredbgreat.dldungeons.themes;
 
 
 import jaredbgreat.dldungeons.builder.BlockFamily;
+import jaredbgreat.dldungeons.builder.IBlockPlacer;
 import jaredbgreat.dldungeons.builder.RegisteredBlock;
 import jaredbgreat.dldungeons.debug.Logging;
 import jaredbgreat.dldungeons.nbt.NBTHelper;
@@ -532,6 +533,9 @@ public class ThemeReader {
 			} if(token.equalsIgnoreCase("entrances")) {
 				theme.entrances = elementParser(theme.entrances, tokens);
 				continue;
+			} if(token.equalsIgnoreCase("air")) {
+				theme.air = blockParser(theme.air, tokens, theme.version);
+				continue;
 			} if(token.equalsIgnoreCase("walls")) {
 				theme.walls = blockParser(theme.walls, tokens, theme.version);
 				continue;
@@ -589,7 +593,8 @@ public class ThemeReader {
 					type.addThemeToType(theme, type);
 				}
 				if(!(theme.version > 1.4f)) {
-					if(theme.type.contains(ThemeType.WATER)) theme.flags.add(ThemeFlags.WATER);
+					if(theme.type.contains(ThemeType.WATER)) 
+						theme.air = new int[]{RegisteredBlock.add("minecraft:water")};
 					if(theme.type.contains(ThemeType.SWAMP)) theme.flags.add(ThemeFlags.SWAMPY);
 				}
 				continue;
@@ -605,6 +610,9 @@ public class ThemeReader {
 				}
 				continue;
 			} 
+		}
+		if(theme.air.length < 1) {
+			theme.air = new int[]{RegisteredBlock.add("minecraft:air")};
 		}
 		theme.fixMobs();
 		theme.biomeRegister();

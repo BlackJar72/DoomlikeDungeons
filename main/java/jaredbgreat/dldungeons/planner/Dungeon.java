@@ -88,6 +88,7 @@ public class Dungeon {
 	public Degree naturals;    // Cave like areas created with celluar automata
 	
 	// Default blocks
+	public int airBlock;
 	public int wallBlock1;
 	public int floorBlock;
 	public int cielingBlock;
@@ -152,7 +153,8 @@ public class Dungeon {
 		
 		applyTheme();
 		entrancePref = random.nextInt(3);		
-		
+
+		airBlock     = theme.air[random.nextInt(theme.air.length)];
 		wallBlock1   = theme.walls[random.nextInt(theme.walls.length)];
 		floorBlock   = theme.floors[random.nextInt(theme.floors.length)];
 		cielingBlock = theme.ceilings[random.nextInt(theme.ceilings.length)];

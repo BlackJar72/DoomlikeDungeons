@@ -85,4 +85,10 @@ public class DBlock extends AbstractBlock {
 		return new DBlock(theBlock.getStateFromMeta(meta));
 	}
 
+
+	@Override
+	public Object getContents() {
+		return block;
+	}
+
 }

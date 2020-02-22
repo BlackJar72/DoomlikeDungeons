@@ -68,6 +68,7 @@ public class Theme {
 	public Element entrances;	// Ways in and out / number of entrance/exit nodes (others are destination / treasure nodes)
 	public Element naturals;    // An alternative cave done in 2 1/2 D
 	
+	public int[] air;
 	public int[] walls;
 	public int[] caveWalls;
 	public int[] floors;
@@ -105,6 +106,7 @@ public class Theme {
 		entrances = new Element(2,   5, 25, 50, 15,  3);
 		fences = new Element(15, 25, 55, 15,  0, 0);
 		naturals = new Element(25, 5, 20, 10,  0, 0);
+		air = makeBlockList(new String[]{});
 		walls = makeBlockList(new String[]{});
 		caveWalls = makeBlockList(new String[]{});
 		floors = makeBlockList(new String[]{});

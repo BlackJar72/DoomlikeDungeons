@@ -246,6 +246,13 @@ private RegisteredBlock(BlockFamily family) throws NoSuchElementException {
 	}
 	
 	
+	public static void deleteBlock(World world, int x, int y, int z, int block) {
+		if(isProtectedBlock(world, x, y, z)) return;
+		if(block > 0) registry.get(block).place(world, x, y, z); 
+		else world.setBlockToAir(new BlockPos(x, y, z));
+	}
+	
+	
 	/**
 	 * Simply a wrapper for placing a chest.
 	 * 
@@ -348,5 +355,11 @@ private RegisteredBlock(BlockFamily family) throws NoSuchElementException {
 	@Override
 	public void place(World world, int x, int y, int z) {
 		block.place(world, x, y, z);
+	}
+
+
+	@Override
+	public Object getContents() {
+		return block;
 	}
 }

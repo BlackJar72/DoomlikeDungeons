@@ -152,14 +152,16 @@ public class MapMatrix {
 						 RegisteredBlock.place(world, shiftX + i, ceilY[i][j] + 1, shiftZ + j, ceiling[i][j]);
 					
 					 for(int k = roomBottom(i, j); k <= ceilY[i][j]; k++)
-						 if(!isWall[i][j])RegisteredBlock.deleteBlock(world, shiftX +i, k, shiftZ + j, flooded);
+						 if(!isWall[i][j]) {RegisteredBlock.deleteBlock(world, shiftX +i, k, shiftZ + j, 
+								 theRoom.airBlock);
+						 }
 						 else if(noHighDegenerate(theRoom, shiftX + i, k, shiftZ + j))
 							 RegisteredBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
 					 for(int k = nCeilY[i][j]; k < ceilY[i][j]; k++) 
 						 if(noHighDegenerate(theRoom, shiftX + i, k, shiftZ + j))
 							 RegisteredBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
 					 if(isFence[i][j]) 
-						 RegisteredBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, dungeon.fenceBlock);
+						 RegisteredBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, theRoom.fenceBlock);
 					 
 					 if(isDoor[i][j]) {
 						 RegisteredBlock.deleteBlock(world, shiftX + i, floorY[i][j],     shiftZ + j, flooded);
