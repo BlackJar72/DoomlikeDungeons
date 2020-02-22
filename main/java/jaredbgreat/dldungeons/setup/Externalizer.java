@@ -27,10 +27,10 @@ public class Externalizer {
 	private BufferedReader instream;
 	private BufferedWriter outstream;
 	private File           outFile;
-	private static final   String baseLocation = "/jaredbgreat/dldungeons/res/themes/";
+	private static final   String BASE_LOCATION = "/jaredbgreat/dldungeons/res/themes/";
 	private static         String outDirectory;
 	
-	private static final String[] themes 
+	private static final String[] THEMES 
 			= new String[]{"common.cfg",
 				           "continentalShelf.cfg",
 				           "dank.cfg",
@@ -44,6 +44,12 @@ public class Externalizer {
 				           "urban.cfg",
 				           "villagelike.cfg",
 				           "volcanic.cfg"};
+	
+	private static final String[] BLOCKS 
+			= new String[]{"mixedcobble.json",
+				           "mixedbricks1.json",
+				           "mixedbricks2.json",
+				           "mixedbricks3.json"};
 	
 	public Externalizer(String outDir) {
 		outDirectory = outDir;
@@ -74,7 +80,7 @@ public class Externalizer {
 			outFile = new File(outDirectory + outloc);
 			if(outFile.exists()) return;
 			instream = new BufferedReader(new InputStreamReader(getClass()
-					.getResourceAsStream(baseLocation + name)));
+					.getResourceAsStream(BASE_LOCATION + name)));
 			outstream = new BufferedWriter(new FileWriter(outFile));
 			String line;
 			if((instream != null) && (outstream != null)) 
@@ -124,7 +130,7 @@ public class Externalizer {
 				}
 			}
 			instream = new BufferedReader(new InputStreamReader(getClass()
-					.getResourceAsStream(baseLocation + name)));
+					.getResourceAsStream(BASE_LOCATION + name)));
 			outstream = new BufferedWriter(new FileWriter(outFile));
 			String line;
 			if((instream != null) && (outstream != null)) 
@@ -149,7 +155,18 @@ public class Externalizer {
 	 * Iterate through the default themes and export them to their own files.
 	 */
 	public void makeThemes() {
-		for(String name : themes) {
+		for(String name : THEMES) {
+			System.out.println("[DLDUNGEONS] Installing file " + outDirectory + name);
+			copyOut(name);
+		}
+	}
+	
+	
+	/**
+	 * Iterate through the default block families and export them to their own files.
+	 */
+	public void makeBlocks() {
+		for(String name : BLOCKS) {
 			System.out.println("[DLDUNGEONS] Installing file " + outDirectory + name);
 			copyOut(name);
 		}
@@ -161,7 +178,19 @@ public class Externalizer {
 	 * over-writing any files with the same path.
 	 */
 	public void forceThemes() {
-		for(String name : themes) {
+		for(String name : THEMES) {
+			System.out.println("[DLDUNGEONS] Installing file " + outDirectory + name);
+			forceOut(name);
+		}
+	}
+	
+	
+	/**
+	 * Iterate through the default themes and export them to their own files, 
+	 * over-writing any files with the same path.
+	 */
+	public void forceBlocks() {
+		for(String name : BLOCKS) {
 			System.out.println("[DLDUNGEONS] Installing file " + outDirectory + name);
 			forceOut(name);
 		}

@@ -155,13 +155,44 @@ public class ThemeReader {
 		// If still empty somehow don't try to read files!
 		if(fileNames.length < 1) return 0;
 		for(String name : fileNames) {
-			if(name.length() >= 5) {
+			if(name.length() > 4) {
 				if(name.equals("template.cfg")) continue;
 				else if(name.substring(name.length() - 4).equalsIgnoreCase(".cfg")) {
 					files.add(new File(name));
 					num++;
 				}
 			}
+		}
+		return num;
+	}
+		
+
+	private static int findBlockFiles(File dir) {
+		int num = 0;
+		Externalizer exporter;
+		files = new ArrayList<File>();
+		if(!dir.exists()) {
+			dir.mkdirs();
+		}
+		String[] fileNames = dir.list();		
+		if(fileNames.length < 1) {
+			// If the directory is empty, assume first run and fill it
+			exporter = new Externalizer(dir.toString() + File.separator);
+			exporter.makeBlocks();
+			fileNames = dir.list();
+		}
+		// If still empty somehow don't try to read files!
+		if(fileNames.length < 1) return 0;
+		for(String name : fileNames) {
+			if(name.length() > 5) {
+				if(name.substring(name.length() - 5).equalsIgnoreCase(".json")) {
+					files.add(new File(name));
+					num++;
+				}
+			}
+		}
+		if(num > 0) {
+			readBlockFamilies(blocksDir);
 		}
 		return num;
 	}
@@ -190,7 +221,8 @@ public class ThemeReader {
 		
 		// Load block families
 		blocksDir = new File(configDir.toString() + File.separator + BLOCKS_DIR);
-		readBlockFamilies(blocksDir);
+		num = findBlockFiles(blocksDir);
+		Logging.logInfo("Found " + num + " block family configs.");
 		
 		// Now the actual themes
 		num = findThemeFiles(themesDir);
@@ -205,9 +237,6 @@ public class ThemeReader {
 	 * @param dir folder where block familes are stored.
 	 */
 	private static void readBlockFamilies(File dir) {
-		if(!dir.exists()) {
-			dir.mkdirs();
-		}
 		if(!(dir.exists() && dir.isDirectory() && dir.canRead())) {
 			Logging.logInfo("WARNING: " + dir 
 					+ " did not exist or was not a valid directory!");

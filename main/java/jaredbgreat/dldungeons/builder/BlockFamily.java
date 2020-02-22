@@ -21,7 +21,7 @@ public class BlockFamily implements IBlockPlacer {
 	
 	private final String name;
 	private final IBlockPlacer[] blocks;
-	private	Random random;	
+	private	static Random random;	
 	
 	
 	private BlockFamily(String name, List<IBlockPlacer> theBlocks) {
@@ -31,7 +31,7 @@ public class BlockFamily implements IBlockPlacer {
 	}
 	
 	
-	public void setRadnom(Random r) {
+	public static void setRadnom(Random r) {
 		random = r;
 	}
 	

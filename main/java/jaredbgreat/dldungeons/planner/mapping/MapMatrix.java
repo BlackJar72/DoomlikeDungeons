@@ -9,6 +9,7 @@ package jaredbgreat.dldungeons.planner.mapping;
 
 import jaredbgreat.dldungeons.DoomlikeDungeons;
 import jaredbgreat.dldungeons.api.DLDEvent;
+import jaredbgreat.dldungeons.builder.BlockFamily;
 import jaredbgreat.dldungeons.builder.RegisteredBlock;
 import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.planner.astar.Step;
@@ -98,6 +99,7 @@ public class MapMatrix {
 	public void build(Dungeon dungeon) {		
 		DoomlikeDungeons.profiler.startTask("Building Dungeon in World");	
 		DoomlikeDungeons.profiler.startTask("Building Dungeon architecture");
+		BlockFamily.setRadnom(dungeon.random);
 		int shiftX = (chunkX * 16) - (room.length / 2) + 8;
 		int shiftZ = (chunkZ * 16) - (room.length / 2) + 8;
 		int below;
