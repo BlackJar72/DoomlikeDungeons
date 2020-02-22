@@ -485,9 +485,15 @@ public class BiomeSets {
 					remove.add(theme);
 				}
 			}
+			if(!theme.biomewl.isEmpty() && !theme.biomewl.contains(biome)) {
+				remove.add(theme);
+			}
+			if(theme.biomebl.contains(biome)) {				
+				remove.add(theme);
+			}
 		}
 		
-		set.removeAll(remove);
+		set.removeAll(remove);			
 		
     	if(set.isEmpty()) {
     		return null;

@@ -29,11 +29,15 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.minecraft.block.Block;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary.Type;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 /**
  * This is the file IO class for reading theme files.
@@ -570,6 +574,12 @@ public class ThemeReader {
 			} if(token.equalsIgnoreCase("notinbiomes")) {
 				theme.notIn = biomeParser(tokens);
 				continue;
+			} if(token.equalsIgnoreCase("biomewhitelist")) {
+				theme.biomewl.addAll(specificBiomeParser(tokens));
+				continue;
+			} if(token.equalsIgnoreCase("biomeblacklist")) {
+				theme.biomebl.addAll(specificBiomeParser(tokens));
+				continue;
 			} if(token.equalsIgnoreCase("chestsfile")) {
 				theme.lootCat = tokens.nextToken();
 				continue;
@@ -895,6 +905,22 @@ public class ThemeReader {
 			else if(name.equalsIgnoreCase("PARADISE")) types.add(ThemeType.PARADISE);
 		}
 		return types;
+	}
+	
+	/**
+	 * This will parse a resource locations into Biomes and resturn 
+	 * a Set of all listed Biomes.
+	 * 
+	 * @param tokens
+	 * @return
+	 */
+	private static Set<Biome> specificBiomeParser(Tokenizer tokens) {
+		Set<Biome> biomes = new HashSet<>();
+		while(tokens.hasMoreTokens()) {
+			biomes.add(ForgeRegistries.BIOMES.getValue(
+					new ResourceLocation(tokens.nextToken())));
+		}
+		return biomes;
 	}
 	
 	

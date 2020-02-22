@@ -7,12 +7,12 @@ package jaredbgreat.dldungeons.themes;
 
 
 import jaredbgreat.dldungeons.builder.RegisteredBlock;
-import jaredbgreat.dldungeons.pieces.chests.LootCategory;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashSet;
 
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary.Type;
 
 
@@ -39,8 +39,11 @@ public class Theme {
 	public String name;
 	public float version = 0f;
 	
-	public HashSet<Type> biomes = new HashSet<Type>();
-	public HashSet<Type> notIn  = new HashSet<Type>();
+	public HashSet<Type> biomes = new HashSet<Type>(); // Biome type white list
+	public HashSet<Type> notIn  = new HashSet<Type>(); // Biome type black list
+	
+	public HashSet<Biome> biomewl = new HashSet<>();  // Specific biome white list
+	public HashSet<Biome> biomebl  = new HashSet<>(); // Specific biome black list
 	
 	public EnumSet<ThemeType> type  = EnumSet.noneOf(ThemeType.class);
 	public EnumSet<ThemeFlags> flags = EnumSet.noneOf(ThemeFlags.class);
