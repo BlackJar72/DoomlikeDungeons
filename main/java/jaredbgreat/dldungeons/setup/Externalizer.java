@@ -49,7 +49,9 @@ public class Externalizer {
 			= new String[]{"mixedcobble.json",
 				           "mixedbricks1.json",
 				           "mixedbricks2.json",
-				           "mixedbricks3.json"};
+				           "mixedbricks3.json",
+				           "crumbling_walls1.json",
+				           "crumbling_walls2.json"};
 	
 	public Externalizer(String outDir) {
 		outDirectory = outDir;
