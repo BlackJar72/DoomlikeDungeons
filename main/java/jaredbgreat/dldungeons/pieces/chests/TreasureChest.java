@@ -48,6 +48,9 @@ public class TreasureChest extends BasicChest {
 		Collections.shuffle(slots, random);
 		slot = 0;
 		level += random.nextInt(2);
+		if(!withBoss && (level > 6)) {
+			level = Math.max(6, level - 2);
+		}
 		if(level >= LootCategory.LEVELS) level = LootCategory.LEVELS - 1;
 		ItemStack treasure;
 		if(world.getBlockState(pos).getBlock() != AbstractBlock.chest) {

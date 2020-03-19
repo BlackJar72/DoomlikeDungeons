@@ -15,6 +15,7 @@ import java.util.StringTokenizer;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
@@ -30,10 +31,10 @@ public final class RegisteredBlock extends AbstractBlock {
 	private final String id;   // The name
 	private final IBlockPlacer block;
 	
-	public static final Block quartz  = (Block)Block.getBlockFromName("quartz_block");
-	public static final Block lapis   = (Block)Block.getBlockFromName("lapis_block");
-	public static final Block water   = (Block)Block.getBlockFromName("water");
-	public static final Block air     = (Block)Block.getBlockFromName("air");
+	public static final Block quartz  = Blocks.QUARTZ_BLOCK;
+	public static final Block lapis   = Blocks.LAPIS_BLOCK;
+	public static final Block water   = Blocks.WATER;
+	public static final Block air     = Blocks.AIR;
 	
 	// All blocks, complete with meta-data used by the mod
 	public static final ArrayList<RegisteredBlock> registry = new ArrayList<RegisteredBlock>();

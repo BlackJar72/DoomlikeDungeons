@@ -13,8 +13,10 @@ import java.util.Random;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.common.MinecraftForge;
 
 /**
@@ -54,7 +56,7 @@ public class BasicChest {
 	public void place(World world, int x, int y, int z, Random random) {
 		BlockPos pos = new BlockPos(x, y, z);
 		level += random.nextInt(2);
-		if(level >= LootCategory.LEVELS) level = LootCategory.LEVELS - 1;
+		level = Math.min(6, Math.min(level, LootCategory.LEVELS - 1));
 		if(world.getBlockState(pos).getBlock() != AbstractBlock.chest) {
 			System.err.println("[DLDUNGEONS] ERROR! Trying to put loot into non-chest at " 
 									+ x + ", " + y + ", " + z + " (basic chest).");
@@ -74,7 +76,8 @@ public class BasicChest {
 			break;
 		}
 		
-		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.AfterChestTileEntity(world, contents, which, x, y, z, random, level));
+		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.AfterChestTileEntity(world, 
+				contents, which, x, y, z, random, level));
 		
 	}
 	

@@ -124,12 +124,21 @@ public class MapMatrix {
 						 }
 					 }
 					 
+
+					 // Fix bad heights
+					 if(nFloorY[i][j] < 1) {
+						 nFloorY[i][j] = (byte) dungeon.baseHeight;
+					 }
+					 if(floorY[i][j] < 1) {
+						 floorY[i][j] = (byte) dungeon.baseHeight;
+					 }
+					 
 					 // Lower parts of the room
-					 if(nFloorY[i][j] < floorY[i][j])
+					 if((nFloorY[i][j] < floorY[i][j]) && (nFloorY[i][j] > 0))
 						 for(int k = nFloorY[i][j]; k < floorY[i][j]; k++) 
 							 if(noLowDegenerate(theRoom, shiftX + i, k, shiftZ + j, i, j))
 								 RegisteredBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
-					 if(nFloorY[i][j] > floorY[i][j])
+					 if((nFloorY[i][j] > floorY[i][j]) && (floorY[i][j] > 0))
 						 for(int k = floorY[i][j]; k < nFloorY[i][j]; k++) 
 							 if(noLowDegenerate(theRoom, shiftX + i, k, shiftZ + j, i, j))
 								 RegisteredBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
@@ -141,7 +150,7 @@ public class MapMatrix {
 							 while(!RegisteredBlock.isGroundBlock(world, shiftX + i, below, shiftZ + j)) {
 								 RegisteredBlock.place(world, shiftX + i, below, shiftZ + j, dungeon.floorBlock);
 						 		below--;
-						 		if(below < 0) break;						 		
+						 		if(below < 1) break;						 		
 						 	 }
 						}
 					 }
