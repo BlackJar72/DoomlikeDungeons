@@ -1,12 +1,9 @@
 package jaredbgreat.dldungeons.builder;
 
-import jaredbgreat.dldungeons.api.DLDEvent;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 
 public abstract class AbstractBlock implements IBlockPlacer {	
 	

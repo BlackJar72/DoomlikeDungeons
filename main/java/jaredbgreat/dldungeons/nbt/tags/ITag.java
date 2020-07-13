@@ -6,7 +6,6 @@ package jaredbgreat.dldungeons.nbt.tags;
  */		
 
 import jaredbgreat.dldungeons.nbt.NBTType;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 

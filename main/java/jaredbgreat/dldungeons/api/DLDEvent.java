@@ -8,12 +8,13 @@ package jaredbgreat.dldungeons.api;
  * frodare (Charles Howard), late 2016.
  */	
 
-import java.util.Random;
-
 import jaredbgreat.dldungeons.builder.IBlockPlacer;
 import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.planner.mapping.MapMatrix;
 import jaredbgreat.dldungeons.rooms.Room;
+
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.math.BlockPos;

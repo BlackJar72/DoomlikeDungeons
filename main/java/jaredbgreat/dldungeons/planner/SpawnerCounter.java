@@ -5,12 +5,12 @@ package jaredbgreat.dldungeons.planner;
  * Copyright (c) 2014-2018 Jared Blackburn
  */	
 
+import jaredbgreat.dldungeons.ConfigHandler;
+import jaredbgreat.dldungeons.pieces.Spawner;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
-
-import jaredbgreat.dldungeons.pieces.Spawner;
-import jaredbgreat.dldungeons.ConfigHandler;
 
 
 public class SpawnerCounter {

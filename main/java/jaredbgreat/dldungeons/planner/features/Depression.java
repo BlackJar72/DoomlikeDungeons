@@ -7,8 +7,6 @@ package jaredbgreat.dldungeons.planner.features;
  */		
 
 
-import jaredbgreat.dldungeons.planner.Dungeon;
-import jaredbgreat.dldungeons.rooms.Room;
 import jaredbgreat.dldungeons.themes.Degree;
 
 /**

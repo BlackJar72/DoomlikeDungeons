@@ -34,8 +34,5 @@ public class Node {
 		
 		// Then plant a seed and try to grow the room
 		hubRoom = new RoomSeed(x, y, z).growRoom(xdim, zdim, height, dungeon, null, null);
-//		if(hubRoom != null) {
-//			dungeon.nodeRooms.add(hubRoom);
-//		}
 	}
 }

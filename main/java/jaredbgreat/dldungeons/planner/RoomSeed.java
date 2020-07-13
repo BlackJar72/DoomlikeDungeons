@@ -7,10 +7,8 @@ package jaredbgreat.dldungeons.planner;
  */	
 
 
-import jaredbgreat.dldungeons.pieces.Shape;
 import jaredbgreat.dldungeons.rooms.AbstractRoom;
 import jaredbgreat.dldungeons.rooms.Room;
-import jaredbgreat.dldungeons.rooms.RoomType;
 
 
 /**

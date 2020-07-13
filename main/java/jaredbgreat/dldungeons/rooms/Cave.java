@@ -6,9 +6,7 @@ package jaredbgreat.dldungeons.rooms;
  */	
 
 
-import jaredbgreat.dldungeons.pieces.Doorway;
 import jaredbgreat.dldungeons.planner.Dungeon;
-import jaredbgreat.dldungeons.planner.astar.AStar;
 
 
 /**

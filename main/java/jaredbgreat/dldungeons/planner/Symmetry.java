@@ -7,10 +7,7 @@ package jaredbgreat.dldungeons.planner;
  */	
 
 
-import jaredbgreat.dldungeons.pieces.Shape;
 import jaredbgreat.dldungeons.pieces.Shapes;
-
-import java.util.EnumSet;
 
 
 /**

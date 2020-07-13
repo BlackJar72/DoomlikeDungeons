@@ -8,6 +8,7 @@ package jaredbgreat.dldungeons.planner.astar;
 
 import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.rooms.Room;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 

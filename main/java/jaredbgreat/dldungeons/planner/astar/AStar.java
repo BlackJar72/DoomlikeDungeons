@@ -7,7 +7,6 @@ package jaredbgreat.dldungeons.planner.astar;
 
 import jaredbgreat.dldungeons.pieces.Doorway;
 import jaredbgreat.dldungeons.planner.Dungeon;
-import jaredbgreat.dldungeons.planner.mapping.MapMatrix;
 import jaredbgreat.dldungeons.planner.mapping.Tile;
 import jaredbgreat.dldungeons.rooms.Room;
 

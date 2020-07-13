@@ -5,12 +5,11 @@ package jaredbgreat.dldungeons.planner.astar;
  * Copyright (c) 2014-2018 Jared Blackburn
  */	
 
-import java.util.PriorityQueue;
-
-import jaredbgreat.dldungeons.pieces.Doorway;
 import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.planner.mapping.Tile;
 import jaredbgreat.dldungeons.rooms.Room;
+
+import java.util.PriorityQueue;
 
 public class AStar2 extends AStar {
 	PriorityQueue<Step2> edges;  // Steps to consider

@@ -10,8 +10,6 @@ import jaredbgreat.dldungeons.nbt.NBTType;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagByteArray;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;

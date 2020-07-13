@@ -6,6 +6,7 @@ package jaredbgreat.dldungeons.planner.astar;
  */	
 
 import jaredbgreat.dldungeons.pieces.Doorway;
+
 import java.util.PriorityQueue;
 
 /**

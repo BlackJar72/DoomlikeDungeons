@@ -5,12 +5,8 @@ package jaredbgreat.dldungeons.planner.astar;
  * Copyright (c) 2014-2018 Jared Blackburn
  */	
 
-import java.util.EnumMap;
-
-import jaredbgreat.dldungeons.pieces.Doorway;
 import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.planner.mapping.Tile;
-import jaredbgreat.dldungeons.themes.ThemeFlags;
 
 /**This meant to represent a Tile (block column / xz coordinate) that acts
  * as a both a node and an implied edge (from the previous node) in an

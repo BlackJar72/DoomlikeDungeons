@@ -10,7 +10,6 @@ package jaredbgreat.dldungeons.planner;
 import jaredbgreat.dldungeons.rooms.Room;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Random;
 
 /**
