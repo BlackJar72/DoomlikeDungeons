@@ -100,7 +100,13 @@ public class GenerationHandler implements IWorldGenerator {
 				e.printStackTrace();
 			}
 		}
-	}	
+	}
+	
+	
+	private void isDungeonCenter() {
+		
+	}
+	
 	
 	
 	/**

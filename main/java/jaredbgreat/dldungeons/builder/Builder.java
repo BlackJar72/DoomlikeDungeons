@@ -26,7 +26,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 
 public class Builder {
-	private static WeakCache<Dungeon> DUNGEON_CACHE;
+	private static WeakCache<Dungeon> DUNGEON_CACHE = new WeakCache<>();
 	
 	private static boolean debugPole = false;
 	
@@ -48,8 +48,7 @@ public class Builder {
 		if(world.isRemote) return; // Do not perform world-gen on the client!
 		if (MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceDungeonBegin(random, chunkX, chunkZ, world))) return;
 		DoomlikeDungeons.profiler.startTask("Create Dungeons");
-		Dungeon dungeon = new Dungeon(random, 
-								world.getBiome(new BlockPos((chunkX * 16), 64, (chunkZ * 16))), 
+		Dungeon dungeon = new Dungeon(world.getBiome(new BlockPos((chunkX * 16), 64, (chunkZ * 16))), 
 								world, chunkX, chunkZ);
 		buildDungeon(dungeon);
 		dungeon.preFinalize();
@@ -76,7 +75,7 @@ public class Builder {
 		if(world.isRemote) return; // Do not perform world-gen on the client!
 		if (MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceDungeonBegin(random, chunkX, chunkZ, world))) return;
 		DoomlikeDungeons.profiler.startTask("Create Dungeons");
-		Dungeon dungeon = new Dungeon(random, 
+		Dungeon dungeon = new Dungeon( 
 							world.getBiome(new BlockPos((chunkX * 16), 64, (chunkZ * 16))), 
 						    world, chunkX, chunkZ);
 		if(dungeon.theme != null &&

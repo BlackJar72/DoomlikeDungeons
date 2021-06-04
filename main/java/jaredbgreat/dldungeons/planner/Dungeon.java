@@ -33,6 +33,7 @@ import jaredbgreat.dldungeons.themes.Sizes;
 import jaredbgreat.dldungeons.themes.Theme;
 import jaredbgreat.dldungeons.util.cache.Coords;
 import jaredbgreat.dldungeons.util.cache.IHaveCoords;
+import jaredbgreat.dldungeons.util.math.SpatialHash;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.MinecraftForge;
@@ -146,11 +147,11 @@ public class Dungeon implements IHaveCoords {
 	}
 
 	
-	public Dungeon(Random rnd, Biome biome, World world, int chunkX, int chunkZ) throws Throwable {
-		coords = new Coords(chunkX, chunkZ);
+	public Dungeon(Biome biome, World world, int chunkX, int chunkZ) throws Throwable {
+		coords = new Coords(chunkX, chunkZ, world.provider.getDimension());
 		DoomlikeDungeons.profiler.startTask("Planning Dungeon");
 		DoomlikeDungeons.profiler.startTask("Layout dungeon (rough draft)");
-		random = rnd;
+		random = SpatialHash.randomFromSeed(world.getSeed(), chunkX, chunkZ, world.provider.getDimension());
 		this.biome = biome;
 		theme = BiomeSets.getTheme(biome, random, world.provider.getDimension());
 		if(theme == null) return;
@@ -183,7 +184,7 @@ public class Dungeon implements IHaveCoords {
 		connectNodes();
 		growthCycle();
 		if(ConfigHandler.thinSpawners && (ConfigHandler.difficulty != Difficulty.NONE)) { 
-			spawners.fixSpawners(this, rnd);
+			spawners.fixSpawners(this, random);
 			for(Room room : rooms) {
 				room.addChests(this);
 			}

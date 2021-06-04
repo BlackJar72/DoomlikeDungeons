@@ -404,5 +404,63 @@ public class SpatialHash {
             return (in % bound);
         }
     }
+    
+    
+    
+    /*=============================*
+     *  SATATIC METHODS METHODS    *
+     ==============================*/
+        
+    
+    /**
+     * Should produce a random long from seed at coordinates x, y, t
+     * 
+     * @param x
+     * @param z
+     * @param t a fake iteration
+     * @return 
+     */
+    public static long longFromSeed(long seed, int x, int z, int t) {
+        long out = seed  + (15485077L * (long)t)
+                         + (12338621L * (long)x) 
+                         + (14416417L * (long)z);
+        long alt = seed  + (179424743L * (long)t)
+                         + (179426003L * (long)x) 
+                         + (179425819L * (long)z);
+        alt ^= rotateLeft(alt, (x % 29) + 13);
+        alt ^= rotateRight(alt, (z % 31) + 7);
+        alt ^= rotateLeft(alt, (t % 23) + 19);
+        alt ^= rotateRight(alt, (z % 31) + 7);
+        out ^= rotateLeft(out, ((x & INT_MASK) % 13) + 5);
+        out ^= rotateRight(out, ((z & INT_MASK) % 11) + 28);  
+        out ^= rotateLeft(out, ((t & INT_MASK)% 17) + 45); 
+        return (out ^ alt);
+    }
+    
+    
+	/**
+	 * Should produce a random long from seed at coordinates x, y, t
+	 * 
+	 * @param x
+	 * @param z
+	 * @param t a fake iteration
+	 * @return 
+	 */
+	public static Random randomFromSeed(long seed, int x, int z, int t) {
+	    long out = seed  + (15485077L * (long)t)
+	                     + (12338621L * (long)x) 
+	                     + (14416417L * (long)z);
+	    long alt = seed  + (179424743L * (long)t)
+	                     + (179426003L * (long)x) 
+	                     + (179425819L * (long)z);
+	    alt ^= rotateLeft(alt, (x % 29) + 13);
+	    alt ^= rotateRight(alt, (z % 31) + 7);
+	    alt ^= rotateLeft(alt, (t % 23) + 19);
+	    alt ^= rotateRight(alt, (z % 31) + 7);
+	    out ^= rotateLeft(out, ((x & INT_MASK) % 13) + 5);
+	    out ^= rotateRight(out, ((z & INT_MASK) % 11) + 28);  
+	    out ^= rotateLeft(out, ((t & INT_MASK)% 17) + 45); 
+	    return new Random(out ^ alt);
+	}
 }
 
