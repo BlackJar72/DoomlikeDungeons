@@ -1,4 +1,4 @@
-package jaredbgreat.dldungeons.parser;
+package jaredbgreat.dldungeons.util.parser;
 
 /* 
  * Doomlike Dungeons by is licensed the MIT License

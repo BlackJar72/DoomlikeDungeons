@@ -1,14 +1,14 @@
 package jaredbgreat.dldungeons.nbt.tags;
 
+import java.util.HashMap;
+
 /* 
  * Doomlike Dungeons by is licensed the MIT License
  * Copyright (c) 2014-2018 Jared Blackburn
  */		
 
 import jaredbgreat.dldungeons.nbt.NBTType;
-import jaredbgreat.dldungeons.parser.Tokenizer;
-
-import java.util.HashMap;
+import jaredbgreat.dldungeons.util.parser.Tokenizer;
 
 public final class Tags {
 	static final HashMap<String,ITag> registry = new HashMap<>();

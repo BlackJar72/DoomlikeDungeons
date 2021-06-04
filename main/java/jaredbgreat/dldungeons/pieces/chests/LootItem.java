@@ -1,6 +1,12 @@
 package jaredbgreat.dldungeons.pieces.chests;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Random;
+
 /* 
  * Doomlike Dungeons by is licensed the MIT License
  * Copyright (c) 2014-2018 Jared Blackburn
@@ -8,17 +14,10 @@ package jaredbgreat.dldungeons.pieces.chests;
 
 
 import jaredbgreat.dldungeons.ConfigHandler;
-import jaredbgreat.dldungeons.debug.Logging;
 import jaredbgreat.dldungeons.nbt.NBTHelper;
 import jaredbgreat.dldungeons.nbt.tags.ITag;
-import jaredbgreat.dldungeons.parser.Tokenizer;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Random;
-
+import jaredbgreat.dldungeons.util.debug.Logging;
+import jaredbgreat.dldungeons.util.parser.Tokenizer;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

@@ -1,5 +1,8 @@
 package jaredbgreat.dldungeons.nbt.tags;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /* 
  * Doomlike Dungeons by is licensed the MIT License
  * Copyright (c) 2014-2018 Jared Blackburn
@@ -7,12 +10,7 @@ package jaredbgreat.dldungeons.nbt.tags;
 
 
 import jaredbgreat.dldungeons.nbt.NBTType;
-import jaredbgreat.dldungeons.parser.Tokenizer;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.nbt.NBTBase;
+import jaredbgreat.dldungeons.util.parser.Tokenizer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 

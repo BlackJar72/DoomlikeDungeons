@@ -7,7 +7,7 @@ package jaredbgreat.dldungeons.nbt;
 
 import jaredbgreat.dldungeons.nbt.tags.ITag;
 import jaredbgreat.dldungeons.nbt.tags.Tags;
-import jaredbgreat.dldungeons.parser.Tokenizer;
+import jaredbgreat.dldungeons.util.parser.Tokenizer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 

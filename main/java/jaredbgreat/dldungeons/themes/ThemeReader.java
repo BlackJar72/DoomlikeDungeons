@@ -1,24 +1,6 @@
 package jaredbgreat.dldungeons.themes;
 
 
-/* 
- * Doomlike Dungeons by is licensed the MIT License
- * Copyright (c) 2014-2018 Jared Blackburn
- */	
-
-
-import jaredbgreat.dldungeons.builder.BlockFamily;
-import jaredbgreat.dldungeons.builder.RegisteredBlock;
-import jaredbgreat.dldungeons.debug.Logging;
-import jaredbgreat.dldungeons.nbt.NBTHelper;
-import jaredbgreat.dldungeons.parser.Tokenizer;
-import jaredbgreat.dldungeons.pieces.chests.LootCategory;
-import jaredbgreat.dldungeons.pieces.chests.LootHandler;
-import jaredbgreat.dldungeons.pieces.chests.LootItem;
-import jaredbgreat.dldungeons.pieces.chests.LootListSet;
-import jaredbgreat.dldungeons.pieces.chests.TreasureChest;
-import jaredbgreat.dldungeons.setup.Externalizer;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -33,6 +15,23 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/* 
+ * Doomlike Dungeons by is licensed the MIT License
+ * Copyright (c) 2014-2018 Jared Blackburn
+ */	
+
+
+import jaredbgreat.dldungeons.builder.BlockFamily;
+import jaredbgreat.dldungeons.builder.RegisteredBlock;
+import jaredbgreat.dldungeons.nbt.NBTHelper;
+import jaredbgreat.dldungeons.pieces.chests.LootCategory;
+import jaredbgreat.dldungeons.pieces.chests.LootHandler;
+import jaredbgreat.dldungeons.pieces.chests.LootItem;
+import jaredbgreat.dldungeons.pieces.chests.LootListSet;
+import jaredbgreat.dldungeons.pieces.chests.TreasureChest;
+import jaredbgreat.dldungeons.setup.Externalizer;
+import jaredbgreat.dldungeons.util.debug.Logging;
+import jaredbgreat.dldungeons.util.parser.Tokenizer;
 import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;

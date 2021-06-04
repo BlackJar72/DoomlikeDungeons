@@ -1,6 +1,10 @@
 package jaredbgreat.dldungeons.planner;
 
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
+
 /* 
  * Doomlike Dungeons by is licensed the MIT License
  * Copyright (c) 2014-2018 Jared Blackburn
@@ -27,11 +31,8 @@ import jaredbgreat.dldungeons.themes.BiomeSets;
 import jaredbgreat.dldungeons.themes.Degree;
 import jaredbgreat.dldungeons.themes.Sizes;
 import jaredbgreat.dldungeons.themes.Theme;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Random;
-
+import jaredbgreat.dldungeons.util.cache.Coords;
+import jaredbgreat.dldungeons.util.cache.IHaveCoords;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.MinecraftForge;
@@ -48,7 +49,9 @@ import net.minecraftforge.common.MinecraftForge;
  * @author Jared Blackburn
  *
  */
-public class Dungeon {
+public class Dungeon implements IHaveCoords {
+	
+	private final Coords coords;
 	
 	public Theme theme;
 	public Random random;
@@ -144,6 +147,7 @@ public class Dungeon {
 
 	
 	public Dungeon(Random rnd, Biome biome, World world, int chunkX, int chunkZ) throws Throwable {
+		coords = new Coords(chunkX, chunkZ);
 		DoomlikeDungeons.profiler.startTask("Planning Dungeon");
 		DoomlikeDungeons.profiler.startTask("Layout dungeon (rough draft)");
 		random = rnd;
@@ -490,6 +494,12 @@ public class Dungeon {
 				map.hasLiquid[i][j] = false;
 				map.isWall[i][j] = false;
 		}	
+	}
+
+
+	@Override
+	public Coords getCoords() {
+		return coords;
 	}
 	
 }

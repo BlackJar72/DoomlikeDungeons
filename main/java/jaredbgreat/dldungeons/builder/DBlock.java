@@ -1,7 +1,7 @@
 package jaredbgreat.dldungeons.builder;
 
 import jaredbgreat.dldungeons.api.DLDEvent;
-import jaredbgreat.dldungeons.debug.Logging;
+import jaredbgreat.dldungeons.util.debug.Logging;
 
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;

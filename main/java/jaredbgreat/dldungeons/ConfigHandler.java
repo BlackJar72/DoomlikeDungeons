@@ -8,13 +8,13 @@ package jaredbgreat.dldungeons;
 
 
 import jaredbgreat.dldungeons.builder.Builder;
-import jaredbgreat.dldungeons.debug.Logging;
 import jaredbgreat.dldungeons.pieces.chests.BasicChest;
 import jaredbgreat.dldungeons.pieces.chests.TreasureChest;
 import jaredbgreat.dldungeons.planner.mapping.MapMatrix;
 import jaredbgreat.dldungeons.rooms.Room;
 import jaredbgreat.dldungeons.setup.Externalizer;
 import jaredbgreat.dldungeons.themes.ThemeReader;
+import jaredbgreat.dldungeons.util.debug.Logging;
 
 import java.io.BufferedWriter;
 import java.io.File;

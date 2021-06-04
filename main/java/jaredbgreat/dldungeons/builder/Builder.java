@@ -10,13 +10,14 @@ package jaredbgreat.dldungeons.builder;
 import static jaredbgreat.dldungeons.builder.RegisteredBlock.lapis;
 import static jaredbgreat.dldungeons.builder.RegisteredBlock.placeBlock;
 import static jaredbgreat.dldungeons.builder.RegisteredBlock.quartz;
-import jaredbgreat.dldungeons.DoomlikeDungeons;
-import jaredbgreat.dldungeons.api.DLDEvent;
-import jaredbgreat.dldungeons.planner.Dungeon;
 
 import java.util.Arrays;
 import java.util.Random;
 
+import jaredbgreat.dldungeons.DoomlikeDungeons;
+import jaredbgreat.dldungeons.api.DLDEvent;
+import jaredbgreat.dldungeons.planner.Dungeon;
+import jaredbgreat.dldungeons.util.cache.WeakCache;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -25,6 +26,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 
 public class Builder {
+	private static WeakCache<Dungeon> DUNGEON_CACHE;
 	
 	private static boolean debugPole = false;
 	
