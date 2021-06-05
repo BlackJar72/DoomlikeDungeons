@@ -26,7 +26,6 @@ import net.minecraftforge.common.MinecraftForge;
 
 
 public class Builder {
-	private static WeakCache<Dungeon> DUNGEON_CACHE = new WeakCache<>();
 	
 	private static boolean debugPole = false;
 	
@@ -46,14 +45,14 @@ public class Builder {
 	 */
 	public static void placeDungeon(Random random, int chunkX, int chunkZ, World world) throws Throwable {	
 		if(world.isRemote) return; // Do not perform world-gen on the client!
-		if (MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceDungeonBegin(random, chunkX, chunkZ, world))) return;
+		if (MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceDungeonBegin(chunkX, chunkZ, world))) return;
 		DoomlikeDungeons.profiler.startTask("Create Dungeons");
 		Dungeon dungeon = new Dungeon(world.getBiome(new BlockPos((chunkX * 16), 64, (chunkZ * 16))), 
 								world, chunkX, chunkZ);
 		buildDungeon(dungeon);
 		dungeon.preFinalize();
 		dungeon = null;
-		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceDungeonFinish(random, chunkX, chunkZ, world, dungeon));
+		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceDungeonFinish(chunkX, chunkZ, world, dungeon));
 		DoomlikeDungeons.profiler.endTask("Create Dungeons");
 	}
 	
@@ -70,10 +69,10 @@ public class Builder {
 	 * @param chunkProvider
 	 * @throws Throwable
 	 */
-	public static void placeDungeon(Random random, int chunkX, int chunkZ, World world,
+	public static void placeDungeon(int chunkX, int chunkZ, World world,
 						IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) throws Throwable {	
 		if(world.isRemote) return; // Do not perform world-gen on the client!
-		if (MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceDungeonBegin(random, chunkX, chunkZ, world))) return;
+		if (MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceDungeonBegin(chunkX, chunkZ, world))) return;
 		DoomlikeDungeons.profiler.startTask("Create Dungeons");
 		Dungeon dungeon = new Dungeon( 
 							world.getBiome(new BlockPos((chunkX * 16), 64, (chunkZ * 16))), 
@@ -87,7 +86,7 @@ public class Builder {
 		}
 		dungeon.preFinalize();
 		dungeon = null;
-		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceDungeonFinish(random, chunkX, chunkZ, world, dungeon));
+		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceDungeonFinish(chunkX, chunkZ, world, dungeon));
 		DoomlikeDungeons.profiler.endTask("Create Dungeons");
 	}
 	
@@ -100,7 +99,8 @@ public class Builder {
 	 */
 	public static void buildDungeon(Dungeon dungeon /*TODO: Parameters*/) {
 		//System.out.println("[DLDUNGONS] Inside Builder.placeDungeon; building dungeon");
-		if(dungeon.theme != null) dungeon.map.build(dungeon);
+		//if(dungeon.theme != null) dungeon.map.build(dungeon);
+		if(dungeon.theme != null) dungeon.map.buildByChunksTest(dungeon);
 	}
 	
 	

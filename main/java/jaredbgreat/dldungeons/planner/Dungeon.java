@@ -170,7 +170,7 @@ public class Dungeon implements IHaveCoords {
 		
 		rooms = new RoomList(size.maxRooms + 1);
 		planter = new ArrayList<Room>();
-		map = new MapMatrix(size.width, world, chunkX, chunkZ);
+		map = new MapMatrix(size, world, coords);
 		numNodes = random.nextInt(size.maxNodes - size.minNodes + 1) + size.minNodes + 1;
 		nodes = new Node[numNodes];
 		spawners = new SpawnerCounter();

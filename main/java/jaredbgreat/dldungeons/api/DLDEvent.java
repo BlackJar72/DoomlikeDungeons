@@ -247,20 +247,14 @@ public class DLDEvent extends Event {
 	@Cancelable
 	public abstract static class PlaceDungeon extends DLDEvent {
 
-		protected final Random random;
 		protected final int chunkX;
 		protected final int chunkZ;
 		protected final World world;
 
-		public PlaceDungeon(Random random, int chunkX, int chunkZ, World world) {
-			this.random = random;
+		public PlaceDungeon(int chunkX, int chunkZ, World world) {
 			this.chunkX = chunkX;
 			this.chunkZ = chunkZ;
 			this.world = world;
-		}
-
-		public Random getRandom() {
-			return random;
 		}
 
 		public int getChunkX() {
@@ -279,16 +273,16 @@ public class DLDEvent extends Event {
 
 	@Cancelable
 	public static class PlaceDungeonBegin extends PlaceDungeon {
-		public PlaceDungeonBegin(Random random, int chunkX, int chunkZ, World world) {
-			super(random, chunkX, chunkZ, world);
+		public PlaceDungeonBegin(int chunkX, int chunkZ, World world) {
+			super(chunkX, chunkZ, world);
 		}
 	}
 
 	public static class PlaceDungeonFinish extends PlaceDungeon {
 		private final Dungeon dungeon;
 
-		public PlaceDungeonFinish(Random random, int chunkX, int chunkZ, World world, Dungeon dungeon) {
-			super(random, chunkX, chunkZ, world);
+		public PlaceDungeonFinish(int chunkX, int chunkZ, World world, Dungeon dungeon) {
+			super(chunkX, chunkZ, world);
 			this.dungeon = dungeon;
 		}
 

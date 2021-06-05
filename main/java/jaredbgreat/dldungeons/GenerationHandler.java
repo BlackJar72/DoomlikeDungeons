@@ -92,9 +92,10 @@ public class GenerationHandler implements IWorldGenerator {
 		int xuse = ((chunkX + xrand) % factor);
 		int zuse = ((chunkZ + zrand) % factor);
 		
-		if((xuse == 0) && (zuse == 0)) {
+		//Find if a dungeon is here
+		if(isDungeonCenter(world.getSeed(), chunkX, chunkZ, world.provider.getDimension())) {
 			try {
-				placeDungeon(random, chunkX, chunkZ, world, chunkGenerator, chunkProvider);
+				placeDungeon(chunkX, chunkZ, world, chunkGenerator, chunkProvider);
 			} catch (Throwable e) {
 				System.err.println("[DLDUNGEONS] Danger!  Failed to finalize a dungeon after building!");
 				e.printStackTrace();
@@ -103,8 +104,15 @@ public class GenerationHandler implements IWorldGenerator {
 	}
 	
 	
-	private void isDungeonCenter() {
-		
+	private boolean isDungeonCenter(long seed, int chunkX, int chunkZ, int dim) {		
+		mrand = new Random(seed + dim
+				+ (2027 * (long)(chunkX / factor)) 
+				+ (1987 * (long)(chunkZ / factor)));
+		int xrand = mrand.nextInt();
+		int zrand = mrand.nextInt();
+		int xuse = ((chunkX + xrand) % factor);
+		int zuse = ((chunkZ + zrand) % factor);
+		return (xuse == 0) && (zuse == 0);
 	}
 	
 	

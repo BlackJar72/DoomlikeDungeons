@@ -14,7 +14,10 @@ import jaredbgreat.dldungeons.builder.RegisteredBlock;
 import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.planner.astar.Step;
 import jaredbgreat.dldungeons.rooms.Room;
+import jaredbgreat.dldungeons.themes.Sizes;
 import jaredbgreat.dldungeons.themes.ThemeFlags;
+import jaredbgreat.dldungeons.util.cache.Coords;
+import jaredbgreat.dldungeons.util.cache.IHaveCoords;
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -30,7 +33,7 @@ import net.minecraftforge.common.MinecraftForge;
  * @author Jared Blackburn
  *
  */
-public class MapMatrix {
+public class MapMatrix implements IHaveCoords {
 	private static final Block lapis = Block.getBlockFromName("lapis_block");
 	private static final Block slab  = Block.getBlockFromName("double_stone_slab");
 	private static final Block gold  = Block.getBlockFromName("gold_block");
@@ -39,7 +42,8 @@ public class MapMatrix {
 	private static boolean drawFlyingMap = false;
 	
 	public final World world;
-	public final int   chunkX, chunkZ, origenX, origenZ;
+	public final Coords coords;
+	public final int   chunkX, chunkZ, origenX, origenZ, lowCX, lowCZ;
 	
 	// map of heights to build at
 	public byte[][] ceilY;		// Ceiling height
@@ -66,26 +70,29 @@ public class MapMatrix {
 	public boolean astared[][];
 	
 	
-	public MapMatrix(int width, World world, int chunkX, int chunkZ) {
+	public MapMatrix(Sizes size, World world, Coords coords) {
 		this.world = world;
-		this.chunkX = chunkX;
-		this.chunkZ = chunkZ;
-		origenX   = (chunkX * 16) - (width / 2) + 8;
-		origenZ   = (chunkZ * 16) - (width / 2) + 8;
-		ceilY  	  = new byte[width][width];
-		floorY    = new byte[width][width];
-		nCeilY 	  = new byte[width][width];
-		nFloorY   = new byte[width][width];
-		room      = new int[width][width];
-		ceiling   = new int[width][width];
-		wall	  = new int[width][width];
-		floor	  = new int[width][width];
-		isWall	  = new boolean[width][width];
-		isFence	  = new boolean[width][width];
-		hasLiquid = new boolean[width][width];	
-		isDoor    = new boolean[width][width];
-		nodedge   = new Step[width][width];
-		astared   = new boolean[width][width];
+		this.coords = coords;
+		chunkX = coords.getX();
+		chunkZ = coords.getZ();
+		lowCX = chunkX - size.chunkRadius;
+		lowCZ = chunkZ - size.chunkRadius;
+		origenX   = (chunkX * 16) - (size.width / 2) + 8;
+		origenZ   = (chunkZ * 16) - (size.width / 2) + 8;
+		ceilY  	  = new byte[size.width][size.width];
+		floorY    = new byte[size.width][size.width];
+		nCeilY 	  = new byte[size.width][size.width];
+		nFloorY   = new byte[size.width][size.width];
+		room      = new int[size.width][size.width];
+		ceiling   = new int[size.width][size.width];
+		wall	  = new int[size.width][size.width];
+		floor	  = new int[size.width][size.width];
+		isWall	  = new boolean[size.width][size.width];
+		isFence	  = new boolean[size.width][size.width];
+		hasLiquid = new boolean[size.width][size.width];	
+		isDoor    = new boolean[size.width][size.width];
+		nodedge   = new Step[size.width][size.width];
+		astared   = new boolean[size.width][size.width];
 	}
 	
 	
@@ -193,6 +200,121 @@ public class MapMatrix {
 	}
 	
 	
+	public void buildByChunksTest(Dungeon dungeon) {
+		for(int i = lowCX; i < (lowCX + dungeon.size.chunkWidth); i++)
+			for(int j = lowCZ; j < (lowCZ + dungeon.size.chunkWidth); j++) {
+				buildInChunk(dungeon, i, j);
+		}
+		dungeon.addTileEntities();	
+		dungeon.addEntrances();
+	}
+	
+	
+	/**
+	 * This will build the dungeon into the world, transforming the information 
+	 * mapped here in 2D arrays into the finished 3D structure in the Minecraft 
+	 * world.
+	 * 
+	 * @param dungeon
+	 */
+	public void buildInChunk(Dungeon dungeon, int cx, int cz) {		
+		DoomlikeDungeons.profiler.startTask("Building Dungeon in Chunk");	
+		DoomlikeDungeons.profiler.startTask("Building Dungeon architecture");
+		BlockFamily.setRadnom(dungeon.random);
+		int shiftX = (chunkX * 16) - (room.length / 2) + 8;
+		int shiftZ = (chunkZ * 16) - (room.length / 2) + 8;
+		int below;
+		boolean flooded = dungeon.theme.flags.contains(ThemeFlags.WATER);
+		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.BeforeBuild(this, shiftX, shiftZ, flooded));
+		
+		int sx = (cx - lowCX) * 16, ex = sx + 16;
+		int sz = (cz - lowCZ) * 16, ez = sz + 16;
+		
+		for(int i = sx; i < ex; i++)
+			for(int j = sz; j < ez; j++) {
+				if(room[i][j] != 0) {
+					 Room theRoom = dungeon.rooms.get(room[i][j]);
+					 
+					 // Debugging code; should not normally run
+					 if(drawFlyingMap) {
+						 if(astared[i][j]) {
+							 RegisteredBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, lapis);
+						 } else if(isDoor[i][j]) {
+							 RegisteredBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, slab);
+						 } else if(isWall[i][j]) {
+							 RegisteredBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, gold);
+						 } else {
+							 RegisteredBlock.placeBlock(world, shiftX + i, 96, shiftZ +j, glass);
+						 }
+					 }
+					 
+
+					 // Fix bad heights
+					 if(nFloorY[i][j] < 1) {
+						 nFloorY[i][j] = (byte) dungeon.baseHeight;
+					 }
+					 if(floorY[i][j] < 1) {
+						 floorY[i][j] = (byte) dungeon.baseHeight;
+					 }
+					 
+					 // Lower parts of the room
+					 if((nFloorY[i][j] < floorY[i][j]) && (nFloorY[i][j] > 0))
+						 for(int k = nFloorY[i][j]; k < floorY[i][j]; k++) 
+							 if(noLowDegenerate(theRoom, shiftX + i, k, shiftZ + j, i, j))
+								 RegisteredBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
+					 if((nFloorY[i][j] > floorY[i][j]) && (floorY[i][j] > 0))
+						 for(int k = floorY[i][j]; k < nFloorY[i][j]; k++) 
+							 if(noLowDegenerate(theRoom, shiftX + i, k, shiftZ + j, i, j))
+								 RegisteredBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
+					 
+					 if(noLowDegenerate(theRoom, shiftX + i, floorY[i][j] - 1, shiftZ + j, i, j)) {
+						 RegisteredBlock.place(world, shiftX + i, floorY[i][j] - 1, shiftZ + j, floor[i][j]);
+						 if(dungeon.theme.buildFoundation) {
+							 below = nFloorY[i][j] < floorY[i][j] ? nFloorY[i][j] - 1 : floorY[i][j] - 2;
+							 while(!RegisteredBlock.isGroundBlock(world, shiftX + i, below, shiftZ + j)) {
+								 RegisteredBlock.place(world, shiftX + i, below, shiftZ + j, dungeon.floorBlock);
+						 		below--;
+						 		if(below < 1) break;						 		
+						 	 }
+						}
+					 }
+					 
+					 // Upper parts of the room
+					 if(!theRoom.sky 
+							 && noHighDegenerate(theRoom, shiftX + i, ceilY[i][j] + 1, shiftZ + j))
+						 RegisteredBlock.place(world, shiftX + i, ceilY[i][j] + 1, shiftZ + j, ceiling[i][j]);
+					
+					 for(int k = roomBottom(i, j); k <= ceilY[i][j]; k++)
+						 if(!isWall[i][j]) {RegisteredBlock.deleteBlock(world, shiftX +i, k, shiftZ + j, 
+								 theRoom.airBlock);
+						 }
+						 else if(noHighDegenerate(theRoom, shiftX + i, k, shiftZ + j))
+							 RegisteredBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
+					 for(int k = nCeilY[i][j]; k < ceilY[i][j]; k++) 
+						 if(noHighDegenerate(theRoom, shiftX + i, k, shiftZ + j))
+							 RegisteredBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
+					 if(isFence[i][j]) 
+						 RegisteredBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, theRoom.fenceBlock);
+					 
+					 if(isDoor[i][j]) {
+						 RegisteredBlock.deleteBlock(world, shiftX + i, floorY[i][j],     shiftZ + j, flooded);
+						 RegisteredBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 1, shiftZ + j, flooded);
+						 RegisteredBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 2, shiftZ + j, flooded);
+					 }
+					 
+					 // Liquids
+					 if(hasLiquid[i][j] && (!isWall[i][j] && !isDoor[i][j])
+							 && !world.isAirBlock(new BlockPos(shiftX + i, floorY[i][j] - 1, shiftZ + j))) 
+						 RegisteredBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, theRoom.liquidBlock);					 
+				}
+			}	
+		
+		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.AfterBuild(this, shiftX, shiftZ, flooded));
+		DoomlikeDungeons.profiler.endTask("Building Dungeon architecture");
+		DoomlikeDungeons.profiler.endTask("Building Dungeon in Chunk");
+	}
+	
+	
 	/**
 	 * Returns true if a block should be placed in those coordinates; that is 
 	 * the block is not air or the room is not degenerate.
@@ -254,5 +376,11 @@ public class MapMatrix {
 	 */
 	public static void setDrawFlyingMap(boolean value) {
 		drawFlyingMap = value;
+	}
+
+
+	@Override
+	public Coords getCoords() {
+		return coords;
 	}
 }
