@@ -13,6 +13,7 @@ import jaredbgreat.dldungeons.builder.BlockFamily;
 import jaredbgreat.dldungeons.builder.RegisteredBlock;
 import jaredbgreat.dldungeons.pieces.Spawner;
 import jaredbgreat.dldungeons.pieces.chests.BasicChest;
+import jaredbgreat.dldungeons.pieces.entrances.AbstractEntrance;
 import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.planner.astar.Step;
 import jaredbgreat.dldungeons.rooms.Room;
@@ -114,6 +115,11 @@ public class MapMatrix implements IHaveCoords {
 	
 	public void addChest(BasicChest chest) {
 		features[chest.mx/16][chest.mz/16].addChest(chest);
+	}
+	
+	
+	public void addEntrance(AbstractEntrance entrance) {
+		features[entrance.x/16][entrance.z/16].addEntrance(entrance);
 	}
 	
 	
@@ -222,11 +228,9 @@ public class MapMatrix implements IHaveCoords {
 	public void buildByChunksTest(Dungeon dungeon) {
 		for(int i = lowCX, i0 = 0; i < (lowCX + dungeon.size.chunkWidth); i++, i0++)
 			for(int j = lowCZ, j0 = 0; j < (lowCZ + dungeon.size.chunkWidth); j++, j0++) {
-				buildInChunk(dungeon, i, j);
-				features[i0][j0].addTileEntites(dungeon, this, shiftX, shiftZ);
+				buildInChunk(dungeon, i, j, i0, j0);
+				//features[i0][j0].buildFeatures(dungeon, this, shiftX, shiftZ, world);
 		}
-		//dungeon.addTileEntities();	
-		//dungeon.addEntrances();
 	}
 	
 	
@@ -237,7 +241,7 @@ public class MapMatrix implements IHaveCoords {
 	 * 
 	 * @param dungeon
 	 */
-	public void buildInChunk(Dungeon dungeon, int cx, int cz) {		
+	public void buildInChunk(Dungeon dungeon, int cx0, int cz0, int cx1, int cz1) {		
 		DoomlikeDungeons.profiler.startTask("Building Dungeon in Chunk");	
 		DoomlikeDungeons.profiler.startTask("Building Dungeon architecture");
 		BlockFamily.setRadnom(dungeon.random);
@@ -245,8 +249,8 @@ public class MapMatrix implements IHaveCoords {
 		boolean flooded = dungeon.theme.flags.contains(ThemeFlags.WATER);
 		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.BeforeBuild(this, shiftX, shiftZ, flooded));
 		
-		int sx = (cx - lowCX) * 16, ex = sx + 16;
-		int sz = (cz - lowCZ) * 16, ez = sz + 16;
+		int sx = (cx0 - lowCX) * 16, ex = sx + 16;
+		int sz = (cz0 - lowCZ) * 16, ez = sz + 16;
 		
 		for(int i = sx; i < ex; i++)
 			for(int j = sz; j < ez; j++) {
@@ -329,6 +333,7 @@ public class MapMatrix implements IHaveCoords {
 		
 		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.AfterBuild(this, shiftX, shiftZ, flooded));
 		DoomlikeDungeons.profiler.endTask("Building Dungeon architecture");
+		features[cx1][cz1].buildFeatures(dungeon, this, shiftX, shiftZ, world);
 		DoomlikeDungeons.profiler.endTask("Building Dungeon in Chunk");
 	}
 	

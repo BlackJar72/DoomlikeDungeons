@@ -15,12 +15,12 @@ import net.minecraft.world.World;
 
 public abstract class AbstractEntrance {
 	
-	protected static final Block ladder 
+	protected static final Block LADDER 
 			= (Block)Block.getBlockFromName("ladder");
-	protected static final Block stairSlab 
+	protected static final Block STAIR_SLAB 
 			= (Block)Block.getBlockFromName("stone_slab");	
 	
-	int x, z;
+	public final int x, z;
 	
 	/**
 	 * Set an entrance to be built at the given coordinates.

@@ -35,8 +35,8 @@ public class SpiralStair extends AbstractEntrance {
 			RegisteredBlock.place(world, wx, i, wz, dungeon.wallBlock1);
 			switch (side) {
 			case 0:
-				RegisteredBlock.placeBlock(world, wx+1, i, wz,   stairSlab, 0, 3);
-				RegisteredBlock.placeBlock(world, wx+1, i, wz+1, stairSlab, 8, 3);
+				RegisteredBlock.placeBlock(world, wx+1, i, wz,   STAIR_SLAB, 0, 3);
+				RegisteredBlock.placeBlock(world, wx+1, i, wz+1, STAIR_SLAB, 8, 3);
 				// Empty space
 				RegisteredBlock.deleteBlock(world, wx,    i, wz+1);
 				RegisteredBlock.deleteBlock(world, wx-1,  i, wz+1);
@@ -46,8 +46,8 @@ public class SpiralStair extends AbstractEntrance {
 				RegisteredBlock.deleteBlock(world, wx+1,  i, wz-1);
 				break;
 			case 1:
-				RegisteredBlock.placeBlock(world, wx,   i, wz+1, stairSlab, 0, 3);
-				RegisteredBlock.placeBlock(world, wx-1, i, wz+1, stairSlab, 8, 3);
+				RegisteredBlock.placeBlock(world, wx,   i, wz+1, STAIR_SLAB, 0, 3);
+				RegisteredBlock.placeBlock(world, wx-1, i, wz+1, STAIR_SLAB, 8, 3);
 				// Empty space
 				RegisteredBlock.deleteBlock(world, wx+1, i,   wz);
 				RegisteredBlock.deleteBlock(world, wx+1, i, wz+1);
@@ -57,8 +57,8 @@ public class SpiralStair extends AbstractEntrance {
 				RegisteredBlock.deleteBlock(world, wx+1, i, wz-1);
 				break;
 			case 2:
-				RegisteredBlock.placeBlock(world, wx-1, i, wz,   stairSlab, 0, 3);
-				RegisteredBlock.placeBlock(world, wx-1, i, wz-1, stairSlab, 8, 3);
+				RegisteredBlock.placeBlock(world, wx-1, i, wz,   STAIR_SLAB, 0, 3);
+				RegisteredBlock.placeBlock(world, wx-1, i, wz-1, STAIR_SLAB, 8, 3);
 				// Empty space
 				RegisteredBlock.deleteBlock(world, wx+1, i,   wz);
 				RegisteredBlock.deleteBlock(world, wx+1, i, wz+1);
@@ -68,8 +68,8 @@ public class SpiralStair extends AbstractEntrance {
 				RegisteredBlock.deleteBlock(world, wx+1, i, wz-1);
 				break;
 			case 3:
-				RegisteredBlock.placeBlock(world, wx,   i, wz-1, stairSlab, 0, 3);
-				RegisteredBlock.placeBlock(world, wx+1, i, wz-1, stairSlab, 8, 3);
+				RegisteredBlock.placeBlock(world, wx,   i, wz-1, STAIR_SLAB, 0, 3);
+				RegisteredBlock.placeBlock(world, wx+1, i, wz-1, STAIR_SLAB, 8, 3);
 				// Empty space
 				RegisteredBlock.deleteBlock(world, wx+1, i,   wz);
 				RegisteredBlock.deleteBlock(world, wx+1, i, wz+1);

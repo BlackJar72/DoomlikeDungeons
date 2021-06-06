@@ -1,5 +1,8 @@
 package jaredbgreat.dldungeons.rooms;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 /* 
 /* 
  * Doomlike Dungeons by is licensed the MIT License
@@ -8,12 +11,17 @@ package jaredbgreat.dldungeons.rooms;
 
 import jaredbgreat.dldungeons.ConfigHandler;
 import jaredbgreat.dldungeons.Difficulty;
+import jaredbgreat.dldungeons.api.DLDEvent;
 import jaredbgreat.dldungeons.pieces.Doorway;
 import jaredbgreat.dldungeons.pieces.Shapes;
 import jaredbgreat.dldungeons.pieces.Spawner;
 import jaredbgreat.dldungeons.pieces.chests.BasicChest;
 import jaredbgreat.dldungeons.pieces.chests.TreasureChest;
 import jaredbgreat.dldungeons.pieces.chests.WeakChest;
+import jaredbgreat.dldungeons.pieces.entrances.AbstractEntrance;
+import jaredbgreat.dldungeons.pieces.entrances.SimpleEntrance;
+import jaredbgreat.dldungeons.pieces.entrances.SpiralStair;
+import jaredbgreat.dldungeons.pieces.entrances.TopRoom;
 import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.planner.RoomSeed;
 import jaredbgreat.dldungeons.planner.Route;
@@ -28,9 +36,7 @@ import jaredbgreat.dldungeons.planner.features.Pillar;
 import jaredbgreat.dldungeons.planner.features.Pool;
 import jaredbgreat.dldungeons.themes.ThemeFlags;
 import jaredbgreat.dldungeons.themes.ThemeType;
-
-import java.util.ArrayList;
-import java.util.Collections;
+import net.minecraftforge.common.MinecraftForge;
 
 
 /**
@@ -75,7 +81,7 @@ public class Room extends AbstractRoom {
 	public ArrayList<DoorQueue> connections;
 	public ArrayList<Doorway> topDoors;
 	public Doorway midpoint; // not really a door but used as one at times
-	
+	public volatile AbstractEntrance entrance;
 	
 	private Room() {id = 0;}	
 	
@@ -141,6 +147,10 @@ public class Room extends AbstractRoom {
 			doors.add(new Doorway(midX, midZ, dungeon.random.nextBoolean()));
 		}
 		
+		if(hasEntrance) {
+			addEntrance(dungeon);
+		}
+		
 		if(isSubroom && parent.sky) {
 			sky = (sky && !dungeon.outside.use(dungeon.random));
 		}
@@ -197,6 +207,39 @@ public class Room extends AbstractRoom {
 			addSpawners(dungeon);
 		}
 		return this;
+	}
+	
+	
+	/**
+	 * This will added a physical entrance to all entrance nodes.
+	 * 
+	 * @param room
+	 */
+	public void addEntrance(Dungeon dungeon) {
+		int type;
+		if(dungeon.variability.use(dungeon.random)) type = dungeon.random.nextInt(3);
+		else type = dungeon.entrancePref; 
+		if(ConfigHandler.easyFind) type = 1;
+		
+		switch (type) {
+		case 0:
+			//DoomlikeDungeons.profiler.startTask("Adding Sriral Stair");
+			entrance = new SpiralStair((int)realX, (int)realZ);
+			//DoomlikeDungeons.profiler.endTask("Adding Sriral Stair");
+			break;
+		case 1:
+			//DoomlikeDungeons.profiler.startTask("Adding Top Room");
+			entrance = new TopRoom((int)realX, (int)realZ);
+			//DoomlikeDungeons.profiler.endTask("Adding Top Room");
+			break;
+		case 2:
+		default:
+			//DoomlikeDungeons.profiler.startTask("Adding Simple Entrance");
+			entrance = new SimpleEntrance((int)realX, (int)realZ);
+			//DoomlikeDungeons.profiler.endTask("Adding Simple Entrance");
+			break;
+		}		
+		//DoomlikeDungeons.profiler.endTask("Adding Entrances");
 	}
 	
 	

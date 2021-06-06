@@ -403,7 +403,10 @@ public class Dungeon implements IHaveCoords {
 		}		
 		for(Spawner  spawner : room.spawners) {
 			map.addSpawner(spawner);
-		}		
+		}
+		if(room.entrance != null) {
+			map.addEntrance(room.entrance);
+		}
 	}
 	
 	
@@ -505,7 +508,8 @@ public class Dungeon implements IHaveCoords {
 				map.floorY[i][j] = (byte)it.floorY;
 				map.hasLiquid[i][j] = false;
 				map.isWall[i][j] = false;
-		}	
+		}
+		it.addEntrance(this);
 	}
 
 

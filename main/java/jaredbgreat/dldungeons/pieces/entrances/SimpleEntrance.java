@@ -30,25 +30,25 @@ public class SimpleEntrance extends AbstractEntrance {
 			case 0:
 				for(int i = bottom; i <= top; i++) {
 					RegisteredBlock.place(world, wx, i, wz, dungeon.wallBlock1);
-					RegisteredBlock.placeBlock(world, wx + 1, i, wz, ladder, 5, 3);
+					RegisteredBlock.placeBlock(world, wx + 1, i, wz, LADDER, 5, 3);
 				}
 				break;
 			case 1:
 				for(int i = bottom; i <= top; i++) {
 					RegisteredBlock.place(world, wx, i, wz, dungeon.wallBlock1);
-					RegisteredBlock.placeBlock(world, wx, i, wz + 1, ladder, 3, 3);
+					RegisteredBlock.placeBlock(world, wx, i, wz + 1, LADDER, 3, 3);
 				}
 				break;
 			case 2:
 				for(int i = bottom; i <= top; i++) {
 					RegisteredBlock.place(world, wx, i, wz, dungeon.wallBlock1);
-					RegisteredBlock.placeBlock(world, wx - 1, i, wz, ladder, 4, 3);
+					RegisteredBlock.placeBlock(world, wx - 1, i, wz, LADDER, 4, 3);
 				}
 				break;
 			case 3:
 				for(int i = bottom; i <= top; i++) {
 					RegisteredBlock.place(world, wx, i, wz, dungeon.wallBlock1);
-					RegisteredBlock.placeBlock(world, wx, i, wz - 1, ladder, 2, 3);
+					RegisteredBlock.placeBlock(world, wx, i, wz - 1, LADDER, 2, 3);
 				}
 				break;
 		}
