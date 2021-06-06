@@ -27,7 +27,7 @@ import net.minecraft.world.World;
  */
 public class TreasureChest extends BasicChest {
 	
-	private static int A2 = 3, B2 = 2, C2 = 2;
+	private static volatile int A2 = 3, B2 = 2, C2 = 2;
 	
 	private boolean withBoss;
 	static ArrayList<Integer> slots = new ArrayList();	

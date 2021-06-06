@@ -14,7 +14,7 @@ package jaredbgreat.dldungeons.pieces;
  * @author Jared Blackburn
  *
  */
-public class Spawner {
+public final class Spawner {
 	
 	private final int x, y, z, room, level;
 	private final String mob;

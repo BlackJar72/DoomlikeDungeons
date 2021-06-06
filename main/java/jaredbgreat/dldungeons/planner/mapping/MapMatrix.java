@@ -11,6 +11,8 @@ import jaredbgreat.dldungeons.DoomlikeDungeons;
 import jaredbgreat.dldungeons.api.DLDEvent;
 import jaredbgreat.dldungeons.builder.BlockFamily;
 import jaredbgreat.dldungeons.builder.RegisteredBlock;
+import jaredbgreat.dldungeons.pieces.Spawner;
+import jaredbgreat.dldungeons.pieces.chests.BasicChest;
 import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.planner.astar.Step;
 import jaredbgreat.dldungeons.rooms.Room;
@@ -43,7 +45,7 @@ public class MapMatrix implements IHaveCoords {
 	
 	public final World world;
 	public final Coords coords;
-	public final int   chunkX, chunkZ, origenX, origenZ, lowCX, lowCZ;
+	public final int   chunkX, chunkZ, origenX, origenZ, lowCX, lowCZ, shiftX, shiftZ;
 	
 	// map of heights to build at
 	public byte[][] ceilY;		// Ceiling height
@@ -69,7 +71,7 @@ public class MapMatrix implements IHaveCoords {
 	public Step    nodedge[][];
 	public boolean astared[][];
 		
-	public ChunkFeatures[][] features;
+	public final ChunkFeatures[][] features;
 	
 	
 	public MapMatrix(Sizes size, World world, Coords coords) {
@@ -96,6 +98,22 @@ public class MapMatrix implements IHaveCoords {
 		nodedge   = new Step[size.width][size.width];
 		astared   = new boolean[size.width][size.width];
 		features  = new ChunkFeatures[size.chunkWidth][size.chunkWidth];
+		for(int i = 0; i < size.chunkWidth; i++)
+			for(int j = 0; j < size.chunkWidth; j++) {
+				features[i][j] = new ChunkFeatures();
+			}
+		shiftX = (chunkX * 16) - (room.length / 2) + 8;
+		shiftZ = (chunkZ * 16) - (room.length / 2) + 8;
+	}
+	
+	
+	public void addSpawner(Spawner spawner) {
+		features[spawner.getX()/16][spawner.getZ()/16].addSpawner(spawner);
+	}
+	
+	
+	public void addChest(BasicChest chest) {
+		features[chest.mx/16][chest.mz/16].addChest(chest);
 	}
 	
 	
@@ -110,8 +128,6 @@ public class MapMatrix implements IHaveCoords {
 		DoomlikeDungeons.profiler.startTask("Building Dungeon in World");	
 		DoomlikeDungeons.profiler.startTask("Building Dungeon architecture");
 		BlockFamily.setRadnom(dungeon.random);
-		int shiftX = (chunkX * 16) - (room.length / 2) + 8;
-		int shiftZ = (chunkZ * 16) - (room.length / 2) + 8;
 		int below;
 		boolean flooded = dungeon.theme.flags.contains(ThemeFlags.WATER);
 		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.BeforeBuild(this, shiftX, shiftZ, flooded));
@@ -204,12 +220,13 @@ public class MapMatrix implements IHaveCoords {
 	
 	
 	public void buildByChunksTest(Dungeon dungeon) {
-		for(int i = lowCX; i < (lowCX + dungeon.size.chunkWidth); i++)
-			for(int j = lowCZ; j < (lowCZ + dungeon.size.chunkWidth); j++) {
+		for(int i = lowCX, i0 = 0; i < (lowCX + dungeon.size.chunkWidth); i++, i0++)
+			for(int j = lowCZ, j0 = 0; j < (lowCZ + dungeon.size.chunkWidth); j++, j0++) {
 				buildInChunk(dungeon, i, j);
+				features[i0][j0].addTileEntites(dungeon, this, shiftX, shiftZ);
 		}
-		dungeon.addTileEntities();	
-		dungeon.addEntrances();
+		//dungeon.addTileEntities();	
+		//dungeon.addEntrances();
 	}
 	
 	
@@ -224,8 +241,6 @@ public class MapMatrix implements IHaveCoords {
 		DoomlikeDungeons.profiler.startTask("Building Dungeon in Chunk");	
 		DoomlikeDungeons.profiler.startTask("Building Dungeon architecture");
 		BlockFamily.setRadnom(dungeon.random);
-		int shiftX = (chunkX * 16) - (room.length / 2) + 8;
-		int shiftZ = (chunkZ * 16) - (room.length / 2) + 8;
 		int below;
 		boolean flooded = dungeon.theme.flags.contains(ThemeFlags.WATER);
 		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.BeforeBuild(this, shiftX, shiftZ, flooded));

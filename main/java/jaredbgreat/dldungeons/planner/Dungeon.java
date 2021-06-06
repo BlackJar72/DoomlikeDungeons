@@ -368,7 +368,8 @@ public class Dungeon implements IHaveCoords {
 	 */
 	private void fixRoomContents() {
 		for(Room room : rooms) {
-			addChestBlocks(room);
+			//addChestBlocks(room);
+			addTEsToChunks(room);
 			DoorChecker.processDoors1(this, room);
 		}
 		for(Room room : rooms) {	
@@ -392,6 +393,16 @@ public class Dungeon implements IHaveCoords {
 		if(MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.AddChestBlocksToRoom(this, room))) return;
 		for(BasicChest  chest : room.chests) {
 			RegisteredBlock.placeChest(map.world, shiftX + chest.mx, chest.my, shiftZ + chest.mz);
+		}		
+	}
+	
+	
+	public void addTEsToChunks(Room room) {
+		for(BasicChest  chest : room.chests) {
+			map.addChest(chest);
+		}		
+		for(Spawner  spawner : room.spawners) {
+			map.addSpawner(spawner);
 		}		
 	}
 	

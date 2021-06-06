@@ -27,10 +27,10 @@ import net.minecraftforge.common.MinecraftForge;
  */
 public class BasicChest {
 	
-	public int mx, my, mz;
+	public final int mx, my, mz;
 	protected int level;
-	private static int A1 = 2, B1 = 1, C1 = 2;
-	protected LootCategory category;
+	private static volatile int A1 = 2, B1 = 1, C1 = 2;
+	protected final LootCategory category;
 	
 	
 	public BasicChest(int x, int y, int z, int level, LootCategory category) {
