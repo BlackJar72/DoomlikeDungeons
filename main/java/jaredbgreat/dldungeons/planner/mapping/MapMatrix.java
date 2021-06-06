@@ -68,6 +68,8 @@ public class MapMatrix implements IHaveCoords {
 	//The A* scratch pad
 	public Step    nodedge[][];
 	public boolean astared[][];
+		
+	public ChunkFeatures[][] features;
 	
 	
 	public MapMatrix(Sizes size, World world, Coords coords) {
@@ -93,6 +95,7 @@ public class MapMatrix implements IHaveCoords {
 		isDoor    = new boolean[size.width][size.width];
 		nodedge   = new Step[size.width][size.width];
 		astared   = new boolean[size.width][size.width];
+		features  = new ChunkFeatures[size.chunkWidth][size.chunkWidth];
 	}
 	
 	
