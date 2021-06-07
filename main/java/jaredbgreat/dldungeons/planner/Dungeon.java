@@ -34,6 +34,7 @@ import jaredbgreat.dldungeons.themes.Theme;
 import jaredbgreat.dldungeons.util.cache.Coords;
 import jaredbgreat.dldungeons.util.cache.IHaveCoords;
 import jaredbgreat.dldungeons.util.math.SpatialHash;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.MinecraftForge;
@@ -153,6 +154,57 @@ public class Dungeon implements IHaveCoords {
 		DoomlikeDungeons.profiler.startTask("Layout dungeon (rough draft)");
 		random = SpatialHash.randomFromSeed(world.getSeed(), chunkX, chunkZ, world.provider.getDimension());
 		this.biome = biome;
+		theme = BiomeSets.getTheme(biome, random, world.provider.getDimension());
+		if(theme == null) return;
+		
+		applyTheme();
+		entrancePref = random.nextInt(3);		
+
+		airBlock     = theme.air[random.nextInt(theme.air.length)];
+		wallBlock1   = theme.walls[random.nextInt(theme.walls.length)];
+		floorBlock   = theme.floors[random.nextInt(theme.floors.length)];
+		cielingBlock = theme.ceilings[random.nextInt(theme.ceilings.length)];
+		fenceBlock   = theme.fencing[random.nextInt(theme.fencing.length)];
+		cornerBlock  = theme.pillarBlock[random.nextInt(theme.pillarBlock.length)];
+		liquidBlock  = theme.liquid[random.nextInt(theme.liquid.length)];
+		caveBlock    = theme.caveWalls[random.nextInt(theme.caveWalls.length)];
+		
+		rooms = new RoomList(size.maxRooms + 1);
+		planter = new ArrayList<Room>();
+		map = new MapMatrix(size, world, coords);
+		numNodes = random.nextInt(size.maxNodes - size.minNodes + 1) + size.minNodes + 1;
+		nodes = new Node[numNodes];
+		spawners = new SpawnerCounter();
+		
+		shiftX = (map.chunkX * 16) - (map.room.length / 2) + 8;
+		shiftZ = (map.chunkZ * 16) - (map.room.length / 2) + 8;
+		
+		makeNodes();
+		if((numEntrances < 1) 
+				&& (ConfigHandler.easyFind || ConfigHandler.singleEntrance)) addAnEntrance();
+		connectNodes();
+		growthCycle();
+		if(ConfigHandler.thinSpawners && (ConfigHandler.difficulty != Difficulty.NONE)) { 
+			spawners.fixSpawners(this, random);
+			for(Room room : rooms) {
+				room.addChests(this);
+			}
+		}
+		DoomlikeDungeons.profiler.endTask("Layout dungeon (rough draft)");
+		DoomlikeDungeons.profiler.startTask("Fixing room contents");
+		fixRoomContents();
+		DoomlikeDungeons.profiler.endTask("Fixing room contents");
+		DoomlikeDungeons.profiler.endTask("Planning Dungeon");
+	}
+
+	
+	public Dungeon(World world, Coords coords) throws Throwable {
+		this.coords = coords;
+		int chunkX = coords.getX(), chunkZ = coords.getZ();
+		DoomlikeDungeons.profiler.startTask("Planning Dungeon");
+		DoomlikeDungeons.profiler.startTask("Layout dungeon (rough draft)");
+		random = SpatialHash.randomFromSeed(world.getSeed(), chunkX, chunkZ, world.provider.getDimension());
+		this.biome = world.getBiome(new BlockPos((chunkX * 16), 64, (chunkZ * 16)));
 		theme = BiomeSets.getTheme(biome, random, world.provider.getDimension());
 		if(theme == null) return;
 		

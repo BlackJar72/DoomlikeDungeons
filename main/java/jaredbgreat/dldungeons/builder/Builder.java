@@ -12,20 +12,21 @@ import static jaredbgreat.dldungeons.builder.RegisteredBlock.placeBlock;
 import static jaredbgreat.dldungeons.builder.RegisteredBlock.quartz;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import jaredbgreat.dldungeons.DoomlikeDungeons;
 import jaredbgreat.dldungeons.api.DLDEvent;
 import jaredbgreat.dldungeons.planner.Dungeon;
+import jaredbgreat.dldungeons.util.cache.Coords;
 import jaredbgreat.dldungeons.util.cache.WeakCache;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.common.MinecraftForge;
 
 
 public class Builder {
+	private static final WeakCache<Dungeon> DUNGEON_CACHE = new WeakCache<>();	
 	
 	private static boolean debugPole = false;
 	
@@ -69,8 +70,7 @@ public class Builder {
 	 * @param chunkProvider
 	 * @throws Throwable
 	 */
-	public static void placeDungeon(int chunkX, int chunkZ, World world,
-						IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) throws Throwable {	
+	public static void placeDungeon(int chunkX, int chunkZ, World world) throws Throwable {	
 		if(world.isRemote) return; // Do not perform world-gen on the client!
 		if (MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceDungeonBegin(chunkX, chunkZ, world))) return;
 		DoomlikeDungeons.profiler.startTask("Create Dungeons");
@@ -88,6 +88,25 @@ public class Builder {
 		dungeon = null;
 		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceDungeonFinish(chunkX, chunkZ, world, dungeon));
 		DoomlikeDungeons.profiler.endTask("Create Dungeons");
+	}
+	
+	
+	public static void buildDungeonChunk(final int cx, final int cz, final Coords dc, final World world) throws Throwable {
+		Dungeon dungeon = DUNGEON_CACHE.get(dc);
+		if(dungeon == null) {
+			dungeon = new Dungeon(world, dc);
+			DUNGEON_CACHE.add(dungeon);
+		}
+		if(dungeon != null) {
+			dungeon.map.buildInChunk(dungeon, cx, cz);
+		}
+	}
+	
+	
+	public static void buildDungeonsChunk(final int cx, final int cz, final List<Coords> dcs, final World world) throws Throwable {
+		for(Coords dc : dcs) {
+			buildDungeonChunk(cx, cz, dc, world);
+		}
 	}
 	
 	

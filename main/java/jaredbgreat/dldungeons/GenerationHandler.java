@@ -9,10 +9,14 @@ package jaredbgreat.dldungeons;
 
 import static jaredbgreat.dldungeons.builder.Builder.placeDungeon;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
+import jaredbgreat.dldungeons.builder.Builder;
+import jaredbgreat.dldungeons.themes.Sizes;
+import jaredbgreat.dldungeons.util.cache.Coords;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -93,15 +97,42 @@ public class GenerationHandler implements IWorldGenerator {
 		int zuse = ((chunkZ + zrand) % factor);
 		
 		//Find if a dungeon is here
+		//buildDungeonHere(world, chunkGenerator, chunkProvider, chunkX, chunkZ);
+		findDungeonsToBuild(world, chunkX, chunkZ);
+	}
+	
+	
+	private void buildDungeonHere(World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider, int chunkX, int chunkZ) {
 		if(isDungeonCenter(world.getSeed(), chunkX, chunkZ, world.provider.getDimension())) {
 			try {
-				placeDungeon(chunkX, chunkZ, world, chunkGenerator, chunkProvider);
+				placeDungeon(chunkX, chunkZ, world);
 			} catch (Throwable e) {
 				System.err.println("[DLDUNGEONS] Danger!  Failed to finalize a dungeon after building!");
 				e.printStackTrace();
 			}
 		}
 	}
+	
+	
+	private void findDungeonsToBuild(final World world, final int chunkX, final int chunkZ) {
+		long seed = world.getSeed();  int dim = world.provider.getDimension();
+		ArrayList<Coords> dungeonLocs = new ArrayList<>();
+		int sx = chunkX - Sizes.HUGE.chunkRadius, ex = chunkX + Sizes.HUGE.chunkRadius;
+		int sz = chunkZ - Sizes.HUGE.chunkRadius, ez = chunkZ + Sizes.HUGE.chunkRadius;
+		for(int i = sx; i <= ex; i++) 
+			for(int j = sz; j <= ez; j++) {
+				if(isDungeonCenter(seed, i, j, dim)) {
+					dungeonLocs.add(new Coords(i, j, dim));
+				}
+			}
+		dungeonLocs.sort(Coords.HashCompare.C);
+		try {
+			Builder.buildDungeonsChunk(chunkX, chunkZ, dungeonLocs, world);
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+	}
+
 	
 	
 	private boolean isDungeonCenter(long seed, int chunkX, int chunkZ, int dim) {		

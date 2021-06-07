@@ -21,6 +21,7 @@ import jaredbgreat.dldungeons.themes.Sizes;
 import jaredbgreat.dldungeons.themes.ThemeFlags;
 import jaredbgreat.dldungeons.util.cache.Coords;
 import jaredbgreat.dldungeons.util.cache.IHaveCoords;
+import jaredbgreat.dldungeons.util.debug.DebugOut;
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -228,8 +229,7 @@ public class MapMatrix implements IHaveCoords {
 	public void buildByChunksTest(Dungeon dungeon) {
 		for(int i = lowCX, i0 = 0; i < (lowCX + dungeon.size.chunkWidth); i++, i0++)
 			for(int j = lowCZ, j0 = 0; j < (lowCZ + dungeon.size.chunkWidth); j++, j0++) {
-				buildInChunk(dungeon, i, j, i0, j0);
-				//features[i0][j0].buildFeatures(dungeon, this, shiftX, shiftZ, world);
+				buildInChunk(dungeon, i, j);
 		}
 	}
 	
@@ -241,7 +241,15 @@ public class MapMatrix implements IHaveCoords {
 	 * 
 	 * @param dungeon
 	 */
-	public void buildInChunk(Dungeon dungeon, int cx0, int cz0, int cx1, int cz1) {		
+	public void buildInChunk(Dungeon dungeon, int cx0, int cz0) {
+		int cx1 = cx0 - lowCX, cz1 = cz0 - lowCZ;
+		if((cx1 < 0) || (cx1 >= dungeon.size.chunkWidth) || (cz1 < 0) || (cz1 >= dungeon.size.chunkWidth)) {
+			return;
+		}
+		
+		//DebugOut.bigSysout("Building dungeon for " + coords + " in chunk " + cx0 + ", " + cz0 
+		//		+ "\n(Low corner: " + lowCX + ", " + lowCZ + "; + Relative location: " + cx1 + ", " + cz1 + ")");
+		
 		DoomlikeDungeons.profiler.startTask("Building Dungeon in Chunk");	
 		DoomlikeDungeons.profiler.startTask("Building Dungeon architecture");
 		BlockFamily.setRadnom(dungeon.random);
