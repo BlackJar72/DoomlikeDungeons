@@ -71,6 +71,7 @@ public final class ConfigHandler {
 	private static final boolean DEFAULT_VANILLA_LOOT = false;	
 	private static final boolean EASY_FIND  = true;	
 	private static final boolean SINGLE_ENTRANCE = true;
+	private static final boolean BIG_HUBS  = false;	
 
 	private static final boolean DISABLE_API = false;
 	private static final boolean NO_MOB_CHANGES = false;
@@ -89,6 +90,8 @@ public final class ConfigHandler {
 	
 	public    static boolean easyFind = EASY_FIND;
 	public    static boolean singleEntrance = SINGLE_ENTRANCE;
+	public    static boolean bigHubs = EASY_FIND;
+	
 	
 	public    static boolean announceCommands = DEFAULT_ANNOUNCE_COMMANDS;
 	public    static boolean vanillaLoot = DEFAULT_VANILLA_LOOT;
@@ -187,6 +190,11 @@ public final class ConfigHandler {
 				"If true dungeons will all have an entrance with a room or ruin, unless the theme "
 				+ System.lineSeparator() + "is one that never has entrances.").getBoolean(EASY_FIND);
 		Logging.logInfo("Will dungeons be easy to find? " + easyFind);
+		
+		bigHubs = config.get("General", "BigHubs", BIG_HUBS, 
+				"If true entrances and \"boss\" rooms will have extra high ceilings, good with tall mobs")
+				.getBoolean(BIG_HUBS);
+		Logging.logInfo("Hub room (entrances and boss rooms) will have high ceiling? " + bigHubs);
 		
 		singleEntrance = config.get("General", "SingleEntrances", SINGLE_ENTRANCE, 
 				"If true all dungeons will exactly one entrance (if the theme allows entrances), "
@@ -299,8 +307,10 @@ public final class ConfigHandler {
 						+ System.lineSeparator() 
 						+ " random.nextInt(A2 + (RoomDifficulty / B2)) + C2");
 		nerf = config.getBoolean("NerfEpicLoot", "Loot", false, 
-					"If true it will limit the amount of level 8 loot place with most spawers "
-					+ "(anything less than a full boss); enable if want to have truly epic items "
+					"If true it will limit the amount of level 8 loot place with most spawners " 
+							+ System.lineSeparator()
+					+ "(anything less than a full boss); enable if want to have truly epic items " 
+							+ System.lineSeparator()
 					+ "like indestructable god picks) but don't want too many of them around.");
 		TreasureChest.setBasicLootNumbers(a, b, c, nerf);
 		Room.setLootBonus(config.getInt("Loot Bonus", "Loot", 1, -9, 9, 
