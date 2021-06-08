@@ -262,6 +262,7 @@ public final class ConfigHandler {
 		
 		//Loot
 		int a, b, c;
+		boolean nerf;
 		config.addCustomCategoryComment("Loot", 
 				"This will change the value and quantity of loo; be careful, too "
 				+ System.lineSeparator() 
@@ -297,7 +298,11 @@ public final class ConfigHandler {
 				"Part of the loot quantity numbers for treasure chests; " 
 						+ System.lineSeparator() 
 						+ " random.nextInt(A2 + (RoomDifficulty / B2)) + C2");
-		TreasureChest.setBasicLootNumbers(a, b, c);
+		nerf = config.getBoolean("NerfEpicLoot", "Loot", false, 
+					"If true it will limit the amount of level 8 loot place with most spawers "
+					+ "(anything less than a full boss); enable if want to have truly epic items "
+					+ "like indestructable god picks) but don't want too many of them around.");
+		TreasureChest.setBasicLootNumbers(a, b, c, nerf);
 		Room.setLootBonus(config.getInt("Loot Bonus", "Loot", 1, -9, 9, 
 				"This modifies the value of the loot, in case you think default is "
 					+ System.lineSeparator() + "too generous or too stingy."));

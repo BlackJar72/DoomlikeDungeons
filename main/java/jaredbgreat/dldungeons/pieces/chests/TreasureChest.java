@@ -28,6 +28,7 @@ import net.minecraft.world.World;
 public class TreasureChest extends BasicChest {
 	
 	private static volatile int A2 = 3, B2 = 2, C2 = 2;
+	private static volatile boolean NERF;
 	
 	private boolean withBoss;
 	static ArrayList<Integer> slots = new ArrayList();	
@@ -48,7 +49,7 @@ public class TreasureChest extends BasicChest {
 		Collections.shuffle(slots, random);
 		slot = 0;
 		level += random.nextInt(2);
-		if(!withBoss && (level > 6)) {
+		if(NERF && !withBoss && (level > 6)) {
 			level = Math.max(6, level - 2);
 		}
 		if(level >= LootCategory.LEVELS) level = LootCategory.LEVELS - 1;
@@ -78,7 +79,7 @@ public class TreasureChest extends BasicChest {
 					level + 1 + random.nextInt(2), random);
 			treasure = lootResult.getLoot();
 			contents.setInventorySlotContents(slots.get(slot).intValue(), treasure);
-			if((lootResult.getLevel() > 6) && !withBoss) {
+			if(NERF && (lootResult.getLevel() > 6) && !withBoss) {
 				level--;
 			}
 			slot++;
@@ -126,5 +127,11 @@ public class TreasureChest extends BasicChest {
 	 */
 	public static void initSlots() {
 		for(int i = 0; i < 27; i++) slots.add(new Integer(i));
+	}
+
+
+	public static void setBasicLootNumbers(int a, int b, int c, boolean nerf) {
+		setBasicLootNumbers(a, b, c);
+		NERF = nerf;
 	}
 }
