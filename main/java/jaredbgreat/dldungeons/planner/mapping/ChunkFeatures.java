@@ -50,16 +50,16 @@ public class ChunkFeatures {
 	 * @param room
 	 */
 	public void buildTileEntites(Dungeon dungeon, MapMatrix map, int shiftX, int shiftZ) {
+		for(BasicChest  chest : chests) {
+			RegisteredBlock.placeChest(map.world, shiftX + chest.mx, chest.my, shiftZ + chest.mz);
+			chest.place(map.world, shiftX + chest.mx, chest.my, shiftZ + chest.mz, dungeon.random);
+		}
 		for(Spawner  spawner : spawners) {
 				RegisteredBlock.placeSpawner(map.world, 
 									shiftX + spawner.getX(), 
 									spawner.getY(), 
 									shiftZ + spawner.getZ(), 
 									spawner.getMob());
-		}
-		for(BasicChest  chest : chests) {
-			RegisteredBlock.placeChest(map.world, shiftX + chest.mx, chest.my, shiftZ + chest.mz);
-			chest.place(map.world, shiftX + chest.mx, chest.my, shiftZ + chest.mz, dungeon.random);
 		}
 	}
 	
