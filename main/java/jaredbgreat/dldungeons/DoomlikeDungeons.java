@@ -1,79 +1,83 @@
 package jaredbgreat.dldungeons;
 
-/* 
- * A procedural multi-room dungeon generator for Minecraft inspired by the 
- * Oblige 3.57 level generator for Doom / Doom II / Heretic / Hexen etc.
- * 
- * Doomlike Dungeons by is licensed the MIT License
- * Copyright (c) 2014-2018 Jared Blackburn
- */	
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import jaredbgreat.dldungeons.builder.RegisteredBlock;
-import jaredbgreat.dldungeons.commands.CmdDimID;
-import jaredbgreat.dldungeons.commands.CmdForceInstallThemes;
-import jaredbgreat.dldungeons.commands.CmdInstallThemes;
-import jaredbgreat.dldungeons.commands.CmdReload;
-import jaredbgreat.dldungeons.commands.CmdSpawn;
-import jaredbgreat.dldungeons.themes.ThemeReader;
-import jaredbgreat.dldungeons.themes.ThemeType;
-import jaredbgreat.dldungeons.util.debug.DLDProfile;
-import jaredbgreat.dldungeons.util.debug.DoNothing;
-import jaredbgreat.dldungeons.util.debug.IProfiler;
-import jaredbgreat.dldungeons.util.debug.Logging;
+import jaredbgreat.dldungeons.genhandler.GenerationHandler;
+import net.minecraft.block.Block;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
+// The value here should match an entry in the META-INF/mods.toml file
+@Mod(Info.ID)
+public class DoomlikeDungeons {	
+    private static final Logger LOGGER = LogManager.getLogger();
+    public final GenerationHandler generation;
 
-/**
- * A procedural multi-room dungeon generator for Minecraft inspired by the 
- * Oblige 3.57 level generator for Doom / Doom II / Heretic / Hexen etc.
- */
-@Mod(modid=Info.ID, name=Info.NAME, version=Info.VERSION, acceptableRemoteVersions="*") 
-public class DoomlikeDungeons {
-	private static GenerationHandler dungeonPlacer;
-	public  static IProfiler profiler;
-	
-    @Instance(Info.ID)
-    public static DoomlikeDungeons instance;
+    public DoomlikeDungeons() {
+        // Register the setup method for modloading
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        // Register the enqueueIMC method for modloading
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
+        // Register the processIMC method for modloading
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
+        // Register the doClientStuff method for modloading
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
+
+        // Register ourselves for server and other game events we are interested in
+        MinecraftForge.EVENT_BUS.register(this);
+        generation = GenerationHandler.getHandler();
+    }
+
     
-    @EventHandler
-    public void preInit(FMLPreInitializationEvent event) {
-    	Logging.logInfo(Info.NAME + " is in preInit, should now load config.");
-    	ConfigHandler.configDir = ConfigHandler.findConfigDir(event.getModConfigurationDirectory());
-    	ConfigHandler.init();
-    	Logging.logInfo("Config should now be loaded.");  
-    	if(ConfigHandler.profile) profiler = new DLDProfile();
-    	else profiler = new DoNothing();
+    private void setup(final FMLCommonSetupEvent event) {
+        // some preinit code
+    }
+
+    
+    private void doClientStuff(final FMLClientSetupEvent event) {
+        // do something that can only be done on the client
+        // LOGGER.info("Got game settings {}", event.getMinecraftSupplier().get().options);
+    }
+
+    
+    private void enqueueIMC(final InterModEnqueueEvent event) {
+        // some example code to dispatch IMC to another mod
+        InterModComms.sendTo("examplemod", "helloworld", () -> { LOGGER.info("Hello world from the MDK"); return "Hello world";});
+    }
+
+    
+    private void processIMC(final InterModProcessEvent event) {
+        // some example code to receive and process InterModComms from other mods
+        // LOGGER.info("Got IMC {}", event.getIMCStream().
+        //        map(m->m.getMessageSupplier().get()).
+        //        collect(Collectors.toList()));
     }
     
-    @EventHandler 
-    public void init(FMLInitializationEvent event) {
-    	if(ConfigHandler.naturalSpawn) dungeonPlacer = new GenerationHandler();
-    	RegisteredBlock.add("minecraft:air");
-    }
     
-    @EventHandler
-    public void postInit(FMLPostInitializationEvent event) {
-    	ConfigHandler.generateLists();
-    	ThemeReader.readThemes(); 
-    	ThemeType.SyncMobLists();
+    // You can use SubscribeEvent and let the Event Bus discover methods to call
+    @SubscribeEvent
+    public void onServerStarting(FMLServerStartingEvent event) {
+        // do something when the server starts
     }
+
     
-    @EventHandler
-    public void serverLoad(FMLServerStartingEvent event)
-    {
-    	event.registerServerCommand(new CmdSpawn());
-    	event.registerServerCommand(new CmdReload());
-    	event.registerServerCommand(new CmdDimID());
-    	//event.registerServerCommand(new CmdTPDim());
-    	if(ConfigHandler.installCmd) {
-    		event.registerServerCommand(new CmdInstallThemes());
-    		event.registerServerCommand(new CmdForceInstallThemes());
-    	}
+    // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD
+    // Event bus for receiving Registry Events)
+    @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
+    public static class RegistryEvents {
+        @SubscribeEvent
+        public static void onBlocksRegistry(final RegistryEvent.Register<Block> blockRegistryEvent) {
+            // register a new block here
+        }
     }
 }
