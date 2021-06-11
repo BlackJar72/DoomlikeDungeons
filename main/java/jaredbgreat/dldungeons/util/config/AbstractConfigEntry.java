@@ -35,7 +35,7 @@ public abstract class AbstractConfigEntry<T> implements IConfigEntry<T>, Compara
 	
 	@Override
 	public boolean equals(Object o) {
-		if(o.getClass() == getClass()) {
+		if(o instanceof AbstractConfigEntry) {
 			return key.equals(((AbstractConfigEntry)o).key);
 		}
 		return false;

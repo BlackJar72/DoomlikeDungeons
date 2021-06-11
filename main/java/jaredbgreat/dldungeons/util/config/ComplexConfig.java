@@ -58,27 +58,24 @@ public final class ComplexConfig {
 	
 	public void readSingleEntry(String line) {
 		char typeCode = line.charAt(0);
-		// Leaving the type code as part of the key so as 
-		// to avoid confusion if changes a type.
-		// REMEMVER TO ADD THE KEY WHEN SEARCHING LATER!!!
 		switch(typeCode) {
 			case 'S':
-				readString(line);
+				readString(line.substring(2));
 				break;
 			case 'B':
-				readBoolean(line);
+				readBoolean(line.substring(2));
 				break;
 			case 'I':
-				readInt(line);
+				readInt(line.substring(2));
 				break;
 			case 'L':
-				readLong(line);
+				readLong(line.substring(2));
 				break;
 			case 'F':
-				readFloat(line);
+				readFloat(line.substring(2));
 				break;
 			case 'D':
-				readDouble(line);
+				readDouble(line.substring(2));
 				break;
 			default:
 				Logging.logError(source + " contained invalid data type " + typeCode 
