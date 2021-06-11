@@ -2,8 +2,6 @@ package jaredbgreat.dldungeons.util.config;
 
 public final class BooleanEntry extends AbstractConfigEntry<Boolean> {
 	private static final String B = "B:";
-	Boolean base;
-	boolean value;
 
 	
 	public BooleanEntry(String key) {
@@ -38,7 +36,7 @@ public final class BooleanEntry extends AbstractConfigEntry<Boolean> {
 			b.append(']');
 			b.append(System.lineSeparator());
 		}
-		b.append(B);
+		b.append(key);
 		b.append('=');
 		b.append(value);
 		b.append(System.lineSeparator());
@@ -50,6 +48,12 @@ public final class BooleanEntry extends AbstractConfigEntry<Boolean> {
 	@Override
 	public Boolean getValue() {
 		return value;
+	}
+
+
+	@Override
+	public String getTypeCode() {
+		return B;
 	}
 	
 }

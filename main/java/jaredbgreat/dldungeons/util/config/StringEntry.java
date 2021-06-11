@@ -1,8 +1,7 @@
 package jaredbgreat.dldungeons.util.config;
 
 public final class StringEntry extends AbstractConfigEntry<String> {
-	private static final String B = "B:";
-	private String value, base;
+	private static final String S = "S:";
 	private String[] comment;
 	
 	
@@ -38,7 +37,7 @@ public final class StringEntry extends AbstractConfigEntry<String> {
 			b.append(']');
 			b.append(System.lineSeparator());
 		}
-		b.append(B);
+		b.append(key);
 		b.append('=');
 		b.append(value);
 		return b.toString();
@@ -48,6 +47,12 @@ public final class StringEntry extends AbstractConfigEntry<String> {
 	@Override
 	public String getValue() {
 		return value;
+	}
+
+
+	@Override
+	public String getTypeCode() {
+		return S;
 	}
 
 }

@@ -9,6 +9,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import jaredbgreat.dldungeons.util.debug.Logging;
+
 
 @SuppressWarnings( {"rawtypes", "unused"} )
 public final class ComplexConfig {
@@ -54,6 +56,38 @@ public final class ComplexConfig {
 	/*---------------------------------------------------------------------------------*/
 	
 	
+	public void readSingleEntry(String line) {
+		char typeCode = line.charAt(0);
+		// Leaving the type code as part of the key so as 
+		// to avoid confusion if changes a type.
+		// REMEMVER TO ADD THE KEY WHEN SEARCHING LATER!!!
+		switch(typeCode) {
+			case 'S':
+				readString(line);
+				break;
+			case 'B':
+				readBoolean(line);
+				break;
+			case 'I':
+				readInt(line);
+				break;
+			case 'L':
+				readLong(line);
+				break;
+			case 'F':
+				readFloat(line);
+				break;
+			case 'D':
+				readDouble(line);
+				break;
+			default:
+				Logging.logError(source + " contained invalid data type " + typeCode 
+						+ " in line " + line + ".");
+				break;
+		}		
+	}
+	
+	
 	/**
 	 * This might be simpler, cleaner way to do it that a piles of 
 	 * cut-n-paste methods.
@@ -71,8 +105,8 @@ public final class ComplexConfig {
 		int delimit = line.indexOf('=');
 		AbstractConfigEntry entry =
 		        (AbstractConfigEntry)clss.getConstructor(new Class[]{String.class})
-		        	.newInstance(line.substring(0, delimit));
-		entry.readIn(line.substring(delimit + 1));
+		        	.newInstance(line.substring(0, delimit).trim());
+		entry.readIn(line.substring(delimit + 1).trim());
 		data.put(entry.key, entry);
 		currentCat.add(entry);		
 	}
@@ -83,8 +117,8 @@ public final class ComplexConfig {
 			currentCat = getCategroy(EMPTY);
 		}
 		int delimit = line.indexOf('=');
-		StringEntry entry = new StringEntry(line.substring(0, delimit));
-		entry.readIn(line.substring(delimit + 1));
+		StringEntry entry = new StringEntry(line.substring(0, delimit).trim());
+		entry.readIn(line.substring(delimit + 1).trim());
 		data.put(entry.key, entry);
 		currentCat.add(entry);		
 	}
@@ -95,8 +129,8 @@ public final class ComplexConfig {
 			currentCat = getCategroy(EMPTY);
 		}
 		int delimit = line.indexOf('=');
-		IntegerEntry entry = new IntegerEntry(line.substring(0, delimit));
-		entry.readIn(line.substring(delimit + 1));
+		IntegerEntry entry = new IntegerEntry(line.substring(0, delimit).trim());
+		entry.readIn(line.substring(delimit + 1).trim());
 		data.put(entry.key, entry);
 		currentCat.add(entry);		
 	}
@@ -107,8 +141,8 @@ public final class ComplexConfig {
 			currentCat = getCategroy(EMPTY);
 		}
 		int delimit = line.indexOf('=');
-		LongEntry entry = new LongEntry(line.substring(0, delimit));
-		entry.readIn(line.substring(delimit + 1));
+		LongEntry entry = new LongEntry(line.substring(0, delimit).trim());
+		entry.readIn(line.substring(delimit + 1).trim());
 		data.put(entry.key, entry);
 		currentCat.add(entry);		
 	}
@@ -119,8 +153,8 @@ public final class ComplexConfig {
 			currentCat = getCategroy(EMPTY);
 		}		
 		int delimit = line.indexOf('=');
-		FloatEntry entry = new FloatEntry(line.substring(0, delimit));
-		entry.readIn(line.substring(delimit + 1));
+		FloatEntry entry = new FloatEntry(line.substring(0, delimit).trim());
+		entry.readIn(line.substring(delimit + 1).trim());
 		data.put(entry.key, entry);
 		currentCat.add(entry);		
 	}
@@ -131,8 +165,8 @@ public final class ComplexConfig {
 			currentCat = getCategroy(EMPTY);
 		}		
 		int delimit = line.indexOf('=');
-		DoubleEntry entry = new DoubleEntry(line.substring(0, delimit));
-		entry.readIn(line.substring(delimit + 1));
+		DoubleEntry entry = new DoubleEntry(line.substring(0, delimit).trim());
+		entry.readIn(line.substring(delimit + 1).trim());
 		data.put(entry.key, entry);
 		currentCat.add(entry);		
 	}
@@ -143,8 +177,8 @@ public final class ComplexConfig {
 			currentCat = getCategroy(EMPTY);
 		}		
 		int delimit = line.indexOf('=');
-		BooleanEntry entry = new BooleanEntry(line.substring(0, delimit));
-		entry.readIn(line.substring(delimit + 1));
+		BooleanEntry entry = new BooleanEntry(line.substring(0, delimit).trim());
+		entry.readIn(line.substring(delimit + 1).trim());
 		data.put(entry.key, entry);
 		currentCat.add(entry);		
 	}

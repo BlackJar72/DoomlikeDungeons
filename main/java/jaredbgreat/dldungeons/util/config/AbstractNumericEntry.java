@@ -1,7 +1,7 @@
 package jaredbgreat.dldungeons.util.config;
 
 public abstract class AbstractNumericEntry<T> extends AbstractConfigEntry<T> {
-	protected T value, min, max, base;
+	protected T min, max;
 	
 
 	public AbstractNumericEntry(String key) {

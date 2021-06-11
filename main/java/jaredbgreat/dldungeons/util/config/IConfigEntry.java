@@ -5,4 +5,5 @@ public interface IConfigEntry<T> {
 	public String getConfigString();
 	public T getValue();
 	public String getKey();
+	public String getTypeCode();
 }

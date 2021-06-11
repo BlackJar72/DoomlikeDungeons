@@ -8,10 +8,16 @@ public abstract class AbstractConfigEntry<T> implements IConfigEntry<T>, Compara
 	public static final String MAX     = ", Maximum: ";
 	protected final String key;
 	protected String[] comment;
+	protected T value, base;
 	
 	
 	public AbstractConfigEntry(String key) {
 		this.key = key;
+	}
+	
+	
+	public void setDefault() {
+		value = base;
 	}
 	
 	

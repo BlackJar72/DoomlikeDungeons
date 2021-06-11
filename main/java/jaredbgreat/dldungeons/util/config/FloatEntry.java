@@ -1,6 +1,6 @@
 package jaredbgreat.dldungeons.util.config;
 
-public final class FloatEntry extends AbstractNumericEntry<Float> {
+public class FloatEntry extends AbstractNumericEntry<Float> {
 	private static final String F = "F:";
 
 	@Override
@@ -12,8 +12,8 @@ public final class FloatEntry extends AbstractNumericEntry<Float> {
 	public FloatEntry(String key) {
 		super(key);
 	}
-	
 		
+	
 	@Override
 	public String getConfigString() {
 		StringBuilder b = new StringBuilder(System.lineSeparator());
@@ -32,11 +32,17 @@ public final class FloatEntry extends AbstractNumericEntry<Float> {
 			b.append(']');
 			b.append(System.lineSeparator());
 		}
-		b.append(F);
+		b.append(key);
 		b.append('=');
 		b.append(value);
 		b.append(System.lineSeparator());
 		return b.toString();
+	}
+
+
+	@Override
+	public String getTypeCode() {
+		return F;
 	}
 	
 }

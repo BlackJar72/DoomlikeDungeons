@@ -32,11 +32,17 @@ public final class DoubleEntry extends AbstractNumericEntry<Double> {
 			b.append(']');
 			b.append(System.lineSeparator());
 		}
-		b.append(D);
+		b.append(key);
 		b.append('=');
 		b.append(value);
 		b.append(System.lineSeparator());
 		return b.toString();
+	}
+
+
+	@Override
+	public String getTypeCode() {
+		return D;
 	}
 	
 }

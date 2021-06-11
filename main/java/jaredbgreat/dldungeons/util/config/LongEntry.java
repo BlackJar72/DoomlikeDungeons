@@ -32,11 +32,17 @@ public final class LongEntry extends AbstractNumericEntry<Long> {
 			b.append(']');
 			b.append(System.lineSeparator());
 		}
-		b.append(L);
+		b.append(key);
 		b.append('=');
 		b.append(value);
 		b.append(System.lineSeparator());
 		return b.toString();
+	}
+
+
+	@Override
+	public String getTypeCode() {
+		return L;
 	}
 	
 }

@@ -32,11 +32,17 @@ public final class IntegerEntry extends AbstractNumericEntry<Integer> {
 			b.append(']');
 			b.append(System.lineSeparator());
 		}
-		b.append(I);
+		b.append(key);
 		b.append('=');
 		b.append(value);
 		b.append(System.lineSeparator());
 		return b.toString();
+	}
+
+
+	@Override
+	public String getTypeCode() {
+		return I;
 	}
 
 }
