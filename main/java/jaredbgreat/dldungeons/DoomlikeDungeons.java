@@ -31,7 +31,8 @@ public class DoomlikeDungeons {
         // Register the processIMC method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
         // Register the doClientStuff method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);       
+        
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
@@ -40,6 +41,7 @@ public class DoomlikeDungeons {
 
     
     private void setup(final FMLCommonSetupEvent event) {
+    	
         // some preinit code
     }
 
@@ -52,7 +54,6 @@ public class DoomlikeDungeons {
     
     private void enqueueIMC(final InterModEnqueueEvent event) {
         // some example code to dispatch IMC to another mod
-        InterModComms.sendTo("examplemod", "helloworld", () -> { LOGGER.info("Hello world from the MDK"); return "Hello world";});
     }
 
     
