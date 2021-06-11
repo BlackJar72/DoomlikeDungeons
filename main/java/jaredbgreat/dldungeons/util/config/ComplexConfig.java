@@ -56,125 +56,39 @@ public final class ComplexConfig {
 	/*---------------------------------------------------------------------------------*/
 	
 	
-	public void readSingleEntry(String line) {
+	public void readSimpleEntry(String line) {
+		//The parameter String "line" should already be trimmed.
+		if(currentCat == null) {
+			currentCat = getCategroy(EMPTY);
+		}
+		int delimit = line.indexOf('=');
 		char typeCode = line.charAt(0);
+		AbstractConfigEntry entry;
 		switch(typeCode) {
 			case 'S':
-				readString(line.substring(2));
+				entry = new StringEntry(line.substring(2, delimit).trim());
 				break;
 			case 'B':
-				readBoolean(line.substring(2));
+				entry = new BooleanEntry(line.substring(2, delimit).trim());
 				break;
 			case 'I':
-				readInt(line.substring(2));
+				entry = new IntegerEntry(line.substring(2, delimit).trim());
 				break;
 			case 'L':
-				readLong(line.substring(2));
+				entry = new LongEntry(line.substring(2, delimit).trim());
 				break;
 			case 'F':
-				readFloat(line.substring(2));
+				entry = new FloatEntry(line.substring(2, delimit).trim());
 				break;
 			case 'D':
-				readDouble(line.substring(2));
+				entry = new DoubleEntry(line.substring(2, delimit).trim());
 				break;
 			default:
 				Logging.logError(source + " contained invalid data type " + typeCode 
 						+ " in line " + line + ".");
+				entry = new StringEntry(line.substring(2, delimit).trim());
 				break;
-		}		
-	}
-	
-	
-	/**
-	 * This might be simpler, cleaner way to do it that a piles of 
-	 * cut-n-paste methods.
-	 * 
-	 * @param line
-	 * @param c
-	 * @throws Exception
-	 */
-	@SuppressWarnings("unchecked")
-	private void readSimpleEntry(final String line, Class clss) throws Exception {
-		if(currentCat == null) {
-			currentCat = getCategroy(EMPTY);
 		}
-		
-		int delimit = line.indexOf('=');
-		AbstractConfigEntry entry =
-		        (AbstractConfigEntry)clss.getConstructor(new Class[]{String.class})
-		        	.newInstance(line.substring(0, delimit).trim());
-		entry.readIn(line.substring(delimit + 1).trim());
-		data.put(entry.key, entry);
-		currentCat.add(entry);		
-	}
-	
-	
-	private void readString(final String line) {
-		if(currentCat == null) {
-			currentCat = getCategroy(EMPTY);
-		}
-		int delimit = line.indexOf('=');
-		StringEntry entry = new StringEntry(line.substring(0, delimit).trim());
-		entry.readIn(line.substring(delimit + 1).trim());
-		data.put(entry.key, entry);
-		currentCat.add(entry);		
-	}
-	
-	
-	private void readInt(final String line) {
-		if(currentCat == null) {
-			currentCat = getCategroy(EMPTY);
-		}
-		int delimit = line.indexOf('=');
-		IntegerEntry entry = new IntegerEntry(line.substring(0, delimit).trim());
-		entry.readIn(line.substring(delimit + 1).trim());
-		data.put(entry.key, entry);
-		currentCat.add(entry);		
-	}
-	
-	
-	private void readLong(final String line) {
-		if(currentCat == null) {
-			currentCat = getCategroy(EMPTY);
-		}
-		int delimit = line.indexOf('=');
-		LongEntry entry = new LongEntry(line.substring(0, delimit).trim());
-		entry.readIn(line.substring(delimit + 1).trim());
-		data.put(entry.key, entry);
-		currentCat.add(entry);		
-	}
-	
-	
-	private void readFloat(final String line) {
-		if(currentCat == null) {
-			currentCat = getCategroy(EMPTY);
-		}		
-		int delimit = line.indexOf('=');
-		FloatEntry entry = new FloatEntry(line.substring(0, delimit).trim());
-		entry.readIn(line.substring(delimit + 1).trim());
-		data.put(entry.key, entry);
-		currentCat.add(entry);		
-	}
-	
-	
-	private void readDouble(final String line) {
-		if(currentCat == null) {
-			currentCat = getCategroy(EMPTY);
-		}		
-		int delimit = line.indexOf('=');
-		DoubleEntry entry = new DoubleEntry(line.substring(0, delimit).trim());
-		entry.readIn(line.substring(delimit + 1).trim());
-		data.put(entry.key, entry);
-		currentCat.add(entry);		
-	}
-	
-	
-	private void readBoolean(final String line) {
-		if(currentCat == null) {
-			currentCat = getCategroy(EMPTY);
-		}		
-		int delimit = line.indexOf('=');
-		BooleanEntry entry = new BooleanEntry(line.substring(0, delimit).trim());
 		entry.readIn(line.substring(delimit + 1).trim());
 		data.put(entry.key, entry);
 		currentCat.add(entry);		
@@ -190,7 +104,10 @@ public final class ComplexConfig {
 	
 	
 	/*---------------------------------------------------------------------------------*/
-	/*                    RETRIECING DATA FROM DATA STORE                              */
+	/*                    RETRIEVING DATA FROM DATA STORE                              */
 	/*---------------------------------------------------------------------------------*/
+	
+	
+	
 
 }

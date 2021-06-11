@@ -26,16 +26,19 @@ public final class BooleanEntry extends AbstractConfigEntry<Boolean> {
 	public String getConfigString() {
 		StringBuilder b = new StringBuilder(System.lineSeparator());
 		for(String c : comment) {
+			b.append(INDENT);
 			b.append(COMMENT);
 			b.append(c);
 			b.append(System.lineSeparator());			
 		}
 		if(base != null) {
+			b.append(INDENT);
 			b.append(DEFAULT);
 			b.append(base);
 			b.append(']');
 			b.append(System.lineSeparator());
 		}
+		b.append(INDENT);
 		b.append(key);
 		b.append('=');
 		b.append(value);

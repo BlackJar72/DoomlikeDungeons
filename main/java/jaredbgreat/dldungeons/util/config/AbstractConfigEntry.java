@@ -6,6 +6,7 @@ public abstract class AbstractConfigEntry<T> implements IConfigEntry<T>, Compara
 	public static final String DEFAULT = "# [Default: ";
 	public static final String MIN     = ", Minimum: ";
 	public static final String MAX     = ", Maximum: ";
+	public static final String INDENT  = "     ";
 	protected final String key;
 	protected String[] comment;
 	protected T value, base;
