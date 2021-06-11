@@ -33,6 +33,16 @@ public class Logging {
 	}
 	
 	
+	public static void logThrowable(Throwable error) {
+		if(log == null) {
+			log = new Logging();
+		}
+		System.err.println(error.getLocalizedMessage());
+		error.printStackTrace();
+		logger.error(error.getLocalizedMessage());
+	}
+	
+	
 	public static void logError(String error) {
 		if(log == null) {
 			log = new Logging();

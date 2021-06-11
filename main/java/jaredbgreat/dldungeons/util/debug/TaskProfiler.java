@@ -20,13 +20,13 @@ import java.util.ArrayList;
  * @author Jared Blackburn
  *
  */
-public class DLDProfile implements IProfiler {
+public class TaskProfiler implements IProfiler {
 	int depth;
 	BufferedWriter save;
 	ArrayList<Task> tasks;
 	
 	
-	public DLDProfile() {
+	public TaskProfiler() {
 		tasks = new ArrayList<Task>();
 		try {
 			save = new BufferedWriter(new FileWriter("DLDProfile.log"));			

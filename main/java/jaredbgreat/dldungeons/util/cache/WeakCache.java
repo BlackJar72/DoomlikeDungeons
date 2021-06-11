@@ -22,7 +22,8 @@ public class WeakCache <T extends IHaveCoords> {
     /**
      * Creates a cache with a default starting size elements.
      */
-    public WeakCache(int size) {
+    @SuppressWarnings("unchecked")
+	public WeakCache(int size) {
         data = new CacheReference[size];
         minSize = size;
         capacity = (size * 3) / 4;
@@ -35,7 +36,8 @@ public class WeakCache <T extends IHaveCoords> {
     /**
      * Creates a cache with a default starting size of 16 elements.
      */
-    public WeakCache() {
+    @SuppressWarnings("unchecked")
+	public WeakCache() {
         data = new CacheReference[16];
         minSize = 16;
         capacity = 12;
@@ -56,7 +58,7 @@ public class WeakCache <T extends IHaveCoords> {
         while(offset < data.length) {
             int slot = (bucket + offset) % data.length;
             if(data[slot] == null || data[slot].get() == null) {
-                data[slot] = new CacheReference(item, this);
+                data[slot] = new CacheReference<T>(item, this);
                 if(++length > capacity) {
                     grow();
                 }
@@ -178,7 +180,8 @@ public class WeakCache <T extends IHaveCoords> {
     /**
      * This will grow the data size when needed.
      */
-    private void grow() {
+    @SuppressWarnings("unchecked")
+	private void grow() {
     	CacheReference<T>[] old = data;
         data = new CacheReference[(old.length * 3) / 2];
         for(int i = 0; i < old.length; i++) {
@@ -195,7 +198,8 @@ public class WeakCache <T extends IHaveCoords> {
     /**
      * This will shrink the data size when needed.
      */
-    private void shrink() {
+    @SuppressWarnings("unchecked")
+	private void shrink() {
     	CacheReference<T>[] old = data;
         data = new CacheReference[Math.max(old.length / 2, minSize)];
         for(int i = 0; i < old.length; i++) {
@@ -209,7 +213,8 @@ public class WeakCache <T extends IHaveCoords> {
     }
     
     
-    private void rebucketAll() {
+    @SuppressWarnings({ "unchecked" })
+	private void rebucketAll() {
         if(length < lowLimit) {
             shrink();
         } else {
@@ -225,7 +230,8 @@ public class WeakCache <T extends IHaveCoords> {
     }
     
     
-    private void rebucket(T item) {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	private void rebucket(T item) {
         int bucket = (item.getCoords().hashCode() & 0x7fffffff) % data.length;
         int offset = 0;
         while(offset <= data.length) {

@@ -1,0 +1,25 @@
+package jaredbgreat.dldungeons.util.config;
+
+public abstract class AbstractNumericEntry<T> extends AbstractConfigEntry<T> {
+	protected T value, min, max, base;
+	
+
+	public AbstractNumericEntry(String key) {
+		super(key);
+	}
+	
+	
+	@Override
+	public T getValue() {
+		return value;
+	}
+	
+	
+	public void attachData(T base, T min, T max, String ... comment) {
+		this.base = base;
+		this.min  = min;
+		this.max  = max;
+		this.comment = comment;
+	}
+
+}

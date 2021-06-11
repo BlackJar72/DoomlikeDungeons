@@ -3,7 +3,6 @@ package jaredbgreat.dldungeons.util.math;
 import java.util.Random;
 
 public class Vec3D {
-    private static final double P2 = Math.PI * 2.0;
     double x, y, z;
     
     public Vec3D(double x, double y,double z) {

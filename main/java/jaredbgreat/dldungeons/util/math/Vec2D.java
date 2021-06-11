@@ -10,7 +10,6 @@ import java.util.Random;
  * @author Jared Blackburn
  */
 public class Vec2D {
-    private static final double P2 = Math.PI * 2.0;
     double x, y;
     
     public Vec2D(double x, double y) {
