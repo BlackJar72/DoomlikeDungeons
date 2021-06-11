@@ -1,10 +1,15 @@
 package jaredbgreat.dldungeons;
 
+import java.io.File;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import jaredbgreat.dldungeons.genhandler.GenerationHandler;
+import jaredbgreat.dldungeons.util.debug.DebugOut;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -22,8 +27,10 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 public class DoomlikeDungeons {	
     private static final Logger LOGGER = LogManager.getLogger();
     public final GenerationHandler generation;
+    public final String configDir;
 
     public DoomlikeDungeons() {
+    	
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         // Register the enqueueIMC method for modloading
@@ -32,10 +39,10 @@ public class DoomlikeDungeons {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
         // Register the doClientStuff method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);       
-        
-
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
+        configDir = System.getProperty("user.dir") + File.separator + "config" + File.separator + "DLDungeons" + File.separator;
+        DebugOut.bigSysout(configDir);
         generation = GenerationHandler.getHandler();
     }
 
