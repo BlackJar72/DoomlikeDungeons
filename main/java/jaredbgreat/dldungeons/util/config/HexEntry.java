@@ -15,6 +15,7 @@ public final class HexEntry extends AbstractNumericEntry<Long> {
 	public void readIn(String string) {
 		try {
 			value = Long.parseLong(string, 16);
+			good = true;
 		} catch(Exception e) {
 			value = 0L;
 		}

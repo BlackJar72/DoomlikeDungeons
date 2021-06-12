@@ -10,7 +10,6 @@ import jaredbgreat.dldungeons.util.parser.Tokenizer;
 public abstract class AbstractListEntry<T> extends AbstractConfigEntry<List<T>>{
 	private static final String DELIM1 = ",\n\r";
 	private static final String DELIM2 = ", ";
-	private static final String FDELIM = "\n\r";
 	private static final int WIDTH = 45;
 	
 
@@ -21,14 +20,14 @@ public abstract class AbstractListEntry<T> extends AbstractConfigEntry<List<T>>{
 	
 	@Override
 	public void readIn(String string) {
-		try {
+		//try {
 			value = new ArrayList<>();
 			Tokenizer tokens = new Tokenizer(string, DELIM1);
 			while(tokens.hasMoreTokens()) {
 				value.add(parseString(tokens.nextToken().trim()));
 			}
 			good = true;
-		} catch(Exception e) {}
+		//} catch(Exception e) {}
 	}
 	
 	

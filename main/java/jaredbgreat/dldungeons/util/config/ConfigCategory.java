@@ -98,6 +98,7 @@ class ConfigCategory implements Comparable<ConfigCategory> {
 		outstream.write(COMMENT);
 		outstream.write(name);
 		outstream.newLine();
+		outstream.write(COMMENT);
 		outstream.newLine();
 		for(int i = 0; i < comment.length; i++) {
 			outstream.write(COMMENT);

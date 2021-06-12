@@ -83,7 +83,6 @@ public final class ComplexConfig {
 			int delim;
 			String nextline;
 			try {
-				DebugOut.bigSysout("Reading file " + source);
 				BufferedReader instream = new BufferedReader(new FileReader(source));
 				while(instream.ready()) {
 					nextline = instream.readLine().trim();
@@ -122,7 +121,9 @@ public final class ComplexConfig {
 				if(!more) {
 					nextline = nextline.substring(0, delim);
 				}
-				readEntry(nextline, instream);
+				if(!nextline.isEmpty()) {
+					readEntry(nextline, instream);
+				}
 			}
 		} catch (IOException e) {
 			Logging.logError("Could not read a line from file " + source + " correctly (or at all).");
@@ -134,7 +135,7 @@ public final class ComplexConfig {
 	private void readEntry(String line, BufferedReader instream) throws IOException {
 		int del1 = line.indexOf('=');
 		int del2 = line.indexOf('[');
-		if((del1 > -1) && (del1 < del2)) {
+		if((del1 > -1) && ((del1 < del2) || (del2 < 0))) {
 			readSimpleEntry(line);
 		} else if(del2 > -1) {
 			readListEntry(line, instream);
@@ -183,8 +184,8 @@ public final class ComplexConfig {
 				entry = new StringEntry(line.substring(2, delimit).trim());
 				break;
 		}
+		entry.readIn(line.substring(delimit + 1).trim());
 		if(entry.isGood()) {
-			entry.readIn(line.substring(delimit + 1).trim());
 			data.put(entry.key, entry);
 		} else {
 			Logging.logError(line + " from file " + source + " failed to read properly.");
@@ -238,8 +239,8 @@ public final class ComplexConfig {
 				entry = new StringEntry(line.substring(2, delimit1).trim());
 				break;
 		}
+		entry.readIn(dat);
 		if(entry.isGood()) {
-			entry.readIn(dat);
 			data.put(entry.key, entry);
 		} else {
 			Logging.logError(line + " from file " + source + " failed to read properly.");

@@ -134,7 +134,7 @@ public final class ConfigHandler {
 		//GenerationHandler.setMinXZ(minXZ); // FIXME/TODO
 		Logging.logInfo("Minimum X Factor Set To: " + minXZ);
 		
-		int diff = config.getHexInt("Difficulty", "General", DEFAULT_DIF, 0, 5,
+		int diff = config.getInt("Difficulty", "General", DEFAULT_DIF, 0, 5,
 				"How hard: 0 = empty, 1 = baby, 2 = easy, 3 = normal, 4= hard, 5 = nightmare");
 		if((diff < 0) || (diff > 5)) diff = DEFAULT_DIF;
 		//parseDiff(diff); // TODO/FIXME

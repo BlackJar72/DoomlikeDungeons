@@ -1,5 +1,7 @@
 package jaredbgreat.dldungeons.util.config;
 
+import jaredbgreat.dldungeons.util.debug.DebugOut;
+
 public final class IntEntry extends AbstractNumericEntry<Integer> {
 	static final String I = "I:";
 	
