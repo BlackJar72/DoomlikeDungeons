@@ -4,7 +4,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ConfigCategory implements Comparable<ConfigCategory> {
 	private static final String COMMENT = "# ";
@@ -13,20 +14,18 @@ public class ConfigCategory implements Comparable<ConfigCategory> {
 	private static final String END = "}";
 	public final String name;
 	@SuppressWarnings("rawtypes")
-	public final List<AbstractConfigEntry> data;
+	public final Map<String, AbstractConfigEntry> data;
 	
 	
 	public ConfigCategory(String name) {
 		this.name = name;
-		data = new ArrayList<>();
+		data = new HashMap<>();
 	}
 	
 	
 	@SuppressWarnings("rawtypes")
 	public void add(AbstractConfigEntry entry) {
-		if(!data.contains(entry)) {
-			data.add(entry);
-		}
+		data.put(entry.getKey(), entry);
 	}
 	
 	
@@ -49,14 +48,11 @@ public class ConfigCategory implements Comparable<ConfigCategory> {
 	}
 	
 	
-	@SuppressWarnings("unchecked")
-	public void sort() {
-		Collections.sort(data);
-	}
-	
-	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void writeToFile(BufferedWriter outstream) throws IOException {
-		sort();
+		ArrayList<AbstractConfigEntry> list = new ArrayList<>();
+		data.forEach((key,value) -> list.add(value));
+		Collections.sort(list);
 		outstream.newLine();
 		outstream.write(BOUND);
 		outstream.write(COMMENT);
@@ -64,10 +60,10 @@ public class ConfigCategory implements Comparable<ConfigCategory> {
 		outstream.write(BOUND);
 		outstream.write(name);
 		outstream.write(START);
-		int size = data.size();
+		int size = list.size();
 		int last = size - 1;
 		for(int i = 0; i < size; i++) {
-			outstream.write(data.get(i).getConfigString());
+			outstream.write(list.get(i).getConfigString());
 			if(i == last) {
 				outstream.write(END);
 			}

@@ -2,6 +2,14 @@ package jaredbgreat.dldungeons.util.config;
 
 public class FloatEntry extends AbstractNumericEntry<Float> {
 	private static final String F = "F:";
+	
+	
+	public FloatEntry(String key) {
+		super(key);
+		min = Float.NEGATIVE_INFINITY;
+		max = Float.POSITIVE_INFINITY;
+	}
+	
 
 	@Override
 	public void readIn(String string) {
@@ -9,8 +17,9 @@ public class FloatEntry extends AbstractNumericEntry<Float> {
 	}
 	
 	
-	public FloatEntry(String key) {
-		super(key);
+	public void attachData(float base, float min, float max, String ... comment) {
+		super.attachData(base, min, max, comment);
+		value = Math.min(max, Math.max(min, value));
 	}
 		
 	
@@ -27,10 +36,14 @@ public class FloatEntry extends AbstractNumericEntry<Float> {
 			b.append(INDENT);
 			b.append(DEFAULT);
 			b.append(base);
-			b.append(MIN);
-			b.append(min);
-			b.append(MAX);
-			b.append(max);
+			if(min > Float.NEGATIVE_INFINITY) {
+				b.append(MIN);
+				b.append(min);
+			}
+			if(max < Float.POSITIVE_INFINITY) {
+				b.append(MAX);
+				b.append(max);
+			}
 			b.append(']');
 			b.append(System.lineSeparator());
 		}

@@ -2,6 +2,14 @@ package jaredbgreat.dldungeons.util.config;
 
 public final class IntegerEntry extends AbstractNumericEntry<Integer> {
 	private static final String I = "I:";
+	
+	
+	public IntegerEntry(String key) {
+		super(key);
+		min = Integer.MIN_VALUE;
+		max = Integer.MAX_VALUE;
+	}
+	
 
 	@Override
 	public void readIn(String string) {
@@ -9,8 +17,9 @@ public final class IntegerEntry extends AbstractNumericEntry<Integer> {
 	}
 	
 	
-	public IntegerEntry(String key) {
-		super(key);
+	public void attachData(int base, int min, int max, String ... comment) {
+		super.attachData(base, min, max, comment);
+		value = Math.min(max, Math.max(min, value));
 	}
 			
 	
@@ -27,10 +36,14 @@ public final class IntegerEntry extends AbstractNumericEntry<Integer> {
 			b.append(INDENT);
 			b.append(DEFAULT);
 			b.append(base);
-			b.append(MIN);
-			b.append(min);
-			b.append(MAX);
-			b.append(max);
+			if(min > Integer.MIN_VALUE) {
+				b.append(MIN);
+				b.append(min);
+			}
+			if(max < Integer.MAX_VALUE) {
+				b.append(MAX);
+				b.append(max);
+			}
 			b.append(']');
 			b.append(System.lineSeparator());
 		}

@@ -2,15 +2,24 @@ package jaredbgreat.dldungeons.util.config;
 
 public final class DoubleEntry extends AbstractNumericEntry<Double> {
 	private static final String D = "D:";
+	
+	
+	public DoubleEntry(String key) {
+		super(key);
+		min = Double.NEGATIVE_INFINITY;
+		max = Double.POSITIVE_INFINITY;
+	}
 
+	
 	@Override
 	public void readIn(String string) {
 		value = Double.parseDouble(string);
 	}
 	
 	
-	public DoubleEntry(String key) {
-		super(key);
+	public void attachData(double base, double min, double max, String ... comment) {
+		super.attachData(base, min, max, comment);
+		value = Math.min(max, Math.max(min, value));
 	}
 		
 	
@@ -27,10 +36,14 @@ public final class DoubleEntry extends AbstractNumericEntry<Double> {
 			b.append(INDENT);
 			b.append(DEFAULT);
 			b.append(base);
-			b.append(MIN);
-			b.append(min);
-			b.append(MAX);
-			b.append(max);
+			if(min > Double.NEGATIVE_INFINITY) {
+				b.append(MIN);
+				b.append(min);
+			}
+			if(max < Double.POSITIVE_INFINITY) {
+				b.append(MAX);
+				b.append(max);
+			}
 			b.append(']');
 			b.append(System.lineSeparator());
 		}

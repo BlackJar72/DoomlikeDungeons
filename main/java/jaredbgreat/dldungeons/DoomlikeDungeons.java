@@ -6,14 +6,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import jaredbgreat.dldungeons.genhandler.GenerationHandler;
+import jaredbgreat.dldungeons.setup.Externalizer;
 import jaredbgreat.dldungeons.util.debug.DebugOut;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -42,8 +40,15 @@ public class DoomlikeDungeons {
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
         configDir = System.getProperty("user.dir") + File.separator + "config" + File.separator + "DLDungeons" + File.separator;
-        DebugOut.bigSysout(configDir);
         generation = GenerationHandler.getHandler();
+    }
+    
+    
+    private void exportFiles() {
+        Externalizer exporter = new Externalizer(configDir + "themes" + File.separator);
+        exporter.makeThemesDir();
+        exporter.makeThemes();
+        exporter.makeBlocks();
     }
 
     

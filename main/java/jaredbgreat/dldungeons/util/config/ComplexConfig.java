@@ -22,8 +22,31 @@ public final class ComplexConfig {
 	private ConfigCategory currentCat;
 	
 	
+	/**
+	 * This constructor sets the file to be read to whatever file is passed in as-is.
+	 * 
+	 * @param file
+	 */
 	public ComplexConfig(File file) {
 		source = file;
+		data = new HashMap<>();
+		cats = new HashMap<>();
+		dirty = false;
+	}
+	
+	
+	/**
+	 * This constructor will set the file to be read to something under the users normal 
+	 * config directory (folder in Windowspeak).  The string passed in is the file to 
+	 * be read but may contain sub-directories separated by the system separator.
+	 * 
+	 * Basically it will place it in [Minecraft's directory]/config/[file].
+	 * 
+	 * @param file
+	 */
+	public ComplexConfig(String file) {
+		source = new File(System.getProperty("user.dir") 
+				+ File.separator + "config" + File.separator + file);
 		data = new HashMap<>();
 		cats = new HashMap<>();
 		dirty = false;
