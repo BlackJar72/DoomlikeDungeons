@@ -33,7 +33,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-
+ 
 
 /**
  * This class reads and holds data from the main configuration file.
