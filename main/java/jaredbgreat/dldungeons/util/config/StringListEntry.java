@@ -10,7 +10,7 @@ public final class StringListEntry extends AbstractListEntry<String> {
 	@Override
 	public String getConfigString() {
 		StringBuilder b1 = new StringBuilder(System.lineSeparator());
-		StringBuilder b2 = new StringBuilder(System.lineSeparator());
+		StringBuilder b2 = new StringBuilder();
 		if(comment != null) {
 			for(String c : comment) {
 				b1.append(INDENT);

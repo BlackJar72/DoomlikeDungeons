@@ -122,8 +122,11 @@ public final class ConfigHandler {
 		// General configuration
 		config.createCategory("General", "Main config settings");
 		
-		int freqScale = config.getInt("FrequencyScale", "General", DEFAULT_SCALE, 4, 48,  
-				"Determines the average distance between dungeons (+2 is twice as far appart)");
+		int freqScale = config.getInt("FrequencyScale", "General", DEFAULT_SCALE, 4, 50,  
+				"Determines the average distance between dungeons (+2 is twice as far appart).", 
+				"This means that smaller numbers give more dungeons.  At 4 there should be a",
+				"dungeon every 128x128 block area, at 8 there should be one for every 512x512 blocks,",
+				"at 50 there should be about four dungeons per world.");
 		if((freqScale > 30) || (freqScale < 6)) freqScale = DEFAULT_SCALE;
 		//GenerationHandler.setFrequency(freqScale); // TODO/FIXME
 		Logging.logInfo("Frequency Scaling Factor Set To: " + freqScale);
