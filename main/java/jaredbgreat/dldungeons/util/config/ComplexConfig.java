@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import jaredbgreat.dldungeons.util.debug.DebugOut;
 import jaredbgreat.dldungeons.util.debug.Logging;
 
 
@@ -82,6 +83,7 @@ public final class ComplexConfig {
 			int delim;
 			String nextline;
 			try {
+				DebugOut.bigSysout("Reading file " + source);
 				BufferedReader instream = new BufferedReader(new FileReader(source));
 				while(instream.ready()) {
 					nextline = instream.readLine().trim();
@@ -90,6 +92,7 @@ public final class ComplexConfig {
 					currentCat = getCategroy(nextline.substring(0, delim).trim());
 					readCategory(instream);
 				}
+				instream.close();
 			} catch (IOException e) {
 				Logging.logError("Failed to read config file " + source);
 				Logging.logThrowable(e);
@@ -367,7 +370,7 @@ public final class ComplexConfig {
 		ConfigCategory cat = getCategroy(category);
 		IntEntry entry;
 		AbstractConfigEntry attempt = data.get(name);		
-		if((attempt != null) && !(attempt instanceof IntEntry)) {
+		if((attempt != null) && (attempt instanceof IntEntry)) {
 			entry = (IntEntry)attempt;
 		} else {
 			entry = new IntEntry(name);
