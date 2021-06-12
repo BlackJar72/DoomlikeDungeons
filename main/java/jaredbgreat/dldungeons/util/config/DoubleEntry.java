@@ -13,7 +13,12 @@ public final class DoubleEntry extends AbstractNumericEntry<Double> {
 	
 	@Override
 	public void readIn(String string) {
-		value = Double.parseDouble(string);
+		try {
+			value = Double.parseDouble(string);
+			good = true;
+		} catch(Exception e) {
+			value = Double.NaN;
+		}
 	}
 	
 	
@@ -26,11 +31,13 @@ public final class DoubleEntry extends AbstractNumericEntry<Double> {
 	@Override
 	public String getConfigString() {
 		StringBuilder b = new StringBuilder(System.lineSeparator());
-		for(String c : comment) {
-			b.append(INDENT);
-			b.append(COMMENT);
-			b.append(c);
-			b.append(System.lineSeparator());			
+		if(comment != null) { 
+			for(String c : comment) {
+				b.append(INDENT);
+				b.append(COMMENT);
+				b.append(c);
+				b.append(System.lineSeparator());
+			}
 		}
 		if(base != null) {
 			b.append(INDENT);

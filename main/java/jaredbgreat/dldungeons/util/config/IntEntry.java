@@ -13,7 +13,12 @@ public final class IntEntry extends AbstractNumericEntry<Integer> {
 
 	@Override
 	public void readIn(String string) {
-		value = Integer.parseInt(string);
+		try {
+			value = Integer.parseInt(string);
+			good = true;
+		} catch(Exception e) {
+			value = 0;
+		}
 	}
 	
 	
@@ -26,11 +31,13 @@ public final class IntEntry extends AbstractNumericEntry<Integer> {
 	@Override
 	public String getConfigString() {
 		StringBuilder b = new StringBuilder(System.lineSeparator());
-		for(String c : comment) {
-			b.append(INDENT);
-			b.append(COMMENT);
-			b.append(c);
-			b.append(System.lineSeparator());			
+		if(comment != null) {
+			for(String c : comment) {
+				b.append(INDENT);
+				b.append(COMMENT);
+				b.append(c);
+				b.append(System.lineSeparator());
+			}
 		}
 		if(base != null) {
 			b.append(INDENT);

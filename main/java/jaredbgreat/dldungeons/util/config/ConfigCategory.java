@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-public class ConfigCategory implements Comparable<ConfigCategory> {
+class ConfigCategory implements Comparable<ConfigCategory> {
 	private static final String COMMENT = "# ";
 	private static final String BOUND   = "##################################################################";
 	private static final String START   = " {";
@@ -17,7 +17,7 @@ public class ConfigCategory implements Comparable<ConfigCategory> {
 	public final String name;
 	@SuppressWarnings("rawtypes")
 	final Map<String, AbstractConfigEntry> data;
-	private String[] comment;
+	private String[] comment = {""};
 	
 	
 	
@@ -49,7 +49,22 @@ public class ConfigCategory implements Comparable<ConfigCategory> {
 	
 	@SuppressWarnings("rawtypes")
 	public void add(AbstractConfigEntry entry) {
-		data.put(entry.getKey(), entry);
+		if(!data.containsKey(entry.getKey())) {
+			data.put(entry.getKey(), entry);
+		}
+		if(!entry.sameCategory(this)) {
+			ConfigCategory other = entry.getCategory();
+			entry.setCategory(this);
+			if(other != null) {
+				other.remove(entry);
+			}
+		}
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	private void remove(AbstractConfigEntry entry) {
+		data.remove(entry.getKey());
 	}
 	
 	
@@ -79,24 +94,26 @@ public class ConfigCategory implements Comparable<ConfigCategory> {
 		Collections.sort(list);
 		outstream.newLine();
 		outstream.write(BOUND);
+		outstream.newLine();
 		outstream.write(COMMENT);
 		outstream.write(name);
 		outstream.newLine();
+		outstream.newLine();
 		for(int i = 0; i < comment.length; i++) {
-			outstream.append(comment[i]);
+			outstream.write(COMMENT);
+			outstream.write(comment[i]);
 			outstream.newLine();
 		}
 		outstream.write(BOUND);
+		outstream.newLine();
 		outstream.write(name);
 		outstream.write(START);
 		int size = list.size();
-		int last = size - 1;
 		for(int i = 0; i < size; i++) {
 			outstream.write(list.get(i).getConfigString());
-			if(i == last) {
-				outstream.write(END);
-			}
 			outstream.newLine();
 		}
+		outstream.write(END);
+		outstream.newLine();
 	}
 }

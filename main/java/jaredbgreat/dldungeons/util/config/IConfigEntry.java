@@ -7,4 +7,5 @@ public interface IConfigEntry<T> {
 	public String getKey();
 	public String getTypeCode();
 	public void setValue(T val);
+	public boolean isGood();
 }

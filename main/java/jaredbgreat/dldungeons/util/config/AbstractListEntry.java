@@ -21,20 +21,14 @@ public abstract class AbstractListEntry<T> extends AbstractConfigEntry<List<T>>{
 	
 	@Override
 	public void readIn(String string) {
-		value = new ArrayList<>();
-		Tokenizer tokens = new Tokenizer(string, DELIM1);
-		while(tokens.hasMoreTokens()) {
-			value.add(parseString(tokens.nextToken().trim()));
-		}
-	}
-
-	
-	public void readInForged(String string) {
-		value = new ArrayList<>();
-		Tokenizer tokens = new Tokenizer(string, FDELIM);
-		while(tokens.hasMoreTokens()) {
-			value.add(parseString(tokens.nextToken().trim()));
-		}
+		try {
+			value = new ArrayList<>();
+			Tokenizer tokens = new Tokenizer(string, DELIM1);
+			while(tokens.hasMoreTokens()) {
+				value.add(parseString(tokens.nextToken().trim()));
+			}
+			good = true;
+		} catch(Exception e) {}
 	}
 	
 	
@@ -48,20 +42,23 @@ public abstract class AbstractListEntry<T> extends AbstractConfigEntry<List<T>>{
 		for(int i = 0; i < offset; i++) {
 			spaceb.append(" ");
 		}
-		StringBuilder builder = new StringBuilder('[');
-		for(int i = 0; i < value.size(); i++) {
-			current = value.get(i).toString();
-			if(((len + current.length()) > WIDTH) || (len == offset)) {
-				builder.append(current);
-				len += current.length();
-			} else {
-				builder.append(System.lineSeparator());
-				builder.append(spaceb);
-				builder.append(current);
-				len = offset + current.length();
-			}
-			if(i < (value.size() -1)) {
-				builder.append(DELIM2);
+		StringBuilder builder = new StringBuilder();
+		builder.append('[');
+		if(value != null) {
+			for(int i = 0; i < value.size(); i++) {
+				current = value.get(i).toString();
+				if(((len + current.length()) < WIDTH) || (len == offset)) {
+					builder.append(current);
+					len += current.length();
+				} else {
+					builder.append(System.lineSeparator());
+					builder.append(spaceb);
+					builder.append(current);
+					len = offset + current.length();
+				}
+				if(i < (value.size() -1)) {
+					builder.append(DELIM2);
+				}
 			}
 		}
 		builder.append(']');
@@ -101,7 +98,7 @@ public abstract class AbstractListEntry<T> extends AbstractConfigEntry<List<T>>{
 	public void setDefaultValue(T[] val) {
 		base = new ArrayList<>(val.length);
 		for(T element : val) {
-			value.add(element);
+			base.add(element);
 		}
 		value = base;
 	}
@@ -111,6 +108,12 @@ public abstract class AbstractListEntry<T> extends AbstractConfigEntry<List<T>>{
 		base = new ArrayList<>(val.size());
 		val.forEach((element) -> base.add(element) );
 		value = base;
+	}
+	
+	
+	@Override
+	public boolean isGood() {
+		return good;
 	}
 
 }

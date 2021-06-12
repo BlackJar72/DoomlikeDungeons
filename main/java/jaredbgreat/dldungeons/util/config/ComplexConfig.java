@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -128,43 +129,12 @@ public final class ComplexConfig {
 	
 	
 	private void readEntry(String line, BufferedReader instream) throws IOException {
-		int del1 = negToBig(line.indexOf('='));
-		int del2 = negToBig(line.indexOf('['));
-		int del3 = negToBig(line.indexOf('<'));
-		switch(orderInt(del1, del2, del3)) {
-			case 0: 
-				readSimpleEntry(line);
-				break;
-			case 1:
-				readListEntry(line, instream);
-				break;
-			case 2:
-				readListEntryForged(line, instream);
-				break;
-			default:
-				Logging.logError("Something is very wrong with the reality! A does not equal A.");
-		}
-	}
-	
-	
-	private int negToBig(int n) {
-		if(n < 0) {
-			n = Integer.MAX_VALUE;
-		}
-		return n;
-	}
-	
-	private int orderInt(int a, int b, int c) {
-		if(a < b) {
-			if( a < c) {
-				return 0;
-			} else {
-				return 2;
-			}
-		} else if(b < c) {
-			return 1;
-		} else {
-			return 2;
+		int del1 = line.indexOf('=');
+		int del2 = line.indexOf('[');
+		if((del1 > -1) && (del1 < del2)) {
+			readSimpleEntry(line);
+		} else if(del2 > -1) {
+			readListEntry(line, instream);
 		}
 	}
 	
@@ -201,14 +171,21 @@ public final class ComplexConfig {
 			case 'D':
 				entry = new DoubleEntry(line.substring(2, delimit).trim());
 				break;
+			case 'H':
+				entry = new HexEntry(line.substring(2, delimit).trim());
+				break;
 			default:
 				Logging.logError(source + " contained invalid data type " + typeCode 
 						+ " in line " + line + ".");
 				entry = new StringEntry(line.substring(2, delimit).trim());
 				break;
 		}
-		entry.readIn(line.substring(delimit + 1).trim());
-		data.put(entry.key, entry);
+		if(entry.isGood()) {
+			entry.readIn(line.substring(delimit + 1).trim());
+			data.put(entry.key, entry);
+		} else {
+			Logging.logError(line + " from file " + source + " failed to read properly.");
+		}
 		currentCat.add(entry);		
 	}
 	
@@ -258,55 +235,12 @@ public final class ComplexConfig {
 				entry = new StringEntry(line.substring(2, delimit1).trim());
 				break;
 		}
-		entry.readIn(dat);
-		data.put(entry.key, entry);
-		currentCat.add(entry);		
-	}
-	
-	
-	private void readListEntryForged(String line, BufferedReader instream) throws IOException {
-		//The parameter String "line" should already be trimmed.
-		dirty = true;
-		if(currentCat == null) {
-			currentCat = getCategroy(EMPTY);
-		}
-		int delimit1 = line.indexOf('<');
-		int delimit2 = line.indexOf('>');
-		String dat;
-		if(delimit2 > delimit1) {
-			dat = line.substring(delimit1 + 1, delimit2);
+		if(entry.isGood()) {
+			entry.readIn(dat);
+			data.put(entry.key, entry);
 		} else {
-			dat = readListToString(line.substring(delimit1 + 1), instream, '>');
+			Logging.logError(line + " from file " + source + " failed to read properly.");
 		}
-		char typeCode = line.charAt(0);
-		AbstractListEntry entry;
-		switch(typeCode) {
-			case 'S':
-				entry = new StringListEntry(line.substring(2, delimit1).trim());
-				break;
-			case 'I':
-				entry = new IntListEntry(line.substring(2, delimit1).trim());
-				break;
-			case 'L':
-				entry = new LongListEntry(line.substring(2, delimit1).trim());
-				break;
-			case 'F':
-				entry = new FloatListEntry(line.substring(2, delimit1).trim());
-				break;
-			case 'D':
-				entry = new DoubleListEntry(line.substring(2, delimit1).trim());
-				break;
-			case 'B':
-				entry = new BooleanListEntry(line.substring(2, delimit1).trim());
-				break;
-			default:
-				Logging.logError(source + " contained invalid data type " + typeCode 
-						+ " in line " + line + ".");
-				entry = new StringListEntry(line.substring(2, delimit1).trim());
-				break;
-		}
-		entry.readInForged(dat);
-		data.put(entry.key, entry);
 		currentCat.add(entry);		
 	}
 	
@@ -322,7 +256,7 @@ public final class ComplexConfig {
 			more = delim < 0;
 			if(more) {
 				builder.append(next);
-			} else if(delim > 0){
+			} else if(delimit2 > 0){
 				builder.append(next.substring(0, delimit2));
 			}
 		}
@@ -378,6 +312,32 @@ public final class ComplexConfig {
 	}
 	
 	
+	public void update() {
+		if(dirty) {
+			if(!source.getParentFile().exists()) {
+				source.getParentFile().mkdirs();
+			}
+			BufferedWriter writer;
+			try {
+				writer = new BufferedWriter(new FileWriter(source));
+				writeToFile(writer);
+				writer.close();
+			} catch (IOException e) {
+				Logging.logError("Failed to write file " + source + "!");
+				e.printStackTrace();
+			} 
+		}
+	}
+	
+	
+	/**
+	 * A synonym for update(), because it should be familiar to users of older Forge versions.
+	 */
+	public void save() {
+		update();
+	}
+	
+	
 	/**
 	 * This creates a new category described by the comment; if 
 	 * the category already exists it set the comment to the one 
@@ -405,15 +365,18 @@ public final class ComplexConfig {
 	
 	public int getInt(String name, String category, int defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		IntEntry entry = (IntEntry)data.get(name);
-		if(entry ==  null) {
+		IntEntry entry;
+		AbstractConfigEntry attempt = data.get(name);		
+		if((attempt != null) && !(attempt instanceof IntEntry)) {
+			entry = (IntEntry)attempt;
+		} else {
 			entry = new IntEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getValue();
 	}
 	
@@ -426,10 +389,10 @@ public final class ComplexConfig {
 			entry.attachData(defaultValue, min, max);
 			entry.makeDefault();
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getValue();
 	}
 	
@@ -441,10 +404,10 @@ public final class ComplexConfig {
 			entry = new LongEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getValue();
 	}
 	
@@ -457,10 +420,10 @@ public final class ComplexConfig {
 			entry.attachData(defaultValue, min, max);
 			entry.makeDefault();
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getValue();
 	}
 	
@@ -472,10 +435,10 @@ public final class ComplexConfig {
 			entry = new FloatEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getValue();
 	}
 	
@@ -488,10 +451,10 @@ public final class ComplexConfig {
 			entry.attachData(defaultValue, min, max);
 			entry.makeDefault();
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getValue();
 	}
 	
@@ -503,10 +466,10 @@ public final class ComplexConfig {
 			entry = new DoubleEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getValue();
 	}
 	
@@ -519,10 +482,10 @@ public final class ComplexConfig {
 			entry.attachData(defaultValue, min, max);
 			entry.makeDefault();
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getValue();
 	}
 	
@@ -534,10 +497,10 @@ public final class ComplexConfig {
 			entry = new BooleanEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getValue();
 	}
 	
@@ -549,10 +512,10 @@ public final class ComplexConfig {
 			entry = new StringEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getValue();
 	}
 	
@@ -564,10 +527,10 @@ public final class ComplexConfig {
 			entry = new HexEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getValue().intValue();
 	}
 	
@@ -580,10 +543,10 @@ public final class ComplexConfig {
 			entry.attachData(defaultValue, min, max);
 			entry.makeDefault();
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getValue().intValue();
 	}
 	
@@ -595,10 +558,10 @@ public final class ComplexConfig {
 			entry = new HexEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getValue();
 	}
 	
@@ -611,10 +574,10 @@ public final class ComplexConfig {
 			entry.attachData(defaultValue, min, max);
 			entry.makeDefault();
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getValue();
 	}
 	
@@ -630,10 +593,10 @@ public final class ComplexConfig {
 			entry = new IntListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getValue();
 	}
 	
@@ -645,10 +608,10 @@ public final class ComplexConfig {
 			entry = new IntListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getAsArray();
 	}
 	
@@ -660,10 +623,10 @@ public final class ComplexConfig {
 			entry = new IntListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getAsSet();
 	}
 	
@@ -679,10 +642,10 @@ public final class ComplexConfig {
 			entry = new LongListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getValue();
 	}
 	
@@ -694,10 +657,10 @@ public final class ComplexConfig {
 			entry = new LongListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getAsArray();
 	}
 	
@@ -709,10 +672,10 @@ public final class ComplexConfig {
 			entry = new LongListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getAsSet();
 	}
 	
@@ -728,10 +691,10 @@ public final class ComplexConfig {
 			entry = new FloatListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getValue();
 	}
 	
@@ -743,10 +706,10 @@ public final class ComplexConfig {
 			entry = new FloatListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getAsArray();
 	}
 	
@@ -758,10 +721,10 @@ public final class ComplexConfig {
 			entry = new FloatListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getAsSet();
 	}
 	
@@ -777,10 +740,10 @@ public final class ComplexConfig {
 			entry = new DoubleListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getValue();
 	}
 	
@@ -792,10 +755,10 @@ public final class ComplexConfig {
 			entry = new DoubleListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getAsArray();
 	}
 	
@@ -807,10 +770,10 @@ public final class ComplexConfig {
 			entry = new DoubleListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getAsSet();
 	}
 	
@@ -826,10 +789,10 @@ public final class ComplexConfig {
 			entry = new StringListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getValue();
 	}
 	
@@ -841,10 +804,10 @@ public final class ComplexConfig {
 			entry = new StringListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getAsArray();
 	}
 	
@@ -856,10 +819,10 @@ public final class ComplexConfig {
 			entry = new StringListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getAsSet();
 	}
 	
@@ -875,10 +838,10 @@ public final class ComplexConfig {
 			entry = new BooleanListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getValue();
 	}
 	
@@ -890,10 +853,10 @@ public final class ComplexConfig {
 			entry = new BooleanListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getAsArray();
 	}
 	
@@ -905,10 +868,10 @@ public final class ComplexConfig {
 			entry = new BooleanListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getAsSet();
 	}
 	
@@ -920,10 +883,10 @@ public final class ComplexConfig {
 			entry = new HexEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.toBooleanArray(num);
 	}
 	
@@ -935,10 +898,10 @@ public final class ComplexConfig {
 			entry = new HexEntry(name);
 			entry.setDefaultValue(entry.fromBooleanArray(defaultValue));
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.toBooleanArray(defaultValue.length);
 	}
 	
@@ -950,10 +913,10 @@ public final class ComplexConfig {
 			entry = new HexEntry(name);
 			entry.setDefaultValue(entry.fromBooleanArray(defaultValue));
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getValue().intValue();
 	}
 	
@@ -965,10 +928,10 @@ public final class ComplexConfig {
 			entry = new HexEntry(name);
 			entry.setDefaultValue(entry.fromBooleanArray(defaultValue));
 			data.put(name, entry);
-			cat.add(entry);
 			dirty = true;
 		}
 		entry.setComment(comment);
+		cat.add(entry);
 		return entry.getValue().longValue();
 	}
 	

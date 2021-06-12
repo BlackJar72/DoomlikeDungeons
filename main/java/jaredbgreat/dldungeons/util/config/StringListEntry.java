@@ -11,11 +11,13 @@ public final class StringListEntry extends AbstractListEntry<String> {
 	public String getConfigString() {
 		StringBuilder b1 = new StringBuilder(System.lineSeparator());
 		StringBuilder b2 = new StringBuilder(System.lineSeparator());
-		for(String c : comment) {
-			b1.append(INDENT);
-			b1.append(COMMENT);
-			b1.append(c);
-			b1.append(System.lineSeparator());			
+		if(comment != null) {
+			for(String c : comment) {
+				b1.append(INDENT);
+				b1.append(COMMENT);
+				b1.append(c);
+				b1.append(System.lineSeparator());
+			}
 		}
 		if(base != null) {
 			b1.append(INDENT);
@@ -27,7 +29,7 @@ public final class StringListEntry extends AbstractListEntry<String> {
 		b2.append(INDENT);
 		b2.append(StringEntry.S);
 		b2.append(key);
-		b2.append('=');
+		b2.append(' ');
 		b2.append(buildDataString(b2.length()));
 		b1.append(b2);
 		b1.append(System.lineSeparator());		
@@ -48,7 +50,11 @@ public final class StringListEntry extends AbstractListEntry<String> {
 
 
 	public String[] getAsArray() {
-		return (String[])value.toArray();
+		String[] out = new String[value.size()];
+		for(int i = 0; i < out.length; i++) {
+			out[i] = value.get(i);
+		}
+		return out;
 	}
 
 }

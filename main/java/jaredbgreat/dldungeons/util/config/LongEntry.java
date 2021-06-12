@@ -13,7 +13,11 @@ public final class LongEntry extends AbstractNumericEntry<Long> {
 
 	@Override
 	public void readIn(String string) {
-		value = Long.parseLong(string);
+		try {
+			value = Long.parseLong(string);
+		} catch(Exception e) {
+			value = 0L;
+		}
 	}
 	
 	
@@ -26,11 +30,13 @@ public final class LongEntry extends AbstractNumericEntry<Long> {
 	@Override
 	public String getConfigString() {
 		StringBuilder b = new StringBuilder(System.lineSeparator());
-		for(String c : comment) {
-			b.append(INDENT);
-			b.append(COMMENT);
-			b.append(c);
-			b.append(System.lineSeparator());			
+		if(comment != null) {
+			for(String c : comment) {
+				b.append(INDENT);
+				b.append(COMMENT);
+				b.append(c);
+				b.append(System.lineSeparator());
+			}
 		}
 		if(base != null) {
 			b.append(INDENT);

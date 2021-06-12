@@ -13,7 +13,12 @@ public class FloatEntry extends AbstractNumericEntry<Float> {
 
 	@Override
 	public void readIn(String string) {
-		value = Float.parseFloat(string);
+		try {
+			value = Float.parseFloat(string);
+			good = true;
+		} catch(Exception e) {
+			value = Float.NaN;
+		}
 	}
 	
 	
@@ -26,11 +31,13 @@ public class FloatEntry extends AbstractNumericEntry<Float> {
 	@Override
 	public String getConfigString() {
 		StringBuilder b = new StringBuilder(System.lineSeparator());
-		for(String c : comment) {
-			b.append(INDENT);
-			b.append(COMMENT);
-			b.append(c);
-			b.append(System.lineSeparator());			
+		if(comment != null) {
+			for(String c : comment) {
+				b.append(INDENT);
+				b.append(COMMENT);
+				b.append(c);
+				b.append(System.lineSeparator());
+			}
 		}
 		if(base != null) {
 			b.append(INDENT);

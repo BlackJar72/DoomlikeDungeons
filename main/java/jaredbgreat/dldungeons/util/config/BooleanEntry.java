@@ -11,7 +11,12 @@ public final class BooleanEntry extends AbstractConfigEntry<Boolean> {
 	
 	@Override
 	public void readIn(String string) {
-		value = Boolean.parseBoolean(string);
+		try {
+			value = Boolean.parseBoolean(string);
+			good = true;
+		} catch(Exception e) {
+			value = false;
+		}
 	}
 	
 	
@@ -29,11 +34,13 @@ public final class BooleanEntry extends AbstractConfigEntry<Boolean> {
 	@Override
 	public String getConfigString() {
 		StringBuilder b = new StringBuilder(System.lineSeparator());
-		for(String c : comment) {
-			b.append(INDENT);
-			b.append(COMMENT);
-			b.append(c);
-			b.append(System.lineSeparator());			
+		if(comment != null) {
+			for(String c : comment) {
+				b.append(INDENT);
+				b.append(COMMENT);
+				b.append(c);
+				b.append(System.lineSeparator());
+			}
 		}
 		if(base != null) {
 			b.append(INDENT);
@@ -43,6 +50,7 @@ public final class BooleanEntry extends AbstractConfigEntry<Boolean> {
 			b.append(System.lineSeparator());
 		}
 		b.append(INDENT);
+		b.append(B);
 		b.append(key);
 		b.append('=');
 		b.append(value);

@@ -39,6 +39,7 @@ public class DoomlikeDungeons {
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
         configDir = System.getProperty("user.dir") + File.separator + "config" + File.separator + "DLDungeons" + File.separator;
+        ConfigHandler.init(configDir);
         generation = GenerationHandler.getHandler();
     }
     
