@@ -6,20 +6,44 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 public class ConfigCategory implements Comparable<ConfigCategory> {
 	private static final String COMMENT = "# ";
-	private static final String BOUND = "##################################################################";
-	private static final String START = " {";
-	private static final String END = "}";
+	private static final String BOUND   = "##################################################################";
+	private static final String START   = " {";
+	private static final String END     = "}";
+	private static final String NLINE   = "\n\r";
 	public final String name;
 	@SuppressWarnings("rawtypes")
-	public final Map<String, AbstractConfigEntry> data;
+	final Map<String, AbstractConfigEntry> data;
+	private String[] comment;
+	
 	
 	
 	public ConfigCategory(String name) {
 		this.name = name;
 		data = new HashMap<>();
+	}
+	
+	
+	public ConfigCategory setComment(String ... lines) {
+		if(lines.length == 1) {
+			setCommentSingle(lines[0]);
+		} else {
+			comment = lines;
+		}
+		return this;
+	}
+	
+	
+	public ConfigCategory setCommentSingle(String text) {
+		StringTokenizer lines = new StringTokenizer(text, NLINE);
+		comment = new String[lines.countTokens()];
+		for(int i = 0; i < comment.length; i++) {
+			comment[i] = lines.nextToken();
+		}
+		return this;
 	}
 	
 	
@@ -57,6 +81,11 @@ public class ConfigCategory implements Comparable<ConfigCategory> {
 		outstream.write(BOUND);
 		outstream.write(COMMENT);
 		outstream.write(name);
+		outstream.newLine();
+		for(int i = 0; i < comment.length; i++) {
+			outstream.append(comment[i]);
+			outstream.newLine();
+		}
 		outstream.write(BOUND);
 		outstream.write(name);
 		outstream.write(START);

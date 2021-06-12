@@ -1,7 +1,5 @@
 package jaredbgreat.dldungeons.util.config;
 
-import java.util.ArrayList;
-
 public class FloatEntry extends AbstractNumericEntry<Float> {
 	static final String F = "F:";
 	
@@ -19,8 +17,8 @@ public class FloatEntry extends AbstractNumericEntry<Float> {
 	}
 	
 	
-	public void attachData(float base, float min, float max, String ... comment) {
-		super.attachData(base, min, max, comment);
+	public void attachData(float base, float min, float max) {
+		super.attachData(base, min, max);
 		value = Math.min(max, Math.max(min, value));
 	}
 		
@@ -68,6 +66,16 @@ public class FloatEntry extends AbstractNumericEntry<Float> {
 	@Override
 	public void setValue(Float val) {
 		value = Math.min(max, Math.max(min, val));
+	}
+	
+	
+	public void setDefault(float def) {
+		base = Math.min(max, Math.max(min, def));
+	}
+	
+	
+	public void setDefaultValue(float def) {
+		value = base = Math.min(max, Math.max(min, def));
 	}
 	
 }

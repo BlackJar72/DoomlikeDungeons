@@ -2,7 +2,6 @@ package jaredbgreat.dldungeons.util.config;
 
 public final class StringEntry extends AbstractConfigEntry<String> {
 	static final String S = "S:";
-	private String[] comment;
 	
 	
 	public StringEntry(String key) {
@@ -12,7 +11,11 @@ public final class StringEntry extends AbstractConfigEntry<String> {
 	
 	public void attachData(String base, String ... comment) {
 		this.base = base;
-		this.comment = comment;
+		if(comment.length == 1) {
+			setCommentSingle(comment[0]);
+		} else {
+			this.comment = comment;
+		}
 	}
 	
 

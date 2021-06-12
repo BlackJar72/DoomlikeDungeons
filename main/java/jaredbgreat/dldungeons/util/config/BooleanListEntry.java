@@ -93,6 +93,25 @@ public final class BooleanListEntry extends AbstractListEntry<Boolean> {
 
 	
 	
+	public void setDefault(boolean[] val) {
+		base = new ArrayList<>(val.length);
+		for(boolean element : val) {
+			base.add(element);
+		}
+	}
+
+	
+	
+	public void setDefaultValue(boolean[] val) {
+		base = new ArrayList<>(val.length);
+		for(boolean element : val) {
+			base.add(element);
+		}
+		value = base;
+	}
+
+	
+	
 	public void setValue(int bits, int num) {
 		if((num < 1) || (num > 32)) {
 			num = 32;

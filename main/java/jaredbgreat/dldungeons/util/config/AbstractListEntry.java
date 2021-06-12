@@ -8,8 +8,8 @@ import java.util.Set;
 import jaredbgreat.dldungeons.util.parser.Tokenizer;
 
 public abstract class AbstractListEntry<T> extends AbstractConfigEntry<List<T>>{
-	private static final String DELIM1 = ",";
-	private static final String DELIM2 = ",";
+	private static final String DELIM1 = ",\n\r";
+	private static final String DELIM2 = ", ";
 	private static final String FDELIM = "\n\r";
 	private static final int WIDTH = 45;
 	
@@ -95,6 +95,22 @@ public abstract class AbstractListEntry<T> extends AbstractConfigEntry<List<T>>{
 		for(T element : val) {
 			value.add(element);
 		}
+	}
+	
+	
+	public void setDefaultValue(T[] val) {
+		base = new ArrayList<>(val.length);
+		for(T element : val) {
+			value.add(element);
+		}
+		value = base;
+	}
+	
+	
+	public void setDefaultValue(Set<T> val) {
+		base = new ArrayList<>(val.size());
+		val.forEach((element) -> base.add(element) );
+		value = base;
 	}
 
 }

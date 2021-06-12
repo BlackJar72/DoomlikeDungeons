@@ -1,5 +1,7 @@
 package jaredbgreat.dldungeons.util.config;
 
+import java.util.StringTokenizer;
+
 @SuppressWarnings("rawtypes")
 public abstract class AbstractConfigEntry<T> implements IConfigEntry<T>, Comparable<AbstractConfigEntry> {
 	public static final String COMMENT = "# ";
@@ -7,6 +9,7 @@ public abstract class AbstractConfigEntry<T> implements IConfigEntry<T>, Compara
 	public static final String MIN     = ", Minimum: ";
 	public static final String MAX     = ", Maximum: ";
 	public static final String INDENT  = "     ";
+	public static final String NLINE   = "\n\r";
 	protected final String key;
 	protected String[] comment;
 	protected T value, base;
@@ -17,8 +20,18 @@ public abstract class AbstractConfigEntry<T> implements IConfigEntry<T>, Compara
 	}
 	
 	
-	public void setDefault() {
+	public void makeDefault() {
 		value = base;
+	}
+	
+	
+	public void setDefault(T def) {
+		base = def;
+	}
+	
+	
+	public void setDefaultValue(T def) {
+		value = base = def;
 	}
 	
 	
@@ -52,6 +65,26 @@ public abstract class AbstractConfigEntry<T> implements IConfigEntry<T>, Compara
 	@Override
 	public void setValue(T val) {
 		value = val;
+	}
+	
+	
+	public AbstractConfigEntry<T> setComment(String ... lines) {
+		if(lines.length == 1) {
+			setCommentSingle(lines[0]);
+		} else {
+			comment = lines;
+		}
+		return this;
+	}
+	
+	
+	public AbstractConfigEntry<T> setCommentSingle(String text) {
+		StringTokenizer lines = new StringTokenizer(text, NLINE);
+		comment = new String[lines.countTokens()];
+		for(int i = 0; i < comment.length; i++) {
+			comment[i] = lines.nextToken();
+		}
+		return this;
 	}
 
 }

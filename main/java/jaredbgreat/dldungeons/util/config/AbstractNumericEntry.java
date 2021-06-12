@@ -15,11 +15,10 @@ public abstract class AbstractNumericEntry<T extends Number> extends AbstractCon
 	}
 	
 	
-	public void attachData(T base, T min, T max, String ... comment) {
+	public void attachData(T base, T min, T max) {
 		this.base = base;
 		this.min  = min;
 		this.max  = max;
-		this.comment = comment;
 	}
 
 }

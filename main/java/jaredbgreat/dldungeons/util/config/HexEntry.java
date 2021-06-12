@@ -1,10 +1,10 @@
 package jaredbgreat.dldungeons.util.config;
 
-public final class LongEntry extends AbstractNumericEntry<Long> {
-	static final String L = "L:";
+public final class HexEntry extends AbstractNumericEntry<Long> {
+	static final String H = "H:";
 	
 	
-	public LongEntry(String key) {
+	public HexEntry(String key) {
 		super(key);
 		min = Long.MIN_VALUE;
 		max = Long.MAX_VALUE;
@@ -13,7 +13,7 @@ public final class LongEntry extends AbstractNumericEntry<Long> {
 
 	@Override
 	public void readIn(String string) {
-		value = Long.parseLong(string);
+		value = Long.parseLong(string, 16);
 	}
 	
 	
@@ -21,7 +21,7 @@ public final class LongEntry extends AbstractNumericEntry<Long> {
 		super.attachData(base, min, max);
 		base  = Math.min(max, Math.max(min, base));
 	}
-		
+			
 	
 	@Override
 	public String getConfigString() {
@@ -48,10 +48,10 @@ public final class LongEntry extends AbstractNumericEntry<Long> {
 			b.append(System.lineSeparator());
 		}
 		b.append(INDENT);
-		b.append(L);
+		b.append(H);
 		b.append(key);
 		b.append('=');
-		b.append(value);
+		b.append(Long.toHexString(value));
 		b.append(System.lineSeparator());
 		return b.toString();
 	}
@@ -59,7 +59,7 @@ public final class LongEntry extends AbstractNumericEntry<Long> {
 
 	@Override
 	public String getTypeCode() {
-		return L;
+		return H;
 	}
 	
 	
@@ -77,5 +77,31 @@ public final class LongEntry extends AbstractNumericEntry<Long> {
 	public void setDefaultValue(long def) {
 		value = base = Math.min(max, Math.max(min, def));
 	}
-	
+
+
+	public boolean[] toBooleanArray(int number) {
+		if((number < 0) || (number > 64)) {
+			number = 64;
+		}
+		long bits = value;
+		boolean[] out = new boolean[number];
+		for(int i = 0; i < out.length; i++) {
+			out[i] = ((bits & (1 << i)) != 0); 
+		}
+		return out;
+	}
+
+
+	public long fromBooleanArray(boolean[] array) {
+		int num = Math.min(64, array.length);
+		long out = 0;
+		for(int i = 0; i < num; i++) {
+			if(array[i]) {
+				out |= (1 << i);
+			}
+		}
+		out = value;
+		return out;
+	}
+
 }

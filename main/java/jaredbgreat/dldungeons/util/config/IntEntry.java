@@ -17,9 +17,9 @@ public final class IntEntry extends AbstractNumericEntry<Integer> {
 	}
 	
 	
-	public void attachData(int base, int min, int max, String ... comment) {
-		super.attachData(base, min, max, comment);
-		value = Math.min(max, Math.max(min, value));
+	public void attachData(int base, int min, int max) {
+		super.attachData(base, min, max);
+		base  = Math.min(max, Math.max(min, base));
 	}
 			
 	
@@ -66,6 +66,16 @@ public final class IntEntry extends AbstractNumericEntry<Integer> {
 	@Override
 	public void setValue(Integer val) {
 		value = Math.min(max, Math.max(min, val));
+	}
+	
+	
+	public void setDefault(int def) {
+		base = Math.min(max, Math.max(min, def));
+	}
+	
+	
+	public void setDefaultValue(int def) {
+		value = base = Math.min(max, Math.max(min, def));
 	}
 
 }

@@ -64,5 +64,22 @@ public final class FloatListEntry extends AbstractListEntry<Float> {
 			value.add(element);
 		}
 	}
+	
+	
+	public void setDefault(float[] val) {
+		base  = new ArrayList<>(val.length);
+		for(float element : val) {
+			value.add(element);
+		}
+	}
+	
+	
+	public void setDefaultValue(float[] val) {
+		base  = new ArrayList<>(val.length);
+		for(float element : val) {
+			value.add(element);
+		}
+		value = base;
+	}
 
 }

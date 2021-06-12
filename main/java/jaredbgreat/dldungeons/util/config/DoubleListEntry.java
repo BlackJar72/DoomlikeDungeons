@@ -65,5 +65,22 @@ public final class DoubleListEntry extends AbstractListEntry<Double> {
 			value.add(element);
 		}
 	}
+	
+	
+	public void setDefault(double[] val) {
+		base  = new ArrayList<>(val.length);
+		for(double element : val) {
+			value.add(element);
+		}
+	}
+	
+	
+	public void setDefaultValue(double[] val) {
+		base  = new ArrayList<>(val.length);
+		for(double element : val) {
+			value.add(element);
+		}
+		value = base;
+	}
 
 }

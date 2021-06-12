@@ -19,13 +19,6 @@ public final class IntListEntry extends AbstractListEntry<Integer> {
 			b1.append(c);
 			b1.append(System.lineSeparator());			
 		}
-		if(base != null) {
-			b1.append(INDENT);
-			b1.append(DEFAULT);
-			b1.append(base);
-			b1.append(']');
-			b1.append(System.lineSeparator());
-		}
 		b2.append(INDENT);
 		b2.append(IntEntry.I);
 		b2.append(key);
@@ -63,6 +56,23 @@ public final class IntListEntry extends AbstractListEntry<Integer> {
 		for(int element : val) {
 			value.add(element);
 		}
+	}
+	
+	
+	public void setDefault(int[] val) {
+		base = new ArrayList<>(val.length);
+		for(int element : val) {
+			base.add(element);
+		}
+	}
+	
+	
+	public void setDefaultValue(int[] val) {
+		base = new ArrayList<>(val.length);
+		for(int element : val) {
+			base.add(element);
+		}
+		value = base;
 	}
 
 }

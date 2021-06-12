@@ -17,9 +17,9 @@ public final class DoubleEntry extends AbstractNumericEntry<Double> {
 	}
 	
 	
-	public void attachData(double base, double min, double max, String ... comment) {
-		super.attachData(base, min, max, comment);
-		value = Math.min(max, Math.max(min, value));
+	public void attachData(double base, double min, double max) {
+		super.attachData(base, min, max);
+		base  = Math.min(max, Math.max(min, base));
 	}
 		
 	
@@ -66,6 +66,16 @@ public final class DoubleEntry extends AbstractNumericEntry<Double> {
 	@Override
 	public void setValue(Double val) {
 		value = Math.min(max, Math.max(min, val));
+	}
+	
+	
+	public void setDefault(double def) {
+		base = Math.min(max, Math.max(min, def));
+	}
+	
+	
+	public void setDefaultValue(double def) {
+		value = base = Math.min(max, Math.max(min, def));
 	}
 	
 }

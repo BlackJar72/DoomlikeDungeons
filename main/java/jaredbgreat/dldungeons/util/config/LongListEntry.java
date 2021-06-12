@@ -64,5 +64,22 @@ public final class LongListEntry extends AbstractListEntry<Long> {
 			value.add(element);
 		}
 	}
+	
+	
+	public void setDefault(long[] val) {
+		base  = new ArrayList<>(val.length);
+		for(long element : val) {
+			value.add(element);
+		}
+	}
+	
+	
+	public void setDefaultValue(long[] val) {
+		base  = new ArrayList<>(val.length);
+		for(long element : val) {
+			value.add(element);
+		}
+		value = base;
+	}
 
 }

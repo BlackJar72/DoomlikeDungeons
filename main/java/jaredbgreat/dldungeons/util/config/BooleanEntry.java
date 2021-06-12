@@ -1,7 +1,5 @@
 package jaredbgreat.dldungeons.util.config;
 
-import java.util.ArrayList;
-
 public final class BooleanEntry extends AbstractConfigEntry<Boolean> {
 	static final String B = "B:";
 
@@ -19,7 +17,11 @@ public final class BooleanEntry extends AbstractConfigEntry<Boolean> {
 	
 	public void attachData(boolean base, String ... comment) {
 		this.base = base;
-		this.comment = comment;
+		if(comment.length == 1) {
+			setCommentSingle(comment[0]);
+		} else {
+			this.comment = comment;
+		}
 	}
 	
 		
