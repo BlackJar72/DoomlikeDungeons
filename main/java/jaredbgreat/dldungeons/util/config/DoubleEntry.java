@@ -1,7 +1,7 @@
 package jaredbgreat.dldungeons.util.config;
 
 public final class DoubleEntry extends AbstractNumericEntry<Double> {
-	private static final String D = "D:";
+	static final String D = "D:";
 	
 	
 	public DoubleEntry(String key) {
@@ -48,6 +48,7 @@ public final class DoubleEntry extends AbstractNumericEntry<Double> {
 			b.append(System.lineSeparator());
 		}
 		b.append(INDENT);
+		b.append(D);
 		b.append(key);
 		b.append('=');
 		b.append(value);
@@ -59,6 +60,12 @@ public final class DoubleEntry extends AbstractNumericEntry<Double> {
 	@Override
 	public String getTypeCode() {
 		return D;
+	}
+	
+	
+	@Override
+	public void setValue(Double val) {
+		value = Math.min(max, Math.max(min, val));
 	}
 	
 }

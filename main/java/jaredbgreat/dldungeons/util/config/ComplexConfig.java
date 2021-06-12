@@ -95,7 +95,7 @@ public final class ComplexConfig {
 				entry = new BooleanEntry(line.substring(2, delimit).trim());
 				break;
 			case 'I':
-				entry = new IntegerEntry(line.substring(2, delimit).trim());
+				entry = new IntEntry(line.substring(2, delimit).trim());
 				break;
 			case 'L':
 				entry = new LongEntry(line.substring(2, delimit).trim());

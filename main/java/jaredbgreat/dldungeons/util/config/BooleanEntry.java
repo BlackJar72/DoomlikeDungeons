@@ -1,7 +1,9 @@
 package jaredbgreat.dldungeons.util.config;
 
+import java.util.ArrayList;
+
 public final class BooleanEntry extends AbstractConfigEntry<Boolean> {
-	private static final String B = "B:";
+	static final String B = "B:";
 
 	
 	public BooleanEntry(String key) {

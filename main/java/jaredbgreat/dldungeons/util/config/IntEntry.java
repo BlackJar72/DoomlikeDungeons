@@ -1,10 +1,10 @@
 package jaredbgreat.dldungeons.util.config;
 
-public final class IntegerEntry extends AbstractNumericEntry<Integer> {
-	private static final String I = "I:";
+public final class IntEntry extends AbstractNumericEntry<Integer> {
+	static final String I = "I:";
 	
 	
-	public IntegerEntry(String key) {
+	public IntEntry(String key) {
 		super(key);
 		min = Integer.MIN_VALUE;
 		max = Integer.MAX_VALUE;
@@ -48,6 +48,7 @@ public final class IntegerEntry extends AbstractNumericEntry<Integer> {
 			b.append(System.lineSeparator());
 		}
 		b.append(INDENT);
+		b.append(I);
 		b.append(key);
 		b.append('=');
 		b.append(value);
@@ -59,6 +60,12 @@ public final class IntegerEntry extends AbstractNumericEntry<Integer> {
 	@Override
 	public String getTypeCode() {
 		return I;
+	}
+	
+	
+	@Override
+	public void setValue(Integer val) {
+		value = Math.min(max, Math.max(min, val));
 	}
 
 }

@@ -47,5 +47,11 @@ public abstract class AbstractConfigEntry<T> implements IConfigEntry<T>, Compara
 	public int compareTo(AbstractConfigEntry o) {		
 		return key.compareTo(o.key);
 	}
+	
+	
+	@Override
+	public void setValue(T val) {
+		value = val;
+	}
 
 }

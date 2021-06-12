@@ -23,7 +23,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(Info.ID)
 public class DoomlikeDungeons {	
-    private static final Logger LOGGER = LogManager.getLogger();
     public final GenerationHandler generation;
     public final String configDir;
 

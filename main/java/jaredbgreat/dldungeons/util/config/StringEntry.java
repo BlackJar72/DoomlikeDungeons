@@ -1,7 +1,7 @@
 package jaredbgreat.dldungeons.util.config;
 
 public final class StringEntry extends AbstractConfigEntry<String> {
-	private static final String S = "S:";
+	static final String S = "S:";
 	private String[] comment;
 	
 	
@@ -40,6 +40,7 @@ public final class StringEntry extends AbstractConfigEntry<String> {
 			b.append(System.lineSeparator());
 		}
 		b.append(INDENT);
+		b.append(S);
 		b.append(key);
 		b.append('=');
 		b.append(value);
