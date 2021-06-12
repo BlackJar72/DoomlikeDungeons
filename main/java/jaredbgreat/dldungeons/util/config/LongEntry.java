@@ -23,7 +23,8 @@ public final class LongEntry extends AbstractNumericEntry<Long> {
 	
 	public void attachData(long base, long min, long max) {
 		super.attachData(base, min, max);
-		base  = Math.min(max, Math.max(min, base));
+		base   = Math.min(max, Math.max(min, base));
+		value  = Math.min(max, Math.max(min, value));
 	}
 		
 	

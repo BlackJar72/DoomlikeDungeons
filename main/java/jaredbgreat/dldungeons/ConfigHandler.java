@@ -37,10 +37,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 public final class ConfigHandler {
 	static ComplexConfig config;
 	
-	private static File mainConfig;
-	private static File themesDir;
-	private static File listsDir;
-	protected static File configDir;
+	private static volatile File mainConfig;
+	private static volatile File themesDir;
+	private static volatile File listsDir;
+	private static volatile File configDir;
 	
 	private static final int DEFAULT_SCALE  = 8;
 	private static final int DEFAULT_MINXZ  = 16;
@@ -65,40 +65,40 @@ public final class ConfigHandler {
 	private static final boolean DISABLE_API = false;
 	private static final boolean NO_MOB_CHANGES = false;
 	
-	public static boolean disableAPI = DISABLE_API;
-	public static boolean noMobChanges = NO_MOB_CHANGES;
+	public static volatile boolean disableAPI = DISABLE_API;
+	public static volatile boolean noMobChanges = NO_MOB_CHANGES;
 	
 	private static final String[] NEVER_IN_BIOMES = new String[]{"END"};
-	private static       String[] neverInBiomes   = NEVER_IN_BIOMES;
-	public  static HashSet<Type>  biomeExclusions = new HashSet<Type>();
+	private static volatile String[] neverInBiomes   = NEVER_IN_BIOMES;
+	public  static volatile HashSet<Type>  biomeExclusions = new HashSet<Type>();
 	
 	protected static boolean writeLists = DEFAULT_WRITE_LISTS;	
 	protected static boolean naturalSpawn = DEFAULT_NATURAL_SPAWN;	
 	protected static boolean obeyRule = DEFAULT_OBEY_RULE;	
 	protected static boolean positiveDims = DEFAULT_POSITIVE_DIMS;
 	
-	public    static boolean easyFind = EASY_FIND;
-	public    static boolean singleEntrance = SINGLE_ENTRANCE;
-	public    static boolean bigHubs = EASY_FIND;
+	public static volatile boolean easyFind = EASY_FIND;
+	public static volatile boolean singleEntrance = SINGLE_ENTRANCE;
+	public static volatile boolean bigHubs = EASY_FIND;
 	
 	
-	public    static boolean announceCommands = DEFAULT_ANNOUNCE_COMMANDS;
-	public    static boolean vanillaLoot = DEFAULT_VANILLA_LOOT;
-	public    static boolean thinSpawners = DEFAULT_THIN_SPAWNERS;	
+	public static volatile boolean announceCommands = DEFAULT_ANNOUNCE_COMMANDS;
+	public static volatile boolean vanillaLoot = DEFAULT_VANILLA_LOOT;
+	public static volatile boolean thinSpawners = DEFAULT_THIN_SPAWNERS;	
 		
 	private   static final boolean PROFILE = false;
-	protected static boolean profile;	
+	protected static volatile boolean profile;	
 	
 	private   static final boolean FAILFAST = false;
-	public static boolean failfast = FAILFAST;
+	public static volatile boolean failfast = FAILFAST;
 	
 	private static final boolean INSTALL_THEMES = true;
-	public  static       boolean installThemes = INSTALL_THEMES;
+	public  static volatile boolean installThemes = INSTALL_THEMES;
 	
 	private static final boolean INSTALL_CMD = true;
-	public  static       boolean installCmd = INSTALL_CMD;
+	public  static volatile boolean installCmd = INSTALL_CMD;
 	
-	public static Difficulty difficulty;
+	public static volatile Difficulty difficulty;
 	
 	// All methods and data are static. 
 	// There is no reason this should ever be instantiated.

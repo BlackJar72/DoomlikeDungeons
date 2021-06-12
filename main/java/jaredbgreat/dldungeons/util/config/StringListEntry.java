@@ -57,4 +57,24 @@ public final class StringListEntry extends AbstractListEntry<String> {
 		return out;
 	}
 
+
+	public String getAsSingleBlock() {
+		StringBuilder builder = new StringBuilder();
+		for(String line : value) {
+			builder.append(line);
+			builder.append(System.lineSeparator());
+		}
+		return builder.toString();
+	}
+
+
+	public String getAsSingleLine() {
+		StringBuilder builder = new StringBuilder();
+		for(String line : value) {
+			builder.append(line);
+			builder.append(' ');
+		}
+		return builder.toString();
+	}
+
 }

@@ -1,31 +1,19 @@
 package jaredbgreat.dldungeons.util.config;
 
-public final class StringEntry extends AbstractConfigEntry<String> {
-	static final String S = "S:";
-	
-	
-	public StringEntry(String key) {
+public final class CharEntry extends AbstractConfigEntry<Character> {
+	static final String C = "C:";
+
+	public CharEntry(String key) {
 		super(key);
 	}
-	
-	
-	public void attachData(String base, String ... comment) {
-		this.base = base;
-		if(comment.length == 1) {
-			setCommentSingle(comment[0]);
-		} else {
-			this.comment = comment;
-		}
-	}
-	
 
+	
 	@Override
 	public void readIn(String string) {
-		value = string;
+		value = string.charAt(0);
 		good = true;
 	}
-	
-		
+
 	
 	@Override
 	public String getConfigString() {
@@ -46,23 +34,24 @@ public final class StringEntry extends AbstractConfigEntry<String> {
 			b.append(System.lineSeparator());
 		}
 		b.append(INDENT);
-		b.append(S);
+		b.append(C);
 		b.append(key);
 		b.append('=');
 		b.append(value);
+		b.append(System.lineSeparator());
 		return b.toString();
 	}
-	
 
+	
 	@Override
-	public String getValue() {
+	public Character getValue() {
 		return value;
 	}
 
-
+	
 	@Override
 	public String getTypeCode() {
-		return S;
+		return C;
 	}
 
 }

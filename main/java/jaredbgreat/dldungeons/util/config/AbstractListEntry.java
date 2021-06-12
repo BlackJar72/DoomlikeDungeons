@@ -8,9 +8,9 @@ import java.util.Set;
 import jaredbgreat.dldungeons.util.parser.Tokenizer;
 
 public abstract class AbstractListEntry<T> extends AbstractConfigEntry<List<T>>{
-	private static final String DELIM1 = ",\n\r";
-	private static final String DELIM2 = ", ";
-	private static final int WIDTH = 45;
+	static final String DELIM1 = ",\n\r";
+	static final String DELIM2 = ", ";
+	static final int WIDTH = 45;
 	
 
 	public AbstractListEntry(String key) {
@@ -20,14 +20,14 @@ public abstract class AbstractListEntry<T> extends AbstractConfigEntry<List<T>>{
 	
 	@Override
 	public void readIn(String string) {
-		//try {
+		try {
 			value = new ArrayList<>();
 			Tokenizer tokens = new Tokenizer(string, DELIM1);
 			while(tokens.hasMoreTokens()) {
 				value.add(parseString(tokens.nextToken().trim()));
 			}
 			good = true;
-		//} catch(Exception e) {}
+		} catch(Exception e) {}
 	}
 	
 	
@@ -94,12 +94,26 @@ public abstract class AbstractListEntry<T> extends AbstractConfigEntry<List<T>>{
 	}
 	
 	
+	public void setDefault(T[] val) {
+		base = new ArrayList<>(val.length);
+		for(T element : val) {
+			base.add(element);
+		}
+	}
+	
+	
 	public void setDefaultValue(T[] val) {
 		base = new ArrayList<>(val.length);
 		for(T element : val) {
 			base.add(element);
 		}
 		value = base;
+	}
+	
+	
+	public void setDefault(Set<T> val) {
+		base = new ArrayList<>(val.size());
+		val.forEach((element) -> base.add(element) );
 	}
 	
 	

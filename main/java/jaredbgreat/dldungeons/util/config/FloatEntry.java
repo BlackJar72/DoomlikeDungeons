@@ -24,6 +24,7 @@ public class FloatEntry extends AbstractNumericEntry<Float> {
 	
 	public void attachData(float base, float min, float max) {
 		super.attachData(base, min, max);
+		base  = Math.min(max, Math.max(min, base));
 		value = Math.min(max, Math.max(min, value));
 	}
 		

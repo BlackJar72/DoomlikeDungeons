@@ -370,15 +370,20 @@ public final class ComplexConfig {
 	public int getInt(String name, String category, int defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
 		IntEntry entry;
-		AbstractConfigEntry attempt = data.get(name);		
+		AbstractConfigEntry attempt = data.get(name);
+		// This should catch changes in type / incorrect types in the file but
+		// for some reason is does not, so I'm not bothering to add it to other 
+		// methods.
 		if((attempt != null) && (attempt instanceof IntEntry)) {
 			entry = (IntEntry)attempt;
 		} else {
 			entry = new IntEntry(name);
 			entry.setDefaultValue(defaultValue);
+			data.remove(name);
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.setDefault(defaultValue);
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.getValue();
@@ -387,14 +392,18 @@ public final class ComplexConfig {
 	
 	public int getInt(String name, String category, int defaultValue, int min, int max, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		IntEntry entry = (IntEntry)data.get(name);
-		if(entry ==  null) {
+		IntEntry entry;
+		AbstractConfigEntry attempt = data.get(name);		
+		if((attempt != null) && (attempt instanceof IntEntry)) {
+			entry = (IntEntry)attempt;
+		} else {
 			entry = new IntEntry(name);
+			entry.setValue(defaultValue);
 			entry.attachData(defaultValue, min, max);
-			entry.makeDefault();
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.attachData(defaultValue, min, max);
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.getValue();
@@ -410,22 +419,24 @@ public final class ComplexConfig {
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.setDefault(defaultValue);
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.getValue();
 	}
 	
 	
-	public long getInt(String name, String category, long defaultValue, long min, long max, String ... comment) {
+	public long getLong(String name, String category, long defaultValue, long min, long max, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
 		LongEntry entry = (LongEntry)data.get(name);
 		if(entry ==  null) {
 			entry = new LongEntry(name);
+			entry.setValue(defaultValue);
 			entry.attachData(defaultValue, min, max);
-			entry.makeDefault();
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.attachData(defaultValue, min, max);
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.getValue();
@@ -441,6 +452,7 @@ public final class ComplexConfig {
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.setDefault(defaultValue);
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.getValue();
@@ -452,11 +464,12 @@ public final class ComplexConfig {
 		FloatEntry entry = (FloatEntry)data.get(name);
 		if(entry ==  null) {
 			entry = new FloatEntry(name);
+			entry.setValue(defaultValue);
 			entry.attachData(defaultValue, min, max);
-			entry.makeDefault();
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.attachData(defaultValue, min, max);
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.getValue();
@@ -472,6 +485,7 @@ public final class ComplexConfig {
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.setDefault(defaultValue);
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.getValue();
@@ -483,11 +497,12 @@ public final class ComplexConfig {
 		DoubleEntry entry = (DoubleEntry)data.get(name);
 		if(entry ==  null) {
 			entry = new DoubleEntry(name);
+			entry.setValue(defaultValue);
 			entry.attachData(defaultValue, min, max);
-			entry.makeDefault();
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.attachData(defaultValue, min, max);
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.getValue();
@@ -496,13 +511,36 @@ public final class ComplexConfig {
 	
 	public boolean getBoolean(String name, String category, boolean defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		BooleanEntry entry = (BooleanEntry)data.get(name);
-		if(entry ==  null) {
+		BooleanEntry entry;
+		AbstractConfigEntry attempt = data.get(name);		
+		if((attempt != null) && (attempt instanceof BooleanEntry)) {
+			entry = (BooleanEntry)attempt;
+		} else {
 			entry = new BooleanEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.setDefault(defaultValue);
+		entry.setComment(comment);
+		cat.add(entry);
+		return entry.getValue();
+	}
+	
+	
+	public char getChar(String name, String category, char defaultValue, String ... comment) {
+		ConfigCategory cat = getCategroy(category);
+		CharEntry entry;
+		AbstractConfigEntry attempt = data.get(name);		
+		if((attempt != null) && (attempt instanceof CharEntry)) {
+			entry = (CharEntry)attempt;
+		} else {
+			entry = new CharEntry(name);
+			entry.setDefaultValue(defaultValue);
+			data.put(name, entry);
+			dirty = true;
+		}
+		entry.setDefault(defaultValue);
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.getValue();
@@ -518,6 +556,7 @@ public final class ComplexConfig {
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.setDefault(defaultValue);
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.getValue();
@@ -599,6 +638,7 @@ public final class ComplexConfig {
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.setDefault(defaultValue);
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.getValue();
@@ -614,6 +654,7 @@ public final class ComplexConfig {
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.setDefault(defaultValue);
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.getAsArray();
@@ -629,6 +670,7 @@ public final class ComplexConfig {
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.setDefault(defaultValue);
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.getAsSet();
@@ -639,7 +681,7 @@ public final class ComplexConfig {
 	 */
 	
 	
-	public List<Long> getlongList(String name, String category, List<Long> defaultValue, String ... comment) {
+	public List<Long> getLongList(String name, String category, List<Long> defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
 		LongListEntry entry = (LongListEntry)data.get(name);
 		if(entry ==  null) {
@@ -648,13 +690,14 @@ public final class ComplexConfig {
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.setDefault(defaultValue);
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.getValue();
 	}
 	
 	
-	public long[] getlongArray(String name, String category, long[] defaultValue, String ... comment) {
+	public long[] getLongArray(String name, String category, long[] defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
 		LongListEntry entry = (LongListEntry)data.get(name);
 		if(entry ==  null) {
@@ -663,6 +706,59 @@ public final class ComplexConfig {
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.setDefault(defaultValue);
+		entry.setComment(comment);
+		cat.add(entry);
+		return entry.getAsArray();
+	}
+	
+	
+	public Set<Long> getLongSet(String name, String category, Set<Long> defaultValue, String ... comment) {
+		ConfigCategory cat = getCategroy(category);
+		LongListEntry entry = (LongListEntry)data.get(name);
+		if(entry ==  null) {
+			entry = new LongListEntry(name);
+			entry.setDefaultValue(defaultValue);
+			data.put(name, entry);
+			dirty = true;
+		}
+		entry.setDefault(defaultValue);
+		entry.setComment(comment);
+		cat.add(entry);
+		return entry.getAsSet();
+	}
+	
+	/*
+	 * Hex Collections
+	 */
+	
+	
+	public List<Long> getHexList(String name, String category, List<Long> defaultValue, String ... comment) {
+		ConfigCategory cat = getCategroy(category);
+		HexListEntry entry = (HexListEntry)data.get(name);
+		if(entry ==  null) {
+			entry = new HexListEntry(name);
+			entry.setDefaultValue(defaultValue);
+			data.put(name, entry);
+			dirty = true;
+		}
+		entry.setDefault(defaultValue);
+		entry.setComment(comment);
+		cat.add(entry);
+		return entry.getValue();
+	}
+	
+	
+	public long[] getHexArray(String name, String category, long[] defaultValue, String ... comment) {
+		ConfigCategory cat = getCategroy(category);
+		HexListEntry entry = (HexListEntry)data.get(name);
+		if(entry ==  null) {
+			entry = new HexListEntry(name);
+			entry.setDefaultValue(defaultValue);
+			data.put(name, entry);
+			dirty = true;
+		}
+		entry.setDefault(defaultValue);
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.getAsArray();
@@ -678,6 +774,7 @@ public final class ComplexConfig {
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.setDefault(defaultValue);
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.getAsSet();
@@ -697,6 +794,7 @@ public final class ComplexConfig {
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.setDefault(defaultValue);
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.getValue();
@@ -712,6 +810,7 @@ public final class ComplexConfig {
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.setDefault(defaultValue);
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.getAsArray();
@@ -727,6 +826,7 @@ public final class ComplexConfig {
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.setDefault(defaultValue);
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.getAsSet();
@@ -746,6 +846,7 @@ public final class ComplexConfig {
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.setDefault(defaultValue);
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.getValue();
@@ -761,6 +862,7 @@ public final class ComplexConfig {
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.setDefault(defaultValue);
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.getAsArray();
@@ -776,6 +878,7 @@ public final class ComplexConfig {
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.setDefault(defaultValue);
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.getAsSet();
@@ -795,6 +898,7 @@ public final class ComplexConfig {
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.setDefault(defaultValue);
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.getValue();
@@ -810,6 +914,7 @@ public final class ComplexConfig {
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.setDefault(defaultValue);
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.getAsArray();
@@ -825,9 +930,42 @@ public final class ComplexConfig {
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.setDefault(defaultValue);
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.getAsSet();
+	}
+	
+	
+	public String getStringAsBlocktext(String name, String category, String[] defaultValue, String ... comment) {
+		ConfigCategory cat = getCategroy(category);
+		StringListEntry entry = (StringListEntry)data.get(name);
+		if(entry ==  null) {
+			entry = new StringListEntry(name);
+			entry.setDefaultValue(defaultValue);
+			data.put(name, entry);
+			dirty = true;
+		}
+		entry.setDefault(defaultValue);
+		entry.setComment(comment);
+		cat.add(entry);
+		return entry.getAsSingleBlock();
+	}
+	
+	
+	public String getStringListOnSingleLine(String name, String category, String[] defaultValue, String ... comment) {
+		ConfigCategory cat = getCategroy(category);
+		StringListEntry entry = (StringListEntry)data.get(name);
+		if(entry ==  null) {
+			entry = new StringListEntry(name);
+			entry.setDefaultValue(defaultValue);
+			data.put(name, entry);
+			dirty = true;
+		}
+		entry.setDefault(defaultValue);
+		entry.setComment(comment);
+		cat.add(entry);
+		return entry.getAsSingleLine();
 	}
 	
 	/*
@@ -844,6 +982,7 @@ public final class ComplexConfig {
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.setDefault(defaultValue);
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.getValue();
@@ -859,6 +998,7 @@ public final class ComplexConfig {
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.setDefault(defaultValue);
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.getAsArray();
@@ -874,6 +1014,7 @@ public final class ComplexConfig {
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.setDefault(defaultValue);
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.getAsSet();
@@ -889,6 +1030,7 @@ public final class ComplexConfig {
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.setDefault(defaultValue);
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.toBooleanArray(num);
@@ -904,6 +1046,7 @@ public final class ComplexConfig {
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.setDefault(entry.fromBooleanArray(defaultValue));
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.toBooleanArray(defaultValue.length);
@@ -919,6 +1062,7 @@ public final class ComplexConfig {
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.setDefault(entry.fromBooleanArray(defaultValue));
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.getValue().intValue();
@@ -934,6 +1078,7 @@ public final class ComplexConfig {
 			data.put(name, entry);
 			dirty = true;
 		}
+		entry.setDefault(entry.fromBooleanArray(defaultValue));
 		entry.setComment(comment);
 		cat.add(entry);
 		return entry.getValue().longValue();

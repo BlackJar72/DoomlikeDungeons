@@ -1,7 +1,5 @@
 package jaredbgreat.dldungeons.util.config;
 
-import jaredbgreat.dldungeons.util.debug.DebugOut;
-
 public final class IntEntry extends AbstractNumericEntry<Integer> {
 	static final String I = "I:";
 	
@@ -26,7 +24,8 @@ public final class IntEntry extends AbstractNumericEntry<Integer> {
 	
 	public void attachData(int base, int min, int max) {
 		super.attachData(base, min, max);
-		base  = Math.min(max, Math.max(min, base));
+		base   = Math.min(max, Math.max(min, base));
+		value  = Math.min(max, Math.max(min, value));
 	}
 			
 	
