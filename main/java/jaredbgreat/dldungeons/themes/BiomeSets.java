@@ -151,7 +151,7 @@ public class BiomeSets {
      */
     public static Theme getTheme(Biome biome, Random random, int dimID) {
     	ArrayList<Theme> use = themeMap.get(biome.getBiomeCategory());		
-    	if(use.isEmpty()) {
+    	if((use == null) || use.isEmpty()) {
     		return null;
     	} else {
     		return use.get((random.nextInt(use.size())));

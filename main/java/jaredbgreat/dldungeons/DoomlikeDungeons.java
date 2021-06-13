@@ -2,12 +2,14 @@ package jaredbgreat.dldungeons;
 
 import java.io.File;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import jaredbgreat.dldungeons.genhandler.GenerationHandler;
 import jaredbgreat.dldungeons.setup.Externalizer;
-import jaredbgreat.dldungeons.util.debug.DebugOut;
+import jaredbgreat.dldungeons.themes.ThemeReader;
+import jaredbgreat.dldungeons.themes.ThemeType;
+import jaredbgreat.dldungeons.util.debug.DoNothing;
+import jaredbgreat.dldungeons.util.debug.IProfiler;
+import jaredbgreat.dldungeons.util.debug.Logging;
+import jaredbgreat.dldungeons.util.debug.TaskProfiler;
 import net.minecraft.block.Block;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
@@ -24,10 +26,11 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 @Mod(Info.ID)
 public class DoomlikeDungeons {	
     public final GenerationHandler generation;
-    public final String configDir;
+	public String configDir;
+	public  static IProfiler profiler;
+    public static DoomlikeDungeons instance;
 
-    public DoomlikeDungeons() {
-    	
+    public DoomlikeDungeons() {    	
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         // Register the enqueueIMC method for modloading
@@ -39,7 +42,6 @@ public class DoomlikeDungeons {
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
         configDir = System.getProperty("user.dir") + File.separator + "config" + File.separator + "DLDungeons" + File.separator;
-        ConfigHandler.init(configDir);
         generation = GenerationHandler.getHandler();
         exportFiles();
     }
@@ -54,8 +56,15 @@ public class DoomlikeDungeons {
 
     
     private void setup(final FMLCommonSetupEvent event) {
-    	
-        // some preinit code
+    	Logging.logInfo(Info.NAME + " is in preInit, should now load config.");
+    	ConfigHandler.configDir = new File(configDir);
+        ConfigHandler.init(configDir);
+    	Logging.logInfo("Config should now be loaded.");  
+    	if(ConfigHandler.profile) profiler = new TaskProfiler();
+    	else profiler = new DoNothing();
+    	//ConfigHandler.generateLists();
+    	ThemeReader.readThemes(configDir); 
+    	ThemeType.SyncMobLists();
     }
 
     
@@ -81,7 +90,7 @@ public class DoomlikeDungeons {
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(FMLServerStartingEvent event) {
-        // do something when the server starts
+    	
     }
 
     

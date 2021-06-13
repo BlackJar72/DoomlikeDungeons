@@ -21,6 +21,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.ITag;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 
 
@@ -35,7 +36,7 @@ import net.minecraftforge.registries.IForgeRegistry;
  * 
  */
 public class LootItem {
-	private static IForgeRegistry<Item> ItemRegistry;
+	private static IForgeRegistry<Item> ItemRegistry = ForgeRegistries.ITEMS;
 	private static Map<ItemPrototype, Integer> prototypes;
 	
 	Item item;

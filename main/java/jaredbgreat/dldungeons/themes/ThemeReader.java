@@ -207,11 +207,12 @@ public class ThemeReader {
 	 * 
 	 * findFiles is called to get the list of files to read, while 
 	 * readTheme and openLoot are called to open the files.
+	 * @param configd 
 	 */
-	public static void readThemes() {
+	public static void readThemes(String configd) {
 		// Open loot first, so files are available
+		configDir = new File(configd);
 		TreasureChest.initSlots();
-		openNBTConfig();
 		openLoot("chests.cfg", true);
 		chestDir = new File(configDir.toString() + File.separator + CHESTS_DIR);
 		if(!chestDir.exists()) {
@@ -264,26 +265,6 @@ public class ThemeReader {
 				}				
 				RegisteredBlock.add(BlockFamily.makeBlockFamily(json.toString()));
 			}
-		}
-	}
-	
-	
-	/**
-	 * Attempts to open chest.cfg, and if successful will call readLoot 
-	 * to read it.
-	 */
-	public static void openNBTConfig() {
-		BufferedReader instream = null;
-		File nbtconfig = new File(configDir.toString() + File.separator + "nbt.cfg");
-		if(nbtconfig.exists()) try {
-			instream = new BufferedReader(new 
-					FileReader(nbtconfig.toString()));
-			readNBT(instream);
-			if(instream != null) instream.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} else {
-			Logging.logInfo("File nbt.cfg is missing; will fallabck on default loot");
 		}
 	}
 	

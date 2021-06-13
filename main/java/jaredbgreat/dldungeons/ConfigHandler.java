@@ -1,27 +1,18 @@
 package jaredbgreat.dldungeons;
 
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.Set;
 
-import jaredbgreat.dldungeons.genhandler.GenerationHandler;
+import jaredbgreat.dldungeons.genhandler.SectionFeature;
+import jaredbgreat.dldungeons.pieces.chests.BasicChest;
+import jaredbgreat.dldungeons.pieces.chests.TreasureChest;
+import jaredbgreat.dldungeons.rooms.Room;
 import jaredbgreat.dldungeons.setup.Externalizer;
+import jaredbgreat.dldungeons.themes.ThemeReader;
 import jaredbgreat.dldungeons.util.config.ComplexConfig;
-import jaredbgreat.dldungeons.util.debug.DebugOut;
 import jaredbgreat.dldungeons.util.debug.Logging;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.feature.structure.MineshaftPieces.Room;
 import net.minecraftforge.common.BiomeDictionary.Type;
-import net.minecraftforge.registries.ForgeRegistries;
 
 
 /**
@@ -38,10 +29,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 public final class ConfigHandler {
 	static ComplexConfig config;
 	
-	private static volatile File mainConfig;
-	private static volatile File themesDir;
-	private static volatile File listsDir;
-	private static volatile File configDir;
+	static volatile File mainConfig;
+	static volatile File themesDir;
+	static volatile File listsDir;
+	static volatile File configDir;
 	
 	private static final int DEFAULT_SCALE  = 8;
 	private static final int DEFAULT_MINXZ  = 16;
@@ -69,8 +60,6 @@ public final class ConfigHandler {
 	public static volatile boolean disableAPI = DISABLE_API;
 	public static volatile boolean noMobChanges = NO_MOB_CHANGES;
 	
-	private static final String[] NEVER_IN_BIOMES = new String[]{"END"};
-	private static volatile String[] neverInBiomes   = NEVER_IN_BIOMES;
 	public  static volatile HashSet<Type>  biomeExclusions = new HashSet<Type>();
 	
 	protected static boolean writeLists = DEFAULT_WRITE_LISTS;	
@@ -128,25 +117,24 @@ public final class ConfigHandler {
 				"This means that smaller numbers give more dungeons.  At 4 there should be a",
 				"dungeon every 128x128 block area, at 8 there should be one for every 512x512 blocks,",
 				"at 50 there should be about four dungeons per world.");
-		//GenerationHandler.setFrequency(freqScale); // TODO/FIXME
+		SectionFeature.setFrequency(freqScale); // TODO/FIXME
 		Logging.logInfo("Frequency Scaling Factor Set To: " + freqScale);
 		
 		int minXZ = config.getInt("MinChunkXY", "General", DEFAULT_MINXZ, 0, 1875000,  
-				"Spawn protection: this is the minimum number of chunks from spawn before dungeon generate");
-		
-		//GenerationHandler.setMinXZ(minXZ); // FIXME/TODO
+				"Spawn protection: this is the minimum number of chunks from spawn before dungeon generate");		
+		SectionFeature.setMinXZ(minXZ);
 		Logging.logInfo("Minimum X Factor Set To: " + minXZ);
 		
 		int diff = config.getInt("Difficulty", "General", DEFAULT_DIF, 0, 5,
 				"How hard: 0 = empty, 1 = baby, 2 = easy, 3 = normal, 4= hard, 5 = nightmare");
 		if((diff < 0) || (diff > 5)) diff = DEFAULT_DIF;
-		//parseDiff(diff); // TODO/FIXME
-		//Logging.logInfo("Difficulty set to: " + difficulty.label);
+		parseDiff(diff);
+		Logging.logInfo("Difficulty set to: " + difficulty.label);
 		
 		int[] dims = config.getIntArray("Dimensions", "General", DEFAULT_DIMS, 
 				"These dimensions either lack dungeons or only they have them "
 				+ "(see OnlySpawnInListedDimensions)");
-		//GenerationHandler.setDimensions(dims); // TODO/FIXME
+		SectionFeature.setDimensions(dims);
 		
 		System.out.print("Dimensions listed in config file: ");
 		for(int i = 0; i < dims.length; i++) System.out.print(dims[i] + ", ");
@@ -208,9 +196,6 @@ public final class ConfigHandler {
 				"If true smaller dungeons will have some of there spawners removed to ",
 				"make them more like larger dungeons.");
 		
-		neverInBiomes = config.getStringArray("NeverInBiomeTypes", "General", NEVER_IN_BIOMES, 
-				"Dungeons will not generate in these biome types (uses Forge biome dictionary");
-		//processBiomeExclusions(neverInBiomes); // TODO/FIXME
 		
 		
 		// API Stuff
@@ -261,7 +246,7 @@ public final class ConfigHandler {
 				"Part of the loot quantity numbers for basic chests; " 
 						+ System.lineSeparator() 
 						+ " random.nextInt(A1 + (RoomDifficulty / B1)) + C1");
-		//BasicChest.setBasicLootNumbers(a, b, c); //TODO/FIXME
+		BasicChest.setBasicLootNumbers(a, b, c); 
 		a = config.getInt("A2", "Loot", 2, 0, 9, 
 				"Part of the loot quantity numbers for treasure chests; " 
 				+ System.lineSeparator() 
@@ -280,10 +265,10 @@ public final class ConfigHandler {
 					+ "(anything less than a full boss); enable if want to have truly epic items " 
 							+ System.lineSeparator()
 					+ "like indestructable god picks) but don't want too many of them around.");
-		//TreasureChest.setBasicLootNumbers(a, b, c, nerf); // TODO/FIXME
-		/*Room.setLootBonus(config.getInt("Loot Bonus", "Loot", 1, -9, 9,  // TODO/FIXME
+		TreasureChest.setBasicLootNumbers(a, b, c, nerf);
+		Room.setLootBonus(config.getInt("Loot Bonus", "Loot", 1, -9, 9,
 				"This modifies the value of the loot, in case you think default is "
-					+ System.lineSeparator() + "too generous or too stingy."));*/
+					+ System.lineSeparator() + "too generous or too stingy."));
 		
 		// Saving it all
 		//openThemesDir(); //TODO/FIXME
@@ -300,4 +285,69 @@ public final class ConfigHandler {
 	public static String getConfigDir() {
 		return configDir + File.separator;
 	}
+	
+	
+	/**
+	 * This convert difficulty setting from an integer to a 
+	 * Difficulty enum constant. 
+	 * 
+	 * @param diff
+	 */
+	protected static void parseDiff(int diff) {
+		switch(diff) {
+			case 0:
+				difficulty = Difficulty.NONE;
+				break;
+			case 1:
+				difficulty = Difficulty.BABY;
+				break;
+			case 2:
+				difficulty = Difficulty.NOOB;
+				break;
+			case 4:
+				difficulty = Difficulty.HARD;
+				break;
+			case 5:
+				difficulty = Difficulty.NUTS;
+				break;
+			case 3:
+			default:
+				difficulty = Difficulty.NORM;
+				
+				break;
+		}
+	}
+	
+	
+	/**
+	 * This will open the theme's directory for some general housekeeping 
+	 * purposes.  I does not read the theme files, as this called by init 
+	 * during pre-init phase of mod loading, while themes are loaded 
+	 * post-init to allow other mods a chance to load and register their 
+	 * content.
+	 */
+	private static void openThemesDir() {
+		Externalizer exporter;
+		String themesDirName = configDir.toString() + File.separator 
+				+ "themes" + File.separator;
+		Logging.logInfo("themesdir will be set to " + themesDirName);
+		themesDir = new File(themesDirName);
+		Logging.logInfo("themesdir File is be set to " + themesDir);
+		if(!themesDir.exists()) {
+			themesDir.mkdir();
+		} 		
+		if(!themesDir.exists()) {
+			Logging.logInfo("Warning: Could not create " + themesDirName + ".");
+		} else if (!themesDir.isDirectory()) {
+			Logging.logInfo("Warning: " + themesDirName 
+					+ " is not a directory (folder); no themes loaded.");
+		} else ThemeReader.setThemesDir(themesDir);
+		File chestDir = new File(configDir.toString() + File.separator + ThemeReader.CHESTS_DIR);
+		if(!chestDir.exists()) {
+			chestDir.mkdir();
+		}
+		exporter = new Externalizer(configDir.toString() + File.separator);
+		exporter.makeChestCfg();
+	}
+	
 }

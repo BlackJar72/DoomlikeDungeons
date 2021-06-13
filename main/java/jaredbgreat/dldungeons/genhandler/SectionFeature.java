@@ -1,11 +1,14 @@
 package jaredbgreat.dldungeons.genhandler;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
 
 import com.mojang.serialization.Codec;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import jaredbgreat.dldungeons.builder.Builder;
+import jaredbgreat.dldungeons.themes.Sizes;
+import jaredbgreat.dldungeons.util.cache.Coords;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
@@ -13,24 +16,120 @@ import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 
 public class SectionFeature  extends Feature<NoFeatureConfig> {
+	private volatile static int factor = 6;
+	private volatile static Random mrand;
+	private static HashSet<Integer> dimensions;
 
 	public SectionFeature(Codec<NoFeatureConfig> codec) {
 		super(codec);
 	}
 
+	
 	@Override
 	public boolean place(ISeedReader sreader, ChunkGenerator chunkgen, Random random, BlockPos pos,
 			NoFeatureConfig noconfig) {
-		int cx = pos.getX() / 16, cz = pos.getZ() / 16;
-		int x = (cx * 16), x2 = x + 16, z = (cz * 16), z2 = z + 16;
-		BlockState bs = Blocks.QUARTZ_BLOCK.defaultBlockState(); 
-		for(int i = x; i < x2; i++)
-			for(int j = 16; j < 32; j++) 
-				for(int k = z; k < z2; k++){
-					BlockPos buildPos = new BlockPos(i, j ,k);
-					sreader.setBlock(buildPos, bs, 3);
-		}
+		int cx = pos.getX() / 16, cz = pos.getZ() / 16;		
+		mrand = new Random(sreader.getSeed() 
+				+ (2027 * (long)(cx / factor)) 
+				+ (1987 * (long)(cz / factor)));		
+		findDungeonsToBuild(sreader, cx, cz);
 		return true;
+	}
+	
+	
+	private void findDungeonsToBuild(final ISeedReader world, final int chunkX, final int chunkZ) {
+		long seed = world.getSeed();
+		ArrayList<Coords> dungeonLocs = new ArrayList<>();
+		int sx = chunkX - Sizes.HUGE.chunkRadius, ex = chunkX + Sizes.HUGE.chunkRadius;
+		int sz = chunkZ - Sizes.HUGE.chunkRadius, ez = chunkZ + Sizes.HUGE.chunkRadius;
+		for(int i = sx; i <= ex; i++) 
+			for(int j = sz; j <= ez; j++) {
+				if(isDungeonCenter(seed, i, j, 0)) {
+					dungeonLocs.add(new Coords(i, j, 0));
+				}
+			}
+		dungeonLocs.sort(Coords.HashCompare.C);
+		try {
+			Builder.buildDungeonsChunk(chunkX, chunkZ, dungeonLocs, world);
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+	}
+
+	
+	
+	private boolean isDungeonCenter(long seed, int chunkX, int chunkZ, int dim) {		
+		mrand = new Random(seed + dim
+				+ (2027 * (long)(chunkX / factor)) 
+				+ (1987 * (long)(chunkZ / factor)));
+		int xrand = mrand.nextInt();
+		int zrand = mrand.nextInt();
+		int xuse = ((chunkX + xrand) % factor);
+		int zuse = ((chunkZ + zrand) % factor);
+		return (xuse == 0) && (zuse == 0);
+	}
+	
+	
+	
+	
+
+	
+	
+	
+	/**
+	 * Sets the frequency scale and converts into the 
+	 * width (and height) of the areas for which dungeons
+	 * are generated.
+	 * 
+	 * @param freqScale
+	 */
+	public static void setFrequency(int freqScale) {
+		if((freqScale % 2) == 0) factor = 2;
+		else factor = 3;
+		factor = (factor << (freqScale / 2));
+	}
+	
+	
+	/**
+	 * Sets the minimum number of chunks from spawn a dungeon center must be.
+	 * 
+	 * @param value
+	 */
+	public static void setMinXZ(int value) {}
+	
+	
+	/**
+	 * Sets list of dimension id's to check for dungeons being allowed.
+	 * 
+	 * @param value
+	 */
+	public static void setDimensions(int[] value) {
+		dimensions = new HashSet<Integer>();
+		for(int i = 0; i < value.length; i++) {
+			dimensions.add(Integer.valueOf(value[i]));
+		}
+	}
+	
+	
+	/**
+	 * Add a dimension id to the list of dimension to consider when 
+	 * check if a dungeon is allowed.  (What this means can vary.)
+	 * 
+	 * @param value
+	 */
+	public static void addDimension(int value) {
+		dimensions.add(Integer.valueOf(value));
+	}
+	
+	
+	/**
+	 * Remove a dimension id from the list of those to consider when potentially 
+	 * placing a dungeons.  (What this means can vary.)
+	 * 
+	 * @param value
+	 */
+	public static void subDimension(int value) {
+		dimensions.remove(Integer.valueOf(value));
 	}
 
 }
