@@ -10,7 +10,7 @@ import jaredbgreat.dldungeons.util.parser.Tokenizer;
 abstract class AbstractListEntry<T> extends AbstractConfigEntry<List<T>>{
 	static final String DELIM1 = ",\n\r";
 	static final String DELIM2 = ", ";
-	static final int WIDTH = 45;
+	static final int WIDTH = 80;
 	
 
 	public AbstractListEntry(String key) {

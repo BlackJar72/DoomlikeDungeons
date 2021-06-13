@@ -13,6 +13,7 @@ import java.util.Set;
 import jaredbgreat.dldungeons.genhandler.GenerationHandler;
 import jaredbgreat.dldungeons.setup.Externalizer;
 import jaredbgreat.dldungeons.util.config.ComplexConfig;
+import jaredbgreat.dldungeons.util.debug.DebugOut;
 import jaredbgreat.dldungeons.util.debug.Logging;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -127,7 +128,6 @@ public final class ConfigHandler {
 				"This means that smaller numbers give more dungeons.  At 4 there should be a",
 				"dungeon every 128x128 block area, at 8 there should be one for every 512x512 blocks,",
 				"at 50 there should be about four dungeons per world.");
-		if((freqScale > 30) || (freqScale < 6)) freqScale = DEFAULT_SCALE;
 		//GenerationHandler.setFrequency(freqScale); // TODO/FIXME
 		Logging.logInfo("Frequency Scaling Factor Set To: " + freqScale);
 		

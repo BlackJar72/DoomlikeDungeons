@@ -22,7 +22,7 @@ import jaredbgreat.dldungeons.util.parser.Tokenizer;
  * @author Jared Blackburn
  *
  */
-class SimpleReader {
+public class SimpleReader {
 	private static final String DELIM   = "=";
 	private static final String COMMENT = "#";
 	private static final String EMPTY   = "";
