@@ -327,7 +327,7 @@ private RegisteredBlock(BlockFamily family) throws NoSuchElementException {
 	 * @param z
 	 * @return
 	 */
-	public static boolean isGroundBlock(World world, int x, int y, int z) {
+	public static boolean isGroundBlock(ISeedReader world, int x, int y, int z) {
 		BlockState bs = world.getBlockState(new BlockPos(x, y, z));
 		Material mat = bs.getMaterial();
 		return 	   (mat == Material.GRASS) 
