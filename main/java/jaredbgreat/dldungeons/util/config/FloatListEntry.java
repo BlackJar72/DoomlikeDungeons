@@ -2,7 +2,7 @@ package jaredbgreat.dldungeons.util.config;
 
 import java.util.ArrayList;
 
-public final class FloatListEntry extends AbstractListEntry<Float> {
+final class FloatListEntry extends AbstractListEntry<Float> {
 
 	public FloatListEntry(String key) {
 		super(key);

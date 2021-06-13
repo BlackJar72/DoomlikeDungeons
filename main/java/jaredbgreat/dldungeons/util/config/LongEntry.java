@@ -1,6 +1,6 @@
 package jaredbgreat.dldungeons.util.config;
 
-public final class LongEntry extends AbstractNumericEntry<Long> {
+final class LongEntry extends AbstractNumericEntry<Long> {
 	static final String L = "L:";
 	
 	

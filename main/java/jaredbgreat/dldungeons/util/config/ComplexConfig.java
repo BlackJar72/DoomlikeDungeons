@@ -371,9 +371,6 @@ public final class ComplexConfig {
 		ConfigCategory cat = getCategroy(category);
 		IntEntry entry;
 		AbstractConfigEntry attempt = data.get(name);
-		// This should catch changes in type / incorrect types in the file but
-		// for some reason is does not, so I'm not bothering to add it to other 
-		// methods.
 		if((attempt != null) && (attempt instanceof IntEntry)) {
 			entry = (IntEntry)attempt;
 		} else {
@@ -412,8 +409,11 @@ public final class ComplexConfig {
 	
 	public long getLong(String name, String category, long defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		LongEntry entry = (LongEntry)data.get(name);
-		if(entry ==  null) {
+		LongEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof LongEntry)) {
+			entry = (LongEntry)attempt;
+		} else {
 			entry = new LongEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
@@ -428,8 +428,11 @@ public final class ComplexConfig {
 	
 	public long getLong(String name, String category, long defaultValue, long min, long max, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		LongEntry entry = (LongEntry)data.get(name);
-		if(entry ==  null) {
+		LongEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof LongEntry)) {
+			entry = (LongEntry)attempt;
+		} else {
 			entry = new LongEntry(name);
 			entry.setValue(defaultValue);
 			entry.attachData(defaultValue, min, max);
@@ -445,8 +448,11 @@ public final class ComplexConfig {
 	
 	public float getFloat(String name, String category, float defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		FloatEntry entry = (FloatEntry)data.get(name);
-		if(entry ==  null) {
+		FloatEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof FloatEntry)) {
+			entry = (FloatEntry)attempt;
+		} else {
 			entry = new FloatEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
@@ -461,8 +467,11 @@ public final class ComplexConfig {
 	
 	public float getFloat(String name, String category, float defaultValue, float min, float max, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		FloatEntry entry = (FloatEntry)data.get(name);
-		if(entry ==  null) {
+		FloatEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof FloatEntry)) {
+			entry = (FloatEntry)attempt;
+		} else {
 			entry = new FloatEntry(name);
 			entry.setValue(defaultValue);
 			entry.attachData(defaultValue, min, max);
@@ -478,8 +487,11 @@ public final class ComplexConfig {
 	
 	public double getDouble(String name, String category, double defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		DoubleEntry entry = (DoubleEntry)data.get(name);
-		if(entry ==  null) {
+		DoubleEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof DoubleEntry)) {
+			entry = (DoubleEntry)attempt;
+		} else {
 			entry = new DoubleEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
@@ -494,8 +506,11 @@ public final class ComplexConfig {
 	
 	public double getDouble(String name, String category, double defaultValue, double min, double max, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		DoubleEntry entry = (DoubleEntry)data.get(name);
-		if(entry ==  null) {
+		DoubleEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof DoubleEntry)) {
+			entry = (DoubleEntry)attempt;
+		} else {
 			entry = new DoubleEntry(name);
 			entry.setValue(defaultValue);
 			entry.attachData(defaultValue, min, max);
@@ -549,8 +564,11 @@ public final class ComplexConfig {
 	
 	public String getString(String name, String category, String defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		StringEntry entry = (StringEntry)data.get(name);
-		if(entry ==  null) {
+		StringEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof StringEntry)) {
+			entry = (StringEntry)attempt;
+		} else {
 			entry = new StringEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
@@ -565,8 +583,11 @@ public final class ComplexConfig {
 	
 	public int getHexInt(String name, String category, int defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		HexEntry entry = (HexEntry)data.get(name);
-		if(entry ==  null) {
+		HexEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof HexEntry)) {
+			entry = (HexEntry)attempt;
+		} else {
 			entry = new HexEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
@@ -580,8 +601,11 @@ public final class ComplexConfig {
 	
 	public int getHexInt(String name, String category, int defaultValue, int min, int max, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		HexEntry entry = (HexEntry)data.get(name);
-		if(entry ==  null) {
+		HexEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof HexEntry)) {
+			entry = (HexEntry)attempt;
+		} else {
 			entry = new HexEntry(name);
 			entry.attachData(defaultValue, min, max);
 			entry.makeDefault();
@@ -596,8 +620,11 @@ public final class ComplexConfig {
 	
 	public long getHexLong(String name, String category, long defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		HexEntry entry = (HexEntry)data.get(name);
-		if(entry ==  null) {
+		HexEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof HexEntry)) {
+			entry = (HexEntry)attempt;
+		} else {
 			entry = new HexEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
@@ -611,8 +638,11 @@ public final class ComplexConfig {
 	
 	public long getHexLong(String name, String category, long defaultValue, long min, long max, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		HexEntry entry = (HexEntry)data.get(name);
-		if(entry ==  null) {
+		HexEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof HexEntry)) {
+			entry = (HexEntry)attempt;
+		} else {
 			entry = new HexEntry(name);
 			entry.attachData(defaultValue, min, max);
 			entry.makeDefault();
@@ -631,8 +661,11 @@ public final class ComplexConfig {
 	
 	public List<Integer> getIntList(String name, String category, List<Integer> defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		IntListEntry entry = (IntListEntry)data.get(name);
-		if(entry ==  null) {
+		IntListEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof IntListEntry)) {
+			entry = (IntListEntry)attempt;
+		} else {
 			entry = new IntListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
@@ -647,8 +680,11 @@ public final class ComplexConfig {
 	
 	public int[] getIntArray(String name, String category, int[] defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		IntListEntry entry = (IntListEntry)data.get(name);
-		if(entry ==  null) {
+		IntListEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof IntListEntry)) {
+			entry = (IntListEntry)attempt;
+		} else {
 			entry = new IntListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
@@ -663,8 +699,11 @@ public final class ComplexConfig {
 	
 	public Set<Integer> getIntSet(String name, String category, Set<Integer> defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		IntListEntry entry = (IntListEntry)data.get(name);
-		if(entry ==  null) {
+		IntListEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof IntListEntry)) {
+			entry = (IntListEntry)attempt;
+		} else {
 			entry = new IntListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
@@ -683,8 +722,11 @@ public final class ComplexConfig {
 	
 	public List<Long> getLongList(String name, String category, List<Long> defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		LongListEntry entry = (LongListEntry)data.get(name);
-		if(entry ==  null) {
+		LongListEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof LongListEntry)) {
+			entry = (LongListEntry)attempt;
+		} else {
 			entry = new LongListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
@@ -699,8 +741,11 @@ public final class ComplexConfig {
 	
 	public long[] getLongArray(String name, String category, long[] defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		LongListEntry entry = (LongListEntry)data.get(name);
-		if(entry ==  null) {
+		LongListEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof LongListEntry)) {
+			entry = (LongListEntry)attempt;
+		} else {
 			entry = new LongListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
@@ -715,8 +760,11 @@ public final class ComplexConfig {
 	
 	public Set<Long> getLongSet(String name, String category, Set<Long> defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		LongListEntry entry = (LongListEntry)data.get(name);
-		if(entry ==  null) {
+		LongListEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof LongListEntry)) {
+			entry = (LongListEntry)attempt;
+		} else {
 			entry = new LongListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
@@ -735,8 +783,11 @@ public final class ComplexConfig {
 	
 	public List<Long> getHexList(String name, String category, List<Long> defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		HexListEntry entry = (HexListEntry)data.get(name);
-		if(entry ==  null) {
+		HexListEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof HexListEntry)) {
+			entry = (HexListEntry)attempt;
+		} else {
 			entry = new HexListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
@@ -751,8 +802,11 @@ public final class ComplexConfig {
 	
 	public long[] getHexArray(String name, String category, long[] defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		HexListEntry entry = (HexListEntry)data.get(name);
-		if(entry ==  null) {
+		HexListEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof HexListEntry)) {
+			entry = (HexListEntry)attempt;
+		} else {
 			entry = new HexListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
@@ -765,11 +819,14 @@ public final class ComplexConfig {
 	}
 	
 	
-	public Set<Long> getlongSet(String name, String category, Set<Long> defaultValue, String ... comment) {
+	public Set<Long> getHexSet(String name, String category, Set<Long> defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		LongListEntry entry = (LongListEntry)data.get(name);
-		if(entry ==  null) {
-			entry = new LongListEntry(name);
+		HexListEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof HexListEntry)) {
+			entry = (HexListEntry)attempt;
+		} else {
+			entry = new HexListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
 			dirty = true;
@@ -787,8 +844,11 @@ public final class ComplexConfig {
 	
 	public List<Float> getFloatList(String name, String category, List<Float> defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		FloatListEntry entry = (FloatListEntry)data.get(name);
-		if(entry ==  null) {
+		FloatListEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof FloatListEntry)) {
+			entry = (FloatListEntry)attempt;
+		} else {
 			entry = new FloatListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
@@ -803,8 +863,11 @@ public final class ComplexConfig {
 	
 	public float[] getFloatArray(String name, String category, float[] defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		FloatListEntry entry = (FloatListEntry)data.get(name);
-		if(entry ==  null) {
+		FloatListEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof FloatListEntry)) {
+			entry = (FloatListEntry)attempt;
+		} else {
 			entry = new FloatListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
@@ -817,10 +880,13 @@ public final class ComplexConfig {
 	}
 	
 	
-	public Set<Float> getFSet(String name, String category, Set<Float> defaultValue, String ... comment) {
+	public Set<Float> getFloatSet(String name, String category, Set<Float> defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		FloatListEntry entry = (FloatListEntry)data.get(name);
-		if(entry ==  null) {
+		FloatListEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof FloatListEntry)) {
+			entry = (FloatListEntry)attempt;
+		} else {
 			entry = new FloatListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
@@ -839,8 +905,11 @@ public final class ComplexConfig {
 	
 	public List<Double> getDoubleList(String name, String category, List<Double> defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		DoubleListEntry entry = (DoubleListEntry)data.get(name);
-		if(entry ==  null) {
+		DoubleListEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof DoubleListEntry)) {
+			entry = (DoubleListEntry)attempt;
+		} else {
 			entry = new DoubleListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
@@ -855,8 +924,11 @@ public final class ComplexConfig {
 	
 	public double[] getDoubleArray(String name, String category, double[] defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		DoubleListEntry entry = (DoubleListEntry)data.get(name);
-		if(entry ==  null) {
+		DoubleListEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof DoubleListEntry)) {
+			entry = (DoubleListEntry)attempt;
+		} else {
 			entry = new DoubleListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
@@ -871,8 +943,11 @@ public final class ComplexConfig {
 	
 	public Set<Double> getDoubleSet(String name, String category, Set<Double> defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		DoubleListEntry entry = (DoubleListEntry)data.get(name);
-		if(entry ==  null) {
+		DoubleListEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof DoubleListEntry)) {
+			entry = (DoubleListEntry)attempt;
+		} else {
 			entry = new DoubleListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
@@ -891,8 +966,11 @@ public final class ComplexConfig {
 	
 	public List<String> getStringList(String name, String category, List<String> defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		StringListEntry entry = (StringListEntry)data.get(name);
-		if(entry ==  null) {
+		StringListEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof StringListEntry)) {
+			entry = (StringListEntry)attempt;
+		} else {
 			entry = new StringListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
@@ -907,8 +985,11 @@ public final class ComplexConfig {
 	
 	public String[] getStringArray(String name, String category, String[] defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		StringListEntry entry = (StringListEntry)data.get(name);
-		if(entry ==  null) {
+		StringListEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof StringListEntry)) {
+			entry = (StringListEntry)attempt;
+		} else {
 			entry = new StringListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
@@ -923,8 +1004,11 @@ public final class ComplexConfig {
 	
 	public Set<String> getStringSet(String name, String category, Set<String> defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		StringListEntry entry = (StringListEntry)data.get(name);
-		if(entry ==  null) {
+		StringListEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof StringListEntry)) {
+			entry = (StringListEntry)attempt;
+		} else {
 			entry = new StringListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
@@ -939,8 +1023,11 @@ public final class ComplexConfig {
 	
 	public String getStringAsBlocktext(String name, String category, String[] defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		StringListEntry entry = (StringListEntry)data.get(name);
-		if(entry ==  null) {
+		StringListEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof StringListEntry)) {
+			entry = (StringListEntry)attempt;
+		} else {
 			entry = new StringListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
@@ -955,8 +1042,11 @@ public final class ComplexConfig {
 	
 	public String getStringListOnSingleLine(String name, String category, String[] defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		StringListEntry entry = (StringListEntry)data.get(name);
-		if(entry ==  null) {
+		StringListEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof StringListEntry)) {
+			entry = (StringListEntry)attempt;
+		} else {
 			entry = new StringListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
@@ -975,8 +1065,11 @@ public final class ComplexConfig {
 	
 	public List<Boolean> getBooleanList(String name, String category, List<Boolean> defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		BooleanListEntry entry = (BooleanListEntry)data.get(name);
-		if(entry ==  null) {
+		BooleanListEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof BooleanListEntry)) {
+			entry = (BooleanListEntry)attempt;
+		} else {
 			entry = new BooleanListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
@@ -991,8 +1084,11 @@ public final class ComplexConfig {
 	
 	public boolean[] getBooleanArray(String name, String category, boolean[] defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		BooleanListEntry entry = (BooleanListEntry)data.get(name);
-		if(entry ==  null) {
+		BooleanListEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof BooleanListEntry)) {
+			entry = (BooleanListEntry)attempt;
+		} else {
 			entry = new BooleanListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
@@ -1007,8 +1103,11 @@ public final class ComplexConfig {
 	
 	public Set<Boolean> getBooleanSet(String name, String category, Set<Boolean> defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		BooleanListEntry entry = (BooleanListEntry)data.get(name);
-		if(entry ==  null) {
+		BooleanListEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof BooleanListEntry)) {
+			entry = (BooleanListEntry)attempt;
+		} else {
 			entry = new BooleanListEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
@@ -1023,8 +1122,11 @@ public final class ComplexConfig {
 	
 	public boolean[] getBooleanArrayFromBits(String name, String category, long defaultValue, int num, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		HexEntry entry = (HexEntry)data.get(name);
-		if(entry ==  null) {
+		HexEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof HexEntry)) {
+			entry = (HexEntry)attempt;
+		} else {
 			entry = new HexEntry(name);
 			entry.setDefaultValue(defaultValue);
 			data.put(name, entry);
@@ -1039,8 +1141,11 @@ public final class ComplexConfig {
 	
 	public boolean[] getBooleanArrayFromBits(String name, String category, boolean[] defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		HexEntry entry = (HexEntry)data.get(name);
-		if(entry ==  null) {
+		HexEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof HexEntry)) {
+			entry = (HexEntry)attempt;
+		} else {
 			entry = new HexEntry(name);
 			entry.setDefaultValue(entry.fromBooleanArray(defaultValue));
 			data.put(name, entry);
@@ -1055,8 +1160,11 @@ public final class ComplexConfig {
 	
 	public int getIntFromBooleanArray(String name, String category, boolean[] defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		HexEntry entry = (HexEntry)data.get(name);
-		if(entry ==  null) {
+		HexEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof HexEntry)) {
+			entry = (HexEntry)attempt;
+		} else {
 			entry = new HexEntry(name);
 			entry.setDefaultValue(entry.fromBooleanArray(defaultValue));
 			data.put(name, entry);
@@ -1071,8 +1179,11 @@ public final class ComplexConfig {
 	
 	public Long getLongFromBooleanArray(String name, String category, boolean[] defaultValue, String ... comment) {
 		ConfigCategory cat = getCategroy(category);
-		HexEntry entry = (HexEntry)data.get(name);
-		if(entry ==  null) {
+		HexEntry entry;
+		AbstractConfigEntry attempt = data.get(name);
+		if((attempt != null) && (attempt instanceof HexEntry)) {
+			entry = (HexEntry)attempt;
+		} else {
 			entry = new HexEntry(name);
 			entry.setDefaultValue(entry.fromBooleanArray(defaultValue));
 			data.put(name, entry);
@@ -1083,8 +1194,4 @@ public final class ComplexConfig {
 		cat.add(entry);
 		return entry.getValue().longValue();
 	}
-	
-	
-	
-
 }

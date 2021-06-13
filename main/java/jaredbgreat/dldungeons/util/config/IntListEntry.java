@@ -2,7 +2,7 @@ package jaredbgreat.dldungeons.util.config;
 
 import java.util.ArrayList;
 
-public final class IntListEntry extends AbstractListEntry<Integer> {
+final class IntListEntry extends AbstractListEntry<Integer> {
 
 	public IntListEntry(String key) {
 		super(key);

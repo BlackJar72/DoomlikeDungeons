@@ -7,7 +7,7 @@ import java.util.Set;
 
 import jaredbgreat.dldungeons.util.parser.Tokenizer;
 
-public abstract class AbstractListEntry<T> extends AbstractConfigEntry<List<T>>{
+abstract class AbstractListEntry<T> extends AbstractConfigEntry<List<T>>{
 	static final String DELIM1 = ",\n\r";
 	static final String DELIM2 = ", ";
 	static final int WIDTH = 45;

@@ -1,6 +1,6 @@
 package jaredbgreat.dldungeons.util.config;
 
-public final class StringListEntry extends AbstractListEntry<String> {
+final class StringListEntry extends AbstractListEntry<String> {
 
 	public StringListEntry(String key) {
 		super(key);

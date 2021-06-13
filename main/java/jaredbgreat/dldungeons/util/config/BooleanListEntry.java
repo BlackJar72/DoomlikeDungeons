@@ -2,7 +2,7 @@ package jaredbgreat.dldungeons.util.config;
 
 import java.util.ArrayList;
 
-public final class BooleanListEntry extends AbstractListEntry<Boolean> {
+final class BooleanListEntry extends AbstractListEntry<Boolean> {
 	
 
 	public BooleanListEntry(String key) {

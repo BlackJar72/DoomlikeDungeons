@@ -3,7 +3,7 @@ package jaredbgreat.dldungeons.util.config;
 import java.util.StringTokenizer;
 
 @SuppressWarnings("rawtypes")
-public abstract class AbstractConfigEntry<T> implements IConfigEntry<T>, Comparable<AbstractConfigEntry> {
+abstract class AbstractConfigEntry<T> implements IConfigEntry<T>, Comparable<AbstractConfigEntry> {
 	public static final String EMPTY   = "";
 	public static final String COMMENT = "# ";
 	public static final String DEFAULT = "# [Default: ";

@@ -1,6 +1,6 @@
 package jaredbgreat.dldungeons.util.config;
 
-public final class HexEntry extends AbstractNumericEntry<Long> {
+final class HexEntry extends AbstractNumericEntry<Long> {
 	static final String H = "H:";
 	
 	

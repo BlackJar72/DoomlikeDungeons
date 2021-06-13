@@ -1,6 +1,6 @@
 package jaredbgreat.dldungeons.util.config;
 
-public final class StringEntry extends AbstractConfigEntry<String> {
+final class StringEntry extends AbstractConfigEntry<String> {
 	static final String S = "S:";
 	
 	

@@ -1,6 +1,6 @@
 package jaredbgreat.dldungeons.util.config;
 
-public final class DoubleEntry extends AbstractNumericEntry<Double> {
+final class DoubleEntry extends AbstractNumericEntry<Double> {
 	static final String D = "D:";
 	
 	

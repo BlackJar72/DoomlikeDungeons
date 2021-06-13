@@ -49,9 +49,7 @@ class ConfigCategory implements Comparable<ConfigCategory> {
 	
 	@SuppressWarnings("rawtypes")
 	public void add(AbstractConfigEntry entry) {
-		if(!data.containsKey(entry.getKey())) {
-			data.put(entry.getKey(), entry);
-		}
+		data.put(entry.getKey(), entry);
 		if(!entry.sameCategory(this)) {
 			ConfigCategory other = entry.getCategory();
 			entry.setCategory(this);

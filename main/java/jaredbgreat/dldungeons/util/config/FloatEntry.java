@@ -1,6 +1,6 @@
 package jaredbgreat.dldungeons.util.config;
 
-public class FloatEntry extends AbstractNumericEntry<Float> {
+class FloatEntry extends AbstractNumericEntry<Float> {
 	static final String F = "F:";
 	
 	

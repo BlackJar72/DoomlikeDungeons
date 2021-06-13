@@ -2,7 +2,7 @@ package jaredbgreat.dldungeons.util.config;
 
 import java.util.ArrayList;
 
-public final class HexListEntry extends AbstractListEntry<Long> {
+final class HexListEntry extends AbstractListEntry<Long> {
 
 	public HexListEntry(String key) {
 		super(key);
