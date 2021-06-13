@@ -21,9 +21,10 @@ import jaredbgreat.dldungeons.themes.Sizes;
 import jaredbgreat.dldungeons.themes.ThemeFlags;
 import jaredbgreat.dldungeons.util.cache.Coords;
 import jaredbgreat.dldungeons.util.cache.IHaveCoords;
-import jaredbgreat.dldungeons.util.debug.DebugOut;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -38,14 +39,14 @@ import net.minecraftforge.common.MinecraftForge;
  *
  */
 public class MapMatrix implements IHaveCoords {
-	private static final Block lapis = Block.getBlockFromName("lapis_block");
-	private static final Block slab  = Block.getBlockFromName("double_stone_slab");
-	private static final Block gold  = Block.getBlockFromName("gold_block");
-	private static final Block glass = Block.getBlockFromName("glass");
+	private static final Block lapis = Blocks.LAPIS_BLOCK;
+	private static final Block slab  = Blocks.SMOOTH_STONE;
+	private static final Block gold  = Blocks.GOLD_BLOCK;
+	private static final Block glass = Blocks.GLASS;
 	
 	private static boolean drawFlyingMap = false;
 	
-	public final World world;
+	public final ISeedReader world;
 	public final Coords coords;
 	public final int   chunkX, chunkZ, origenX, origenZ, lowCX, lowCZ, shiftX, shiftZ;
 	
@@ -76,7 +77,7 @@ public class MapMatrix implements IHaveCoords {
 	public final ChunkFeatures[][] features;
 	
 	
-	public MapMatrix(Sizes size, World world, Coords coords) {
+	public MapMatrix(Sizes size, ISeedReader world, Coords coords) {
 		this.world = world;
 		this.coords = coords;
 		chunkX = coords.getX();
@@ -132,12 +133,12 @@ public class MapMatrix implements IHaveCoords {
 	 * @param dungeon
 	 */
 	public void build(Dungeon dungeon) {		
-		DoomlikeDungeons.profiler.startTask("Building Dungeon in World");	
-		DoomlikeDungeons.profiler.startTask("Building Dungeon architecture");
+		//DoomlikeDungeons.profiler.startTask("Building Dungeon in World");	
+		//DoomlikeDungeons.profiler.startTask("Building Dungeon architecture");
 		BlockFamily.setRadnom(dungeon.random);
 		int below;
 		boolean flooded = dungeon.theme.flags.contains(ThemeFlags.WATER);
-		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.BeforeBuild(this, shiftX, shiftZ, flooded));
+		MinecraftForge.EVENT_BUS.post(new DLDEvent.BeforeBuild(this, shiftX, shiftZ, flooded));
 		
 		for(int i = 0; i < room.length; i++)
 			for(int j = 0; j < room.length; j++) {
@@ -213,16 +214,17 @@ public class MapMatrix implements IHaveCoords {
 					 
 					 // Liquids
 					 if(hasLiquid[i][j] && (!isWall[i][j] && !isDoor[i][j])
-							 && !world.isAirBlock(new BlockPos(shiftX + i, floorY[i][j] - 1, shiftZ + j))) 
+							 && (!world.getBlockState(new BlockPos(shiftX + i, floorY[i][j] - 1, shiftZ + j))
+									 .equals(Blocks.AIR.defaultBlockState())))
 						 RegisteredBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, theRoom.liquidBlock);					 
 				}
 			}	
 		
-		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.AfterBuild(this, shiftX, shiftZ, flooded));
-		DoomlikeDungeons.profiler.endTask("Building Dungeon architecture");
+		MinecraftForge.EVENT_BUS.post(new DLDEvent.AfterBuild(this, shiftX, shiftZ, flooded));
+		//DoomlikeDungeons.profiler.endTask("Building Dungeon architecture");
 		dungeon.addTileEntities();	
 		dungeon.addEntrances();
-		DoomlikeDungeons.profiler.endTask("Building Dungeon in World");
+		//DoomlikeDungeons.profiler.endTask("Building Dungeon in World");
 	}
 	
 	
@@ -250,12 +252,12 @@ public class MapMatrix implements IHaveCoords {
 		//DebugOut.bigSysout("Building dungeon for " + coords + " in chunk " + cx0 + ", " + cz0 
 		//		+ "\n(Low corner: " + lowCX + ", " + lowCZ + "; + Relative location: " + cx1 + ", " + cz1 + ")");
 		
-		DoomlikeDungeons.profiler.startTask("Building Dungeon in Chunk");	
-		DoomlikeDungeons.profiler.startTask("Building Dungeon architecture");
+		//DoomlikeDungeons.profiler.startTask("Building Dungeon in Chunk");	
+		//DoomlikeDungeons.profiler.startTask("Building Dungeon architecture");
 		BlockFamily.setRadnom(dungeon.random);
 		int below;
 		boolean flooded = dungeon.theme.flags.contains(ThemeFlags.WATER);
-		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.BeforeBuild(this, shiftX, shiftZ, flooded));
+		MinecraftForge.EVENT_BUS.post(new DLDEvent.BeforeBuild(this, shiftX, shiftZ, flooded));
 		
 		int sx = (cx0 - lowCX) * 16, ex = sx + 16;
 		int sz = (cz0 - lowCZ) * 16, ez = sz + 16;
@@ -333,16 +335,18 @@ public class MapMatrix implements IHaveCoords {
 					 }
 					 
 					 // Liquids
+
 					 if(hasLiquid[i][j] && (!isWall[i][j] && !isDoor[i][j])
-							 && !world.isAirBlock(new BlockPos(shiftX + i, floorY[i][j] - 1, shiftZ + j))) 
+							 && (!world.getBlockState(new BlockPos(shiftX + i, floorY[i][j] - 1, shiftZ + j))
+									 .equals(Blocks.AIR.defaultBlockState()))) 
 						 RegisteredBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, theRoom.liquidBlock);					 
 				}
 			}	
 		
-		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.AfterBuild(this, shiftX, shiftZ, flooded));
-		DoomlikeDungeons.profiler.endTask("Building Dungeon architecture");
+		//MinecraftForge.EVENT_BUS.post(new DLDEvent.AfterBuild(this, shiftX, shiftZ, flooded));
+		//DoomlikeDungeons.profiler.endTask("Building Dungeon architecture");
 		features[cx1][cz1].buildFeatures(dungeon, this, shiftX, shiftZ, world);
-		DoomlikeDungeons.profiler.endTask("Building Dungeon in Chunk");
+		//DoomlikeDungeons.profiler.endTask("Building Dungeon in Chunk");
 	}
 	
 	
@@ -360,7 +364,7 @@ public class MapMatrix implements IHaveCoords {
 	 * @return if the block should be placed here.
 	 */
 	private boolean noHighDegenerate(Room theRoom, int x, int y, int z) {
-		return !(theRoom.degenerate && world.isAirBlock(new BlockPos(x, y, z)));
+		return !(theRoom.degenerate && isAirBlock(world, new BlockPos(x, y, z)));
 	}
 	
 	
@@ -380,7 +384,7 @@ public class MapMatrix implements IHaveCoords {
 	 */
 	private boolean noLowDegenerate(Room theRoom, int x, int y, int z, int i, int j) {
 		return !(theRoom.degenerateFloors 
-				&& world.isAirBlock(new BlockPos(x, y, z))
+				&& isAirBlock(world, new BlockPos(x, y, z))
 				&& !astared[i][j]);
 	}
 	
@@ -414,4 +418,16 @@ public class MapMatrix implements IHaveCoords {
 	public Coords getCoords() {
 		return coords;
 	}
+	
+	
+	public static boolean isAirBlock(ISeedReader s, int x, int y, int z) {
+		return (s.getBlockState(new BlockPos(x, y, z))
+				 .equals(Blocks.AIR.defaultBlockState()));
+	}
+	
+	
+	public static boolean isAirBlock(ISeedReader s, BlockPos pos) {
+		return (s.getBlockState(pos).equals(Blocks.AIR.defaultBlockState()));
+	}
+	
 }

@@ -41,6 +41,7 @@ public class DoomlikeDungeons {
         configDir = System.getProperty("user.dir") + File.separator + "config" + File.separator + "DLDungeons" + File.separator;
         ConfigHandler.init(configDir);
         generation = GenerationHandler.getHandler();
+        exportFiles();
     }
     
     

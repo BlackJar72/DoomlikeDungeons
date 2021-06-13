@@ -8,7 +8,7 @@ import jaredbgreat.dldungeons.pieces.Spawner;
 import jaredbgreat.dldungeons.pieces.chests.BasicChest;
 import jaredbgreat.dldungeons.pieces.entrances.AbstractEntrance;
 import jaredbgreat.dldungeons.planner.Dungeon;
-import net.minecraft.world.World;
+import net.minecraft.world.ISeedReader;
 
 /**
  * A class to store information such as chest, spawner, and exit information, instead of 
@@ -69,7 +69,7 @@ public class ChunkFeatures {
 	 * 
 	 * @param room
 	 */
-	private void buildEntrance(Dungeon dungeon, World world) {
+	private void buildEntrance(Dungeon dungeon, ISeedReader world) {
 		//System.out.println("Might build and entrance...");
 		if(entrance != null) {
 			entrance.build(dungeon, world);
@@ -78,7 +78,7 @@ public class ChunkFeatures {
 	}
 	
 	
-	public void buildFeatures(Dungeon dungeon, MapMatrix map, int shiftX, int shiftZ, World world) {
+	public void buildFeatures(Dungeon dungeon, MapMatrix map, int shiftX, int shiftZ, ISeedReader world) {
 		buildTileEntites(dungeon, map, shiftX, shiftZ);
 		buildEntrance(dungeon, world);
 	}

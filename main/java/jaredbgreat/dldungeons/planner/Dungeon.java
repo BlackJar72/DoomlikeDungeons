@@ -35,6 +35,7 @@ import jaredbgreat.dldungeons.util.cache.Coords;
 import jaredbgreat.dldungeons.util.cache.IHaveCoords;
 import jaredbgreat.dldungeons.util.math.SpatialHash;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.MinecraftForge;
@@ -148,13 +149,13 @@ public class Dungeon implements IHaveCoords {
 	}
 
 	
-	public Dungeon(Biome biome, World world, int chunkX, int chunkZ) throws Throwable {
-		coords = new Coords(chunkX, chunkZ, world.provider.getDimension());
-		DoomlikeDungeons.profiler.startTask("Planning Dungeon");
-		DoomlikeDungeons.profiler.startTask("Layout dungeon (rough draft)");
-		random = SpatialHash.randomFromSeed(world.getSeed(), chunkX, chunkZ, world.provider.getDimension());
+	public Dungeon(Biome biome, ISeedReader world, int chunkX, int chunkZ) throws Throwable {
+		coords = new Coords(chunkX, chunkZ, 0);
+		//DoomlikeDungeons.profiler.startTask("Planning Dungeon");
+		//DoomlikeDungeons.profiler.startTask("Layout dungeon (rough draft)");
+		random = SpatialHash.randomFromSeed(world.getSeed(), chunkX, chunkZ, 0);
 		this.biome = biome;
-		theme = BiomeSets.getTheme(biome, random, world.provider.getDimension());
+		theme = BiomeSets.getTheme(biome, random, 0);
 		if(theme == null) return;
 		
 		applyTheme();
@@ -190,22 +191,22 @@ public class Dungeon implements IHaveCoords {
 				room.addChests(this);
 			}
 		}
-		DoomlikeDungeons.profiler.endTask("Layout dungeon (rough draft)");
-		DoomlikeDungeons.profiler.startTask("Fixing room contents");
+		//DoomlikeDungeons.profiler.endTask("Layout dungeon (rough draft)");
+		//DoomlikeDungeons.profiler.startTask("Fixing room contents");
 		fixRoomContents();
-		DoomlikeDungeons.profiler.endTask("Fixing room contents");
-		DoomlikeDungeons.profiler.endTask("Planning Dungeon");
+		//DoomlikeDungeons.profiler.endTask("Fixing room contents");
+		//DoomlikeDungeons.profiler.endTask("Planning Dungeon");
 	}
 
 	
-	public Dungeon(World world, Coords coords) throws Throwable {
+	public Dungeon(ISeedReader world, Coords coords) throws Throwable {
 		this.coords = coords;
 		int chunkX = coords.getX(), chunkZ = coords.getZ();
-		DoomlikeDungeons.profiler.startTask("Planning Dungeon");
-		DoomlikeDungeons.profiler.startTask("Layout dungeon (rough draft)");
-		random = SpatialHash.randomFromSeed(world.getSeed(), chunkX, chunkZ, world.provider.getDimension());
+		//DoomlikeDungeons.profiler.startTask("Planning Dungeon");
+		//DoomlikeDungeons.profiler.startTask("Layout dungeon (rough draft)");
+		random = SpatialHash.randomFromSeed(world.getSeed(), chunkX, chunkZ, 0);
 		this.biome = world.getBiome(new BlockPos((chunkX * 16), 64, (chunkZ * 16)));
-		theme = BiomeSets.getTheme(biome, random, world.provider.getDimension());
+		theme = BiomeSets.getTheme(biome, random, 0);
 		if(theme == null) return;
 		
 		applyTheme();
@@ -241,11 +242,11 @@ public class Dungeon implements IHaveCoords {
 				room.addChests(this);
 			}
 		}
-		DoomlikeDungeons.profiler.endTask("Layout dungeon (rough draft)");
-		DoomlikeDungeons.profiler.startTask("Fixing room contents");
+		//DoomlikeDungeons.profiler.endTask("Layout dungeon (rough draft)");
+		//DoomlikeDungeons.profiler.startTask("Fixing room contents");
 		fixRoomContents();
-		DoomlikeDungeons.profiler.endTask("Fixing room contents");
-		DoomlikeDungeons.profiler.endTask("Planning Dungeon");
+		//DoomlikeDungeons.profiler.endTask("Fixing room contents");
+		//DoomlikeDungeons.profiler.endTask("Planning Dungeon");
 	}
 	
 	
@@ -442,7 +443,7 @@ public class Dungeon implements IHaveCoords {
 	 * @param room
 	 */
 	public void addChestBlocks(Room room) {
-		if(MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.AddChestBlocksToRoom(this, room))) return;
+		if(MinecraftForge.EVENT_BUS.post(new DLDEvent.AddChestBlocksToRoom(this, room))) return;
 		for(BasicChest  chest : room.chests) {
 			RegisteredBlock.placeChest(map.world, shiftX + chest.mx, chest.my, shiftZ + chest.mz);
 		}		
@@ -479,7 +480,7 @@ public class Dungeon implements IHaveCoords {
 	 * @param room
 	 */
 	private void addTileEntitesToRoom(Room room) {
-		if(MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.AddTileEntitiesToRoom(this, room))) return;
+		if(MinecraftForge.EVENT_BUS.post(new DLDEvent.AddTileEntitiesToRoom(this, room))) return;
 			for(Spawner  spawner : room.spawners) {
 					RegisteredBlock.placeSpawner(map.world, 
 										shiftX + spawner.getX(), 
@@ -517,7 +518,7 @@ public class Dungeon implements IHaveCoords {
 		if(variability.use(random)) entrance = random.nextInt(3);
 		else entrance = entrancePref; 
 		if(ConfigHandler.easyFind) entrance = 1;
-		if(MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.AddEntrance(this, room))) return;
+		if(MinecraftForge.EVENT_BUS.post(new DLDEvent.AddEntrance(this, room))) return;
 		
 		switch (entrance) {
 		case 0:
