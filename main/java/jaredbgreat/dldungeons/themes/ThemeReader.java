@@ -228,6 +228,7 @@ public class ThemeReader {
 		Logging.logInfo("Found " + num + " block family configs.");
 		
 		// Now the actual themes
+		themesDir = new File(configd + File.separator + "themes" + File.separator);
 		num = findThemeFiles(themesDir);
 		Logging.logInfo("Found " + num + " themes.");
 		for(File file : files) readTheme(file);

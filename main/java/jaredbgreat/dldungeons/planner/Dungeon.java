@@ -56,26 +56,26 @@ public class Dungeon implements IHaveCoords {
 	
 	private final Coords coords;
 	
-	public Theme theme;
-	public Random random;
-	public Biome biome;
+	public volatile Theme theme;
+	public volatile Random random;
+	public volatile Biome biome;
 	
-	public MapMatrix map;   // 2D layout of the dungeon
-	public Node[] nodes;    // Main rooms (entrances and destination) which other rooms connect
-	public int numNodes;    
-	public int roomCount;
-	public int entrancePref;
+	public final MapMatrix map;   // 2D layout of the dungeon
+	public volatile Node[] nodes;    // Main rooms (entrances and destination) which other rooms connect
+	public volatile int numNodes;    
+	public volatile int roomCount;
+	public volatile int entrancePref;
 	
-	public int baseHeight;  // Default floor height for the dungeon
-	public int numEntrances = 0;
+	public volatile int baseHeight;  // Default floor height for the dungeon
+	public volatile int numEntrances = 0;
 	
-	public RoomList rooms;
-	public SpawnerCounter spawners;
-	public ArrayList<Room> planter;
-	public ArrayList<Room> grower;
+	public volatile RoomList rooms;
+	public volatile SpawnerCounter spawners;
+	public volatile ArrayList<Room> planter;
+	public volatile ArrayList<Room> grower;
 	
 	// Planning parameters
-	public Sizes   size;
+	public volatile Sizes   size;
 	
 	// Not sure if I'll use all of them...	
 	public Degree outside;		// Roofless rooms (also wall-less, but may have fences)
@@ -105,48 +105,10 @@ public class Dungeon implements IHaveCoords {
 	public int liquidBlock;
 	public int caveBlock;
 	
-	public LootCategory lootCat;
+	public volatile LootCategory lootCat;
 	
 	int shiftX;
 	int shiftZ;
-	
-	
-	/**
-	 * De-links all referenced objects as a safety measure against memory leaks, 
-	 * which the complexity creates a risk for.  This might not be needed, as 
-	 * circular have been checked for.  
-	 */
-	public void preFinalize() {
-		if(theme != null) {
-			for(int i = 0; i < nodes.length; i++) nodes[i] = null;
-			for(Room room: rooms) {
-				room.preFinalize();
-				room = null;
-			}
-			rooms.clear();
-		}
-		rooms = null;
-		planter = grower = null;
-		nodes = null;
-		theme =  null;
-		random = null;
-		biome = null;
-		map = null;		
-		size = null;	
-		outside = null;
-		liquids = null;
-		subrooms = null;
-		islands = null;	
-		pillars = null;
-		symmetry = null;
-		variability = null;
-		degeneracy = null;
-		complexity = null;
-		verticle = null;
-		entrances = null;
-		bigRooms = null;
-		naturals = null;
-	}
 
 	
 	public Dungeon(Biome biome, ISeedReader world, int chunkX, int chunkZ) throws Throwable {
@@ -156,46 +118,48 @@ public class Dungeon implements IHaveCoords {
 		random = SpatialHash.randomFromSeed(world.getSeed(), chunkX, chunkZ, 0);
 		this.biome = biome;
 		theme = BiomeSets.getTheme(biome, random, 0);
-		if(theme == null) return;
-		
-		applyTheme();
-		entrancePref = random.nextInt(3);		
-
-		airBlock     = theme.air[random.nextInt(theme.air.length)];
-		wallBlock1   = theme.walls[random.nextInt(theme.walls.length)];
-		floorBlock   = theme.floors[random.nextInt(theme.floors.length)];
-		cielingBlock = theme.ceilings[random.nextInt(theme.ceilings.length)];
-		fenceBlock   = theme.fencing[random.nextInt(theme.fencing.length)];
-		cornerBlock  = theme.pillarBlock[random.nextInt(theme.pillarBlock.length)];
-		liquidBlock  = theme.liquid[random.nextInt(theme.liquid.length)];
-		caveBlock    = theme.caveWalls[random.nextInt(theme.caveWalls.length)];
-		
-		rooms = new RoomList(size.maxRooms + 1);
-		planter = new ArrayList<Room>();
-		map = new MapMatrix(size, world, coords);
-		numNodes = random.nextInt(size.maxNodes - size.minNodes + 1) + size.minNodes + 1;
-		nodes = new Node[numNodes];
-		spawners = new SpawnerCounter();
-		
-		shiftX = (map.chunkX * 16) - (map.room.length / 2) + 8;
-		shiftZ = (map.chunkZ * 16) - (map.room.length / 2) + 8;
-		
-		makeNodes();
-		if((numEntrances < 1) 
-				&& (ConfigHandler.easyFind || ConfigHandler.singleEntrance)) addAnEntrance();
-		connectNodes();
-		growthCycle();
-		if(ConfigHandler.thinSpawners && (ConfigHandler.difficulty != Difficulty.NONE)) { 
-			spawners.fixSpawners(this, random);
-			for(Room room : rooms) {
-				room.addChests(this);
+		if(theme != null) {			
+			applyTheme();
+			entrancePref = random.nextInt(3);		
+	
+			airBlock     = theme.air[random.nextInt(theme.air.length)];
+			wallBlock1   = theme.walls[random.nextInt(theme.walls.length)];
+			floorBlock   = theme.floors[random.nextInt(theme.floors.length)];
+			cielingBlock = theme.ceilings[random.nextInt(theme.ceilings.length)];
+			fenceBlock   = theme.fencing[random.nextInt(theme.fencing.length)];
+			cornerBlock  = theme.pillarBlock[random.nextInt(theme.pillarBlock.length)];
+			liquidBlock  = theme.liquid[random.nextInt(theme.liquid.length)];
+			caveBlock    = theme.caveWalls[random.nextInt(theme.caveWalls.length)];
+			
+			rooms = new RoomList(size.maxRooms + 1);
+			planter = new ArrayList<Room>();
+			map = new MapMatrix(size, world, coords);
+			numNodes = random.nextInt(size.maxNodes - size.minNodes + 1) + size.minNodes + 1;
+			nodes = new Node[numNodes];
+			spawners = new SpawnerCounter();
+			
+			shiftX = (map.chunkX * 16) - (map.room.length / 2) + 8;
+			shiftZ = (map.chunkZ * 16) - (map.room.length / 2) + 8;
+			
+			makeNodes();
+			if((numEntrances < 1) 
+					&& (ConfigHandler.easyFind || ConfigHandler.singleEntrance)) addAnEntrance();
+			connectNodes();
+			growthCycle();
+			if(ConfigHandler.thinSpawners && (ConfigHandler.difficulty != Difficulty.NONE)) { 
+				spawners.fixSpawners(this, random);
+				for(Room room : rooms) {
+					room.addChests(this);
+				}
 			}
+			//DoomlikeDungeons.profiler.endTask("Layout dungeon (rough draft)");
+			//DoomlikeDungeons.profiler.startTask("Fixing room contents");
+			fixRoomContents();
+			//DoomlikeDungeons.profiler.endTask("Fixing room contents");
+			//DoomlikeDungeons.profiler.endTask("Planning Dungeon");
+		} else {
+			map = null;
 		}
-		//DoomlikeDungeons.profiler.endTask("Layout dungeon (rough draft)");
-		//DoomlikeDungeons.profiler.startTask("Fixing room contents");
-		fixRoomContents();
-		//DoomlikeDungeons.profiler.endTask("Fixing room contents");
-		//DoomlikeDungeons.profiler.endTask("Planning Dungeon");
 	}
 
 	
@@ -207,7 +171,7 @@ public class Dungeon implements IHaveCoords {
 		random = SpatialHash.randomFromSeed(world.getSeed(), chunkX, chunkZ, 0);
 		this.biome = world.getBiome(new BlockPos((chunkX * 16), 64, (chunkZ * 16)));
 		theme = BiomeSets.getTheme(biome, random, 0);
-		if(theme == null) return;
+		if(theme != null) {
 		
 		applyTheme();
 		entrancePref = random.nextInt(3);		
@@ -247,6 +211,9 @@ public class Dungeon implements IHaveCoords {
 		fixRoomContents();
 		//DoomlikeDungeons.profiler.endTask("Fixing room contents");
 		//DoomlikeDungeons.profiler.endTask("Planning Dungeon");
+		} else {
+			map = null;
+		}
 	}
 	
 	

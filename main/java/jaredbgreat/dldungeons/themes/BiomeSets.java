@@ -8,9 +8,8 @@ package jaredbgreat.dldungeons.themes;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.Category;
@@ -41,7 +40,7 @@ public class BiomeSets {
 	 * constants used (or else their string representation.
 	 */
 	
-	static final HashMap<Category, ArrayList<Theme>> themeMap = new HashMap<>();
+	static final ConcurrentHashMap<Category, ArrayList<Theme>> themeMap = new ConcurrentHashMap<>();
 	// For old types
 	static final ArrayList<Theme> forest    = new ArrayList<Theme>();
 	static final ArrayList<Theme> plains    = new ArrayList<Theme>();

@@ -8,6 +8,7 @@ import jaredbgreat.dldungeons.api.DLDEvent;
 import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.util.cache.Coords;
 import jaredbgreat.dldungeons.util.cache.WeakCache;
+import jaredbgreat.dldungeons.util.debug.DebugOut;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
@@ -41,7 +42,6 @@ public class Builder {
 		Dungeon dungeon = new Dungeon(world.getBiome(new BlockPos((chunkX * 16), 64, (chunkZ * 16))), 
 								world, chunkX, chunkZ);
 		buildDungeon(dungeon);
-		dungeon.preFinalize();
 		dungeon = null;
 		MinecraftForge.EVENT_BUS.post(new DLDEvent.PlaceDungeonFinish(chunkX, chunkZ, world, dungeon));
 		//DoomlikeDungeons.profiler.endTask("Create Dungeons");
@@ -66,7 +66,6 @@ public class Builder {
 							world.getBiome(new BlockPos((chunkX * 16), 64, (chunkZ * 16))), 
 						    world, chunkX, chunkZ);
 		buildDungeon(dungeon);
-		dungeon.preFinalize();
 		dungeon = null;
 		//DoomlikeDungeons.profiler.endTask("Create Dungeons");
 	}
@@ -78,7 +77,7 @@ public class Builder {
 			dungeon = new Dungeon(world, dc);
 			DUNGEON_CACHE.add(dungeon);
 		}
-		if(dungeon != null) {
+		if((dungeon != null) && (dungeon.map != null)) {
 			dungeon.map.buildInChunk(dungeon, cx, cz);
 		}
 	}

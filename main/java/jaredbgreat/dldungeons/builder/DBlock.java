@@ -3,6 +3,7 @@ package jaredbgreat.dldungeons.builder;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
+import jaredbgreat.dldungeons.util.debug.DebugOut;
 import jaredbgreat.dldungeons.util.debug.Logging;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -65,10 +66,9 @@ public class DBlock extends AbstractBlock {
 	public static DBlock makeDBlock(String id) {
 		try {
 			Block theBlock;
-			StringTokenizer nums = new StringTokenizer(id, ":");
-			String modid = nums.nextToken();
-			ResourceLocation name = new ResourceLocation(modid 
-					+ ":" + nums.nextToken());
+			DebugOut.bigSysout(id);
+			System.err.println(id);
+			ResourceLocation name = new ResourceLocation(id);
 			theBlock = GameRegistry.findRegistry(Block.class).getValue(name);
 			if(theBlock == null) {
 				String error = "[DLDUNGEONS] ERROR! Block read as \"" + id 
@@ -77,9 +77,10 @@ public class DBlock extends AbstractBlock {
 				throw new NoSuchElementException(error);
 			}
 			return new DBlock(theBlock.defaultBlockState());
-		} catch (NoSuchElementException ex) {
-			throw new NoSuchElementException("Something was wrong with " + id 
-					+ "; could not find all elements.");
+		} catch (Exception ex) {
+			//throw new NoSuchElementException("Something was wrong with " + id 
+			//		+ "; could not find all elements.");
+			return null;
 		}
 	}
 

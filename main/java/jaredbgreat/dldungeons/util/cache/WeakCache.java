@@ -11,7 +11,7 @@ package jaredbgreat.dldungeons.util.cache;
  * @param <T>
  */
 public class WeakCache <T extends IHaveCoords> {
-    private CacheReference<T>[] data;
+    private volatile CacheReference<T>[] data;
     private final int minSize;
     private int capacity;
     private int lowLimit;
