@@ -8,6 +8,7 @@ package jaredbgreat.dldungeons;
 
 
 import jaredbgreat.dldungeons.builder.Builder;
+import jaredbgreat.dldungeons.builder.RegisteredBlock;
 import jaredbgreat.dldungeons.pieces.chests.BasicChest;
 import jaredbgreat.dldungeons.pieces.chests.TreasureChest;
 import jaredbgreat.dldungeons.planner.mapping.MapMatrix;
@@ -595,4 +596,10 @@ public final class ConfigHandler {
 	public static String getConfigDir() {
 		return configDir + File.separator;
 	}
+	
+	
+	public static void listDBlocks() {
+		RegisteredBlock.listDBlocks(listsDir);
+	}
+	
 }

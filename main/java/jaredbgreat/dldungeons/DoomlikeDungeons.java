@@ -62,6 +62,7 @@ public class DoomlikeDungeons {
     	ConfigHandler.generateLists();
     	ThemeReader.readThemes(); 
     	ThemeType.SyncMobLists();
+    	//ConfigHandler.listDBlocks();
     }
     
     @EventHandler

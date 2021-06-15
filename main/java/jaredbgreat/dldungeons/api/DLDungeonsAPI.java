@@ -167,7 +167,8 @@ public class DLDungeonsAPI {
 	 * 		0: Common Mobs (e.g., zombie, skeleton, spider)
 	 * 		1: Tough  Mobs (e.g., creeper, blaze, enderman, cave spider)
 	 * 		2: Brute  Mobs (e.g., witch, tougher Lycanite's Mobs, most Dungeons Mobs)
-	 * 		3: Elite  Mobs (e.g., bosses, mini-bosses, MineFantasy dragon and knights)
+	 * 		3: Elite  Mobs (e.g., mini-bosses, MineFantasy dragon and knights)
+	 * 		4: Boss   Mobs (e.g., things comparable to The With and Ender Dragon)
 	 * 
 	 * Valid theme types are similar to biome types from the Forge biome dictionary, and 
 	 * have many names in common.  You can list as many as needed.

@@ -77,33 +77,13 @@ public class GenerationHandler implements IWorldGenerator {
 		// Prevent bad spawns
 		if(world.isRemote) return;
 		if((ConfigHandler.obeyRule && !world.getWorldInfo().isMapFeaturesEnabled())
-				|| !ConfigHandler.naturalSpawn) return; 
-		boolean blockedBiome = false;
-		Set<Type> types = BiomeDictionary.getTypes((world.getBiome(new BlockPos(chunkX * 16, 63, chunkZ * 16))));
-		for(Type type : types) {			
-			blockedBiome = ConfigHandler.biomeExclusions.contains(type) || blockedBiome;
-		}
-		if(blockedBiome) return;
-		if((dimensions.contains(Integer.valueOf(world.provider.getDimension())) != ConfigHandler.positiveDims)) return;
-		if((Math.abs(chunkX - (world.getSpawnPoint().getX() / 16)) < minXZ) 
-				|| (Math.abs(chunkZ - (world.getSpawnPoint().getZ() / 16)) < minXZ)) return;
-		
-		mrand = new Random(world.getSeed() + world.provider.getDimension()
-				+ (2027 * (long)(chunkX / factor)) 
-				+ (1987 * (long)(chunkZ / factor)));
-		int xrand = mrand.nextInt();
-		int zrand = mrand.nextInt();
-		int xuse = ((chunkX + xrand) % factor);
-		int zuse = ((chunkZ + zrand) % factor);
-		
-		//Find if a dungeon is here
-		//buildDungeonHere(world, chunkGenerator, chunkProvider, chunkX, chunkZ);
+				|| !ConfigHandler.naturalSpawn) return;
 		findDungeonsToBuild(world, chunkX, chunkZ);
 	}
 	
 	
 	private void buildDungeonHere(World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider, int chunkX, int chunkZ) {
-		if(isDungeonCenter(world.getSeed(), chunkX, chunkZ, world.provider.getDimension())) {
+		if(isDungeonCenter(world, world.getSeed(), chunkX, chunkZ, world.provider.getDimension())) {
 			try {
 				placeDungeon(chunkX, chunkZ, world);
 			} catch (Throwable e) {
@@ -121,7 +101,7 @@ public class GenerationHandler implements IWorldGenerator {
 		int sz = chunkZ - Sizes.HUGE.chunkRadius, ez = chunkZ + Sizes.HUGE.chunkRadius;
 		for(int i = sx; i <= ex; i++) 
 			for(int j = sz; j <= ez; j++) {
-				if(isDungeonCenter(seed, i, j, dim)) {
+				if(isDungeonCenter(world, seed, i, j, dim)) {
 					dungeonLocs.add(new Coords(i, j, dim));
 				}
 			}
@@ -135,7 +115,16 @@ public class GenerationHandler implements IWorldGenerator {
 
 	
 	
-	private boolean isDungeonCenter(long seed, int chunkX, int chunkZ, int dim) {		
+	private boolean isDungeonCenter(World world, long seed, int chunkX, int chunkZ, int dim) { 
+		boolean blockedBiome = false;
+		Set<Type> types = BiomeDictionary.getTypes((world.getBiome(new BlockPos(chunkX * 16, 63, chunkZ * 16))));
+		for(Type type : types) {			
+			blockedBiome = ConfigHandler.biomeExclusions.contains(type) || blockedBiome;
+		}
+		if(blockedBiome) return false;
+		if((dimensions.contains(Integer.valueOf(world.provider.getDimension())) != ConfigHandler.positiveDims)) return false;
+		if((Math.abs(chunkX - (world.getSpawnPoint().getX() / 16)) < minXZ) 
+				|| (Math.abs(chunkZ - (world.getSpawnPoint().getZ() / 16)) < minXZ)) return false;		
 		mrand = new Random(seed + dim
 				+ (2027 * (long)(chunkX / factor)) 
 				+ (1987 * (long)(chunkZ / factor)));

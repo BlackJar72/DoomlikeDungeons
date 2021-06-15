@@ -1,5 +1,14 @@
 package jaredbgreat.dldungeons.builder;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.NoSuchElementException;
+
 /* 
  * Doomlike Dungeons by is licensed the MIT License
  * Copyright (c) 2014-2018 Jared Blackburn
@@ -7,10 +16,6 @@ package jaredbgreat.dldungeons.builder;
 
 import jaredbgreat.dldungeons.api.DLDEvent;
 import jaredbgreat.dldungeons.util.debug.Logging;
-
-import java.util.ArrayList;
-import java.util.NoSuchElementException;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -37,6 +42,7 @@ public final class RegisteredBlock extends AbstractBlock {
 	// All blocks, complete with meta-data used by the mod
 	public static final ArrayList<RegisteredBlock> registry = new ArrayList<RegisteredBlock>();
 	
+	private static HashSet<String> names = new HashSet<>();	
 	
 	/**
 	 * Gets the item named by the string "in" -- hacky, but might work 
@@ -56,7 +62,8 @@ public final class RegisteredBlock extends AbstractBlock {
 	 * 
 	 * @param id
 	 */
-	private RegisteredBlock(String id) throws NoSuchElementException {		
+	private RegisteredBlock(String id) throws NoSuchElementException {	
+		names.add(id);
 		this.id = id; 
 		block = DBlock.makeDBlock(id);
 		if(block.toString().contains("minecraft:air") 
@@ -67,6 +74,30 @@ public final class RegisteredBlock extends AbstractBlock {
 			throw new NoSuchElementException(error);
 		}
 	}
+	
+	
+	public static void listDBlocks(File listsDir) {
+		ArrayList<String> namel = new ArrayList<>();
+		names.forEach( (name) -> namel.add(name) ) ;
+		Collections.sort(namel);
+		File itemlist = new File(listsDir.toString() + File.separator + "DBlocks.txt");
+		if(itemlist.exists()) itemlist.delete(); 
+		try {
+			final BufferedWriter outstream 
+					= new BufferedWriter(new FileWriter(itemlist.toString()));
+			
+			for(String name : namel) {
+				outstream.write(name);
+				outstream.newLine();
+			}
+			
+			if(outstream != null) outstream.close();
+		} catch (IOException e) {
+			System.err.println("Error: Could not write file blocks.txt");
+			e.printStackTrace();
+		}		
+	}
+	
 	
 	
 /**

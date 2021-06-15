@@ -33,5 +33,8 @@ public abstract class AbstractBlock implements IBlockPlacer {
 		return (block == chestid || block == spawnerid  
 				|| block == portal1id || block == portal2id || block == bedrockId);
 	}
+	
+	
+	
 
 }
