@@ -60,11 +60,11 @@ public final class RegisteredBlock extends AbstractBlock {
 	private RegisteredBlock(String id) throws NoSuchElementException {	
 		names.add(id);
 		this.id = id; 
-		IBlockPlacer fuck = DBlock.makeDBlock(id);
-		if(fuck == null) {
-			fuck = registry.get(0);
+		IBlockPlacer maybe = DBlock.makeDBlock(id);
+		if(maybe == null) {
+			maybe = registry.get(0);
 		}
-		block = fuck;
+		block = maybe;
 		if(block.toString().contains("minecraft:air") 
 				&& !id.contains("minecraft:air")) {
 			String error = "[DLDUNGEONS] ERROR! Block read as \"" + id 

@@ -66,8 +66,6 @@ public class DBlock extends AbstractBlock {
 	public static DBlock makeDBlock(String id) {
 		try {
 			Block theBlock;
-			DebugOut.bigSysout(id);
-			System.err.println(id);
 			ResourceLocation name = new ResourceLocation(id);
 			theBlock = GameRegistry.findRegistry(Block.class).getValue(name);
 			if(theBlock == null) {

@@ -23,54 +23,6 @@ public class Builder {
 	
 	private static boolean debugPole = false;
 	
-	
-	/**
-	 * This will place a dungeon into the world, and is called to create the dungeon object 
-	 * (which plans the dungeon) when a dungeon is cheated in by command or generated through
-	 * the API and have the dungeon built.  Basically, this is used any time and dungeons is 
-	 * generated without the use of IChunkGenerator and IChunkProvider objects, that is, not
-	 * through an IWorldGenerator.
-	 * 
-	 * @param random
-	 * @param chunkX
-	 * @param chunkZ
-	 * @param world
-	 * @throws Throwable
-	 */
-	public static void placeDungeon(Random random, int chunkX, int chunkZ, ISeedReader world, ChunkGenerator chunkgen) throws Throwable {	
-		//DoomlikeDungeons.profiler.startTask("Create Dungeons");
-		Dungeon dungeon = new Dungeon(world.getBiome(new BlockPos((chunkX * 16), 64, (chunkZ * 16))), 
-								world, chunkX, chunkZ);
-		buildDungeon(dungeon);
-		dungeon = null;
-		MinecraftForge.EVENT_BUS.post(new DLDEvent.PlaceDungeonFinish(chunkX, chunkZ, world, dungeon));
-		//DoomlikeDungeons.profiler.endTask("Create Dungeons");
-	}
-	
-	
-	/**
-	 * This will place a dungeon into the world, and is called by the Generation handler to 
-	 * create the dungeon object (which plans the dungeon) and have the dungeon built.
-	 * 
-	 * @param random
-	 * @param chunkX
-	 * @param chunkZ
-	 * @param world
-	 * @param chunkGenerator
-	 * @param chunkProvider
-	 * @throws Throwable
-	 */
-	public static void placeDungeon(int chunkX, int chunkZ, ISeedReader world) throws Throwable {	
-		//DoomlikeDungeons.profiler.startTask("Create Dungeons");
-		Dungeon dungeon = new Dungeon( 
-							world.getBiome(new BlockPos((chunkX * 16), 64, (chunkZ * 16))), 
-						    world, chunkX, chunkZ);
-		buildDungeon(dungeon);
-		dungeon = null;
-		//DoomlikeDungeons.profiler.endTask("Create Dungeons");
-	}
-	
-	
 	public static void buildDungeonChunk(final int cx, final int cz, final Coords dc, final ISeedReader world) throws Throwable {
 		Dungeon dungeon = DUNGEON_CACHE.get(dc);
 		if(dungeon == null) {
@@ -87,19 +39,6 @@ public class Builder {
 		for(Coords dc : dcs) {
 			buildDungeonChunk(cx, cz, dc, world);
 		}
-	}
-	
-	
-	/**
-	 * This will build the dungeon into the world, technically by having the dungeons map
-	 * build itself.
-	 * 
-	 * @param dungeon
-	 */
-	public static void buildDungeon(Dungeon dungeon /*TODO: Parameters*/) {
-		//System.out.println("[DLDUNGONS] Inside Builder.placeDungeon; building dungeon");
-		//if(dungeon.theme != null) dungeon.map.build(dungeon);
-		if(dungeon.theme != null) dungeon.map.buildByChunksTest(dungeon);
 	}
 	
 }
