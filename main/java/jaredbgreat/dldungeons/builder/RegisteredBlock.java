@@ -271,14 +271,14 @@ private RegisteredBlock(BlockFamily family) throws NoSuchElementException {
 	public static void deleteBlock(ISeedReader world, int x, int y, int z, boolean flooded) {
 		if(isProtectedBlock(world, x, y, z)) return;
 		if(flooded) placeBlock(world, x, y, z, water); 
-		else world.setBlock(new BlockPos(x, y, z), Blocks.AIR.defaultBlockState(), 3);
+		else world.removeBlock(new BlockPos(x, y, z), false);
 	}
 	
 	
 	public static void deleteBlock(ISeedReader world, int x, int y, int z, int block) {
 		if(isProtectedBlock(world, x, y, z)) return;
 		if(block > 0) registry.get(block).place(world, x, y, z); 
-		else world.setBlock(new BlockPos(x, y, z), Blocks.AIR.defaultBlockState(), 3);
+		else world.removeBlock(new BlockPos(x, y, z), false);
 	}
 	
 	

@@ -25,7 +25,7 @@ import net.minecraftforge.common.MinecraftForge;
 public class BasicChest {
 	
 	public final int mx, my, mz;
-	protected int level;
+	protected volatile int level;
 	private static volatile int A1 = 2, B1 = 1, C1 = 2;
 	protected final LootCategory category;
 	

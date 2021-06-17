@@ -75,32 +75,15 @@ public class Room extends AbstractRoom {
 	public boolean isSubroom;
 	public boolean hasEntrance;
 	public boolean hasSpawners;
-	public ArrayList<Spawner> spawners;
-	public ArrayList<BasicChest> chests;
+	public final ArrayList<Spawner> spawners;
+	public final ArrayList<BasicChest> chests;
 	public ArrayList<Doorway> doors;
 	public ArrayList<DoorQueue> connections;
 	public ArrayList<Doorway> topDoors;
 	public Doorway midpoint; // not really a door but used as one at times
 	public volatile AbstractEntrance entrance;
 	
-	private Room() {id = 0;}	
-	
-	
-	/**
-	 * A safety method to ensure there are no circular references 
-	 * to create a memory leak.  Note that none should exist, this 
-	 * is included as a safety measure do to the general complexity 
-	 * of the relationship between dungeons, rooms, and related rooms.
-	 */
-	public void preFinalize() {
-		childSeeds.clear();
-		childSeeds = null;
-		spawners.clear();
-		chests.clear();
-		spawners = null;
-		chests = null;
-		doors = null;
-	}
+	private Room() {id = 0; chests = null; spawners = null;}	
 	
 	
 	public Room(int beginX, int endX, int beginZ, int endZ, int floorY, int ceilY, 

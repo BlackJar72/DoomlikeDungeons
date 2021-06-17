@@ -14,9 +14,8 @@ import net.minecraft.world.ISeedReader;
 
 
 public class Builder {
-	private static final WeakCache<Dungeon> DUNGEON_CACHE = new WeakCache<>();	
+	private static final WeakCache<Dungeon> DUNGEON_CACHE = new WeakCache<>();
 	
-	private static boolean debugPole = false;
 	
 	public static void buildDungeonChunk(final ChunkPos cp, final Coords dc, final ISeedReader world) throws Throwable {
 		Dungeon dungeon = DUNGEON_CACHE.get(dc);
