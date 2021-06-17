@@ -1,13 +1,6 @@
 package jaredbgreat.dldungeons.planner.mapping;
 
 
-/* 
- * Doomlike Dungeons by is licensed the MIT License
- * Copyright (c) 2014-2018 Jared Blackburn
- */	
-
-
-import jaredbgreat.dldungeons.DoomlikeDungeons;
 import jaredbgreat.dldungeons.api.DLDEvent;
 import jaredbgreat.dldungeons.builder.BlockFamily;
 import jaredbgreat.dldungeons.builder.RegisteredBlock;
@@ -21,11 +14,12 @@ import jaredbgreat.dldungeons.themes.Sizes;
 import jaredbgreat.dldungeons.themes.ThemeFlags;
 import jaredbgreat.dldungeons.util.cache.Coords;
 import jaredbgreat.dldungeons.util.cache.IHaveCoords;
+import jaredbgreat.dldungeons.util.debug.DebugOut;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.ISeedReader;
-import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
 /**
@@ -132,13 +126,13 @@ public class MapMatrix implements IHaveCoords {
 	 * 
 	 * @param dungeon
 	 */
-	public void buildInChunk(Dungeon dungeon, int cx0, int cz0) {
-		int cx1 = cx0 - lowCX, cz1 = cz0 - lowCZ;
+	public void buildInChunk(Dungeon dungeon, ChunkPos cp) {
+		int cx1 = cp.x - lowCX, cz1 = cp.z - lowCZ;
 		if((cx1 < 0) || (cx1 >= dungeon.size.chunkWidth) || (cz1 < 0) || (cz1 >= dungeon.size.chunkWidth)) {
 			return;
 		}
 		
-		//DebugOut.bigSysout("Building dungeon for " + coords + " in chunk " + cx0 + ", " + cz0 
+		//DebugOut.bigSysout("Building dungeon for " + coords + " in chunk " + cp.x + ", " + cp.z 
 		//		+ "\n(Low corner: " + lowCX + ", " + lowCZ + "; + Relative location: " + cx1 + ", " + cz1 + ")");
 		
 		//DoomlikeDungeons.profiler.startTask("Building Dungeon in Chunk");	
@@ -148,8 +142,8 @@ public class MapMatrix implements IHaveCoords {
 		boolean flooded = dungeon.theme.flags.contains(ThemeFlags.WATER);
 		MinecraftForge.EVENT_BUS.post(new DLDEvent.BeforeBuild(this, shiftX, shiftZ, flooded));
 		
-		int sx = (cx0 - lowCX) * 16, ex = sx + 16;
-		int sz = (cz0 - lowCZ) * 16, ez = sz + 16;
+		int sx = cx1 * 16, ex = sx + 16;
+		int sz = cz1 * 16, ez = sz + 16;
 				
 		for(int i = sx; i < ex; i++)
 			for(int j = sz; j < ez; j++) {

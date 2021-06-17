@@ -9,9 +9,10 @@ import com.mojang.serialization.Codec;
 import jaredbgreat.dldungeons.builder.Builder;
 import jaredbgreat.dldungeons.themes.Sizes;
 import jaredbgreat.dldungeons.util.cache.Coords;
-import jaredbgreat.dldungeons.util.debug.DebugOut;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.ISeedReader;
+import net.minecraft.world.World;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
@@ -29,29 +30,32 @@ public class SectionFeature  extends Feature<NoFeatureConfig> {
 	@Override
 	public boolean place(ISeedReader sreader, ChunkGenerator chunkgen, Random random, BlockPos pos,
 			NoFeatureConfig noconfig) {
-		int cx = pos.getX() / 16, cz = pos.getZ() / 16;		
+		int cx = pos.getX() / 16, cz = pos.getZ() / 16;	
+		ChunkPos cp = new ChunkPos(pos);
 		mrand = new Random(sreader.getSeed() 
 				+ (2027 * (long)(cx / factor)) 
 				+ (1987 * (long)(cz / factor)));		
-		findDungeonsToBuild(sreader, cx, cz);
+		findDungeonsToBuild(sreader, cp);
 		return true;
 	}
 	
 	
-	private void findDungeonsToBuild(final ISeedReader world, final int chunkX, final int chunkZ) {
-		long seed = world.getSeed();
+	private void findDungeonsToBuild(final ISeedReader sreader, final ChunkPos cp) {
+		long seed = sreader.getSeed();
+		World world = sreader.getLevel();
+		int dimension = world.dimension().location().hashCode();
 		ArrayList<Coords> dungeonLocs = new ArrayList<>();
-		int sx = chunkX - Sizes.HUGE.chunkRadius, ex = chunkX + Sizes.HUGE.chunkRadius;
-		int sz = chunkZ - Sizes.HUGE.chunkRadius, ez = chunkZ + Sizes.HUGE.chunkRadius;
+		int sx = cp.x - Sizes.HUGE.chunkRadius, ex = cp.x + Sizes.HUGE.chunkRadius;
+		int sz = cp.z - Sizes.HUGE.chunkRadius, ez = cp.z + Sizes.HUGE.chunkRadius;
 		for(int i = sx; i <= ex; i++) 
 			for(int j = sz; j <= ez; j++) {
-				if(isDungeonCenter(seed, i, j, 0)) {
-					dungeonLocs.add(new Coords(i, j, 0));
+				if(isDungeonCenter(seed, i, j, dimension)) {
+					dungeonLocs.add(new Coords(i, j, dimension));
 				}
 			}
 		dungeonLocs.sort(Coords.HashCompare.C);
 		try {
-			Builder.buildDungeonsChunk(chunkX, chunkZ, dungeonLocs, world);
+			Builder.buildDungeonsChunk(cp, dungeonLocs, sreader);
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
