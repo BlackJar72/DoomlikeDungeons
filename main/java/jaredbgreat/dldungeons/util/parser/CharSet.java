@@ -196,4 +196,18 @@ public class CharSet {
 		return (data[loc] & (1 << bit)) != 0;
 	}
 	
+	
+	@Override
+	public String toString() {
+		StringBuilder b = new StringBuilder();
+		b.append('[').append(System.lineSeparator());
+		for(int i = 0; i < 256; i++) {
+			if(contains((char)i)) {
+				b.append((char)i);
+			}
+		}
+		b.append(System.lineSeparator()).append('[').append(System.lineSeparator());
+		return b.toString();
+	}
+	
 }

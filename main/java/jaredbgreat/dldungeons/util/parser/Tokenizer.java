@@ -20,10 +20,7 @@ import java.util.Arrays;
  *
  */
 public class Tokenizer {
-	private static final CharSet hex = new CharSet(new 
-			char[]{'1', '2', '3', '4', '5', '6', '7', '8', '9', 
-			       'a', 'b', 'c', 'd', 'e', 'f',
-			       'A', 'B', 'C', 'D', 'E', 'F'});
+	private static final CharSet hex = new CharSet("1234567890abcdefABCDEF");
 	private final CharSet  delim;
 	private String[] tokens;
 	private int  token = 0;
@@ -192,15 +189,17 @@ public class Tokenizer {
 	
 	
 	private char parseUnicode() {
+		int l = 0;
 		nextChar();
 		StringBuilder nstring = new StringBuilder();
-		while((position < in.length()) && (hex.contains(in.charAt(position)))) {
+		while((l < 4) && (position < in.length())) {
 			nextChar();
 			nstring.append(next);
+			l++;
 		}
 		// Without this it will skip ahead.
 		position--;
-		return (char)Integer.parseUnsignedInt(nstring.toString().toLowerCase(), 16);	
+		return (char)Integer.parseUnsignedInt(nstring.toString(), 16);	
 	}
 	
 	
