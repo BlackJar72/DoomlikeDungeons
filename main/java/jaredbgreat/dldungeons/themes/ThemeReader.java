@@ -832,12 +832,15 @@ public class ThemeReader {
 			else if(name.equalsIgnoreCase("NONE")) biomes.add(Category.NONE); 
 			else if(name.equalsIgnoreCase("TAIGA)")) biomes.add(Category.TAIGA); 
 			else if(name.equalsIgnoreCase("EXTREME_HILLS")) biomes.add(Category.EXTREME_HILLS); 
+			else if(name.equalsIgnoreCase("HILLS")) biomes.add(Category.EXTREME_HILLS); 
+			else if(name.equalsIgnoreCase("MOUNTAINS")) biomes.add(Category.EXTREME_HILLS); 
 			else if(name.equalsIgnoreCase("JUNGLE")) biomes.add(Category.JUNGLE); 
 			else if(name.equalsIgnoreCase("MESA")) biomes.add(Category.MESA); 
 			else if(name.equalsIgnoreCase("PLAINS")) biomes.add(Category.PLAINS); 
 			else if(name.equalsIgnoreCase("SAVANNA")) biomes.add(Category.SAVANNA); 
 			else if(name.equalsIgnoreCase("ICY")) biomes.add(Category.ICY); 
-			else if(name.equalsIgnoreCase("THEEND")) biomes.add(Category.THEEND); 
+			else if(name.equalsIgnoreCase("THEEND")) biomes.add(Category.THEEND);  
+			else if(name.equalsIgnoreCase("END")) biomes.add(Category.THEEND); 
 			else if(name.equalsIgnoreCase("BEACH")) biomes.add(Category.BEACH); 
 			else if(name.equalsIgnoreCase("FOREST")) biomes.add(Category.FOREST); 
 			else if(name.equalsIgnoreCase("OCEAN")) biomes.add(Category.OCEAN); 

@@ -8,6 +8,8 @@ package jaredbgreat.dldungeons.pieces.entrances;
 
 import jaredbgreat.dldungeons.builder.RegisteredBlock;
 import jaredbgreat.dldungeons.planner.Dungeon;
+import net.minecraft.block.SlabBlock;
+import net.minecraft.state.properties.SlabType;
 import net.minecraft.world.ISeedReader;
 
 
@@ -34,8 +36,8 @@ public class SpiralStair extends AbstractEntrance {
 			RegisteredBlock.place(world, wx, i, wz, dungeon.wallBlock1);
 			switch (side) {
 			case 0:
-				RegisteredBlock.placeBlock(world, wx+1, i, wz,   STAIR_SLAB, 0, 3);
-				RegisteredBlock.placeBlock(world, wx+1, i, wz+1, STAIR_SLAB, 8, 3);
+				RegisteredBlock.placeBlock(world, wx+1, i, wz,   STAIR_SLAB1);
+				RegisteredBlock.placeBlock(world, wx+1, i, wz+1, STAIR_SLAB2);
 				// Empty space
 				RegisteredBlock.deleteBlock(world, wx,    i, wz+1);
 				RegisteredBlock.deleteBlock(world, wx-1,  i, wz+1);
@@ -45,8 +47,8 @@ public class SpiralStair extends AbstractEntrance {
 				RegisteredBlock.deleteBlock(world, wx+1,  i, wz-1);
 				break;
 			case 1:
-				RegisteredBlock.placeBlock(world, wx,   i, wz+1, STAIR_SLAB, 0, 3);
-				RegisteredBlock.placeBlock(world, wx-1, i, wz+1, STAIR_SLAB, 8, 3);
+				RegisteredBlock.placeBlock(world, wx,   i, wz+1, STAIR_SLAB1);
+				RegisteredBlock.placeBlock(world, wx-1, i, wz+1, STAIR_SLAB2);
 				// Empty space
 				RegisteredBlock.deleteBlock(world, wx+1, i,   wz);
 				RegisteredBlock.deleteBlock(world, wx+1, i, wz+1);
@@ -56,8 +58,8 @@ public class SpiralStair extends AbstractEntrance {
 				RegisteredBlock.deleteBlock(world, wx+1, i, wz-1);
 				break;
 			case 2:
-				RegisteredBlock.placeBlock(world, wx-1, i, wz,   STAIR_SLAB, 0, 3);
-				RegisteredBlock.placeBlock(world, wx-1, i, wz-1, STAIR_SLAB, 8, 3);
+				RegisteredBlock.placeBlock(world, wx-1, i, wz,   STAIR_SLAB1);
+				RegisteredBlock.placeBlock(world, wx-1, i, wz-1, STAIR_SLAB2);
 				// Empty space
 				RegisteredBlock.deleteBlock(world, wx+1, i,   wz);
 				RegisteredBlock.deleteBlock(world, wx+1, i, wz+1);
@@ -67,8 +69,8 @@ public class SpiralStair extends AbstractEntrance {
 				RegisteredBlock.deleteBlock(world, wx+1, i, wz-1);
 				break;
 			case 3:
-				RegisteredBlock.placeBlock(world, wx,   i, wz-1, STAIR_SLAB, 0, 3);
-				RegisteredBlock.placeBlock(world, wx+1, i, wz-1, STAIR_SLAB, 8, 3);
+				RegisteredBlock.placeBlock(world, wx,   i, wz-1, STAIR_SLAB1);
+				RegisteredBlock.placeBlock(world, wx+1, i, wz-1, STAIR_SLAB2);
 				// Empty space
 				RegisteredBlock.deleteBlock(world, wx+1, i,   wz);
 				RegisteredBlock.deleteBlock(world, wx+1, i, wz+1);

@@ -11,15 +11,21 @@ package jaredbgreat.dldungeons.pieces.entrances;
  */
 import jaredbgreat.dldungeons.planner.Dungeon;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.SlabBlock;
+import net.minecraft.state.properties.SlabType;
 import net.minecraft.world.ISeedReader;
 
 public abstract class AbstractEntrance {
 	
 	protected static final Block LADDER 
 			= (Block)Blocks.LADDER;
-	protected static final Block STAIR_SLAB 
-			= (Block)Blocks.STONE_SLAB;	
+	protected static final BlockState STAIR_SLAB1 
+		= Blocks.SMOOTH_STONE_SLAB.defaultBlockState();	
+	protected static final BlockState STAIR_SLAB2 
+		= Blocks.SMOOTH_STONE_SLAB.defaultBlockState()
+			.setValue(SlabBlock.TYPE, SlabType.TOP);
 	
 	public final int x, z;
 	

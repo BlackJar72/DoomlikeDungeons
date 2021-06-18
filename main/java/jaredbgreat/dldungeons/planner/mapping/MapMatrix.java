@@ -42,7 +42,7 @@ public class MapMatrix implements IHaveCoords {
 	
 	public final ISeedReader world;
 	public final Coords coords;
-	public final int   chunkX, chunkZ, origenX, origenZ, lowCX, lowCZ, shiftX, shiftZ;
+	public final int   chunkX, chunkZ, lowCX, lowCZ, shiftX, shiftZ;
 	
 	// map of heights to build at
 	public byte[][] ceilY;		// Ceiling height
@@ -78,8 +78,6 @@ public class MapMatrix implements IHaveCoords {
 		chunkZ = coords.getZ();
 		lowCX = chunkX - size.chunkRadius;
 		lowCZ = chunkZ - size.chunkRadius;
-		origenX   = (chunkX * 16) - (size.width / 2) + 8;
-		origenZ   = (chunkZ * 16) - (size.width / 2) + 8;
 		ceilY  	  = new byte[size.width][size.width];
 		floorY    = new byte[size.width][size.width];
 		nCeilY 	  = new byte[size.width][size.width];
@@ -99,8 +97,9 @@ public class MapMatrix implements IHaveCoords {
 			for(int j = 0; j < size.chunkWidth; j++) {
 				features[i][j] = new ChunkFeatures();
 			}
-		shiftX = (chunkX * 16) - (room.length / 2) + 8;
-		shiftZ = (chunkZ * 16) - (room.length / 2) + 8;
+		ChunkPos origen = new ChunkPos(lowCX, lowCZ);
+		shiftX = origen.getMinBlockX();
+		shiftZ = origen.getMinBlockZ();
 	}
 	
 	
@@ -125,15 +124,13 @@ public class MapMatrix implements IHaveCoords {
 	 * world.
 	 * 
 	 * @param dungeon
+	 * @throws Exception 
 	 */
-	public void buildInChunk(Dungeon dungeon, ChunkPos cp) {
+	public void buildInChunk(Dungeon dungeon, ChunkPos cp) throws Exception {
 		int cx1 = cp.x - lowCX, cz1 = cp.z - lowCZ;
 		if((cx1 < 0) || (cx1 >= dungeon.size.chunkWidth) || (cz1 < 0) || (cz1 >= dungeon.size.chunkWidth)) {
 			return;
 		}
-		
-		//DebugOut.bigSysout("Building dungeon for " + coords + " in chunk " + cp.x + ", " + cp.z 
-		//		+ "\n(Low corner: " + lowCX + ", " + lowCZ + "; + Relative location: " + cx1 + ", " + cz1 + ")");
 		
 		//DoomlikeDungeons.profiler.startTask("Building Dungeon in Chunk");	
 		//DoomlikeDungeons.profiler.startTask("Building Dungeon architecture");
@@ -144,7 +141,11 @@ public class MapMatrix implements IHaveCoords {
 		
 		int sx = cx1 * 16, ex = sx + 16;
 		int sz = cz1 * 16, ez = sz + 16;
-				
+		
+		//DebugOut.bigSysout("Building dungeon for " + coords + " in chunk " + cp.x + ", " + cp.z 
+		//		+ "\n        Should be at: " + cp.getMinBlockX() + ", " + cp.getMinBlockZ() + " to " + cp.getMaxBlockX() + ", " + cp.getMaxBlockZ()
+		//	    + "\nActually building at: " + (shiftX + sx) + ", " + (shiftZ + sz) + " to " + (shiftX + ex - 1) + ", " + (shiftZ + ez - 1));
+		try {	
 		for(int i = sx; i < ex; i++)
 			for(int j = sz; j < ez; j++) {
 				if(room[i][j] != 0) {
@@ -212,9 +213,9 @@ public class MapMatrix implements IHaveCoords {
 						 RegisteredBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, theRoom.fenceBlock);
 					 
 					 if(isDoor[i][j]) {
-						 RegisteredBlock.deleteBlock(world, shiftX + i, floorY[i][j],     shiftZ + j, flooded);
-						 RegisteredBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 1, shiftZ + j, flooded);
-						 RegisteredBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 2, shiftZ + j, flooded);
+						 RegisteredBlock.deleteBlock(world, shiftX + i, floorY[i][j],     shiftZ + j, theRoom.airBlock);
+						 RegisteredBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 1, shiftZ + j, theRoom.airBlock);
+						 RegisteredBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 2, shiftZ + j, theRoom.airBlock);
 					 }
 					 
 					 // Liquids
@@ -224,7 +225,22 @@ public class MapMatrix implements IHaveCoords {
 									 .equals(Blocks.AIR.defaultBlockState()))) 
 						 RegisteredBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, theRoom.liquidBlock);					 
 				}
-			}	
+			}
+		} catch(Exception e) {
+			StringBuilder b = new StringBuilder(e.getLocalizedMessage());
+			b.append(System.lineSeparator());
+			b.append("MapMatrix.buildInChunkbuildInChunk(): Building range ");
+			b.append((sx + shiftX) + "," + (sz + shiftZ));
+			b.append(" to ");
+			b.append((ex + shiftX - 1) + "," + (ez + shiftZ - 1));
+			b.append(" in chunk at " + cp);
+			b.append(" (blocks  ");
+			b.append(cp.getMinBlockX() + "," + cp.getMinBlockZ());
+			b.append(" to ");
+			b.append(cp.getMaxBlockX() + "," + cp.getMaxBlockZ() + ")");
+			b.append(System.lineSeparator());
+			throw new Exception(b.toString());
+		}
 		
 		//MinecraftForge.EVENT_BUS.post(new DLDEvent.AfterBuild(this, shiftX, shiftZ, flooded));
 		//DoomlikeDungeons.profiler.endTask("Building Dungeon architecture");

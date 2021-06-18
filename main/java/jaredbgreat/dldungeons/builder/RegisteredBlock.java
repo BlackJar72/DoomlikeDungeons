@@ -62,16 +62,18 @@ public final class RegisteredBlock extends AbstractBlock {
 		this.id = id; 
 		IBlockPlacer maybe = DBlock.makeDBlock(id);
 		if(maybe == null) {
-			maybe = registry.get(0);
+			// FXIME
+			maybe = DBlock.makeDBlock("minecraft:hay_block");
+		}
+		if(maybe.toString().contains("minecraft:air") && !id.contains("minecraft:air")) { 
+			// FXIME
+			maybe = DBlock.makeDBlock("minecraft:hay_block");
+			//String error = "[DLDUNGEONS] ERROR! Block read as \"" + id 
+			//		+ "\" parsed into an air block!";
+			//Logging.logError(error);
+			//throw new NoSuchElementException(error);
 		}
 		block = maybe;
-		if(block.toString().contains("minecraft:air") 
-				&& !id.contains("minecraft:air")) {
-			String error = "[DLDUNGEONS] ERROR! Block read as \"" + id 
-					+ "\" parsed into an air block!";
-			Logging.logError(error);
-			throw new NoSuchElementException(error);
-		}
 	}
 	
 	
@@ -245,6 +247,23 @@ private RegisteredBlock(BlockFamily family) throws NoSuchElementException {
 	
 	
 	/**
+	 * Purely a wrapper for block/state placing/setting methods typically found in world,
+	 * allowing easier updating when block representation or method signature / location
+	 * changes.
+	 * 
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param block
+	 */
+	public static void placeBlock(ISeedReader world, int x, int y, int z, BlockState block) {
+		if(isProtectedBlock(world, x, y, z)) return; 
+		world.setBlock(new BlockPos(x, y, z), block, 3);
+	}
+	
+	
+	/**
 	 * A wrapper for setting a block to air.
 	 * 
 	 * @param world
@@ -278,7 +297,7 @@ private RegisteredBlock(BlockFamily family) throws NoSuchElementException {
 	public static void deleteBlock(ISeedReader world, int x, int y, int z, int block) {
 		if(isProtectedBlock(world, x, y, z)) return;
 		if(block > 0) registry.get(block).place(world, x, y, z); 
-		else world.removeBlock(new BlockPos(x, y, z), false);
+		else registry.get(block).place(world, x, y, z);;
 	}
 	
 	

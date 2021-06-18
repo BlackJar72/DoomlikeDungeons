@@ -9,6 +9,7 @@ import com.mojang.serialization.Codec;
 import jaredbgreat.dldungeons.builder.Builder;
 import jaredbgreat.dldungeons.themes.Sizes;
 import jaredbgreat.dldungeons.util.cache.Coords;
+import jaredbgreat.dldungeons.util.debug.Logging;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.ISeedReader;
@@ -28,19 +29,19 @@ public class SectionFeature  extends Feature<NoFeatureConfig> {
 
 	
 	@Override
-	public boolean place(ISeedReader sreader, ChunkGenerator chunkgen, Random random, BlockPos pos,
+	public boolean place(ISeedReader sreader, ChunkGenerator chunkgen, Random random, final BlockPos pos,
 			NoFeatureConfig noconfig) {
 		int cx = pos.getX() / 16, cz = pos.getZ() / 16;	
 		ChunkPos cp = new ChunkPos(pos);
 		mrand = new Random(sreader.getSeed() 
 				+ (2027 * (long)(cx / factor)) 
 				+ (1987 * (long)(cz / factor)));		
-		findDungeonsToBuild(sreader, cp);
+		findDungeonsToBuild(sreader, cp, pos);
 		return true;
 	}
 	
 	
-	private void findDungeonsToBuild(final ISeedReader sreader, final ChunkPos cp) {
+	private void findDungeonsToBuild(final ISeedReader sreader, final ChunkPos cp, final BlockPos pos) {
 		long seed = sreader.getSeed();
 		World world = sreader.getLevel();
 		int dimension = world.dimension().location().hashCode();
@@ -57,7 +58,17 @@ public class SectionFeature  extends Feature<NoFeatureConfig> {
 		try {
 			Builder.buildDungeonsChunk(cp, dungeonLocs, sreader);
 		} catch (Throwable e) {
-			e.printStackTrace();
+			// Ignore this as an apparent false alarm, everything works
+			//e.printStackTrace();
+			StringBuilder b = new StringBuilder(e.getLocalizedMessage());
+			b.append("SectionFeature.findDungeonsToBuild(): Building in chunk at " + cp);
+			b.append(" (blocks  ");
+			b.append(cp.getMinBlockX() + "," + cp.getMinBlockZ());
+			b.append(" to ");
+			b.append(cp.getMaxBlockX() + "," + cp.getMinBlockZ() + "); ");
+			b.append("Originally requested " + pos);
+			b.append(System.lineSeparator());
+			Logging.logError(b.toString());
 		}
 	}
 
