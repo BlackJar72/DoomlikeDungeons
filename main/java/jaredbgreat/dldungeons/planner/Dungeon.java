@@ -254,7 +254,11 @@ public class Dungeon implements IHaveCoords {
 	 * of type Degree.
 	 */
 	private void applyTheme() {
-		size  	 	= theme.sizes.select(random);
+		if(ConfigHandler.announceCommands) {
+			size  	= Sizes.HUGE;
+		} else {
+			size   	= theme.sizes.select(random);
+		}
 		outside 	= theme.outside.select(random);
 		liquids	 	= theme.liquids.select(random);
 		subrooms 	= theme.subrooms.select(random);

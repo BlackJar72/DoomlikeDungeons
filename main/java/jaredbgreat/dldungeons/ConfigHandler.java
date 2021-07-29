@@ -73,6 +73,7 @@ public final class ConfigHandler {
 	private static final boolean EASY_FIND  = true;	
 	private static final boolean SINGLE_ENTRANCE = true;
 	private static final boolean BIG_HUBS  = false;	
+	private static final boolean ALL_HUGE  = false;	
 
 	private static final boolean DISABLE_API = false;
 	private static final boolean NO_MOB_CHANGES = false;
@@ -91,7 +92,8 @@ public final class ConfigHandler {
 	
 	public    static boolean easyFind = EASY_FIND;
 	public    static boolean singleEntrance = SINGLE_ENTRANCE;
-	public    static boolean bigHubs = EASY_FIND;
+	public    static boolean bigHubs = BIG_HUBS;
+	public    static boolean allHuge = ALL_HUGE;
 	
 	
 	public    static boolean announceCommands = DEFAULT_ANNOUNCE_COMMANDS;
@@ -196,6 +198,11 @@ public final class ConfigHandler {
 				"If true entrances and \"boss\" rooms will have extra high ceilings, good with tall mobs")
 				.getBoolean(BIG_HUBS);
 		Logging.logInfo("Hub room (entrances and boss rooms) will have high ceiling? " + bigHubs);
+		
+		allHuge = config.get("General", "AllHuge", ALL_HUGE, 
+				"If true all the dungeons will be in the huge catagory.")
+				.getBoolean(ALL_HUGE);
+		Logging.logInfo("All dungeon will be huge? " + allHuge);
 		
 		singleEntrance = config.get("General", "SingleEntrances", SINGLE_ENTRANCE, 
 				"If true all dungeons will exactly one entrance (if the theme allows entrances), "

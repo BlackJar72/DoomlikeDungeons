@@ -15,7 +15,7 @@ This really is almost certainly the final version of this mod -- even if I updat
 Doomlike Dungeons by is now licensed the MIT License:
 MIT License
 
-Copyright (c) 2014-2018 Jared Blackburn
+Copyright (c) 2014-2020 Jared Blackburn
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
