@@ -119,7 +119,7 @@ public class Builder {
 	public static void buildDungeon(Dungeon dungeon /*TODO: Parameters*/) {
 		//System.out.println("[DLDUNGONS] Inside Builder.placeDungeon; building dungeon");
 		//if(dungeon.theme != null) dungeon.map.build(dungeon);
-		if(dungeon.theme != null) dungeon.map.buildByChunksTest(dungeon);
+		if(dungeon.theme != null) dungeon.map.buildByChunks(dungeon);
 	}
 	
 	
