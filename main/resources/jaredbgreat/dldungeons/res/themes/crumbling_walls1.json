@@ -1,7 +1,7 @@
 {
   "name": "crumbling_walls_1",
   "blocks": [
-    "minecraft:stone_brick",
+    "minecraft:stone_bricks",
     "minecraft:mossy_stone_bricks",
     "minecraft:cracked_stone_bricks",
     "minecraft:air"

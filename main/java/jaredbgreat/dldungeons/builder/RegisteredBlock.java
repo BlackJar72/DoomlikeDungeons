@@ -60,17 +60,18 @@ public final class RegisteredBlock extends AbstractBlock {
 	private RegisteredBlock(String id) throws NoSuchElementException {	
 		names.add(id);
 		this.id = id; 
-		IBlockPlacer maybe = DBlock.makeDBlock(id);
+		DBlock maybe = DBlock.makeDBlock(id);
 		if(maybe == null) {
 			// FXIME
 			maybe = DBlock.makeDBlock("minecraft:hay_block");
 		}
-		if(maybe.toString().contains("minecraft:air") && !id.contains("minecraft:air")) { 
+		
+		if(((BlockState) maybe.getContents()).getBlock().getRegistryName().toString().contains("minecraft:air") && !id.contains("minecraft:air")) { 
 			// FXIME
 			maybe = DBlock.makeDBlock("minecraft:hay_block");
-			//String error = "[DLDUNGEONS] ERROR! Block read as \"" + id 
-			//		+ "\" parsed into an air block!";
-			//Logging.logError(error);
+			String error = "[DLDUNGEONS] ERROR! Block read as \"" + id 
+					+ "\" parsed into an air block!";
+			Logging.logError(error);
 			//throw new NoSuchElementException(error);
 		}
 		block = maybe;
