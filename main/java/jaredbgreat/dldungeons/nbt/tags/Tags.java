@@ -1,6 +1,7 @@
 package jaredbgreat.dldungeons.nbt.tags;
 
 import java.util.HashMap;
+import java.util.Locale;
 
 /* 
  * Doomlike Dungeons by is licensed the MIT License
@@ -17,7 +18,7 @@ public final class Tags {
 	
 	public static ITag makeITag(String line, Tokenizer tokens) {
 		ITag out;
-		NBTType type = NBTType.valueOf(tokens.getToken(1).toUpperCase());
+		NBTType type = NBTType.valueOf(tokens.getToken(1).toUpperCase(Locale.ROOT));
 		switch(type) {
 		case BOOLEAN:
 			out = new NBTBoolean(tokens.getToken(0), tokens.getToken(2), tokens.getToken(3));
