@@ -22,7 +22,7 @@ public abstract class AbstractEntrance {
 	protected static final Block LADDER 
 			= (Block)Blocks.LADDER;
 	protected static final BlockState STAIR_SLAB1 
-		= Blocks.SMOOTH_STONE_SLAB.defaultBlockState();	
+		= Blocks.SMOOTH_STONE_SLAB.defaultBlockState();
 	protected static final BlockState STAIR_SLAB2 
 		= Blocks.SMOOTH_STONE_SLAB.defaultBlockState()
 			.setValue(SlabBlock.TYPE, SlabType.TOP);

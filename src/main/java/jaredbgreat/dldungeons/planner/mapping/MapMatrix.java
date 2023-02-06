@@ -222,7 +222,7 @@ public class MapMatrix implements IHaveCoords {
 
 					 if(hasLiquid[i][j] && (!isWall[i][j] && !isDoor[i][j])
 							 && (!world.getBlockState(new BlockPos(shiftX + i, floorY[i][j] - 1, shiftZ + j))
-									 .equals(Blocks.AIR.defaultBlockState()))) 
+									 .equals(Blocks.AIR.defaultBlockState())))
 						 RegisteredBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, theRoom.liquidBlock);					 
 				}
 			}

@@ -333,7 +333,7 @@ private RegisteredBlock(BlockFamily family) throws NoSuchElementException {
 		MobSpawnerTileEntity theSpawner = (MobSpawnerTileEntity)world.getBlockEntity(pos);
 		
 		// Set up spawner logic
-		AbstractSpawner logic = theSpawner.getSpawner();		
+		AbstractSpawner logic = theSpawner.getSpawner();
 		CompoundNBT spawnData = new CompoundNBT();
 	    spawnData.putString("id", mob);
 	    logic.setNextSpawnData(new WeightedSpawnerEntity(1, spawnData));
@@ -354,11 +354,11 @@ private RegisteredBlock(BlockFamily family) throws NoSuchElementException {
 	public static boolean isGroundBlock(ISeedReader world, int x, int y, int z) {
 		BlockState bs = world.getBlockState(new BlockPos(x, y, z));
 		Material mat = bs.getMaterial();
-		return 	   (mat == Material.GRASS) 
-				|| (mat == Material.METAL) 
-				|| (mat == Material.DIRT) 
+		return 	   (mat == Material.GRASS)
+				|| (mat == Material.METAL)
+				|| (mat == Material.DIRT)
 				|| (mat == Material.SAND) 
-				|| (mat == Material.STONE) 
+				|| (mat == Material.STONE)
 				|| (mat == Material.CLAY
 				// Failsafe, it can never go into the void, or become an infinite loop
 				|| (y < 0));

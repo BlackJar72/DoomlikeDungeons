@@ -22,7 +22,7 @@ public class GenerationHandler {
 	
 	@SubscribeEvent
 	public static void registerFeatures(BiomeLoadingEvent event) {
-		event.getGeneration().addFeature(GenerationStage.Decoration.UNDERGROUND_STRUCTURES, 
+		event.getGeneration().addFeature(GenerationStage.Decoration.UNDERGROUND_STRUCTURES,
 				sectionFeature.configured(IFeatureConfig.NONE)
 				              .decorated(always.configured(NoPlacementConfig.INSTANCE)));
 	}
