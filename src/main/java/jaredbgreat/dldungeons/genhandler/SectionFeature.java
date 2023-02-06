@@ -59,7 +59,7 @@ public class SectionFeature  extends Feature<NoFeatureConfig> {
 			Builder.buildDungeonsChunk(cp, dungeonLocs, sreader);
 		} catch (Throwable e) {
 			// Ignore this as an apparent false alarm, everything works
-			//e.printStackTrace();
+			e.printStackTrace();
 			StringBuilder b = new StringBuilder(e.getLocalizedMessage());
 			b.append("SectionFeature.findDungeonsToBuild(): Building in chunk at " + cp);
 			b.append(" (blocks  ");
