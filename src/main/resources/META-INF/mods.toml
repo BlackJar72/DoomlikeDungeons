@@ -7,7 +7,7 @@ version="${file.jarVersion}" #mandatory
 displayName="Doomlike Dungeons" #mandatory
 logoFile="dldlogo2.png" #optional
 credits="Thanks for inspiration to Andrew J. Apted t(he Oblige level generator) and Slidedrum (the New Dungeons mod)." #optional
-authors="JaredBGreat" #optional
+authors="JaredBGreat, and RedRoseWarrior1" #optional
 description='''
 Procedurally generates multiroom dungeons resembling Doom levels into the world.
 '''
