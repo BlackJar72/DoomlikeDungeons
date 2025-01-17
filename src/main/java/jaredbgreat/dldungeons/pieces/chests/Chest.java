@@ -20,7 +20,6 @@ public class Chest {
     int mx, my, mz;
     protected int level;
     ChestType type;
-    LootType category;
     boolean withBoss;
 
     // These are used during placement and do not need to be serialized
@@ -35,10 +34,9 @@ public class Chest {
                             chest.mz,
                             chest.level)),
                     ChestType.CODEC.fieldOf("type").forGetter(chest -> chest.type),
-                    LootType.CODEC.fieldOf("category").forGetter(chest -> chest.category),
                     Codec.BOOL.listOf().fieldOf("flags").forGetter(chest -> List.of(
                             chest.withBoss)))
-                .apply(builder, (data, type, category, flags) -> {
+                .apply(builder, (data, type, flags) -> {
                 final Chest chest = new Chest();
 
                 chest.mx = data.get(0);
@@ -46,7 +44,6 @@ public class Chest {
                 chest.mz = data.get(2);
                 chest.level = data.get(2);
                 chest.type = type;
-                chest.category = category;
                 chest.withBoss = flags.get(0);
                 return chest;
             }));
@@ -55,13 +52,12 @@ public class Chest {
     private Chest(){}
 
 
-    public Chest(int x, int y, int z, int level, ChestType type, LootType category) {
+    public Chest(int x, int y, int z, int level, ChestType type) {
         this.mx = x;
         this.my = y;
         this.mz = z;
         this.level = level;
         this.type = type;
-        this.category = category;
     }
 
 
