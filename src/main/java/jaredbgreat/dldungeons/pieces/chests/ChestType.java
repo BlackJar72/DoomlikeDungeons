@@ -15,7 +15,7 @@ public enum ChestType {
 
     WEAK (new WeakProcessor()),
     BASIC (new BasicProcessor()),
-    TREASURE (new BasicProcessor());
+    TREASURE (new TreasureProcessor());
 
     public static final Codec<ChestType> CODEC = Codec.INT.xmap(ordinal -> values()[ordinal], Enum::ordinal);
 
