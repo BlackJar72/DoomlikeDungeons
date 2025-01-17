@@ -1,0 +1,8 @@
+{
+  "type": "dldungeonsjbg:dldungeon",
+  "biomes": "#dldungeonsjbg:has_structure/dldungeon",
+  "step": "underground_structures",
+  "terrain_adaptation": "none",
+  "config": {},
+  "spawn_overrides": {}
+}
