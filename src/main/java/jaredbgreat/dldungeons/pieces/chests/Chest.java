@@ -6,6 +6,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Chest {
@@ -63,6 +64,17 @@ public class Chest {
 
     public void place(WorldGenLevel world, int x, int y, int z, RandomSource random, LootCategory category) {
         type.processor.place(this, world, x, y, z, random, category);
+    }
+
+
+    static {
+        initSlots();
+    }
+
+
+    public static void initSlots() {
+        slots.clear();
+        for(int i = 0; i < 27; i++) Chest.slots.add(i);
     }
 
 

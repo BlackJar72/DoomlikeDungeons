@@ -238,7 +238,6 @@ public class LootListSet {
 		special.add(goldApples);
 		
 		addDiscs();
-		TreasureChest.initSlots();
 	}
 	
 	

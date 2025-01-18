@@ -3,7 +3,6 @@ package jaredbgreat.dldungeons.planner;
 
 import jaredbgreat.dldungeons.builder.RegisteredBlock;
 import jaredbgreat.dldungeons.pieces.Spawner;
-import jaredbgreat.dldungeons.pieces.chests.BasicChest;
 import jaredbgreat.dldungeons.pieces.chests.Chest;
 import jaredbgreat.dldungeons.pieces.chests.LootCategory;
 import jaredbgreat.dldungeons.pieces.entrances.SimpleEntrance;

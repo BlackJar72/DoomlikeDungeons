@@ -24,7 +24,6 @@ public enum ChestType {
     interface IChestProcessor {
         void place(Chest owner, WorldGenLevel world, int x, int y, int z, RandomSource random, LootCategory category);
         void fillChest(Chest owner, ChestBlockEntity chest, LootType kind, RandomSource random, LootCategory category);
-        public void initSlots();
     }
 
     ChestType(IChestProcessor processor) {
@@ -70,9 +69,6 @@ public enum ChestType {
                 if(treasure != null) chest.setItem(random.nextInt(27), treasure);
             }
         }
-
-        @Override
-        public void initSlots() {}
     }
 
 
@@ -104,7 +100,6 @@ public enum ChestType {
         public void place(Chest owner, WorldGenLevel world, int x, int y, int z, RandomSource random, LootCategory category) {
             BlockPos pos = new BlockPos(x, y, z);
             Collections.shuffle(Chest.slots, new Random(random.nextLong()));
-            initSlots();
             owner.slot = 0;
             owner.level += random.nextInt(2);
             if(Chest.NERF && !owner.withBoss && (owner.level > 6)) {
@@ -159,13 +154,6 @@ public enum ChestType {
                 }
             }
 
-        }
-
-        @Override
-        public void initSlots() {
-            Chest.slots.clear();
-            for(int i = 0; i < 27; i++) Chest.slots.add(i);
-            Collections.shuffle(Chest.slots);
         }
     }
 
