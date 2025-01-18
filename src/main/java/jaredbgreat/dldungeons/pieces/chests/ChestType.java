@@ -104,6 +104,7 @@ public enum ChestType {
         public void place(Chest owner, WorldGenLevel world, int x, int y, int z, RandomSource random, LootCategory category) {
             BlockPos pos = new BlockPos(x, y, z);
             Collections.shuffle(Chest.slots, new Random(random.nextLong()));
+            initSlots();
             owner.slot = 0;
             owner.level += random.nextInt(2);
             if(Chest.NERF && !owner.withBoss && (owner.level > 6)) {
@@ -157,11 +158,14 @@ public enum ChestType {
                     owner.slot++;
                 }
             }
+
         }
 
         @Override
         public void initSlots() {
+            Chest.slots.clear();
             for(int i = 0; i < 27; i++) Chest.slots.add(i);
+            Collections.shuffle(Chest.slots);
         }
     }
 

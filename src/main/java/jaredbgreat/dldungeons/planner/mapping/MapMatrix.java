@@ -9,8 +9,9 @@ package jaredbgreat.dldungeons.planner.mapping;
 import jaredbgreat.dldungeons.builder.BlockFamily;
 import jaredbgreat.dldungeons.builder.RegisteredBlock;
 import jaredbgreat.dldungeons.pieces.Spawner;
-import jaredbgreat.dldungeons.pieces.chests.BasicChest;
+import jaredbgreat.dldungeons.pieces.chests.Chest;
 import jaredbgreat.dldungeons.pieces.entrances.AbstractEntrance;
+import jaredbgreat.dldungeons.pieces.entrances.Entrance;
 import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.planner.astar.Step;
 import jaredbgreat.dldungeons.rooms.Room;
@@ -216,13 +217,13 @@ public class MapMatrix {
     }
 
 
-    public void addChest(BasicChest chest) {
-        features[chest.mx / 16][chest.mz / 16].addChest(chest);
+    public void addChest(Chest chest) {
+        features[chest.getMX() / 16][chest.getMZ() / 16].addChest(chest);
     }
 
 
-    public void addEntrance(AbstractEntrance entrance) {
-        features[entrance.x / 16][entrance.z / 16].addEntrance(entrance);
+    public void addEntrance(Entrance entrance) {
+        features[entrance.getX() / 16][entrance.getZ() / 16].addEntrance(entrance);
     }
 
 

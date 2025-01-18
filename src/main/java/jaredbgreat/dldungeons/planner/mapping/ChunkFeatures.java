@@ -5,8 +5,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import jaredbgreat.dldungeons.builder.RegisteredBlock;
 import jaredbgreat.dldungeons.pieces.Spawner;
-import jaredbgreat.dldungeons.pieces.chests.BasicChest;
+import jaredbgreat.dldungeons.pieces.chests.Chest;
 import jaredbgreat.dldungeons.pieces.entrances.AbstractEntrance;
+import jaredbgreat.dldungeons.pieces.entrances.Entrance;
+import jaredbgreat.dldungeons.pieces.entrances.SimpleEntrance;
 import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.rooms.Room;
 import jaredbgreat.dldungeons.rooms.RoomList;
@@ -26,9 +28,9 @@ import java.util.stream.IntStream;
  *
  */
 public class ChunkFeatures {
-	AbstractEntrance entrance;
+	Entrance entrance;
 	final List<Spawner> spawners;
-	final List<BasicChest> chests;
+	final List<Chest> chests;
 
 	//public static final Codec<ChunkFeatures> CODEC = Spawner.CODEC.listOf().xmap(ChunkFeatures::new,
 	//		spawners -> spawners.subList(1, spawners.size())
@@ -45,6 +47,23 @@ public class ChunkFeatures {
 			}));
 */
 
+	public static final Codec<ChunkFeatures> CODEC = RecordCodecBuilder.create(builder -> builder
+			.group(
+					Spawner.CODEC.listOf().fieldOf("spawners").forGetter(chunkFeatures -> chunkFeatures.spawners),
+					Chest.CODEC.listOf().fieldOf("chests").forGetter(chunkFeatures -> chunkFeatures.chests),
+					Entrance.CODEC.fieldOf("entrance").forGetter(chunkFeatures -> chunkFeatures.entrance)
+			)
+			.apply(builder, (spawners, chests, entrance) -> {
+				return new ChunkFeatures(spawners, List.of());
+			}));
+
+		private ChunkFeatures(List<Spawner> spawners, List<Chest> chests) {
+			this.spawners = spawners;
+			this.chests = chests;
+	}
+
+
+
 	public ChunkFeatures() {
 		spawners = new ArrayList<>();
 		chests   = new ArrayList<>();
@@ -56,12 +75,12 @@ public class ChunkFeatures {
 	}
 	
 	
-	public void addChest(BasicChest chest) {
+	public void addChest(Chest chest) {
 		chests.add(chest);
 	}
 	
 	
-	public void addEntrance(AbstractEntrance entrance) {
+	public void addEntrance(Entrance entrance) {
 		this.entrance = entrance;
 	}
 	
@@ -71,9 +90,9 @@ public class ChunkFeatures {
 	 * 
 	 */
 	public void buildTileEntites(WorldGenLevel world, Dungeon dungeon, int shiftX, int shiftZ) {
-		for(BasicChest  chest : chests) {
-			RegisteredBlock.placeChest(world, shiftX + chest.mx, chest.my, shiftZ + chest.mz);
-			chest.place(world, shiftX + chest.mx, chest.my, shiftZ + chest.mz, dungeon.random, dungeon.lootCat);
+		for(Chest  chest : chests) {
+			RegisteredBlock.placeChest(world, shiftX + chest.getMX(), chest.getMY(), shiftZ + chest.getMZ());
+			chest.place(world, shiftX + chest.getMX(), chest.getMY(), shiftZ + chest.getMZ(), dungeon.random, dungeon.lootCat);
 		}
 		for(Spawner  spawner : spawners) {
 				RegisteredBlock.placeSpawner(world,
@@ -92,7 +111,8 @@ public class ChunkFeatures {
 	private void buildEntrance(Dungeon dungeon, WorldGenLevel world) {
 		//System.out.println("Might build and entrance...");
 		if(entrance != null) {
-			entrance.build(dungeon, world);
+			AbstractEntrance wayIn = entrance.getType().factory.makeEntrance(entrance.getX(), entrance.getZ());
+			wayIn.build(dungeon, world);
 			//System.out.println(" \t ...Build and entrance!");
 		}
 	}

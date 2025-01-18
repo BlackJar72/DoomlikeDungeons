@@ -4,6 +4,7 @@ package jaredbgreat.dldungeons.planner;
 import jaredbgreat.dldungeons.builder.RegisteredBlock;
 import jaredbgreat.dldungeons.pieces.Spawner;
 import jaredbgreat.dldungeons.pieces.chests.BasicChest;
+import jaredbgreat.dldungeons.pieces.chests.Chest;
 import jaredbgreat.dldungeons.pieces.chests.LootCategory;
 import jaredbgreat.dldungeons.pieces.entrances.SimpleEntrance;
 import jaredbgreat.dldungeons.pieces.entrances.SpiralStair;
@@ -45,7 +46,8 @@ public class Dungeon {
      * A minimal codec to save (most of the) information relevant for the actual world generation.
      */
     public static final Codec<Dungeon> CODEC = RecordCodecBuilder.create(instance -> instance
-            .group(MapMatrix.CODEC.fieldOf("map").forGetter(dungeon -> dungeon.map),
+            .group(
+                    MapMatrix.CODEC.fieldOf("map").forGetter(dungeon -> dungeon.map),
                     Sizes.CODEC.fieldOf("size").forGetter(dungeon -> dungeon.size),
                     Degree.CODEC.listOf().fieldOf("degrees").forGetter(dungeon -> List.of(
                             dungeon.outside,
@@ -485,14 +487,14 @@ public class Dungeon {
      * @param room
      */
     public void addChestBlocks(Room room, WorldGenLevel world) {
-        for (BasicChest chest : room.chests) {
-            RegisteredBlock.placeChest(world, shiftX + chest.mx, chest.my, shiftZ + chest.mz);
+        for (Chest chest : room.chests) {
+            RegisteredBlock.placeChest(world, shiftX + chest.getMX(), chest.getMY(), shiftZ + chest.getMZ());
         }
     }
 
 
     public void addTEsToChunks(Room room) {
-        for (BasicChest chest : room.chests) {
+        for (Chest chest : room.chests) {
             map.addChest(chest);
         }
         for (Spawner spawner : room.spawners) {
@@ -528,8 +530,8 @@ public class Dungeon {
                     shiftZ + spawner.getZ(),
                     spawner.getMob());
         }
-        for (BasicChest chest : room.chests) {
-            chest.place(world, shiftX + chest.mx, chest.my, shiftZ + chest.mz, random, lootCat);
+        for (Chest chest : room.chests) {
+            chest.place(world, shiftX + chest.getMX(), chest.getMY(), shiftZ + chest.getMZ(), random, lootCat);
         }
     }
 

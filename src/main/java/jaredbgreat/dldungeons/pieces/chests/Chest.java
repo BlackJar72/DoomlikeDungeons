@@ -61,9 +61,14 @@ public class Chest {
     }
 
 
-    public void Place(WorldGenLevel world, int x, int y, int z, RandomSource random, LootCategory category) {
+    public void place(WorldGenLevel world, int x, int y, int z, RandomSource random, LootCategory category) {
         type.processor.place(this, world, x, y, z, random, category);
     }
+
+
+    public int getMX() { return mx; }
+    public int getMY() { return my; }
+    public int getMZ() { return mz; }
 
 
     //****************************************************************************************************************//
@@ -91,8 +96,9 @@ public class Chest {
     }
 
 
-    public void setWithBoss(boolean bossRoom) {
+    public Chest setWithBoss(boolean bossRoom) {
         withBoss = bossRoom;
+        return this;
     }
 
 

@@ -3,13 +3,8 @@ package jaredbgreat.dldungeons.rooms;
 import jaredbgreat.dldungeons.pieces.Doorway;
 import jaredbgreat.dldungeons.pieces.Shapes;
 import jaredbgreat.dldungeons.pieces.Spawner;
-import jaredbgreat.dldungeons.pieces.chests.BasicChest;
-import jaredbgreat.dldungeons.pieces.chests.TreasureChest;
-import jaredbgreat.dldungeons.pieces.chests.WeakChest;
-import jaredbgreat.dldungeons.pieces.entrances.AbstractEntrance;
-import jaredbgreat.dldungeons.pieces.entrances.SimpleEntrance;
-import jaredbgreat.dldungeons.pieces.entrances.SpiralStair;
-import jaredbgreat.dldungeons.pieces.entrances.TopRoom;
+import jaredbgreat.dldungeons.pieces.chests.*;
+import jaredbgreat.dldungeons.pieces.entrances.*;
 import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.planner.RoomSeed;
 import jaredbgreat.dldungeons.planner.Route;
@@ -107,12 +102,12 @@ public class Room extends AbstractRoom {
     public boolean hasEntrance;
     public boolean hasSpawners;
     public ArrayList<Spawner> spawners;
-    public ArrayList<BasicChest> chests;
+    public ArrayList<Chest> chests;
     public ArrayList<Doorway> doors;
     public ArrayList<DoorQueue> connections;
     public ArrayList<Doorway> topDoors;
     public Doorway midpoint; // not really a door but used as one at times
-    public volatile AbstractEntrance entrance;
+    public volatile Entrance entrance;
 
     private Room() {
         id = 0;
@@ -142,8 +137,8 @@ public class Room extends AbstractRoom {
         dungeon.rooms.add(this);
         id = dungeon.rooms.realSize();
         childSeeds = new ArrayList<RoomSeed>();
-        spawners = new ArrayList<Spawner>();
-        chests = new ArrayList<BasicChest>();
+        spawners = new ArrayList<>();
+        chests = new ArrayList<>();
         doors = new ArrayList<Doorway>();
         connections = new ArrayList<DoorQueue>();
         dungeon.planter.add(this);
@@ -252,14 +247,14 @@ public class Room extends AbstractRoom {
 
         switch (type) {
             case 0:
-                entrance = new SpiralStair((int) realX, (int) realZ);
+                entrance = new Entrance((int) realX, (int) realZ, EntranceType.STAIR);
                 break;
             case 1:
-                entrance = new TopRoom((int) realX, (int) realZ);
+                entrance = new Entrance((int) realX, (int) realZ, EntranceType.ROOM);
                 break;
             case 2:
             default:
-                entrance = new SimpleEntrance((int) realX, (int) realZ);
+                entrance = new Entrance((int) realX, (int) realZ, EntranceType.SIMPLE);
                 break;
         }
         //DoomlikeDungeons.profiler.endTask("Adding Entrances");
@@ -447,14 +442,14 @@ public class Room extends AbstractRoom {
             tmp = (endZ - beginZ - 3);
             z = dungeon.random.nextInt(tmp) + beginZ + 2;
             y = dungeon.map.floorY[x][z];
-            chests.add(new WeakChest(x, y, z, dungeon.lootCat));
+            chests.add(new Chest(x, y, z, 1, ChestType.WEAK));
         } else if (dungeon.random.nextBoolean() && !isNode) {
             tmp = (endX - beginX - 3);
             x = dungeon.random.nextInt(tmp) + beginX + 2;
             tmp = (endZ - beginZ - 3);
             z = dungeon.random.nextInt(tmp) + beginZ + 2;
             y = dungeon.map.floorY[x][z];
-            chests.add(new BasicChest(x, y, z, lev, dungeon.lootCat));
+            chests.add(new Chest(x, y, z, lev, ChestType.BASIC));
         } else {
             int ms = Math.max(n, 2);
             if (isNode) num = Math.min(ms, dungeon.random.nextInt(2 + (ms / 2)) + 2);
@@ -465,14 +460,14 @@ public class Room extends AbstractRoom {
                 tmp = (endZ - beginZ - 3);
                 z = dungeon.random.nextInt(tmp) + beginZ + 2;
                 y = dungeon.map.floorY[x][z];
-                chests.add(new BasicChest(x, y, z, lev, dungeon.lootCat));
+                chests.add(new Chest(x, y, z, lev, ChestType.BASIC));
             }
         }
         if (isNode && !hasEntrance) {
             x = (int) realX;
             z = (int) realZ;
             y = dungeon.map.floorY[x][z];
-            chests.add(new TreasureChest(x, y, z, lev, dungeon.lootCat).setWithBoss(trueBoss));
+            chests.add(new Chest(x, y, z, lev, ChestType.TREASURE).setWithBoss(trueBoss));
         }
     }
 
