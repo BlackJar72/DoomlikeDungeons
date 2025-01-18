@@ -46,7 +46,7 @@ public class BasicChest {
 	 * @param z
 	 * @param random
 	 */
-	public void place(WorldGenLevel world, int x, int y, int z, RandomSource random) {
+	public void place(WorldGenLevel world, int x, int y, int z, RandomSource random, LootCategory lootCat) {
 		BlockPos pos = new BlockPos(x, y, z);
 		level += random.nextInt(2);
 		level = Math.min(6, Math.min(level, LootCategory.LEVELS - 1));

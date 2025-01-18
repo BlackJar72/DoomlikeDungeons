@@ -46,7 +46,7 @@ public class TreasureChest extends BasicChest {
 	 *  a separate random slot for each item so that none are overwritten. 
 	 */
 	@Override
-	public void place(WorldGenLevel world, int x, int y, int z, RandomSource random) {
+	public void place(WorldGenLevel world, int x, int y, int z, RandomSource random, LootCategory lootCat) {
 		BlockPos pos = new BlockPos(x, y, z);
 		Collections.shuffle(slots, new Random(random.nextLong()));
 		slot = 0;

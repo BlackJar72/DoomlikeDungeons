@@ -529,7 +529,7 @@ public class Dungeon {
                     spawner.getMob());
         }
         for (BasicChest chest : room.chests) {
-            chest.place(world, shiftX + chest.mx, chest.my, shiftZ + chest.mz, random);
+            chest.place(world, shiftX + chest.mx, chest.my, shiftZ + chest.mz, random, lootCat);
         }
     }
 

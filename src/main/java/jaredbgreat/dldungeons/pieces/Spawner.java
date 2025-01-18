@@ -35,7 +35,7 @@ public final class Spawner {
 
 				spawner.x = data.get(0);
 				spawner.y = data.get(1);
-				spawner.x = data.get(2);
+				spawner.z = data.get(2);
 				spawner.room = data.get(3);
 				spawner.level = data.get(4);
 				spawner.mob = mob;

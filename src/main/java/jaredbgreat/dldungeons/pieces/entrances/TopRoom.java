@@ -22,7 +22,6 @@ public class TopRoom extends AbstractEntrance {
 	
 	public TopRoom(int x, int z) {
 		super(x, z);
-		
 	}
 
 	

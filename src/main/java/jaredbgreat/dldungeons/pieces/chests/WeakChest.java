@@ -25,7 +25,7 @@ public class WeakChest extends BasicChest {
     }
 
     @Override
-    public void place(WorldGenLevel world, int x, int y, int z, RandomSource random) {
+    public void place(WorldGenLevel world, int x, int y, int z, RandomSource random, LootCategory lootCat) {
         BlockPos pos = new BlockPos(x, y, z);
         ChestBlockEntity contents = (ChestBlockEntity) world.getBlockEntity(pos);
         if (world.getBlockState(pos).getBlock() != Blocks.CHEST) {

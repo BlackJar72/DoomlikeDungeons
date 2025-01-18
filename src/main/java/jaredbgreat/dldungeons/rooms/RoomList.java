@@ -20,6 +20,7 @@ import java.util.ListIterator;
  * @author Jared Blackburn
  */
 public class RoomList extends ArrayList<Room> {
+
     public static final Codec<RoomList> CODEC = Room.CODEC.listOf().xmap(RoomList::new,
             rooms -> rooms.subList(1, rooms.size())
     );

@@ -61,8 +61,8 @@ public class Chest {
     }
 
 
-    public void Place(WorldGenLevel world, int x, int y, int z, RandomSource random) {
-        type.processor.place(this, world, x, y, z, random);
+    public void Place(WorldGenLevel world, int x, int y, int z, RandomSource random, LootCategory category) {
+        type.processor.place(this, world, x, y, z, random, category);
     }
 
 

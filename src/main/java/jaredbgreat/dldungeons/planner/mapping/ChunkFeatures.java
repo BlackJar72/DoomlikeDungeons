@@ -1,15 +1,22 @@
 package jaredbgreat.dldungeons.planner.mapping;
 
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import jaredbgreat.dldungeons.builder.RegisteredBlock;
 import jaredbgreat.dldungeons.pieces.Spawner;
 import jaredbgreat.dldungeons.pieces.chests.BasicChest;
 import jaredbgreat.dldungeons.pieces.entrances.AbstractEntrance;
 import jaredbgreat.dldungeons.planner.Dungeon;
+import jaredbgreat.dldungeons.rooms.Room;
+import jaredbgreat.dldungeons.rooms.RoomList;
+import jaredbgreat.dldungeons.themes.Sizes;
+import jaredbgreat.dldungeons.util.cache.Coords;
 import net.minecraft.world.level.WorldGenLevel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * A class to store information such as chest, spawner, and exit information, instead of 
@@ -22,8 +29,22 @@ public class ChunkFeatures {
 	AbstractEntrance entrance;
 	final List<Spawner> spawners;
 	final List<BasicChest> chests;
-	
-	
+
+	//public static final Codec<ChunkFeatures> CODEC = Spawner.CODEC.listOf().xmap(ChunkFeatures::new,
+	//		spawners -> spawners.subList(1, spawners.size())
+	//);
+
+	/*
+	public static final Codec<ChunkFeatures> CODEC = RecordCodecBuilder.create(builder -> builder
+			.group(
+					Spawner.CODEC.listOf().xmap(ArrayList::new, spawners -> spawners.subList(0, spawners.size()),
+					Spawner.CODEC.listOf().xmap(ArrayList::new,chests -> chests.subList(0, chests.size())
+			)
+			.apply(builder, (spawners, chests) -> {
+
+			}));
+*/
+
 	public ChunkFeatures() {
 		spawners = new ArrayList<>();
 		chests   = new ArrayList<>();
@@ -52,7 +73,7 @@ public class ChunkFeatures {
 	public void buildTileEntites(WorldGenLevel world, Dungeon dungeon, int shiftX, int shiftZ) {
 		for(BasicChest  chest : chests) {
 			RegisteredBlock.placeChest(world, shiftX + chest.mx, chest.my, shiftZ + chest.mz);
-			chest.place(world, shiftX + chest.mx, chest.my, shiftZ + chest.mz, dungeon.random);
+			chest.place(world, shiftX + chest.mx, chest.my, shiftZ + chest.mz, dungeon.random, dungeon.lootCat);
 		}
 		for(Spawner  spawner : spawners) {
 				RegisteredBlock.placeSpawner(world,
