@@ -8,7 +8,12 @@ package jaredbgreat.dldungeons.pieces.entrances;
 
 import jaredbgreat.dldungeons.builder.RegisteredBlock;
 import jaredbgreat.dldungeons.planner.Dungeon;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Half;
+import net.minecraft.world.level.block.state.properties.SlabType;
 
 /**
  * An entrance with a small, one-room building, either complete or as a ruin,
@@ -26,10 +31,10 @@ public class TopRoom extends AbstractEntrance {
 
 	
 	@Override
-	public void build(Dungeon dungeon, WorldGenLevel world) {
+	public void build(Dungeon dungeon, WorldGenLevel world, int shiftX, int shiftZ) {
 		//DoomlikeDungeons.profiler.startTask("Generating Top Room Numbers (TopRoom)");
-		wx = x + (dungeon.map.chunkX * 16) - (dungeon.map.room.length / 2) + 8;
-		wz = z + (dungeon.map.chunkZ * 16) - (dungeon.map.room.length / 2) + 8;
+		wx = x + shiftX;
+		wz = z + shiftZ;
 		bottom = dungeon.map.floorY[x][z];
 		top = world.getMaxBuildHeight();
 		while(!RegisteredBlock.isGroundBlock(world, wx, top, wz)) top--;
@@ -230,29 +235,38 @@ public class TopRoom extends AbstractEntrance {
 		//DoomlikeDungeons.profiler.startTask("Generating Latter (TopRoom)");
 		top += ydim;
 		int side = dungeon.random.nextInt(4);
+		BlockState ladder;
 		switch (side) {
 			case 0:
+				ladder = LADDER.defaultBlockState()
+						.setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.WEST);
 				for(int i = bottom; i <= top; i++) {
 					RegisteredBlock.place(world, wx, i, wz, dungeon.wallBlock1);
-					RegisteredBlock.placeBlock(world, wx + 1, i, wz, LADDER, 5, 3);
+					RegisteredBlock.placeBlock(world, wx + 1, i, wz, ladder, 5, 3);
 				}
 				break;
 			case 1:
+				ladder = LADDER.defaultBlockState()
+						.setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH);
 				for(int i = bottom; i <= top; i++) {
 					RegisteredBlock.place(world, wx, i, wz, dungeon.wallBlock1);
-					RegisteredBlock.placeBlock(world, wx, i, wz + 1, LADDER, 3, 3);
+					RegisteredBlock.placeBlock(world, wx, i, wz + 1, ladder, 3, 3);
 				}
 				break;
 			case 2:
+				ladder = LADDER.defaultBlockState()
+						.setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.EAST);
 				for(int i = bottom; i <= top; i++) {
 					RegisteredBlock.place(world, wx, i, wz, dungeon.wallBlock1);
-					RegisteredBlock.placeBlock(world, wx - 1, i, wz, LADDER, 4, 3);
+					RegisteredBlock.placeBlock(world, wx - 1, i, wz, ladder, 4, 3);
 				}
 				break;
 			case 3:
+				ladder = LADDER.defaultBlockState()
+						.setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH);
 				for(int i = bottom; i <= top; i++) {
 					RegisteredBlock.place(world, wx, i, wz, dungeon.wallBlock1);
-					RegisteredBlock.placeBlock(world, wx, i, wz - 1, LADDER, 2, 3);
+					RegisteredBlock.placeBlock(world, wx, i, wz - 1, ladder, 2, 3);
 				}
 				break;
 		}	
@@ -274,10 +288,12 @@ public class TopRoom extends AbstractEntrance {
 		for(int i = bottom; i < top; i++) {
 			int sx, sz;
 			RegisteredBlock.place(world, wx, i, wz, dungeon.wallBlock1);
+			BlockState uslab = STAIR_SLAB.defaultBlockState().setValue(BlockStateProperties.SLAB_TYPE, SlabType.TOP);
+			BlockState lslab = STAIR_SLAB.defaultBlockState().setValue(BlockStateProperties.SLAB_TYPE, SlabType.BOTTOM);
 			switch (side) {
 			case 0:
-				RegisteredBlock.placeBlock(world, wx+1, i, wz,   STAIR_SLAB, 0, 3);
-				RegisteredBlock.placeBlock(world, wx+1, i, wz+1, STAIR_SLAB, 8, 3);
+				RegisteredBlock.placeBlock(world, wx+1, i, wz,   lslab, 0, 3);
+				RegisteredBlock.placeBlock(world, wx+1, i, wz+1, uslab, 8, 3);
 				// Empty space
 				RegisteredBlock.deleteBlock(world, wx,    i, wz+1);
 				RegisteredBlock.deleteBlock(world, wx-1,  i, wz+1);
@@ -287,8 +303,8 @@ public class TopRoom extends AbstractEntrance {
 				RegisteredBlock.deleteBlock(world, wx+1,  i, wz-1);
 				break;
 			case 1:
-				RegisteredBlock.placeBlock(world, wx,   i, wz+1, STAIR_SLAB, 0, 3);
-				RegisteredBlock.placeBlock(world, wx-1, i, wz+1, STAIR_SLAB, 8, 3);
+				RegisteredBlock.placeBlock(world, wx,   i, wz+1, lslab, 0, 3);
+				RegisteredBlock.placeBlock(world, wx-1, i, wz+1, uslab, 8, 3);
 				// Empty space
 				RegisteredBlock.deleteBlock(world, wx+1, i,   wz);
 				RegisteredBlock.deleteBlock(world, wx+1, i, wz+1);
@@ -298,8 +314,8 @@ public class TopRoom extends AbstractEntrance {
 				RegisteredBlock.deleteBlock(world, wx+1, i, wz-1);
 				break;
 			case 2:
-				RegisteredBlock.placeBlock(world, wx-1, i, wz,   STAIR_SLAB, 0, 3);
-				RegisteredBlock.placeBlock(world, wx-1, i, wz-1, STAIR_SLAB, 8, 3);
+				RegisteredBlock.placeBlock(world, wx-1, i, wz,   lslab, 0, 3);
+				RegisteredBlock.placeBlock(world, wx-1, i, wz-1, uslab, 8, 3);
 				// Empty space
 				RegisteredBlock.deleteBlock(world, wx+1, i,   wz);
 				RegisteredBlock.deleteBlock(world, wx+1, i, wz+1);
@@ -309,8 +325,8 @@ public class TopRoom extends AbstractEntrance {
 				RegisteredBlock.deleteBlock(world, wx+1, i, wz-1);
 				break;
 			case 3:
-				RegisteredBlock.placeBlock(world, wx,   i, wz-1, STAIR_SLAB, 0, 3);
-				RegisteredBlock.placeBlock(world, wx+1, i, wz-1, STAIR_SLAB, 8, 3);
+				RegisteredBlock.placeBlock(world, wx,   i, wz-1, lslab, 0, 3);
+				RegisteredBlock.placeBlock(world, wx+1, i, wz-1, uslab, 8, 3);
 				// Empty space
 				RegisteredBlock.deleteBlock(world, wx+1, i,   wz);
 				RegisteredBlock.deleteBlock(world, wx+1, i, wz+1);

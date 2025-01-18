@@ -223,6 +223,12 @@ public final class RegisteredBlock extends AbstractBlock {
         world.setBlock(new BlockPos(x, y, z), block.defaultBlockState(), 2);
     }
 
+    
+    public static void placeBlock(WorldGenLevel world, int x, int y, int z, BlockState block, int a, int b) {
+        if (isProtectedBlock(world, x, y, z)) return;
+        world.setBlock(new BlockPos(x, y, z), block, 2);
+    }
+
 
     /**
      * A wrapper for setting a block to air.

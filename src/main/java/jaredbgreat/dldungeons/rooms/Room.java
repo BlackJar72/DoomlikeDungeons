@@ -247,14 +247,14 @@ public class Room extends AbstractRoom {
 
         switch (type) {
             case 0:
-                entrance = new Entrance((int) realX, (int) realZ, EntranceType.STAIR);
+                entrance = new Entrance(midX, midZ, EntranceType.STAIR);
                 break;
             case 1:
-                entrance = new Entrance((int) realX, (int) realZ, EntranceType.ROOM);
+                entrance = new Entrance(midX, midZ, EntranceType.ROOM);
                 break;
             case 2:
             default:
-                entrance = new Entrance((int) realX, (int) realZ, EntranceType.SIMPLE);
+                entrance = new Entrance(midX, midZ, EntranceType.SIMPLE);
                 break;
         }
         //DoomlikeDungeons.profiler.endTask("Adding Entrances");

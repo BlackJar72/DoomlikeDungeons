@@ -562,18 +562,18 @@ public class Dungeon {
         switch (entrance) {
             case 0:
                 //DoomlikeDungeons.profiler.startTask("Adding Sriral Stair");
-                new SpiralStair((int) room.realX, (int) room.realZ).build(this, world);
+                new SpiralStair((int) room.realX, (int) room.realZ).build(this, world, shiftX, shiftZ);
                 //DoomlikeDungeons.profiler.endTask("Adding Sriral Stair");
                 break;
             case 1:
                 //DoomlikeDungeons.profiler.startTask("Adding Top Room");
-                new TopRoom((int) room.realX, (int) room.realZ).build(this, world);
+                new TopRoom((int) room.realX, (int) room.realZ).build(this, world, shiftX, shiftZ);
                 //DoomlikeDungeons.profiler.endTask("Adding Top Room");
                 break;
             case 2:
             default:
                 //DoomlikeDungeons.profiler.startTask("Adding Simple Entrance");
-                new SimpleEntrance((int) room.realX, (int) room.realZ).build(this, world);
+                new SimpleEntrance((int) room.realX, (int) room.realZ).build(this, world, shiftX, shiftZ);
                 //DoomlikeDungeons.profiler.endTask("Adding Simple Entrance");
                 break;
         }

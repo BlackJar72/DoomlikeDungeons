@@ -54,10 +54,13 @@ public class ChunkFeatures {
 					Entrance.CODEC.fieldOf("entrance").forGetter(chunkFeatures -> chunkFeatures.entrance)
 			)
 			.apply(builder, (spawners, chests, entrance) -> {
-				return new ChunkFeatures(spawners, List.of());
+				ChunkFeatures features = new ChunkFeatures(spawners, chests);
+				features.entrance = entrance;
+				return features;
 			}));
 
-		private ChunkFeatures(List<Spawner> spawners, List<Chest> chests) {
+
+	private ChunkFeatures(List<Spawner> spawners, List<Chest> chests) {
 			this.spawners = spawners;
 			this.chests = chests;
 	}
@@ -108,19 +111,19 @@ public class ChunkFeatures {
 	 * This will added a physical entrance to all entrance nodes.
 	 * 
 	 */
-	private void buildEntrance(Dungeon dungeon, WorldGenLevel world) {
+	private void buildEntrance(Dungeon dungeon, WorldGenLevel world, int shiftX, int shiftZ) {
 		//System.out.println("Might build and entrance...");
 		if(entrance != null) {
 			AbstractEntrance wayIn = entrance.getType().factory.makeEntrance(entrance.getX(), entrance.getZ());
-			wayIn.build(dungeon, world);
-			//System.out.println(" \t ...Build and entrance!");
+			wayIn.build(dungeon, world, shiftX, shiftZ);
 		}
+		//System.out.println(" \t ...Build and entrance!");
 	}
 	
 	
 	public void buildFeatures(Dungeon dungeon, int shiftX, int shiftZ, WorldGenLevel world) {
 		buildTileEntites(world, dungeon, shiftX, shiftZ);
-		buildEntrance(dungeon, world);
+		buildEntrance(dungeon, world, shiftX, shiftZ);
 	}
 
 

@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.Blocks;
 public abstract class AbstractEntrance {
 
     protected static final Block LADDER = Blocks.LADDER;
-    protected static final Block STAIR_SLAB = Blocks.STONE_SLAB;
+    protected static final Block STAIR_SLAB = Blocks.SMOOTH_STONE_SLAB;
 
     public final int x, z;
 
@@ -40,5 +40,5 @@ public abstract class AbstractEntrance {
      * @param dungeon
      * @param world
      */
-    public abstract void build(Dungeon dungeon, WorldGenLevel world);
+    public abstract void build(Dungeon dungeon, WorldGenLevel world, int shiftX, int shiftZ);
 }
