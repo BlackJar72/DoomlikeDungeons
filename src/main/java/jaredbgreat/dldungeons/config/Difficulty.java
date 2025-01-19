@@ -25,12 +25,18 @@ import net.minecraft.util.RandomSource;
  */
 public enum Difficulty {
 
-    NONE  (0, 0, 0, 0, 0,  -1, false, "No spawners."),
-    BABY  (3, 0, 0, 0, 0, 884, false, "Baby mode.  I'm too young to die!"),
-    NOOB  (4, 1, 1, 1, 1, 590, false, "Not too hard, not to rough."),
-    NORM  (5, 2, 1, 1, 2, 427, false, "Normal difficulty. Hurt me plenty! "),
-    HARD  (6, 3, 2, 2, 3, 323, true, "Super violent!"),
-    NUTS  (7, 5, 2, 2, 4, 100, true, "NIGHTMARE!!! Insane horror!");
+    NONE  (0, 0, 0, 0, 0,  -1, false,
+            "No spawners."),
+    BABY  (3, 0, 0, 0, 0, 884, false,
+            "Baby mode.  I'm too young to die!"),
+    NOOB  (4, 1, 1, 1, 1, 590, false,
+            "Not too hard, not to rough."),
+    NORM  (5, 2, 1, 1, 2, 427, false,
+            "Normal difficulty. Hurt me plenty! "),
+    HARD  (6, 3, 2, 2, 3, 323, true,
+            "Super violent! Some might even say ultraviolence"),
+    NUTS  (7, 5, 2, 2, 4, 100, true,
+            "NIGHTMARE!!! Insane horror!");
 
 
     public final int spawners;
@@ -67,31 +73,6 @@ public enum Difficulty {
 
     public static Difficulty setDifficulty(Difficulty value) {
         difficulty = value;
-        return difficulty;
-    }
-
-
-    public static Difficulty setDifficulty(int numeric) {
-        switch (numeric) {
-            case 0:
-                difficulty = NONE;
-                break;
-            case 1:
-                difficulty = BABY;
-                break;
-            case 2:
-                difficulty = NOOB;
-                break;
-            case 4:
-                difficulty = HARD;
-                break;
-            case 5:
-                difficulty = NUTS;
-                break;
-            default: // "case 3:" is resolved here, alongside bad input
-                difficulty = NORM;
-                break;
-        }
         return difficulty;
     }
 

@@ -336,6 +336,10 @@ public class Room extends AbstractRoom {
      * @param dungeon
      */
     protected void addSpawners(Dungeon dungeon) {
+        Difficulty difficulty = Difficulty.getDifficulty();
+        if(difficulty == Difficulty.NONE ||
+                (!isNode && !difficulty.addmob(dungeon.random))
+                || (hasEntrance && !difficulty.entrancemobs)) return;
         boolean multibonus = false;
         int x, y, z, tmp, num;
         String mob;
@@ -442,7 +446,7 @@ public class Room extends AbstractRoom {
             tmp = (endZ - beginZ - 3);
             z = dungeon.random.nextInt(tmp) + beginZ + 2;
             y = dungeon.map.floorY[x][z];
-            chests.add(new Chest(x, y, z, 1, ChestType.WEAK));
+            chests.add(new Chest(x, y, z, 0, ChestType.WEAK));
         } else if (dungeon.random.nextBoolean() && !isNode) {
             tmp = (endX - beginX - 3);
             x = dungeon.random.nextInt(tmp) + beginX + 2;

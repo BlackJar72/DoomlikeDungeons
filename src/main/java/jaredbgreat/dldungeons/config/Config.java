@@ -61,7 +61,7 @@ public class Config {
             .defineListAllowEmpty(Collections.singletonList("Never With Biome Tags"), () -> List.of("is_end"), Config::returnTrue);*/
 
     private static final ForgeConfigSpec.BooleanValue NERF_LOOT = BUILDER
-            .comment("If true this will limit the amoutn of level 8 loot found with anything less than a true boss")
+            .comment("If true this will limit the amount of level 8 loot found with anything less than a true boss")
             .comment("(This includes epic, sometimes somewhat cheaty items,)")
             .define("Nerf Epic Loot", false);
 
@@ -71,34 +71,34 @@ public class Config {
 
     private static final ForgeConfigSpec.IntValue A1 = BUILDER
             .comment("Part of the formula for determine how many items go in basic chests.")
-            .comment("Formula for number of loot items: item = random.NextIt(A1 + (Room Difficulty / B1)) + C1")
+            .comment("Formula for number of loot items: number of items = random.NextIt(A1 + (Room Difficulty / B1)) + C1")
             .defineInRange("Common Chest A1", 3, 0, 9);
 
     private static final ForgeConfigSpec.IntValue B1 = BUILDER
             .comment("Part of the formula for determine how many items go in basic chests.")
-            .comment("Formula for number of loot items: item = random.NextIt(A1 + (Room Difficulty / B1)) + C1")
+            .comment("Formula for number of loot items: number of items = random.NextIt(A1 + (Room Difficulty / B1)) + C1")
             .defineInRange("Common Chest B1", 1, 0, 9);
 
     private static final ForgeConfigSpec.IntValue C1 = BUILDER
             .comment("Part of the formula for determine how many items go in basic chests.")
-            .comment("Formula for number of loot items: item = random.NextIt(A1 + (Room Difficulty / B1)) + C1")
+            .comment("Formula for number of loot items: number of items = random.NextIt(A1 + (Room Difficulty / B1)) + C1")
             .defineInRange("Common Chest C1", 3, 0, 9);
 
     private static final ForgeConfigSpec.IntValue A2 = BUILDER
             .comment("Part of the formula for determine how many items of each category go in \"boss room\" treasure chests.")
-            .comment("Formula for number of loot items: item = random.NextIt(A2 + (Room Difficulty / B2)) + C2")
+            .comment("Formula for number of loot items: number of items = random.NextIt(A2 + (Room Difficulty / B2)) + C2")
             .comment("The categories for these items are healing, gear, and loot.")
             .defineInRange("Common Chest A2", 1, 0, 9);
 
     private static final ForgeConfigSpec.IntValue B2 = BUILDER
             .comment("Part of the formula for determine how many items of each category go in \"boss room\" treasure chests.")
-            .comment("Formula for number of loot items: item = random.NextIt(A2 + (Room Difficulty / B2)) + C2")
+            .comment("Formula for number of loot items: number of items = random.NextIt(A2 + (Room Difficulty / B2)) + C2")
             .comment("The categories for these items are healing, gear, and loot.")
             .defineInRange("Common Chest B2", 1, 0, 9);
 
     private static final ForgeConfigSpec.IntValue C2 = BUILDER
             .comment("Part of the formula for determine how many items of each category go in \"boss room\" treasure chests.")
-            .comment("Formula for number of loot items: item = random.NextIt(A2 + (Room Difficulty / B2)) + C2")
+            .comment("Formula for number of loot items: number of items = random.NextIt(A2 + (Room Difficulty / B2)) + C2")
             .comment("The categories for these items are healing, gear, and loot.")
             .defineInRange("Common Chest C2", 1, 0, 9);
 
