@@ -1,9 +1,7 @@
 package jaredbgreat.dldungeons.builder;
 
-import com.github.xyroc.dldungeonspoc.DLDPoC;
+import com.github.xyroc.dldungeonspoc.DLDungeons;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
@@ -17,7 +15,6 @@ import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryManager;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -311,7 +308,7 @@ public final class RegisteredBlock extends AbstractBlock {
         } else {
             String error = "ERROR! Spawner placed at \"" + x + " " + y + " " + z
                     + "\" is actually " + Objects.requireNonNullElse(be.getClass().getSimpleName(), "(None)");
-            DLDPoC.LOGGER.error(error);
+            DLDungeons.LOGGER.error(error);
         }
     }
 

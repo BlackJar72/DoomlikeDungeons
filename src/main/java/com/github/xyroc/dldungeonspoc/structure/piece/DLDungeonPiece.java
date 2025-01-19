@@ -1,6 +1,6 @@
 package com.github.xyroc.dldungeonspoc.structure.piece;
 
-import com.github.xyroc.dldungeonspoc.DLDPoC;
+import com.github.xyroc.dldungeonspoc.DLDungeons;
 import com.github.xyroc.dldungeonspoc.init.ModStructurePieceTypes;
 import jaredbgreat.dldungeons.planner.Dungeon;
 import net.minecraft.core.BlockPos;
@@ -41,7 +41,7 @@ public class DLDungeonPiece extends StructurePiece {
 
     @Override
     protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tag) {
-        DLDPoC.LOGGER.info("Saving dungeon at chunk {},{}", dungeon.map.chunkX, dungeon.map.chunkZ);
+        DLDungeons.LOGGER.info("Saving dungeon at chunk {},{}", dungeon.map.chunkX, dungeon.map.chunkZ);
         // Save dungeon plan to nbt here. Using a codec to do this because it's nice and clean, but you can do it the old-fashioned way as well.
         // The same goes for the constructor of this class which reads from nbt.
         tag.put(NBT_KEY_DUNGEON, Dungeon.CODEC.encodeStart(NbtOps.INSTANCE, dungeon).getOrThrow(false, (error) -> {

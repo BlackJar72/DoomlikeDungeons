@@ -2,6 +2,7 @@ package com.github.xyroc.dldungeonspoc;
 
 import com.github.xyroc.dldungeonspoc.init.ModStructurePieceTypes;
 import com.github.xyroc.dldungeonspoc.init.ModStructureTypes;
+import jaredbgreat.dldungeons.config.Config;
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -13,12 +14,12 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/mods.toml file
-@Mod(DLDPoC.MODID)
-public class DLDPoC {
+@Mod(DLDungeons.MODID)
+public class DLDungeons {
     public static final String MODID = "dldungeonsjbg";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public DLDPoC(FMLJavaModLoadingContext context) {
+    public DLDungeons(FMLJavaModLoadingContext context) {
         IEventBus modEventBus = context.getModEventBus();
 
         // Register the commonSetup method for modloading

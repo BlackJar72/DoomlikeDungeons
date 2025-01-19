@@ -1,6 +1,7 @@
 package jaredbgreat.dldungeons.planner;
 
 
+import jaredbgreat.dldungeons.config.Config;
 import jaredbgreat.dldungeons.rooms.Room;
 import net.minecraft.util.RandomSource;
 
@@ -24,7 +25,9 @@ public class Node {
         int ymod = (xdim <= zdim) ? (int) Math.sqrt(xdim) : (int) Math.sqrt(zdim);
 
         int height = random.nextInt((dungeon.verticle.value / 2) + ymod + 1) + 2;
-        height = Math.min(12, Math.max(7, Math.max(height * 2, height + dungeon.random.nextInt(3) + 2)));
+        if(Config.bigHubs ) {
+            height = Math.min(12, Math.max(7, Math.max(height * 2, height + dungeon.random.nextInt(3) + 2)));
+        }
 
 
         // Then plant a seed and try to grow the room

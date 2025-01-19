@@ -2,6 +2,7 @@ package jaredbgreat.dldungeons.planner;
 
 
 import jaredbgreat.dldungeons.builder.RegisteredBlock;
+import jaredbgreat.dldungeons.config.Config;
 import jaredbgreat.dldungeons.pieces.Spawner;
 import jaredbgreat.dldungeons.pieces.chests.Chest;
 import jaredbgreat.dldungeons.pieces.chests.LootCategory;
@@ -290,7 +291,8 @@ public class Dungeon {
         shiftZ = (map.chunkZ * 16) - (map.room.length / 2) + 8;
 
         makeNodes();
-        if (numEntrances < 1) addAnEntrance();
+        if ((numEntrances < 1)
+                && (Config.easyFind || Config.singleEntrance)) addAnEntrance();
         connectNodes();
         growthCycle();
         spawners.fixSpawners(this, random);
@@ -306,7 +308,11 @@ public class Dungeon {
      * of type Degree.
      */
     private void applyTheme() {
-        size = theme.sizes.select(random);
+        if(Config.allHuge) {
+            size  	= Sizes.HUGE;
+        } else {
+            size   	= theme.sizes.select(random);
+        }
         outside = theme.outside.select(random);
         liquids = theme.liquids.select(random);
         subrooms = theme.subrooms.select(random);
@@ -558,6 +564,7 @@ public class Dungeon {
         int entrance;
         if (variability.use(random)) entrance = random.nextInt(3);
         else entrance = entrancePref;
+        if(Config.easyFind) entrance = 1;
 
         switch (entrance) {
             case 0:

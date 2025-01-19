@@ -1,6 +1,6 @@
 package com.github.xyroc.dldungeonspoc.init;
 
-import com.github.xyroc.dldungeonspoc.DLDPoC;
+import com.github.xyroc.dldungeonspoc.DLDungeons;
 import com.github.xyroc.dldungeonspoc.structure.piece.DLDungeonPiece;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -17,7 +17,7 @@ public class ModStructurePieceTypes {
     }
 
     private static StructurePieceType register(String name, StructurePieceType.ContextlessType type) {
-        return Registry.register(BuiltInRegistries.STRUCTURE_PIECE, DLDPoC.resource(name), type);
+        return Registry.register(BuiltInRegistries.STRUCTURE_PIECE, DLDungeons.resource(name), type);
     }
 
 }

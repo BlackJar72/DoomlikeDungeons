@@ -1,4 +1,4 @@
-package jaredbgreat.dldungeons.congigurations;
+package jaredbgreat.dldungeons.config;
 
 /*
  * Doomlike Dungeons by is licensed the MIT License
@@ -6,8 +6,6 @@ package jaredbgreat.dldungeons.congigurations;
  */
 
 import net.minecraft.util.RandomSource;
-
-import java.util.Random;
 
 /**
  * An enumeration of difficulty setting for the mod.
@@ -28,11 +26,11 @@ import java.util.Random;
 public enum Difficulty {
 
     NONE  (0, 0, 0, 0, 0,  -1, false, "No spawners."),
-    BABY  (3, 0, 0, 0, 0, 884, false, "Baby mode."),
-    NOOB  (4, 1, 1, 1, 1, 590, false, "Not too hard."),
-    NORM  (5, 2, 1, 1, 2, 427, false, "Normal difficulty."),
-    HARD  (6, 3, 2, 2, 3, 323, true, "Super violent."),
-    NUTS  (7, 5, 2, 2, 4, 100, true, "Insane horror!");
+    BABY  (3, 0, 0, 0, 0, 884, false, "Baby mode.  I'm too young to die!"),
+    NOOB  (4, 1, 1, 1, 1, 590, false, "Not too hard, not to rough."),
+    NORM  (5, 2, 1, 1, 2, 427, false, "Normal difficulty. Hurt me plenty! "),
+    HARD  (6, 3, 2, 2, 3, 323, true, "Super violent!"),
+    NUTS  (7, 5, 2, 2, 4, 100, true, "NIGHTMARE!!! Insane horror!");
 
 
     public final int spawners;
@@ -44,7 +42,8 @@ public enum Difficulty {
     public final boolean entrancemobs;
     public final String label;
 
-    public static final Difficulty DEFAULT = Difficulty.NORM; // A stand-in until a ways to set it is created via config
+
+    private static volatile Difficulty difficulty = Difficulty.NORM; // Starts with default value
 
 
     private Difficulty(int spawners, int promote, int mobmax, int nodelev,
@@ -58,6 +57,42 @@ public enum Difficulty {
         this.blocksPerSpawner = blocksPerSpawner;
         this.entrancemobs = entrancemobs;
         this.label = label;
+    }
+
+
+    public static Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+
+    public static Difficulty setDifficulty(Difficulty value) {
+        difficulty = value;
+        return difficulty;
+    }
+
+
+    public static Difficulty setDifficulty(int numeric) {
+        switch (numeric) {
+            case 0:
+                difficulty = NONE;
+                break;
+            case 1:
+                difficulty = BABY;
+                break;
+            case 2:
+                difficulty = NOOB;
+                break;
+            case 4:
+                difficulty = HARD;
+                break;
+            case 5:
+                difficulty = NUTS;
+                break;
+            default: // "case 3:" is resolved here, alongside bad input
+                difficulty = NORM;
+                break;
+        }
+        return difficulty;
     }
 
 

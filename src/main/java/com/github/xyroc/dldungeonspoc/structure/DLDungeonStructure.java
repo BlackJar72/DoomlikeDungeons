@@ -1,15 +1,12 @@
 package com.github.xyroc.dldungeonspoc.structure;
 
-import com.github.xyroc.dldungeonspoc.DLDPoC;
+import com.github.xyroc.dldungeonspoc.DLDungeons;
 import com.github.xyroc.dldungeonspoc.init.ModStructureTypes;
 import com.github.xyroc.dldungeonspoc.structure.piece.DLDungeonPiece;
 import com.mojang.serialization.Codec;
 import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.util.cache.Coords;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
-import net.minecraft.core.QuartPos;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -41,7 +38,7 @@ public class DLDungeonStructure extends Structure {
         final BlockPos center = new BlockPos(chunkCenterX, chunkCenterGroundHeight, chunkCenterZ);
 
         final Structure.GenerationStub stub = new Structure.GenerationStub(center, (structurePiecesBuilder) -> {
-            DLDPoC.LOGGER.info("Generating dungeon at block [{},{}]", chunkCenterX, chunkCenterZ);
+            DLDungeons.LOGGER.info("Generating dungeon at block [{},{}]", chunkCenterX, chunkCenterZ);
             // Generate dungeon plan.
             final Dungeon dungeon;
             try {
