@@ -8,6 +8,7 @@ import jaredbgreat.dldungeons.pieces.Spawner;
 import jaredbgreat.dldungeons.pieces.chests.Chest;
 import jaredbgreat.dldungeons.pieces.entrances.AbstractEntrance;
 import jaredbgreat.dldungeons.pieces.entrances.Entrance;
+import jaredbgreat.dldungeons.pieces.entrances.EntranceType;
 import jaredbgreat.dldungeons.pieces.entrances.SimpleEntrance;
 import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.rooms.Room;
@@ -18,6 +19,7 @@ import net.minecraft.world.level.WorldGenLevel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 /**
@@ -28,6 +30,9 @@ import java.util.stream.IntStream;
  *
  */
 public class ChunkFeatures {
+
+	private static final Entrance NO_ENTRANCE = new Entrance(0, 0, EntranceType.NONE);
+
 	Entrance entrance;
 	final List<Spawner> spawners;
 	final List<Chest> chests;
@@ -51,11 +56,12 @@ public class ChunkFeatures {
 			.group(
 					Spawner.CODEC.listOf().fieldOf("spawners").forGetter(chunkFeatures -> chunkFeatures.spawners),
 					Chest.CODEC.listOf().fieldOf("chests").forGetter(chunkFeatures -> chunkFeatures.chests),
-					Entrance.CODEC.fieldOf("entrance").forGetter(chunkFeatures -> chunkFeatures.entrance)
+					Entrance.CODEC.optionalFieldOf("entrance").forGetter(chunkFeatures
+							-> Optional.ofNullable(chunkFeatures.entrance))
 			)
 			.apply(builder, (spawners, chests, entrance) -> {
 				ChunkFeatures features = new ChunkFeatures(spawners, chests);
-				features.entrance = entrance;
+				features.entrance = entrance.orElse(null);;
 				return features;
 			}));
 
@@ -63,6 +69,7 @@ public class ChunkFeatures {
 	private ChunkFeatures(List<Spawner> spawners, List<Chest> chests) {
 			this.spawners = spawners;
 			this.chests = chests;
+			this.entrance = NO_ENTRANCE;
 	}
 
 
@@ -70,6 +77,7 @@ public class ChunkFeatures {
 	public ChunkFeatures() {
 		spawners = new ArrayList<>();
 		chests   = new ArrayList<>();
+		entrance = NO_ENTRANCE;
 	}
 	
 	
@@ -113,7 +121,7 @@ public class ChunkFeatures {
 	 */
 	private void buildEntrance(Dungeon dungeon, WorldGenLevel world, int shiftX, int shiftZ) {
 		//System.out.println("Might build and entrance...");
-		if(entrance != null) {
+		if((entrance != null) && (entrance.getType() != EntranceType.NONE)) {
 			AbstractEntrance wayIn = entrance.getType().factory.makeEntrance(entrance.getX(), entrance.getZ());
 			wayIn.build(dungeon, world, shiftX, shiftZ);
 		}

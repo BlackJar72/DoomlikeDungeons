@@ -89,6 +89,22 @@ public class MapMatrix {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Convert a 2d chunk features to lists.
+     */
+    private List<List<ChunkFeatures>> featuresToList() {
+        return Arrays.stream(features).toList()
+                .stream()
+                .map(arr -> {
+                    List<ChunkFeatures> list = new ArrayList<>();
+                    for (ChunkFeatures f : arr) {
+                        list.add(f);
+                    }
+                    return list;
+                })
+                .collect(Collectors.toList());
+    }
+
     private interface TriConsumer<A, B, C> {
         void accept(A a, B b, C c);
     }
@@ -125,10 +141,13 @@ public class MapMatrix {
                             booleansToList(matrix.isFence),
                             booleansToList(matrix.hasLiquid),
                             booleansToList(matrix.isDoor)
-                    )))
-            .apply(builder, (size, coords, heights, blocksAndRooms, booleans) -> {
+                    )),
+                    ChunkFeatures.CODEC.listOf().listOf().fieldOf("features").forGetter(matrix -> matrix.featuresToList())
+            )
+            .apply(builder, (size, coords, heights, blocksAndRooms, booleans, features) -> {
                 final int[] actualCoords = coords.toArray();
                 final MapMatrix matrix = new MapMatrix(Sizes.values()[size], new Coords(actualCoords[0], actualCoords[1], 0));
+
 
                 iterateListOfLists(heights.get(0), (value, x, y) -> matrix.ceilY[x][y] = value);
                 iterateListOfLists(heights.get(1), (value, x, y) -> matrix.floorY[x][y] = value);
@@ -144,6 +163,8 @@ public class MapMatrix {
                 iterateListOfLists(booleans.get(1), (value, x, y) -> matrix.isFence[x][y] = value);
                 iterateListOfLists(booleans.get(2), (value, x, y) -> matrix.hasLiquid[x][y] = value);
                 iterateListOfLists(booleans.get(3), (value, x, y) -> matrix.isDoor[x][y] = value);
+
+                iterateListOfLists(features, (value, x, y) -> matrix.features[x][y] = value);
 
                 return matrix;
             }));
@@ -177,7 +198,7 @@ public class MapMatrix {
     public Step nodedge[][];
     public boolean astared[][];
 
-    public final ChunkFeatures[][] features;
+    public ChunkFeatures[][] features;
 
 
     public MapMatrix(Sizes size, Coords coords) {

@@ -175,6 +175,7 @@ public class Room extends AbstractRoom {
         }
 
         if (hasEntrance) {
+            //dungeon.map.entrance[midX][midZ] = 1;
             addEntrance(dungeon);
         }
 

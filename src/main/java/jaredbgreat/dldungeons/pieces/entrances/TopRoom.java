@@ -247,7 +247,7 @@ public class TopRoom extends AbstractEntrance {
 				break;
 			case 1:
 				ladder = LADDER.defaultBlockState()
-						.setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH);
+						.setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH);
 				for(int i = bottom; i <= top; i++) {
 					RegisteredBlock.place(world, wx, i, wz, dungeon.wallBlock1);
 					RegisteredBlock.placeBlock(world, wx, i, wz + 1, ladder, 3, 3);
@@ -263,7 +263,7 @@ public class TopRoom extends AbstractEntrance {
 				break;
 			case 3:
 				ladder = LADDER.defaultBlockState()
-						.setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH);
+						.setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH);
 				for(int i = bottom; i <= top; i++) {
 					RegisteredBlock.place(world, wx, i, wz, dungeon.wallBlock1);
 					RegisteredBlock.placeBlock(world, wx, i, wz - 1, ladder, 2, 3);
