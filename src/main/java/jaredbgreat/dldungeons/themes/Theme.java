@@ -7,6 +7,7 @@ package jaredbgreat.dldungeons.themes;
 
 
 import jaredbgreat.dldungeons.builder.RegisteredBlock;
+import net.minecraft.world.entity.EntityType;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -49,12 +50,20 @@ public class Theme {
 		PLACEHOLDER_THEME.pillarBlock = makeBlockList(new String[] {"minecraft:oak_planks"});
 		PLACEHOLDER_THEME.dimensionWhitelist = new int[] {0};
 
+		// No, these will not all be default themes -- though probably all will appear in at least one
 		PLACEHOLDER_THEME.commonMobs.add("minecraft:zombie");
-		PLACEHOLDER_THEME.hardMobs.add("minecraft:skeleton");
-		PLACEHOLDER_THEME.bruteMobs.add("minecraft:husk");
-		PLACEHOLDER_THEME.eliteMobs.add("minecraft:stray");
-		PLACEHOLDER_THEME.bossMobs.add("minecraft:executioner");
-
+		PLACEHOLDER_THEME.commonMobs.add("minecraft:skeleton");
+		PLACEHOLDER_THEME.commonMobs.add("minecraft:spider");
+		PLACEHOLDER_THEME.hardMobs.add("minecraft:creeper");
+		PLACEHOLDER_THEME.hardMobs.add("minecraft:enderman");
+		PLACEHOLDER_THEME.hardMobs.add("minecraft:cave_spider");
+		PLACEHOLDER_THEME.hardMobs.add("minecraft:husk");
+		PLACEHOLDER_THEME.hardMobs.add("minecraft:stray");
+		PLACEHOLDER_THEME.hardMobs.add("minecraft:pillager");
+		PLACEHOLDER_THEME.bruteMobs.add("minecraft:witch");
+		PLACEHOLDER_THEME.bruteMobs.add("minecraft:ravager");
+		PLACEHOLDER_THEME.eliteMobs.add("minecraft:ravager");
+		PLACEHOLDER_THEME.bossMobs.add("minecraft:warden");
 	}
 	
 	public String name;

@@ -315,12 +315,12 @@ public class MapMatrix {
 
                     if (noLowDegenerate(theRoom, shiftX + i, floorY[i][j] - 1, shiftZ + j, i, j, world)) {
                         RegisteredBlock.place(world, shiftX + i, floorY[i][j] - 1, shiftZ + j, floor[i][j]);
-                        if (dungeon.theme.buildFoundation) {
+                        if (/*dungeon.theme.buildFoundation*/ true) { // Will become default, due to large caverns
                             below = nFloorY[i][j] < floorY[i][j] ? nFloorY[i][j] - 1 : floorY[i][j] - 2;
                             while (!RegisteredBlock.isGroundBlock(world, shiftX + i, below, shiftZ + j)) {
                                 RegisteredBlock.place(world, shiftX + i, below, shiftZ + j, dungeon.floorBlock);
                                 below--;
-                                if (below < 1) break;
+                                if (below < -32) break;
                             }
                         }
                     }

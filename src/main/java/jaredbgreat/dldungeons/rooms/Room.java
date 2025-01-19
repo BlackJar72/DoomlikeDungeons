@@ -1,5 +1,6 @@
 package jaredbgreat.dldungeons.rooms;
 
+import jaredbgreat.dldungeons.congigurations.Difficulty;
 import jaredbgreat.dldungeons.pieces.Doorway;
 import jaredbgreat.dldungeons.pieces.Shapes;
 import jaredbgreat.dldungeons.pieces.Spawner;
@@ -338,7 +339,7 @@ public class Room extends AbstractRoom {
         int x, y, z, tmp, num;
         String mob;
         if (!hasEntrance && (dungeon.random.nextInt(2) == 0 || isNode)) {
-            tmp = (endX - beginX) > (endZ - beginZ) ? (endX - beginX) : (endZ - beginZ);
+            tmp = Math.max((endX - beginX), (endZ - beginZ));
             num = dungeon.random.nextInt(2 + (tmp / 8)) + 1;
             for (int i = 0; i < num; i++) {
                 tmp = (endX - beginX - 3);
@@ -347,8 +348,9 @@ public class Room extends AbstractRoom {
                 z = dungeon.random.nextInt(tmp) + beginZ + 2;
                 if (dungeon.random.nextInt(4) == 0) y = dungeon.map.ceilY[x][z];
                 else y = dungeon.map.floorY[x][z];
+                // FIXME: Use Config
 //                int lev = levAdjust(ConfigHandler.difficulty.moblevel(dungeon.random), dungeon);
-                int lev = 2;
+                int lev = levAdjust(Difficulty.DEFAULT.moblevel(dungeon.random), dungeon);
                 if (lev >= 0) {
                     mob = dungeon.theme.allMobs[lev].get(dungeon.random.nextInt(dungeon.theme.allMobs[lev].size()));
                     Spawner s = new Spawner(x, y, z, id, lev, mob);
@@ -363,8 +365,9 @@ public class Room extends AbstractRoom {
             z = dungeon.random.nextInt(tmp) + beginZ + (tmp / 2);
             if (dungeon.random.nextInt(4) == 0) y = dungeon.map.floorY[x][z];
             else y = dungeon.map.ceilY[x][z];
+            // FIXME: Use Config
 //            int lev = levAdjust(ConfigHandler.difficulty.moblevel(dungeon.random), dungeon);
-            int lev = 2;
+            int lev = levAdjust(Difficulty.DEFAULT.moblevel(dungeon.random), dungeon);
             if (lev >= 0) {
                 mob = dungeon.theme.allMobs[lev].get(dungeon.random.nextInt(dungeon.theme.allMobs[lev].size()));
                 Spawner s = new Spawner(x, y, z, id, lev, mob);
@@ -380,8 +383,9 @@ public class Room extends AbstractRoom {
             } else {
                 y = dungeon.map.floorY[x][z] - 1;
             }
+            // FIXME: Use Config
 //            int lev = levAdjust(ConfigHandler.difficulty.nodelevel(dungeon.random), dungeon);
-            int lev = 2;
+            int lev = levAdjust(Difficulty.DEFAULT.nodelevel(dungeon.random), dungeon);
             if (lev >= 0) {
                 mob = dungeon.theme.allMobs[lev].get(dungeon.random.nextInt(dungeon.theme.allMobs[lev].size()));
                 spawners.add(new Spawner(x, y, z, id, lev, mob));

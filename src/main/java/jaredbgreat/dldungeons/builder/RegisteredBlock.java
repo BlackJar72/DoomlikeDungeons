@@ -2,6 +2,11 @@ package jaredbgreat.dldungeons.builder;
 
 import com.github.xyroc.dldungeonspoc.DLDPoC;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.WorldGenLevel;
@@ -11,6 +16,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryManager;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -297,6 +304,8 @@ public final class RegisteredBlock extends AbstractBlock {
         if (!placeBlock(world, x, y, z, Blocks.SPAWNER)) return;
         final BlockEntity be = world.getBlockEntity(pos);
         if (be instanceof SpawnerBlockEntity spawner) {
+            EntityType mobtype = ForgeRegistries.ENTITY_TYPES.getValue(ResourceLocation.tryParse(mob));
+            spawner.setEntityId(mobtype, RandomSource.create());
             // Set up spawner logic
             // Ignore this for now.
         } else {
