@@ -1,14 +1,16 @@
 package com.github.xyroc.dldungeonspoc.datapack;
 
-import com.github.xyroc.dldungeonspoc.DLDPoC;
+import com.github.xyroc.dldungeonspoc.DLDungeons;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.Unit;
 import net.minecraft.util.profiling.ProfilerFiller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.BiConsumer;
@@ -33,8 +35,8 @@ public class ResourceReloadHandler implements PreparableReloadListener {
     public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller profilerFiller, ProfilerFiller profilerFiller1, Executor backgroundExecutor, Executor gameExecutor) {
         return preparationBarrier.wait(Unit.INSTANCE).thenRunAsync(() -> {
             loadBlockFamilies(resourceManager);
-            loadThemes(resourceManager);
             loadSpecialChests(resourceManager);
+            loadThemes(resourceManager);
         }, gameExecutor);
     }
 
@@ -42,6 +44,7 @@ public class ResourceReloadHandler implements PreparableReloadListener {
         return loadFilesInDirectory(resourceManager, BLOCK_FAMILIES_DIRECTORY, IS_CFG_FILE, (location, file) -> {
             final ResourceLocation key = keyFromLocation(location, BLOCK_FAMILIES_DIRECTORY, CFG_FILE_ENDING);
             // Read file from input stream and insert into some data structure for later use.
+            // final BufferedReader reader = new BufferedReader(new InputStreamReader(file));
         });
     }
 
@@ -67,7 +70,7 @@ public class ResourceReloadHandler implements PreparableReloadListener {
         return CompletableFuture.runAsync(() -> {
             resourceManager.getResource(location).ifPresentOrElse(resource -> {
                 try {
-                    DLDPoC.LOGGER.debug("Loading individual file: {}", location);
+                    DLDungeons.LOGGER.debug("Loading individual file: {}", location);
                     consumer.accept(resource.open());
                 } catch (IOException e) {
                     throw new RuntimeException("Error loading file " + location, e);
@@ -88,7 +91,7 @@ public class ResourceReloadHandler implements PreparableReloadListener {
         return CompletableFuture.runAsync(() -> resourceManager.listResources(directory, validLocations).forEach((location, resource) -> {
             try {
                 final InputStream file = resource.open();
-                DLDPoC.LOGGER.debug("Loading file: {}", location);
+                DLDungeons.LOGGER.debug("Loading file: {}", location);
                 consumer.accept(location, file);
             } catch (IOException e) {
                 throw new RuntimeException(e);
