@@ -28,8 +28,12 @@ public class ResourceReloadHandler implements PreparableReloadListener {
     private static final String SPECIAL_CHESTS_DIRECTORY = THEMING_DIRECTORY + "/special_chests";
     private static final String THEMES_DIRECTORY = THEMING_DIRECTORY + "/themes";
 
-    private static final String CFG_FILE_ENDING = ".cfg";
-    private static final Predicate<ResourceLocation> IS_CFG_FILE = location -> location.getPath().endsWith(CFG_FILE_ENDING);
+    private static final String CFG_FILE_ENDING  = ".cfg";
+    private static final String JSON_FILE_ENDING = ".json";
+
+    private static final Predicate<ResourceLocation> IS_CFG_FILE  = location -> location.getPath().endsWith(CFG_FILE_ENDING);
+    private static final Predicate<ResourceLocation> IS_JSON_FILE = location -> location.getPath().endsWith(JSON_FILE_ENDING);
+
 
     @Override
     public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller profilerFiller, ProfilerFiller profilerFiller1, Executor backgroundExecutor, Executor gameExecutor) {
@@ -41,8 +45,8 @@ public class ResourceReloadHandler implements PreparableReloadListener {
     }
 
     private CompletableFuture<Void> loadBlockFamilies(ResourceManager resourceManager) {
-        return loadFilesInDirectory(resourceManager, BLOCK_FAMILIES_DIRECTORY, IS_CFG_FILE, (location, file) -> {
-            final ResourceLocation key = keyFromLocation(location, BLOCK_FAMILIES_DIRECTORY, CFG_FILE_ENDING);
+        return loadFilesInDirectory(resourceManager, BLOCK_FAMILIES_DIRECTORY, IS_JSON_FILE, (location, file) -> {
+            final ResourceLocation key = keyFromLocation(location, BLOCK_FAMILIES_DIRECTORY, JSON_FILE_ENDING);
             // Read file from input stream and insert into some data structure for later use.
             // final BufferedReader reader = new BufferedReader(new InputStreamReader(file));
         });
