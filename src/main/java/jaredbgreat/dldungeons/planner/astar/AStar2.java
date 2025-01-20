@@ -86,35 +86,35 @@ public class AStar2 extends AStar {
 					for(int j = -size; j <= size; j++) {
 						dungeon.map.floorY[child.x+i][child.z+j] = floory;
 						dungeon.map.ceilY[child.x+i][child.z+j] = ceily;
-						dungeon.map.hasLiquid[child.x+i][child.z+j] = false;
+						dungeon.map.unsetLiquid(child.x+i, child.z+j);
 						if(dungeon.map.room[child.x+i][child.z+j] < 1) {
 							dungeon.map.room[child.x+i][child.z+j] = roomid;
-							dungeon.map.isWall[child.x+i][child.z+j] = true;
+							dungeon.map.setWall(child.x+i, child.z+j);
 						}
-						if(dungeon.map.astared[child.x+i][child.z+j] || 
+						if(dungeon.map.isAStar(child.x+i, child.z+j) ||
 								((Math.abs(i) < size) && (Math.abs(j) < size))) {
-							dungeon.map.isDoor[child.x+i][child.z+j] = true;
-							dungeon.map.isWall[child.x+i][child.z+j] = false;
+							dungeon.map.setDoor(child.x+i, child.z+j);
+							dungeon.map.unsetWall(child.x+i, child.z+j);
 						}
 					}
 			}
-			dungeon.map.astared[child.x][child.z] = true;
-			if(dungeon.map.isWall[child.x][child.z] ||
-						dungeon.map.isFence[child.x][child.z]) 
+			dungeon.map.setAStar(child.x, child.z);
+			if(dungeon.map.isWall(child.x, child.z) ||
+						dungeon.map.isFence(child.x, child.z))
 					addDoor(parent, child);
-			if(dungeon.map.hasLiquid[child.x][child.z]) 
+			if(dungeon.map.isLiquid(child.x, child.z))
 					fixLiquid(parent, child, 
 							(byte) dungeon.rooms.get(room).floorY);
 			fixHeights(parent, child);
 			child = parent;
 			parent = child.parent;
 		} while (parent != null);
-		dungeon.map.astared[child.x][child.z] = true;
-		if(dungeon.map.isWall[child.x][child.z] ||
-					dungeon.map.isFence[child.x][child.z]) 
-				dungeon.map.isDoor[child.x][child.z] = true;
-		if(dungeon.map.hasLiquid[child.x][child.z]) {
-			dungeon.map.hasLiquid[child.x][child.z] = false;
+		dungeon.map.setAStar(child.x, child.z);
+		if(dungeon.map.isWall(child.x, child.z) ||
+					dungeon.map.isFence(child.x, child.z))
+				dungeon.map.setDoor(child.x, child.z);
+		if(dungeon.map.isLiquid(child.x, child.z)) {
+			dungeon.map.unsetLiquid(child.x, child.z);
 			dungeon.map.floorY[child.x][child.z] = 
 					(byte) dungeon.rooms.get(room).floorY;
 		}

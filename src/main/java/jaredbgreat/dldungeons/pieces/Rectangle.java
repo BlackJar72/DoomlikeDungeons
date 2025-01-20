@@ -85,7 +85,7 @@ public final class Rectangle {
 						if(dungeon.map.room[j][k] != room.id) continue;
 						if(dungeon.map.floorY[j][k] > room.floorY) dungeon.map.floorY[j][k] = (byte)room.floorY;
 						dungeon.map.floorY[j][k] = (byte)(room.floorY - drop);
-						dungeon.map.hasLiquid[j][k] = true;
+						dungeon.map.setLiquid(j, k);
 						byte nFloorY = dungeon.map.nFloorY[j][k] < dungeon.map.floorY[j][k] ? 
 								dungeon.map.nFloorY[j][k] : dungeon.map.floorY[j][k];
 						dungeon.map.nFloorY[j][k] = nFloorY;
@@ -132,7 +132,7 @@ public final class Rectangle {
 						byte nFloorY = dungeon.map.nFloorY[j][k] < dungeon.map.floorY[j][k] ? 
 								dungeon.map.nFloorY[j][k] : dungeon.map.floorY[j][k];
 						dungeon.map.floorY[j][k] += drop;
-						dungeon.map.hasLiquid[j][k] = false;
+						dungeon.map.unsetLiquid(j, k);
 						dungeon.map.nFloorY[j][k] = nFloorY;
 					}
 				//System.out.println("Rectangle has been drawn.");
@@ -173,7 +173,7 @@ public final class Rectangle {
 					for(byte j = xbegin; j < xend; j++) {
 						if((j < 0) || (j >= dungeon.size.width) || (k < 0) || (k >= dungeon.size.width)) continue;
 						if(dungeon.map.room[j][k] != room.id) continue;
-						dungeon.map.isWall[j][k] = true;
+						dungeon.map.setWall(j, k);
 					}
 		}
 	
@@ -211,7 +211,7 @@ public final class Rectangle {
 				for(byte k = zbegin; k < zend; k++) 
 					for(byte j = xbegin; j < xend; j++) {
 						if((j < 0) || (j >= dungeon.size.width) || (k < 0) || (k >= dungeon.size.width)) continue;
-						dungeon.map.isWall[j][k] = false;
+						dungeon.map.unsetWall(j, k);
 					}
 		}
 	
@@ -255,7 +255,7 @@ public final class Rectangle {
 						if((j < 0) || (j >= dungeon.size.width) || (k < 0) || (k >= dungeon.size.width)) continue;
 						if(dungeon.map.room[j][k] != room.id) continue;
 						dungeon.map.floorY[j][k] = floorY;
-						dungeon.map.hasLiquid[j][k] = false;
+						dungeon.map.unsetLiquid(j, k);
 					}
 		}
 		

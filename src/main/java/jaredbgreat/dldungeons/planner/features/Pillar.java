@@ -38,36 +38,36 @@ public class Pillar extends FeatureAdder {
 		switch (room.sym) {
 		case NONE: break;
 		case TR1:
-			dungeon.map.isPillar[pillarx1][pillarz1] = true;
-			dungeon.map.isPillar[pillarz1][pillarx1] = true;
+			dungeon.map.setPillar(pillarx1, pillarz1);
+			dungeon.map.setPillar(pillarz1, pillarx1);
 			break;
 		case TR2:
-			dungeon.map.isPillar[pillarx1][pillarz1]  = true;
-			dungeon.map.isPillar[pillarz1][pillarx1]  = true;
+			dungeon.map.setPillar(pillarx1, pillarz1);
+			dungeon.map.setPillar(pillarz1, pillarx1);
 			break;
 		case X:
-			dungeon.map.isPillar[pillarx1][pillarz1] = true;
-			dungeon.map.isPillar[pillarx2][pillarz1] = true;
+			dungeon.map.setPillar(pillarx1, pillarz1);
+			dungeon.map.setPillar(pillarx2, pillarz1);
 			break;
 		case Z:
-			dungeon.map.isPillar[pillarx1][pillarz1] = true;
-			dungeon.map.isPillar[pillarx1][pillarz2] = true;
+			dungeon.map.setPillar(pillarx1, pillarz1);
+			dungeon.map.setPillar(pillarx1, pillarz2);
 			break;
 		case XZ:
-			dungeon.map.isPillar[pillarx1][pillarz1] = true;
-			dungeon.map.isPillar[pillarx1][pillarz2] = true;
-			dungeon.map.isPillar[pillarx2][pillarz1] = true;
-			dungeon.map.isPillar[pillarx2][pillarz2] = true;
+			dungeon.map.setPillar(pillarx1, pillarz1);
+			dungeon.map.setPillar(pillarx1, pillarz2);
+			dungeon.map.setPillar(pillarx2, pillarz1);
+			dungeon.map.setPillar(pillarx2, pillarz2);
 			break;
 		case R:
-			dungeon.map.isPillar[pillarx1][pillarz1] = true;
-			dungeon.map.isPillar[pillarx2][pillarz2] = true;
+			dungeon.map.setPillar(pillarx1, pillarz1);
+			dungeon.map.setPillar(pillarx2, pillarz2);
 			break;
 		case SW:
-			dungeon.map.isPillar[pillarx1][pillarz1] = true;
-			dungeon.map.isPillar[pillarx1][pillarz2] = true;
-			dungeon.map.isPillar[pillarx2][pillarz1] = true;
-			dungeon.map.isPillar[pillarx2][pillarz2] = true;
+			dungeon.map.setPillar(pillarx1, pillarz1);
+			dungeon.map.setPillar(pillarx1, pillarz2);
+			dungeon.map.setPillar(pillarx2, pillarz1);
+			dungeon.map.setPillar(pillarx2, pillarz2);
 		}
 	}
 }

@@ -142,29 +142,29 @@ public class DoorChecker {
 			return;
 		}
 		for(Doorway door : room.doors) {
-			if(dungeon.map.astared[door.x][door.z]) continue;
+			if(dungeon.map.isAStar(door.x, door.z)) continue;
 			if(door.xOriented) {
-				if(dungeon.map.isWall[door.x+1][door.z] || 
-						dungeon.map.isWall[door.x-1][door.z])
-					dungeon.map.isDoor[door.x][door.z] = false;
-				if(dungeon.map.hasLiquid[door.x+1][door.z] != 
-						dungeon.map.hasLiquid[door.x-1][door.z])
-					dungeon.map.isDoor[door.x][door.z] = false;
-				if(dungeon.map.hasLiquid[door.x+1][door.z]) {
-					dungeon.map.hasLiquid[door.x][door.z] = true;
+				if(dungeon.map.isWall(door.x+1, door.z) ||
+						dungeon.map.isWall(door.x-1, door.z))
+					dungeon.map.unsetDoor(door.x, door.z);
+				if(dungeon.map.isLiquid(door.x+1, door.z) !=
+						dungeon.map.isLiquid(door.x-1, door.z))
+					dungeon.map.unsetDoor(door.x, door.z);
+				if(dungeon.map.isLiquid(door.x+1, door.z)) {
+					dungeon.map.setLiquid(door.x, door.z);
 					if(dungeon.theme.flags.contains(ThemeFlags.SWAMPY))
 							dungeon.map.floorY[door.x][door.z] = (byte) (room.floorY - 1);
 					else dungeon.map.floorY[door.x][door.z] = (byte) (room.floorY - 2);
 				}
 			} else {
-				if(dungeon.map.isWall[door.x][door.z+1] || 
-						dungeon.map.isWall[door.x][door.z-1])
-					dungeon.map.isDoor[door.x][door.z] = false;
-				if(dungeon.map.hasLiquid[door.x][door.z+1] != 
-						dungeon.map.hasLiquid[door.x][door.z-1])
-					dungeon.map.isDoor[door.x][door.z] = false;
-				if(dungeon.map.hasLiquid[door.x][door.z+1]) {
-					dungeon.map.hasLiquid[door.x][door.z] = true;
+				if(dungeon.map.isWall(door.x, door.z+1) ||
+						dungeon.map.isWall(door.x, door.z-1))
+					dungeon.map.unsetDoor(door.x, door.z);
+				if(dungeon.map.isLiquid(door.x, door.z+1) !=
+						dungeon.map.isLiquid(door.x, door.z-1))
+					dungeon.map.unsetDoor(door.x, door.z);
+				if(dungeon.map.isLiquid(door.x, door.z+1)) {
+					dungeon.map.setLiquid(door.x, door.z);
 					if(dungeon.theme.flags.contains(ThemeFlags.SWAMPY)) 
 							dungeon.map.floorY[door.x][door.z] = (byte) (room.floorY - 1);
 					else dungeon.map.floorY[door.x][door.z] = (byte) (room.floorY - 2);
@@ -181,7 +181,7 @@ public class DoorChecker {
 			valid = validateDoor(dungeon, door);
 			if(!valid) {
 				invalid.add(door);
-				dungeon.map.isDoor[door.x][door.z] = false;
+				dungeon.map.unsetDoor(door.x, door.z);
 			} else {
 				door.prioritize(dungeon, room.id); // Will only be run on valid doors
 				room.addToConnections(door);

@@ -605,8 +605,8 @@ public class Dungeon {
         for (int i = (int) it.realX - 2; i < ((int) it.realX + 2); i++)
             for (int j = (int) it.realZ - 2; j < ((int) it.realZ + 2); j++) {
                 map.floorY[i][j] = (byte) it.floorY;
-                map.hasLiquid[i][j] = false;
-                map.isWall[i][j] = false;
+                map.unsetLiquid(i,j);
+                map.unsetWall(i, j);
             }
         it.addEntrance(this);
     }

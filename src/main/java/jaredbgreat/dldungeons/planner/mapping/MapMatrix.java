@@ -128,21 +128,15 @@ public class MapMatrix {
                             bytesToList(matrix.ceilY),
                             bytesToList(matrix.floorY),
                             bytesToList(matrix.nCeilY),
-                            bytesToList(matrix.nFloorY)
+                            bytesToList(matrix.nFloorY),
+                            bytesToList(matrix.boolBits)
                     )),
                     Codec.INT.listOf().listOf().listOf().fieldOf("blocksAndRooms").forGetter(matrix -> List.of(
                             intsToList(matrix.room)
                     )),
-                    Codec.BOOL.listOf().listOf().listOf().fieldOf("booleans").forGetter(matrix -> List.of(
-                            booleansToList(matrix.isWall),
-                            booleansToList(matrix.isPillar),
-                            booleansToList(matrix.isFence),
-                            booleansToList(matrix.hasLiquid),
-                            booleansToList(matrix.isDoor)
-                    )),
                     ChunkFeatures.CODEC.listOf().listOf().fieldOf("features").forGetter(matrix -> matrix.featuresToList())
             )
-            .apply(builder, (size, coords, heights, blocksAndRooms, booleans, features) -> {
+            .apply(builder, (size, coords, heights, blocksAndRooms, features) -> {
                 final int[] actualCoords = coords.toArray();
                 final MapMatrix matrix = new MapMatrix(Sizes.values()[size], new Coords(actualCoords[0], actualCoords[1], 0));
 
@@ -151,14 +145,9 @@ public class MapMatrix {
                 iterateListOfLists(heights.get(1), (value, x, y) -> matrix.floorY[x][y] = value);
                 iterateListOfLists(heights.get(2), (value, x, y) -> matrix.nCeilY[x][y] = value);
                 iterateListOfLists(heights.get(3), (value, x, y) -> matrix.nFloorY[x][y] = value);
+                iterateListOfLists(heights.get(4), (value, x, y) -> matrix.boolBits[x][y] = value);
 
                 iterateListOfLists(blocksAndRooms.get(0), (value, x, y) -> matrix.room[x][y] = value);
-
-                iterateListOfLists(booleans.get(0), (value, x, y) -> matrix.isWall[x][y] = value);
-                iterateListOfLists(booleans.get(1), (value, x, y) -> matrix.isPillar[x][y] = value);
-                iterateListOfLists(booleans.get(2), (value, x, y) -> matrix.isFence[x][y] = value);
-                iterateListOfLists(booleans.get(3), (value, x, y) -> matrix.hasLiquid[x][y] = value);
-                iterateListOfLists(booleans.get(4), (value, x, y) -> matrix.isDoor[x][y] = value);
 
                 iterateListOfLists(features, (value, x, y) -> matrix.features[x][y] = value);
 
@@ -176,22 +165,10 @@ public class MapMatrix {
     public byte[][] nCeilY;        // Height of Neighboring Ceiling
     public byte[][] nFloorY;    // Height of Neighboring Floor
 
-    /*
-    // Blocks referenced against the DBlock.registry
-    public int[][] ceiling;
-    public int[][] wall;
-    public int[][] floor;
-    */
+    public byte[][] boolBits;
 
     // The room id (index of the room in the dungeons main RoomList)
     public int[][] room;
-
-    // Is it a wall?
-    public boolean[][] isWall;        // Is this coordinate occupied by a wall?
-    public boolean[][] isPillar;        // Is this coordinate occupied by a wall?
-    public boolean[][] isFence;        // Is this coordinate occupied by a wall?
-    public boolean[][] hasLiquid;    // Is floor covered by a liquid block?
-    public boolean[][] isDoor;        // Is there a door here?
 
     //The A* scratch pad
     public Step nodedge[][];
@@ -212,12 +189,8 @@ public class MapMatrix {
         floorY = new byte[size.width][size.width];
         nCeilY = new byte[size.width][size.width];
         nFloorY = new byte[size.width][size.width];
+        boolBits = new byte[size.width][size.width];
         room = new int[size.width][size.width];
-        isWall = new boolean[size.width][size.width];
-        isPillar = new boolean[size.width][size.width];
-        isFence = new boolean[size.width][size.width];
-        hasLiquid = new boolean[size.width][size.width];
-        isDoor = new boolean[size.width][size.width];
         nodedge = new Step[size.width][size.width];
         astared = new boolean[size.width][size.width];
         features = new ChunkFeatures[size.chunkWidth][size.chunkWidth];
@@ -283,11 +256,11 @@ public class MapMatrix {
 
                     // Debugging code; should not normally run
                     if (drawFlyingMap) {
-                        if (astared[i][j]) {
+                        if (isAStar(i, j)) {
                             RegisteredBlock.placeBlock(world, shiftX + i, 96, shiftZ + j, Blocks.LAPIS_BLOCK);
-                        } else if (isDoor[i][j]) {
+                        } else if (isDoor(i, j)) {
                             RegisteredBlock.placeBlock(world, shiftX + i, 96, shiftZ + j, Blocks.STONE_SLAB);
-                        } else if (isWall[i][j]) {
+                        } else if (isWall(i, j)) {
                             RegisteredBlock.placeBlock(world, shiftX + i, 96, shiftZ + j, Blocks.GOLD_BLOCK);
                         } else {
                             RegisteredBlock.placeBlock(world, shiftX + i, 96, shiftZ + j, Blocks.GLASS);
@@ -331,27 +304,27 @@ public class MapMatrix {
                         RegisteredBlock.place(world, shiftX + i, ceilY[i][j] + 1, shiftZ + j, theRoom.cielingBlock);
 
                     for (int k = roomBottom(i, j); k <= ceilY[i][j]; k++)
-                        if (!(isWall[i][j] || isPillar[i][j])) {
+                        if (!(isWall(i, j) || isPillar(i, j))) {
                             RegisteredBlock.deleteBlock(world, shiftX + i, k, shiftZ + j,
                                     theRoom.airBlock);
-                        } else if(isWall[i][j] && noHighDegenerate(theRoom, shiftX + i, k, shiftZ + j, world))
+                        } else if(isWall(i, j) && noHighDegenerate(theRoom, shiftX + i, k, shiftZ + j, world))
                             RegisteredBlock.place(world, shiftX + i, k, shiftZ + j, theRoom.wallBlock1);
                         else if(noHighDegenerate(theRoom, shiftX + i, k, shiftZ + j, world))
                             RegisteredBlock.place(world, shiftX + i, k, shiftZ + j, theRoom.pillarBlock);
                     for (int k = nCeilY[i][j]; k < ceilY[i][j]; k++)
                         if (noHighDegenerate(theRoom, shiftX + i, k, shiftZ + j, world))
                             RegisteredBlock.place(world, shiftX + i, k, shiftZ + j, theRoom.wallBlock1);
-                    if (isFence[i][j])
+                    if (isFence(i, j))
                         RegisteredBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, theRoom.fenceBlock);
 
-                    if (isDoor[i][j]) {
+                    if (isDoor(i, j)) {
                         RegisteredBlock.deleteBlock(world, shiftX + i, floorY[i][j], shiftZ + j, flooded);
                         RegisteredBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 1, shiftZ + j, flooded);
                         RegisteredBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 2, shiftZ + j, flooded);
                     }
 
                     // Liquids
-                    if (hasLiquid[i][j] && (!isWall[i][j] && !isDoor[i][j])
+                    if (isLiquid(i, j) && (!isWall(i, j) || isDoor(i, j))
                             && !world.getBlockState(new BlockPos(shiftX + i, floorY[i][j] - 1, shiftZ + j)).isAir())
                         RegisteredBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, theRoom.liquidBlock);
                 }
@@ -396,7 +369,7 @@ public class MapMatrix {
     private boolean noLowDegenerate(Room theRoom, int x, int y, int z, int i, int j, WorldGenLevel world) {
         return !(theRoom.degenerateFloors
                 && world.getBlockState(new BlockPos(x, y, z)).isAir()
-                && !astared[i][j]);
+                && !isAStar(i, j));
     }
 
 
@@ -410,7 +383,7 @@ public class MapMatrix {
      */
     private int roomBottom(int i, int j) {
         int b = floorY[i][j];
-        if (isWall[i][j] && !isDoor[i][j]) b--;
+        if (isWall(i, j) && !isDoor(i, j)) b--;
         return b;
     }
 
@@ -423,5 +396,136 @@ public class MapMatrix {
     public static void setDrawFlyingMap(boolean value) {
         drawFlyingMap = value;
     }
+
+
+//********************************************************************************************************************//
+//                                   HANDLE BOOLEANS AS BIT FLAGS BELOW HERE                                          //
+//********************************************************************************************************************//
+
+
+    static final byte bWall   =  1;
+    static final byte bPillar =  2;
+    static final byte bFence  =  4;
+    static final byte bLiquid =  8;
+    static final byte bDoor   = 16;
+    static final byte bAStar  = 32;
+
+    static final byte nWall    =  ~bWall;
+    static final byte nPillar  =  ~bPillar;
+    static final byte nFence   =  ~bFence;
+    static final byte nLiquid  =  ~bLiquid;
+    static final byte nDoor    =  ~bDoor;
+    static final byte nAStar   =  ~bAStar;
+
+    // Is Wall
+    public boolean isWall(int x, int z) {
+        return (boolBits[x][z] & bWall) > 0;
+    }
+
+    public void setWall(int x, int z) {
+        boolBits[x][z] |= bWall;
+    }
+
+    public void unsetWall(int x, int z) {
+        boolBits[x][z] &= nWall;
+    }
+
+    public void setWall(int x, int z, Boolean value) {
+        if(value) boolBits[x][z] |= bWall;
+        else boolBits[x][z] &= nWall;
+    }
+
+    // Is Pillar
+    public boolean isPillar(int x, int z) {
+        return (boolBits[x][z] & bPillar) > 0;
+    }
+
+    public void setPillar(int x, int z) {
+        boolBits[x][z] |= bPillar;
+    }
+
+    public void unsetPillar(int x, int z) {
+        boolBits[x][z] &= nPillar;
+    }
+
+    public void setPillar(int x, int z, Boolean value) {
+        if(value) boolBits[x][z] |= bPillar;
+        else boolBits[x][z] &= nPillar;
+    }
+
+    // Is Fence
+    public boolean isFence(int x, int z) {
+        return (boolBits[x][z] & bFence) > 0;
+    }
+
+    public void setFence(int x, int z) {
+        boolBits[x][z] |= bFence;
+    }
+
+    public void unsetFence(int x, int z) {
+        boolBits[x][z] &= nFence;
+    }
+
+    public void setFence(int x, int z, Boolean value) {
+        if(value) boolBits[x][z] |= bFence;
+        else boolBits[x][z] &= nFence;
+    }
+
+    // Is Liquid
+    public boolean isLiquid(int x, int z) {
+        return (boolBits[x][z] & bLiquid) > 0;
+    }
+
+    public void setLiquid(int x, int z) {
+        boolBits[x][z] |= bLiquid;
+    }
+
+    public void unsetLiquid(int x, int z) {
+        boolBits[x][z] &= nLiquid;
+    }
+
+    public void setLiquid(int x, int z, Boolean value) {
+        if(value) boolBits[x][z] |= bLiquid;
+        else boolBits[x][z] &= nLiquid;
+    }
+
+    // Is Door
+    public boolean isDoor(int x, int z) {
+        return (boolBits[x][z] & bDoor) > 0;
+    }
+
+    public void setDoor(int x, int z) {
+        boolBits[x][z] |= bDoor;
+    }
+
+    public void unsetDoor(int x, int z) {
+        boolBits[x][z] &= nDoor;
+    }
+
+    public void setDoor(int x, int z, Boolean value) {
+        if(value) boolBits[x][z] |= bDoor;
+        else boolBits[x][z] &= nDoor;
+    }
+
+    // Is A* Marked
+    public boolean isAStar(int x, int z) {
+        return (boolBits[x][z] & bAStar) > 0;
+    }
+
+    public void setAStar(int x, int z) {
+        boolBits[x][z] |= bAStar;
+    }
+
+    public void unsetAStar(int x, int z) {
+        boolBits[x][z] &= nAStar;
+    }
+
+    public void setAStar(int x, int z, Boolean value) {
+        if(value) boolBits[x][z] |= bAStar;
+        else boolBits[x][z] &= nAStar;
+    }
+
+
+
 
 }

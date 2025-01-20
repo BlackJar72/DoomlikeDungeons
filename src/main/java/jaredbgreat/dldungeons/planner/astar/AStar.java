@@ -93,22 +93,22 @@ public class AStar {
 		Step child = end, parent = end.parent;
 		if(parent == null) return;		
 
-		dungeon.map.astared[end.x][end.z] = true;
-		if(dungeon.map.isWall[end.x][end.z] ||
-					dungeon.map.isFence[end.x][end.z]) 
-				dungeon.map.isDoor[end.x][end.z] = true;
-		if(dungeon.map.hasLiquid[end.x][end.z]) {
-			dungeon.map.hasLiquid[end.x][end.z] = false;
+		dungeon.map.setAStar(end.x, end.z);
+		if(dungeon.map.isWall(end.x, end.z) ||
+					dungeon.map.isFence(end.x, end.z))
+				dungeon.map.setDoor(end.x, end.z);
+		if(dungeon.map.isLiquid(end.x, end.z)) {
+			dungeon.map.unsetLiquid(end.x, end.z);
 			dungeon.map.floorY[end.x][end.z] = 
 					(byte) dungeon.rooms.get(room).floorY;
 		}
 		
 		do {
-			dungeon.map.astared[child.x][child.z] = true;
-			if(dungeon.map.isWall[child.x][child.z] ||
-						dungeon.map.isFence[child.x][child.z]) 
+			dungeon.map.setAStar(child.x, child.z);
+			if(dungeon.map.isWall(child.x, child.z) ||
+						dungeon.map.isFence(child.x, child.z))
 					addDoor(parent, child);
-			if(dungeon.map.hasLiquid[child.x][child.z]) 
+			if(dungeon.map.isLiquid(child.x, child.z))
 					fixLiquid(parent, child, 
 							(byte) dungeon.rooms.get(room).floorY);
 			fixHeights(parent, child);
@@ -116,12 +116,12 @@ public class AStar {
 			parent = child.parent;
 		} while (parent != null);
 		
-		dungeon.map.astared[child.x][child.z] = true;
-		if(dungeon.map.isWall[child.x][child.z] ||
-					dungeon.map.isFence[child.x][child.z]) 
-				dungeon.map.isDoor[child.x][child.z] = true;
-		if(dungeon.map.hasLiquid[child.x][child.z]) {
-			dungeon.map.hasLiquid[child.x][child.z] = false;
+		dungeon.map.setAStar(child.x, child.z);
+		if(dungeon.map.isWall(child.x, child.z) ||
+					dungeon.map.isFence(child.x, child.z))
+				dungeon.map.setDoor(child.x, child.z);
+		if(dungeon.map.isLiquid(child.x, child.z)) {
+			dungeon.map.unsetLiquid(child.x, child.z);
 			dungeon.map.floorY[child.x][child.z] = 
 					(byte) dungeon.rooms.get(room).floorY;
 		}
@@ -129,13 +129,13 @@ public class AStar {
 	
 	
 	protected void addDoor(Step from, Step to) {
-		dungeon.map.isDoor[to.x][to.z] = true;
-		dungeon.map.isDoor[from.x][from.z] = true;
+		dungeon.map.setDoor(to.x, to.z);
+		dungeon.map.setDoor(from.x, from.z);
 	}
 	
 	
 	protected void fixLiquid(Step from, Step to, byte floorY) {
-		dungeon.map.hasLiquid[to.x][to.z] = false;
+		dungeon.map.unsetLiquid(to.x, to.z);
 		dungeon.map.floorY[to.x][to.z] = 
 				dungeon.map.floorY[from.x][from.z];
 		if(dungeon.map.floorY[to.x][to.z] < floorY) 

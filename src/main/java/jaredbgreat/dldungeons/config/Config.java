@@ -3,18 +3,10 @@ package jaredbgreat.dldungeons.config;
 import com.github.xyroc.dldungeonspoc.DLDungeons;
 import jaredbgreat.dldungeons.pieces.chests.Chest;
 import jaredbgreat.dldungeons.rooms.Room;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BiomeTags;
-import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.Collections;
-import java.util.List;
 
 @Mod.EventBusSubscriber(modid = DLDungeons.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Config {
@@ -54,11 +46,6 @@ public class Config {
     private static final ForgeConfigSpec.BooleanValue SINGLE_ENTRANCE = BUILDER
             .comment(" If true all have exactly one entrance.")
             .define("Only Single Entrance", false);
-
-    /*// a list of strings that are treated as resource locations for items
-    private static final ForgeConfigSpec.ConfigValue<List<? extends String>> NEVER_TAGS = BUILDER
-            .comment("A list of biome tags with which the dungeons should not generate.")
-            .defineListAllowEmpty(Collections.singletonList("Never With Biome Tags"), () -> List.of("is_end"), Config::returnTrue);*/
 
     private static final ForgeConfigSpec.BooleanValue NERF_LOOT = BUILDER
             .comment("If true this will limit the amount of level 8 loot found with anything less than a true boss")

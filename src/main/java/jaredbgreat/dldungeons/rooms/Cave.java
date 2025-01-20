@@ -62,7 +62,7 @@ public class Cave extends Room {
 		for(int i = 0; i < xSize; i++) {
 			for(int j = 0; j < zSize; j++) {
 				if(cells[0][i][j] == 1) {
-					dungeon.map.isWall[i + beginX][j  + beginZ] = true;
+					dungeon.map.setWall(i + beginX, j  + beginZ);
 				}
 			}
 		}
@@ -90,8 +90,8 @@ public class Cave extends Room {
 			for(int i = (int)realX -2; i < ((int)realX + 2); i++)
 					for(int j = (int)realZ - 2; j < ((int)realZ + 2); j++) {
 						dungeon.map.floorY[i][j] = (byte)floorY;
-						dungeon.map.hasLiquid[i][j] = false;
-						dungeon.map.isWall[i][j] = false;
+						dungeon.map.unsetLiquid(i, j);
+						dungeon.map.unsetWall(i, j);
 					}
 		}
 		if(parent == null) {
