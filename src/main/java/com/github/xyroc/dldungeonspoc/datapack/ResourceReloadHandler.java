@@ -38,6 +38,7 @@ public class ResourceReloadHandler implements PreparableReloadListener {
     @Override
     public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller profilerFiller, ProfilerFiller profilerFiller1, Executor backgroundExecutor, Executor gameExecutor) {
         return preparationBarrier.wait(Unit.INSTANCE).thenRunAsync(() -> {
+            // TODO / FIXME: Call load for nbt.cfg here (probably needs nothing special, its just one file)
             loadBlockFamilies(resourceManager);
             loadSpecialChests(resourceManager);
             loadThemes(resourceManager);
