@@ -1,0 +1,111 @@
+package com.github.xyroc.dldungeonspoc.datapack;
+
+import com.github.xyroc.dldungeonspoc.DLDPoC;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.PreparableReloadListener;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.Unit;
+import net.minecraft.util.profiling.ProfilerFiller;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+
+public class ResourceReloadHandler implements PreparableReloadListener {
+    /**
+     * Base directory within the data pack.
+     * Should be unique to avoid clashes with other data packs.
+     */
+    private static final String BASE_DIRECTORY = "dldungeons";
+    private static final String THEMING_DIRECTORY = BASE_DIRECTORY + "/theming";
+    private static final String BLOCK_FAMILIES_DIRECTORY = THEMING_DIRECTORY + "/block_families";
+    private static final String SPECIAL_CHESTS_DIRECTORY = THEMING_DIRECTORY + "/special_chests";
+    private static final String THEMES_DIRECTORY = THEMING_DIRECTORY + "/themes";
+
+    private static final String CFG_FILE_ENDING = ".cfg";
+    private static final Predicate<ResourceLocation> IS_CFG_FILE = location -> location.getPath().endsWith(CFG_FILE_ENDING);
+
+    @Override
+    public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller profilerFiller, ProfilerFiller profilerFiller1, Executor backgroundExecutor, Executor gameExecutor) {
+        return preparationBarrier.wait(Unit.INSTANCE).thenRunAsync(() -> {
+            loadBlockFamilies(resourceManager);
+            loadThemes(resourceManager);
+            loadSpecialChests(resourceManager);
+        }, gameExecutor);
+    }
+
+    private CompletableFuture<Void> loadBlockFamilies(ResourceManager resourceManager) {
+        return loadFilesInDirectory(resourceManager, BLOCK_FAMILIES_DIRECTORY, IS_CFG_FILE, (location, file) -> {
+            final ResourceLocation key = keyFromLocation(location, BLOCK_FAMILIES_DIRECTORY, CFG_FILE_ENDING);
+            // Read file from input stream and insert into some data structure for later use.
+        });
+    }
+
+    private CompletableFuture<Void> loadThemes(ResourceManager resourceManager) {
+        return loadFilesInDirectory(resourceManager, THEMES_DIRECTORY, IS_CFG_FILE, (location, file) -> {
+            final ResourceLocation key = keyFromLocation(location, THEMES_DIRECTORY, CFG_FILE_ENDING);
+            // Read file from input stream and insert into some data structure for later use.
+        });
+    }
+
+    private CompletableFuture<Void> loadSpecialChests(ResourceManager resourceManager) {
+        return loadFilesInDirectory(resourceManager, SPECIAL_CHESTS_DIRECTORY, IS_CFG_FILE, (location, file) -> {
+            final ResourceLocation key = keyFromLocation(location, SPECIAL_CHESTS_DIRECTORY, CFG_FILE_ENDING);
+            // Read file from input stream and insert into some data structure for later use.
+        });
+    }
+
+    /**
+     * Load an individual file within the data pack.
+     * Throws an error if the file does not exist.
+     */
+    private CompletableFuture<Void> loadIndividualFile(ResourceManager resourceManager, ResourceLocation location, Consumer<InputStream> consumer) {
+        return CompletableFuture.runAsync(() -> {
+            resourceManager.getResource(location).ifPresentOrElse(resource -> {
+                try {
+                    DLDPoC.LOGGER.debug("Loading individual file: {}", location);
+                    consumer.accept(resource.open());
+                } catch (IOException e) {
+                    throw new RuntimeException("Error loading file " + location, e);
+                }
+            }, () -> {
+                throw new RuntimeException("Missing file " + location);
+            });
+        });
+    }
+
+    /**
+     * Load all files within a directory in the data pack.
+     */
+    private CompletableFuture<Void> loadFilesInDirectory(ResourceManager resourceManager,
+                                                         String directory,
+                                                         Predicate<ResourceLocation> validLocations,
+                                                         BiConsumer<ResourceLocation, InputStream> consumer) {
+        return CompletableFuture.runAsync(() -> resourceManager.listResources(directory, validLocations).forEach((location, resource) -> {
+            try {
+                final InputStream file = resource.open();
+                DLDPoC.LOGGER.debug("Loading file: {}", location);
+                consumer.accept(location, file);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }));
+    }
+
+    /**
+     * Creates a key for a given resource location. Removes the base directory, the following slash and the file ending.
+     *
+     * @param location      the initial resource location.
+     * @param baseDirectory the base path without the last slash. ( dirA/dirB not dirA/dirB/ )
+     * @param fileEnding    the file ending to remove at the end of the path
+     * @return the key
+     */
+    private static ResourceLocation keyFromLocation(ResourceLocation location, String baseDirectory, String fileEnding) {
+        final String path = location.getPath();
+        return new ResourceLocation(location.getNamespace(), path.substring(baseDirectory.length() + 1, path.length() - fileEnding.length()));
+    }
+}
