@@ -189,9 +189,6 @@ public class Room extends AbstractRoom {
                 if (dungeon.map.room[i][j] == 0) dungeon.map.room[i][j] = id;
                 dungeon.map.ceilY[i][j] = dungeon.map.nCeilY[i][j] = (byte) ceilY;
                 dungeon.map.floorY[i][j] = dungeon.map.nFloorY[i][j] = (byte) floorY;
-                if (!sky) dungeon.map.ceiling[i][j] = cielingBlock;
-                dungeon.map.floor[i][j] = floorBlock;
-                dungeon.map.wall[i][j] = wallBlock1;
                 dungeon.map.hasLiquid[i][j] = false;
                 dungeon.map.isWall[i][j] = false;
             }
@@ -245,7 +242,8 @@ public class Room extends AbstractRoom {
      */
     public void addEntrance(Dungeon dungeon) {
         int type;
-        if (dungeon.variability.use(dungeon.random)) type = dungeon.random.nextInt(3);
+        if(Config.easyFind) type = 1;
+        else if (dungeon.variability.use(dungeon.random)) type = dungeon.random.nextInt(3);
         else type = dungeon.entrancePref;
 
         switch (type) {
@@ -278,11 +276,8 @@ public class Room extends AbstractRoom {
                 || (dungeon.rooms.get(dungeon.map.room[x][z]).sky && !sky)
                 || (isSubroom)) {
             dungeon.map.room[x][z] = id;
-            if (!sky) dungeon.map.ceiling[x][z] = cielingBlock;
-            dungeon.map.floor[x][z] = floorBlock;
-            dungeon.map.wall[x][z] = wallBlock1;
             dungeon.map.hasLiquid[x][z] = false;
-            dungeon.map.isWall[x][z] = !sky;
+            dungeon.map.isWall[x][z] = true;
             dungeon.map.isFence[x][z] = fenced;
         }
         if (dungeon.map.ceilY[x][z] < (byte) ceilY) dungeon.map.ceilY[x][z] = (byte) ceilY;

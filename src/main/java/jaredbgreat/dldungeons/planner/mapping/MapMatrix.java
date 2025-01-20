@@ -131,13 +131,11 @@ public class MapMatrix {
                             bytesToList(matrix.nFloorY)
                     )),
                     Codec.INT.listOf().listOf().listOf().fieldOf("blocksAndRooms").forGetter(matrix -> List.of(
-                            intsToList(matrix.ceiling),
-                            intsToList(matrix.wall),
-                            intsToList(matrix.floor),
                             intsToList(matrix.room)
                     )),
                     Codec.BOOL.listOf().listOf().listOf().fieldOf("booleans").forGetter(matrix -> List.of(
                             booleansToList(matrix.isWall),
+                            booleansToList(matrix.isPillar),
                             booleansToList(matrix.isFence),
                             booleansToList(matrix.hasLiquid),
                             booleansToList(matrix.isDoor)
@@ -154,15 +152,13 @@ public class MapMatrix {
                 iterateListOfLists(heights.get(2), (value, x, y) -> matrix.nCeilY[x][y] = value);
                 iterateListOfLists(heights.get(3), (value, x, y) -> matrix.nFloorY[x][y] = value);
 
-                iterateListOfLists(blocksAndRooms.get(0), (value, x, y) -> matrix.ceiling[x][y] = value);
-                iterateListOfLists(blocksAndRooms.get(1), (value, x, y) -> matrix.wall[x][y] = value);
-                iterateListOfLists(blocksAndRooms.get(2), (value, x, y) -> matrix.floor[x][y] = value);
-                iterateListOfLists(blocksAndRooms.get(3), (value, x, y) -> matrix.room[x][y] = value);
+                iterateListOfLists(blocksAndRooms.get(0), (value, x, y) -> matrix.room[x][y] = value);
 
                 iterateListOfLists(booleans.get(0), (value, x, y) -> matrix.isWall[x][y] = value);
-                iterateListOfLists(booleans.get(1), (value, x, y) -> matrix.isFence[x][y] = value);
-                iterateListOfLists(booleans.get(2), (value, x, y) -> matrix.hasLiquid[x][y] = value);
-                iterateListOfLists(booleans.get(3), (value, x, y) -> matrix.isDoor[x][y] = value);
+                iterateListOfLists(booleans.get(1), (value, x, y) -> matrix.isPillar[x][y] = value);
+                iterateListOfLists(booleans.get(2), (value, x, y) -> matrix.isFence[x][y] = value);
+                iterateListOfLists(booleans.get(3), (value, x, y) -> matrix.hasLiquid[x][y] = value);
+                iterateListOfLists(booleans.get(4), (value, x, y) -> matrix.isDoor[x][y] = value);
 
                 iterateListOfLists(features, (value, x, y) -> matrix.features[x][y] = value);
 
@@ -180,16 +176,19 @@ public class MapMatrix {
     public byte[][] nCeilY;        // Height of Neighboring Ceiling
     public byte[][] nFloorY;    // Height of Neighboring Floor
 
+    /*
     // Blocks referenced against the DBlock.registry
     public int[][] ceiling;
     public int[][] wall;
     public int[][] floor;
+    */
 
     // The room id (index of the room in the dungeons main RoomList)
     public int[][] room;
 
     // Is it a wall?
     public boolean[][] isWall;        // Is this coordinate occupied by a wall?
+    public boolean[][] isPillar;        // Is this coordinate occupied by a wall?
     public boolean[][] isFence;        // Is this coordinate occupied by a wall?
     public boolean[][] hasLiquid;    // Is floor covered by a liquid block?
     public boolean[][] isDoor;        // Is there a door here?
@@ -214,10 +213,8 @@ public class MapMatrix {
         nCeilY = new byte[size.width][size.width];
         nFloorY = new byte[size.width][size.width];
         room = new int[size.width][size.width];
-        ceiling = new int[size.width][size.width];
-        wall = new int[size.width][size.width];
-        floor = new int[size.width][size.width];
         isWall = new boolean[size.width][size.width];
+        isPillar = new boolean[size.width][size.width];
         isFence = new boolean[size.width][size.width];
         hasLiquid = new boolean[size.width][size.width];
         isDoor = new boolean[size.width][size.width];
@@ -273,6 +270,8 @@ public class MapMatrix {
         int below;
         boolean flooded = dungeon.theme.flags.contains(ThemeFlags.WATER);
 
+        int airBlock, wallBlock1, floorBlock, cielingBlock, fenceBlock, pillarBlock, liquidBlock, caveBlock;
+
         int sx = (cx0 - lowCX) * 16, ex = sx + 16;
         int sz = (cz0 - lowCZ) * 16, ez = sz + 16;
 
@@ -280,6 +279,7 @@ public class MapMatrix {
             for (int j = sz; j < ez; j++) {
                 if (room[i][j] != 0) {
                     Room theRoom = dungeon.rooms.get(room[i][j]);
+
 
                     // Debugging code; should not normally run
                     if (drawFlyingMap) {
@@ -307,14 +307,14 @@ public class MapMatrix {
                     if ((nFloorY[i][j] < floorY[i][j]) && (nFloorY[i][j] > 0))
                         for (int k = nFloorY[i][j]; k < floorY[i][j]; k++)
                             if (noLowDegenerate(theRoom, shiftX + i, k, shiftZ + j, i, j, world))
-                                RegisteredBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
+                                RegisteredBlock.place(world, shiftX + i, k, shiftZ + j, theRoom.wallBlock1);
                     if ((nFloorY[i][j] > floorY[i][j]) && (floorY[i][j] > 0))
                         for (int k = floorY[i][j]; k < nFloorY[i][j]; k++)
                             if (noLowDegenerate(theRoom, shiftX + i, k, shiftZ + j, i, j, world))
-                                RegisteredBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
+                                RegisteredBlock.place(world, shiftX + i, k, shiftZ + j, theRoom.wallBlock1);
 
                     if (noLowDegenerate(theRoom, shiftX + i, floorY[i][j] - 1, shiftZ + j, i, j, world)) {
-                        RegisteredBlock.place(world, shiftX + i, floorY[i][j] - 1, shiftZ + j, floor[i][j]);
+                        RegisteredBlock.place(world, shiftX + i, floorY[i][j] - 1, shiftZ + j, theRoom.floorBlock);
                         if (/*dungeon.theme.buildFoundation*/ true) { // Will become default, due to large caverns
                             below = nFloorY[i][j] < floorY[i][j] ? nFloorY[i][j] - 1 : floorY[i][j] - 2;
                             while (!RegisteredBlock.isGroundBlock(world, shiftX + i, below, shiftZ + j)) {
@@ -328,17 +328,19 @@ public class MapMatrix {
                     // Upper parts of the room
                     if (!theRoom.sky
                             && noHighDegenerate(theRoom, shiftX + i, ceilY[i][j] + 1, shiftZ + j, world))
-                        RegisteredBlock.place(world, shiftX + i, ceilY[i][j] + 1, shiftZ + j, ceiling[i][j]);
+                        RegisteredBlock.place(world, shiftX + i, ceilY[i][j] + 1, shiftZ + j, theRoom.cielingBlock);
 
                     for (int k = roomBottom(i, j); k <= ceilY[i][j]; k++)
-                        if (!isWall[i][j]) {
+                        if (!(isWall[i][j] || isPillar[i][j])) {
                             RegisteredBlock.deleteBlock(world, shiftX + i, k, shiftZ + j,
                                     theRoom.airBlock);
-                        } else if (noHighDegenerate(theRoom, shiftX + i, k, shiftZ + j, world))
-                            RegisteredBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
+                        } else if(isWall[i][j] && noHighDegenerate(theRoom, shiftX + i, k, shiftZ + j, world))
+                            RegisteredBlock.place(world, shiftX + i, k, shiftZ + j, theRoom.wallBlock1);
+                        else if(noHighDegenerate(theRoom, shiftX + i, k, shiftZ + j, world))
+                            RegisteredBlock.place(world, shiftX + i, k, shiftZ + j, theRoom.pillarBlock);
                     for (int k = nCeilY[i][j]; k < ceilY[i][j]; k++)
                         if (noHighDegenerate(theRoom, shiftX + i, k, shiftZ + j, world))
-                            RegisteredBlock.place(world, shiftX + i, k, shiftZ + j, wall[i][j]);
+                            RegisteredBlock.place(world, shiftX + i, k, shiftZ + j, theRoom.wallBlock1);
                     if (isFence[i][j])
                         RegisteredBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, theRoom.fenceBlock);
 

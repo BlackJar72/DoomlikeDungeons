@@ -90,10 +90,6 @@ public class AStar2 extends AStar {
 						if(dungeon.map.room[child.x+i][child.z+j] < 1) {
 							dungeon.map.room[child.x+i][child.z+j] = roomid;
 							dungeon.map.isWall[child.x+i][child.z+j] = true;
-							dungeon.map.floor[child.x+i][child.z+j] = dungeon.floorBlock;
-							dungeon.map.ceiling[child.x+i][child.z+j] = dungeon.cielingBlock;
-							dungeon.map.wall[child.x+i][child.z+j] = dungeon.wallBlock1;
-						
 						}
 						if(dungeon.map.astared[child.x+i][child.z+j] || 
 								((Math.abs(i) < size) && (Math.abs(j) < size))) {
