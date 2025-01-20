@@ -1,7 +1,7 @@
 {
   "name": "mixed_bricks_2",
   "blocks": [
-    "minecraft:stonebrick",
-    "minecraft:stonebrick(2)"
+    "minecraft:stone_bricks",
+    "minecraft:cracked_stone_bricks"
   ]
 } 
