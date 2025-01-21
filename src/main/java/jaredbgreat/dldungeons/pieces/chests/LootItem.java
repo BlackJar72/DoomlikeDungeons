@@ -32,7 +32,7 @@ public class LootItem {
 
     Item item;
     int min, max, meta, level;
-    ArrayList<ITag> nbtData;
+    //ArrayList<ITag> nbtData;
 
 
     private static class ItemPrototype {
@@ -147,29 +147,29 @@ public class LootItem {
     }
 
 
-    /**
-     * This will parse an NBT tag from the chest.cfg and add it to the LootItem
-     * as an NbtTag object for later use in adding the tag to actual item stacks
-     * in chests.
-     *
-     * @param in
-     */
-    public void addNbt(String in) {
-        if (nbtData == null) {
-            nbtData = new ArrayList<ITag>();
-        }
-        // Ignore nbt for now.
-    }
-
-
-    /**
-     * Make the items NBT data a small as possible.
-     */
-    public void trimNbt() {
-        if (nbtData != null) {
-            nbtData.trimToSize();
-        }
-    }
+//    /**
+//     * This will parse an NBT tag from the chest.cfg and add it to the LootItem
+//     * as an NbtTag object for later use in adding the tag to actual item stacks
+//     * in chests.
+//     *
+//     * @param in
+//     */
+//    public void addNbt(String in) {
+//        if (nbtData == null) {
+//            nbtData = new ArrayList<ITag>();
+//        }
+//        // Ignore nbt for now.
+//    }
+//
+//
+//    /**
+//     * Make the items NBT data a small as possible.
+//     */
+//    public void trimNbt() {
+//        if (nbtData != null) {
+//            nbtData.trimToSize();
+//        }
+//    }
 
 
     /**

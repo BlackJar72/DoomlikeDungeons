@@ -433,7 +433,7 @@ public class Room extends AbstractRoom {
         } else if (dungeon.theme.flags.contains(ThemeFlags.EASY)) {
             lev--;
         }
-        lev += lootBonus + dungeon.random.nextInt(2);
+        lev += lootBonus;
         int x, y, z, tmp, num;
         if (!hasSpawners) {
             tmp = (endX - beginX - 3);

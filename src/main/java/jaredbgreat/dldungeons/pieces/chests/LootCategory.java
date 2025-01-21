@@ -163,10 +163,9 @@ public class LootCategory {
      */
     private boolean isEnchantable(LootItem in) {
         Item item = (Item) in.item;
-        return (((in.nbtData == null) || in.nbtData.isEmpty())
-                && (item instanceof TieredItem
+        return (item instanceof TieredItem
                 || item instanceof ArmorItem
-                || item instanceof BowItem));
+                || item instanceof BowItem);
     }
 
 
