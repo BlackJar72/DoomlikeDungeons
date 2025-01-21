@@ -20,6 +20,11 @@
     "minecraft:stony_shore",
     "minecraft:swamp",
     "minecraft:ocean",
-    "minecraft:deep_ocean"
+    "minecraft:deep_ocean",
+    "minecraft:nether_wastes",
+    "minecraft:crimson_forest",
+    "minecraft:warped_forest",
+    "minecraft:basalt_deltas",
+    "minecraft:soul_sand_valley"
   ]
 }
