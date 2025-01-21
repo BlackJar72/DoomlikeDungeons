@@ -73,12 +73,6 @@ public class DBlock extends AbstractBlock {
 						+ "\" was was not in registry (returned null).";
 				throw new NoSuchElementException(error);
 			}
-			if(nums.hasMoreElements()) {
-				meta = Integer.parseInt(nums.nextToken()); 
-			} else {
-				meta = 0;
-			}
-			// Hack: ignore meta
 			return new DBlock(theBlock.defaultBlockState());
 		} catch (NoSuchElementException ex) {
 			throw new NoSuchElementException("Something was wrong with " + id 

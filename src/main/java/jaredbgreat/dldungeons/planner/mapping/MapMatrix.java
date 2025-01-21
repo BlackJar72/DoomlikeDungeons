@@ -292,7 +292,7 @@ public class MapMatrix {
                             while (!RegisteredBlock.isGroundBlock(world, shiftX + i, below, shiftZ + j)) {
                                 RegisteredBlock.place(world, shiftX + i, below, shiftZ + j, dungeon.floorBlock);
                                 below--;
-                                if (below < -32) break;
+                                if (below < -60) break;
                             }
                         }
                     }

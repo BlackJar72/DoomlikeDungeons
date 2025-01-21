@@ -20,6 +20,7 @@ import jaredbgreat.dldungeons.themes.Theme;
 import jaredbgreat.dldungeons.util.cache.Coords;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Holder;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
@@ -215,57 +216,24 @@ public class Dungeon {
         this.coords = coords;
     }
 
-    public Dungeon(Biome biome, RandomSource random, int chunkX, int chunkZ) throws Throwable {
+
+
+    public Dungeon(RandomSource random, Coords coords, Holder<Biome> biome) throws Throwable {
         final int dim = 0;
-        coords = new Coords(chunkX, chunkZ, dim);
 
-        this.random = random;
-        this.biome = biome;
-        theme = Theme.getOverworldTheme(random);
-        if (theme == null) return;
+        /*
+                biomeHolder.getTagKeys().forEach(biomeTag -> {
+                    // Do stuff with tags.
+                });
 
-        applyTheme();
-        entrancePref = random.nextInt(3);
-
-        airBlock = theme.air[random.nextInt(theme.air.length)];
-        wallBlock1 = theme.walls[random.nextInt(theme.walls.length)];
-        floorBlock = theme.floors[random.nextInt(theme.floors.length)];
-        cielingBlock = theme.ceilings[random.nextInt(theme.ceilings.length)];
-        fenceBlock = theme.fencing[random.nextInt(theme.fencing.length)];
-        cornerBlock = theme.pillarBlock[random.nextInt(theme.pillarBlock.length)];
-        liquidBlock = theme.liquid[random.nextInt(theme.liquid.length)];
-        caveBlock = theme.caveWalls[random.nextInt(theme.caveWalls.length)];
-
-        rooms = new RoomList(size.maxRooms + 1);
-        planter = new ArrayList<Room>();
-        map = new MapMatrix(size, coords);
-        numNodes = random.nextInt(size.maxNodes - size.minNodes + 1) + size.minNodes + 1;
-        nodes = new Node[numNodes];
-        spawners = new SpawnerCounter();
-
-        shiftX = (map.chunkX * 16) - (map.room.length / 2) + 8;
-        shiftZ = (map.chunkZ * 16) - (map.room.length / 2) + 8;
-
-        makeNodes();
-        if (numEntrances < 1) addAnEntrance();
-        connectNodes();
-        growthCycle();
-        spawners.fixSpawners(this, random);
-        for (Room room : rooms) {
-            room.addChests(this);
-        }
-
-        fixRoomContents();
-    }
-
-
-    public Dungeon(RandomSource random, Coords coords) throws Throwable {
-        final int dim = 0;
+        // Check specific tag with known tag key.
+        boolean isForest = biomeHolder.is(BiomeTags.IS_FOREST);
+        */
 
         this.coords = coords;
         int chunkX = coords.getX(), chunkZ = coords.getZ();
         this.random = random;
-        theme = Theme.PLACEHOLDER_THEME;
+        theme = Theme.getOverworldTheme(random);
         if (theme == null) return;
 
         applyTheme();

@@ -7,6 +7,9 @@ import com.mojang.serialization.Codec;
 import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.util.cache.Coords;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.QuartPos;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -37,12 +40,18 @@ public class DLDungeonStructure extends Structure {
 
         final BlockPos center = new BlockPos(chunkCenterX, chunkCenterGroundHeight, chunkCenterZ);
 
+        final Holder<Biome> biomeHolder = context.biomeSource().getNoiseBiome(
+                QuartPos.fromBlock(chunkCenterX),
+                QuartPos.fromBlock(chunkCenterGroundHeight),
+                QuartPos.fromBlock(chunkCenterZ),
+                context.randomState().sampler());
+
         final Structure.GenerationStub stub = new Structure.GenerationStub(center, (structurePiecesBuilder) -> {
             DLDungeons.LOGGER.info("Generating dungeon at block [{},{}]", chunkCenterX, chunkCenterZ);
             // Generate dungeon plan.
             final Dungeon dungeon;
             try {
-                dungeon = new Dungeon(context.random(), new Coords(context.chunkPos().x, context.chunkPos().z, 0));
+                dungeon = new Dungeon(context.random(), new Coords(context.chunkPos().x, context.chunkPos().z, 0), biomeHolder);
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
