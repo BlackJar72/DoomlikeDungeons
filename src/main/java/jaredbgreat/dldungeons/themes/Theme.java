@@ -7,6 +7,7 @@ package jaredbgreat.dldungeons.themes;
 
 
 import jaredbgreat.dldungeons.builder.RegisteredBlock;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.tags.BiomeTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
@@ -188,8 +189,15 @@ public class Theme {
 	}
 
 
-	public static Theme getOverworldTheme(RandomSource random) {
-		Theme output = overworldThemes.get(random.nextInt(overworldThemes.size()));
+	public static Theme getOverworldTheme(RandomSource random, Holder<Biome> biome) {
+		Theme output;
+		if(biome.is(BiomeTags.IS_NETHER)) {
+			output = netherThemes.get(random.nextInt(netherThemes.size()));
+		} else if (biome.is(BiomeTags.IS_OCEAN) || biome.is(BiomeTags.IS_DEEP_OCEAN)) {
+			output = oceanicThemes.get(random.nextInt(oceanicThemes.size()));
+		} else {
+			output = overworldThemes.get(random.nextInt(overworldThemes.size()));
+		}
 		if(output == null) output = PLACEHOLDER_THEME;
 		return output;
 	}

@@ -40,17 +40,17 @@ public class DLDungeonStructure extends Structure {
 
         final BlockPos center = new BlockPos(chunkCenterX, chunkCenterGroundHeight, chunkCenterZ);
 
-        final Holder<Biome> biomeHolder = context.biomeSource().getNoiseBiome(
-                QuartPos.fromBlock(chunkCenterX),
-                QuartPos.fromBlock(chunkCenterGroundHeight),
-                QuartPos.fromBlock(chunkCenterZ),
-                context.randomState().sampler());
 
         final Structure.GenerationStub stub = new Structure.GenerationStub(center, (structurePiecesBuilder) -> {
             DLDungeons.LOGGER.info("Generating dungeon at block [{},{}]", chunkCenterX, chunkCenterZ);
             // Generate dungeon plan.
             final Dungeon dungeon;
             try {
+                final Holder<Biome> biomeHolder = context.biomeSource().getNoiseBiome(
+                        QuartPos.fromBlock(chunkCenterX),
+                        QuartPos.fromBlock(chunkCenterGroundHeight),
+                        QuartPos.fromBlock(chunkCenterZ),
+                        context.randomState().sampler());
                 dungeon = new Dungeon(context.random(), new Coords(context.chunkPos().x, context.chunkPos().z, 0), biomeHolder);
             } catch (Throwable e) {
                 throw new RuntimeException(e);

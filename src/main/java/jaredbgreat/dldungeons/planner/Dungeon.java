@@ -233,7 +233,7 @@ public class Dungeon {
         this.coords = coords;
         int chunkX = coords.getX(), chunkZ = coords.getZ();
         this.random = random;
-        theme = Theme.getOverworldTheme(random);
+        theme = Theme.getOverworldTheme(random, biome);
         if (theme == null) return;
 
         applyTheme();

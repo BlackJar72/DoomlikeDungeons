@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "#minecraft:is_overworld",
     "#minecraft:is_badlands",
     "#minecraft:is_beach",
     "#minecraft:is_forest",
@@ -19,7 +20,6 @@
     "minecraft:stony_shore",
     "minecraft:swamp",
     "minecraft:ocean",
-    "minecraft:deep_ocean",
-    "minecraft:nether"
+    "minecraft:deep_ocean"
   ]
 }
