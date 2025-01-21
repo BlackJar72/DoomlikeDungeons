@@ -17,6 +17,9 @@
     "minecraft:savanna_plateau",
     "minecraft:windswept_savanna",
     "minecraft:stony_shore",
-    "minecraft:swamp"
+    "minecraft:swamp",
+    "minecraft:ocean",
+    "minecraft:deep_ocean",
+    "minecraft:nether"
   ]
 }
