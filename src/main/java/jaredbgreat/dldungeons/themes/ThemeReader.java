@@ -185,7 +185,7 @@ public class ThemeReader {
         BufferedReader instream = null;
         try {
             instream = new BufferedReader(new InputStreamReader(file));
-            parseTheme(instream, file.toString());
+            parseTheme(instream, name);
             if(instream != null) instream.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -345,6 +345,7 @@ public class ThemeReader {
             theme.caveWalls = theme.walls;
         }
         Theme.themes.add(theme);
+        System.out.println("**** DLD: Loaded Theme " + theme.name);
     }
 
 

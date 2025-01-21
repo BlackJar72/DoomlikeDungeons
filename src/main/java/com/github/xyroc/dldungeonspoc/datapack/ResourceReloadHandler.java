@@ -69,6 +69,7 @@ public class ResourceReloadHandler implements PreparableReloadListener {
         return loadFilesInDirectory(resourceManager, SPECIAL_CHESTS_DIRECTORY, IS_CFG_FILE, (location, file) -> {
             final ResourceLocation key = keyFromLocation(location, SPECIAL_CHESTS_DIRECTORY, CFG_FILE_ENDING);
             // Read file from input stream and insert into some data structure for later use.
+            System.out.println("READING THEME " + key.toString() + " from locations " + file.toString());
             ThemeReader.openLoot(file, key.toString());
         });
     }

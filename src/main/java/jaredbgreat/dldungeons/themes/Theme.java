@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 
@@ -165,16 +166,25 @@ public class Theme {
 		fixMobs();
 	}
 
-	public static void SortThemes() {
-		for(Theme theme : themes) {
-			if(theme.flags.contains(ThemeFlags.OCEANIC)) {
-				oceanicThemes.add(theme);
-			} else if(theme.flags.contains(ThemeFlags.NETHER)) {
-				netherThemes.add(theme);
-			} else {
-				overworldThemes.add(theme);
+	public static CompletableFuture<Void> SortThemes() {
+		return CompletableFuture.runAsync(() -> {
+			System.out.println("****************************");
+			System.out.println("***  SORTING THEMES NOW  ***");
+			System.out.println("****************************");
+			for (Theme theme : themes) {
+				if (theme.flags.contains(ThemeFlags.OCEANIC)) {
+					oceanicThemes.add(theme);
+					System.out.println("Sorted Theme " + theme.name + " to Ocean");
+				} else if (theme.flags.contains(ThemeFlags.NETHER)) {
+					netherThemes.add(theme);
+					System.out.println("Sorted Theme " + theme.name + " to Nether");
+				} else {
+					overworldThemes.add(theme);
+					System.out.println("Sorted Theme " + theme.name + " to Overworld");
+				}
+				System.out.println("Should have " + theme.name);
 			}
-		}
+		});
 	}
 
 
