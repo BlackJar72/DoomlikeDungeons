@@ -30,10 +30,10 @@ public class ResourceReloadHandler implements PreparableReloadListener {
     private static final String SPECIAL_CHESTS_DIRECTORY = THEMING_DIRECTORY + "/special_chests";
     private static final String THEMES_DIRECTORY = THEMING_DIRECTORY + "/themes";
 
-    private static final String CFG_FILE_ENDING  = ".cfg";
+    private static final String CFG_FILE_ENDING = ".cfg";
     private static final String JSON_FILE_ENDING = ".json";
 
-    private static final Predicate<ResourceLocation> IS_CFG_FILE  = location -> location.getPath().endsWith(CFG_FILE_ENDING);
+    private static final Predicate<ResourceLocation> IS_CFG_FILE = location -> location.getPath().endsWith(CFG_FILE_ENDING);
     private static final Predicate<ResourceLocation> IS_JSON_FILE = location -> location.getPath().endsWith(JSON_FILE_ENDING);
 
 
@@ -48,8 +48,8 @@ public class ResourceReloadHandler implements PreparableReloadListener {
     }
 
 
-    private CompletableFuture<Void> loadBlockFamilies(ResourceManager resourceManager) {
-        return loadFilesInDirectory(resourceManager, BLOCK_FAMILIES_DIRECTORY, IS_JSON_FILE, (location, file) -> {
+    private void loadBlockFamilies(ResourceManager resourceManager) {
+        loadFilesInDirectory(resourceManager, BLOCK_FAMILIES_DIRECTORY, IS_JSON_FILE, (location, file) -> {
             final ResourceLocation key = keyFromLocation(location, BLOCK_FAMILIES_DIRECTORY, JSON_FILE_ENDING);
             // Read file from input stream and insert into some data structure for later use.
             // final BufferedReader reader = new BufferedReader(new InputStreamReader(file));
@@ -57,16 +57,16 @@ public class ResourceReloadHandler implements PreparableReloadListener {
         });
     }
 
-    private CompletableFuture<Void> loadThemes(ResourceManager resourceManager) {
-        return loadFilesInDirectory(resourceManager, THEMES_DIRECTORY, IS_CFG_FILE, (location, file) -> {
+    private void loadThemes(ResourceManager resourceManager) {
+        loadFilesInDirectory(resourceManager, THEMES_DIRECTORY, IS_CFG_FILE, (location, file) -> {
             final ResourceLocation key = keyFromLocation(location, THEMES_DIRECTORY, CFG_FILE_ENDING);
             // Read file from input stream and insert into some data structure for later use.
             ThemeReader.readTheme(file, key.toString());
         });
     }
 
-    private CompletableFuture<Void> loadSpecialChests(ResourceManager resourceManager) {
-        return loadFilesInDirectory(resourceManager, SPECIAL_CHESTS_DIRECTORY, IS_CFG_FILE, (location, file) -> {
+    private void loadSpecialChests(ResourceManager resourceManager) {
+        loadFilesInDirectory(resourceManager, SPECIAL_CHESTS_DIRECTORY, IS_CFG_FILE, (location, file) -> {
             final ResourceLocation key = keyFromLocation(location, SPECIAL_CHESTS_DIRECTORY, CFG_FILE_ENDING);
             // Read file from input stream and insert into some data structure for later use.
             System.out.println("READING THEME " + key.toString() + " from locations " + file.toString());
@@ -78,29 +78,27 @@ public class ResourceReloadHandler implements PreparableReloadListener {
      * Load an individual file within the data pack.
      * Throws an error if the file does not exist.
      */
-    private CompletableFuture<Void> loadIndividualFile(ResourceManager resourceManager, ResourceLocation location, Consumer<InputStream> consumer) {
-        return CompletableFuture.runAsync(() -> {
-            resourceManager.getResource(location).ifPresentOrElse(resource -> {
-                try {
-                    DLDungeons.LOGGER.debug("Loading individual file: {}", location);
-                    consumer.accept(resource.open());
-                } catch (IOException e) {
-                    throw new RuntimeException("Error loading file " + location, e);
-                }
-            }, () -> {
-                throw new RuntimeException("Missing file " + location);
-            });
+    private void loadIndividualFile(ResourceManager resourceManager, ResourceLocation location, Consumer<InputStream> consumer) {
+        resourceManager.getResource(location).ifPresentOrElse(resource -> {
+            try {
+                DLDungeons.LOGGER.debug("Loading individual file: {}", location);
+                consumer.accept(resource.open());
+            } catch (IOException e) {
+                throw new RuntimeException("Error loading file " + location, e);
+            }
+        }, () -> {
+            throw new RuntimeException("Missing file " + location);
         });
     }
 
     /**
      * Load all files within a directory in the data pack.
      */
-    private CompletableFuture<Void> loadFilesInDirectory(ResourceManager resourceManager,
-                                                         String directory,
-                                                         Predicate<ResourceLocation> validLocations,
-                                                         BiConsumer<ResourceLocation, InputStream> consumer) {
-        return CompletableFuture.runAsync(() -> resourceManager.listResources(directory, validLocations).forEach((location, resource) -> {
+    private void loadFilesInDirectory(ResourceManager resourceManager,
+                                      String directory,
+                                      Predicate<ResourceLocation> validLocations,
+                                      BiConsumer<ResourceLocation, InputStream> consumer) {
+        resourceManager.listResources(directory, validLocations).forEach((location, resource) -> {
             try {
                 final InputStream file = resource.open();
                 DLDungeons.LOGGER.debug("Loading file: {}", location);
@@ -108,7 +106,7 @@ public class ResourceReloadHandler implements PreparableReloadListener {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        }));
+        });
     }
 
     /**
