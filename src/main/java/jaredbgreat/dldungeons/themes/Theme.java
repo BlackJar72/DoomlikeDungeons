@@ -7,10 +7,26 @@ package jaredbgreat.dldungeons.themes;
 
 
 import jaredbgreat.dldungeons.builder.RegisteredBlock;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.tags.BiomeTagsProvider;
+import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.data.worldgen.biome.BiomeData;
+import net.minecraft.tags.BiomeTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
+import net.minecraftforge.common.BiomeManager;
+import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.world.ModifiableBiomeInfo;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 
 /**
@@ -38,6 +54,11 @@ public class Theme {
 	 * After all, this is just a Proof of Concept!
 	 */
 	public static final Theme PLACEHOLDER_THEME = new Theme();
+
+	public static final CopyOnWriteArrayList<Theme> themes = new CopyOnWriteArrayList<>();
+	public static final CopyOnWriteArrayList<Theme> overworldThemes = new CopyOnWriteArrayList<>();
+	public static final CopyOnWriteArrayList<Theme> oceanicThemes = new CopyOnWriteArrayList<>();
+	public static final CopyOnWriteArrayList<Theme> netherThemes = new CopyOnWriteArrayList<>();
 
 	static {
 		PLACEHOLDER_THEME.air = makeBlockList(new String[] {"minecraft:air"});
@@ -68,7 +89,7 @@ public class Theme {
 	
 	public String name;
 	public int version = 0;
-	
+
 	public EnumSet<ThemeType> type  = EnumSet.noneOf(ThemeType.class);
 	public EnumSet<ThemeFlags> flags = EnumSet.noneOf(ThemeFlags.class);
 	
@@ -143,7 +164,26 @@ public class Theme {
 		
 		fixMobs();
 	}
-	
+
+	public static void SortThemes() {
+		for(Theme theme : themes) {
+			if(theme.flags.contains(ThemeFlags.OCEANIC)) {
+				oceanicThemes.add(theme);
+			} else if(theme.flags.contains(ThemeFlags.NETHER)) {
+				netherThemes.add(theme);
+			} else {
+				overworldThemes.add(theme);
+			}
+		}
+	}
+
+
+	public static Theme getOverworldTheme(RandomSource random) {
+		Theme output = overworldThemes.get(random.nextInt(overworldThemes.size()));
+		if(output == null) output = PLACEHOLDER_THEME;
+		return output;
+	}
+
 	
 	/**
 	 * Add a mob to the list of mobs at the given difficulty level.

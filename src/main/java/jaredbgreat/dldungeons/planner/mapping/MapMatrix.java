@@ -241,7 +241,6 @@ public class MapMatrix {
 
         BlockFamily.setRadnom(world.getRandom());
         int below;
-        boolean flooded = dungeon.theme.flags.contains(ThemeFlags.WATER);
 
         int airBlock, wallBlock1, floorBlock, cielingBlock, fenceBlock, pillarBlock, liquidBlock, caveBlock;
 
@@ -318,9 +317,9 @@ public class MapMatrix {
                         RegisteredBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, theRoom.fenceBlock);
 
                     if (isDoor(i, j)) {
-                        RegisteredBlock.deleteBlock(world, shiftX + i, floorY[i][j], shiftZ + j, flooded);
-                        RegisteredBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 1, shiftZ + j, flooded);
-                        RegisteredBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 2, shiftZ + j, flooded);
+                        RegisteredBlock.deleteBlock(world, shiftX + i, floorY[i][j], shiftZ + j, theRoom.airBlock);
+                        RegisteredBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 1, shiftZ + j, theRoom.airBlock);
+                        RegisteredBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 2, shiftZ + j, theRoom.airBlock);
                     }
 
                     // Liquids

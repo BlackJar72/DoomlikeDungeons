@@ -267,8 +267,7 @@ public final class RegisteredBlock extends AbstractBlock {
 
     public static void deleteBlock(WorldGenLevel world, int x, int y, int z, int block) {
         if (isProtectedBlock(world, x, y, z)) return;
-        if (block > 0) registry.get(block).place(world, x, y, z);
-        else world.setBlock(new BlockPos(x, y, z), Blocks.AIR.defaultBlockState(), 2);
+        registry.get(block).place(world, x, y, z);
     }
 
 

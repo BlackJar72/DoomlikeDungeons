@@ -221,7 +221,7 @@ public class Dungeon {
 
         this.random = random;
         this.biome = biome;
-        theme = Theme.PLACEHOLDER_THEME;
+        theme = Theme.getOverworldTheme(random);
         if (theme == null) return;
 
         applyTheme();

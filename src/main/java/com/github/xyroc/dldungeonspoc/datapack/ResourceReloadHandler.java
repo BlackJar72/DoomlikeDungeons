@@ -1,6 +1,8 @@
 package com.github.xyroc.dldungeonspoc.datapack;
 
 import com.github.xyroc.dldungeonspoc.DLDungeons;
+import jaredbgreat.dldungeons.themes.Theme;
+import jaredbgreat.dldungeons.themes.ThemeReader;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -41,14 +43,17 @@ public class ResourceReloadHandler implements PreparableReloadListener {
             loadBlockFamilies(resourceManager);
             loadSpecialChests(resourceManager);
             loadThemes(resourceManager);
+            Theme.SortThemes();
         }, gameExecutor);
     }
+
 
     private CompletableFuture<Void> loadBlockFamilies(ResourceManager resourceManager) {
         return loadFilesInDirectory(resourceManager, BLOCK_FAMILIES_DIRECTORY, IS_JSON_FILE, (location, file) -> {
             final ResourceLocation key = keyFromLocation(location, BLOCK_FAMILIES_DIRECTORY, JSON_FILE_ENDING);
             // Read file from input stream and insert into some data structure for later use.
             // final BufferedReader reader = new BufferedReader(new InputStreamReader(file));
+            ThemeReader.readBlockFamilies(file);
         });
     }
 
@@ -56,6 +61,7 @@ public class ResourceReloadHandler implements PreparableReloadListener {
         return loadFilesInDirectory(resourceManager, THEMES_DIRECTORY, IS_CFG_FILE, (location, file) -> {
             final ResourceLocation key = keyFromLocation(location, THEMES_DIRECTORY, CFG_FILE_ENDING);
             // Read file from input stream and insert into some data structure for later use.
+            ThemeReader.readTheme(file, key.toString());
         });
     }
 
@@ -63,6 +69,7 @@ public class ResourceReloadHandler implements PreparableReloadListener {
         return loadFilesInDirectory(resourceManager, SPECIAL_CHESTS_DIRECTORY, IS_CFG_FILE, (location, file) -> {
             final ResourceLocation key = keyFromLocation(location, SPECIAL_CHESTS_DIRECTORY, CFG_FILE_ENDING);
             // Read file from input stream and insert into some data structure for later use.
+            ThemeReader.openLoot(file, key.toString());
         });
     }
 

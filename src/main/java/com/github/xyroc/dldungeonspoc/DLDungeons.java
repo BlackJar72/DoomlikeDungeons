@@ -41,6 +41,7 @@ public class DLDungeons {
         ModStructureTypes.init();
         // Register structure piece types.
         ModStructurePieceTypes.init();
+
     }
 
     private void onAddReloadListener(final AddReloadListenerEvent event) {
