@@ -23,6 +23,7 @@ import jaredbgreat.dldungeons.themes.ThemeFlags;
 import jaredbgreat.dldungeons.themes.ThemeType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Collections;
