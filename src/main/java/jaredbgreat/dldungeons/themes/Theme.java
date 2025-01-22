@@ -160,28 +160,21 @@ public class Theme {
 		liquid = makeBlockList(new String[]{});
 		pillarBlock = makeBlockList(new String[]{});
 		dimensionWhitelist = new int[0];
-		lootCat = "chests.cfg";
+		lootCat = "dldungeonsjbg:chest";
 		
 		fixMobs();
 	}
 
 	public static CompletableFuture<Void> SortThemes() {
 		return CompletableFuture.runAsync(() -> {
-			System.out.println("****************************");
-			System.out.println("***  SORTING THEMES NOW  ***");
-			System.out.println("****************************");
 			for (Theme theme : themes) {
 				if (theme.flags.contains(ThemeFlags.OCEANIC)) {
 					oceanicThemes.add(theme);
-					System.out.println("Sorted Theme " + theme.name + " to Ocean");
 				} else if (theme.flags.contains(ThemeFlags.NETHER)) {
 					netherThemes.add(theme);
-					System.out.println("Sorted Theme " + theme.name + " to Nether");
 				} else {
 					overworldThemes.add(theme);
-					System.out.println("Sorted Theme " + theme.name + " to Overworld");
 				}
-				System.out.println("Should have " + theme.name);
 			}
 		});
 	}
@@ -224,7 +217,6 @@ public class Theme {
 		default:
 			System.err.println("[DLDUNGEONS] Failed to add mob " + mob + " to theme " 
 					+ name + ", illegal difficulty level " + level + " (use 0 to 3).");
-			return;
 		}
 	}
 	
@@ -271,23 +263,14 @@ public class Theme {
 		allMobs[3] = printListDebug(eliteMobs);
 		allMobs[4] = printListDebug(bossMobs);
 	}
-	
-	
+
+
 	private ArrayList printListDebug(ArrayList list) {/*
 		System.out.println(list);
 		for(Object o : list) {
 			System.out.println(" \t " + o);
 		}*/
 		return list;
-	}
-	
-	
-	/**
-	 * Register the theme with biome types it should and 
-	 * should never appear in.
-	 */
-	public void biomeRegister() {
-
 	}
 	
 	

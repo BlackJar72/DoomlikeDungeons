@@ -7,21 +7,18 @@ package jaredbgreat.dldungeons.pieces.chests;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class LootHandler {
-	private static LootHandler handler;
+	private static final LootHandler handler = new LootHandler();;
 	private final Map<String, LootCategory> categories;
 	
 	private LootHandler() {
-		categories = new HashMap<>();
+		categories = new ConcurrentHashMap<>();
 	}
 	
 	
 	public static LootHandler getLootHandler() {
-		if(handler == null) {
-			handler = new LootHandler();
-			handler.createCategory("chest.cfg");
-		}
 		return handler;
 	}
 	
@@ -33,18 +30,17 @@ public class LootHandler {
 	 * @return
 	 */
 	public LootCategory createCategory(String name) {
-		if(categories.containsKey(name)) {
-			System.err.println("[DLDUNGEONS] Warning: Trying to create Loot Category" 
-					+ name + " more than once!");
-			return categories.get(name);
-		}
 		LootListSet listset = new LootListSet();
-		LootCategory category = new LootCategory(listset);
+		LootCategory category = new LootCategory(listset, name);
 		categories.put(name, category);
+		System.out.println("DLD: Created LootCategory " + name);
 		return category;
 	}
 	
-	
+
+
+
+
 	public LootCategory getCategory(String name) {
 		return categories.get(name);
 	}

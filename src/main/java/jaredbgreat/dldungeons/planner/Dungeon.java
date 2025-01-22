@@ -25,6 +25,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraftforge.fml.Logging;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -78,10 +79,10 @@ public class Dungeon {
                             dungeon.cornerBlock,
                             dungeon.liquidBlock,
                             dungeon.caveBlock
-                    ))//,
-                    //Codec.INT.fieldOf("theme_id").forGetter(dungeon -> Theme.themes.indexOf(dungeon.theme))
+                    )),
+                    Codec.STRING.fieldOf("loot_cat").forGetter(dungeon -> dungeon.lootCat.name)
             )
-            .apply(instance, (map, size, degrees, rooms, blocks/*, theme_id*/) -> {
+            .apply(instance, (map, size, degrees, rooms, blocks, loot_cat) -> {
                 final Dungeon dungeon = new Dungeon(new Coords(map.chunkX, map.chunkZ, 0));
 
                 dungeon.theme = Theme.PLACEHOLDER_THEME;
@@ -118,14 +119,13 @@ public class Dungeon {
                 dungeon.liquidBlock = blocks.get(8);
                 dungeon.caveBlock = blocks.get(9);
 
-                /*
-                dungeon.theme = Theme.themes.get(theme_id);
-
-                dungeon.lootCat     = LootHandler.getLootHandler().getCategory(dungeon.theme.lootCat);
+                dungeon.lootCat     = LootHandler.getLootHandler().getCategory(loot_cat);
                 if(dungeon.lootCat == null) {
-                    dungeon.lootCat = LootHandler.getLootHandler().getCategory("chest.cfg");
+                    dungeon.lootCat = LootHandler.getLootHandler().getCategory("dldungeonsjbg:chest");
+                }if (dungeon.lootCat == null) {
+                    System.err.println("DLD: Error! Chest file could not be found at world reload; did something change?");
+                    dungeon.lootCat = LootCategory.PLACEHOLDER;
                 }
-                */
 
                 return dungeon;
             }));
@@ -307,13 +307,15 @@ public class Dungeon {
         fences = theme.fences.select(random);
         naturals = theme.naturals.select(random);
         baseHeight = random.nextInt(theme.maxY - theme.minY) + theme.minY;
-        /*
+
         lootCat     = LootHandler.getLootHandler().getCategory(theme.lootCat);
         if(lootCat == null) {
-            lootCat = LootHandler.getLootHandler().getCategory("chest.cfg");
+            lootCat = LootHandler.getLootHandler().getCategory("dldungeonsjbg:chest");
+        } if (lootCat == null) {
+            System.err.println("DLD: Error! Failed to load loot list (chests file) for "
+                    + theme.lootCat + "; was the name wrong? or does it not exist?");
+            lootCat = LootCategory.PLACEHOLDER;
         }
-        */
-        lootCat = LootCategory.PLACEHOLDER;
     }
 
 

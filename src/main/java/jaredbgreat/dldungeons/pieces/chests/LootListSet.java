@@ -16,7 +16,15 @@ import static jaredbgreat.dldungeons.pieces.chests.LootItem.*;
  * @author Jared Blackburn
  */
 public class LootListSet {
-	
+
+	public enum LootListType {
+		GL,
+		HL,
+		LL,
+		SPECIAL,
+		DISCS
+	}
+
 	final LootList gear1 = new LootList();
 	final LootList gear2 = new LootList();
 	final LootList gear3 = new LootList();
@@ -44,7 +52,62 @@ public class LootListSet {
 	LootList discs = new LootList();
 	LootList special = new LootList();
 	
-	
+	public String toString() {
+		StringBuilder b = new StringBuilder();
+		b.append("GEAR").append(gear1).append(gear2).append(gear3).append(gear4).append(gear5).append(gear6).append(gear7)
+				.append("HEAL").append(heal1).append(heal2).append(heal3).append(heal4).append(heal5).append(heal6).append(heal7)
+				.append("LOOT").append(loot1).append(loot2).append(loot3).append(loot4).append(loot5).append(loot6).append(loot7)
+				.append("SPECIAL").append(special).append("DISCS").append(discs);
+		return b.toString();
+	}
+
+
+	public LootList getList(LootListType type, int level) {
+		level = Math.max(0, Math.min(6, level));
+		switch(type) {
+            case GL -> {
+				switch(level) {
+					case 0: return gear1;
+					case 1: return gear2;
+					case 2: return gear3;
+					case 3: return gear4;
+					case 4: return gear5;
+					case 5: return gear6;
+					case 6: return gear7;
+				}
+            }
+            case HL -> {
+				switch(level) {
+					case 0: return  heal1;
+					case 1: return  heal2;
+					case 2: return  heal3;
+					case 3: return  heal4;
+					case 4: return  heal5;
+					case 5: return  heal6;
+					case 6: return  heal7;
+				}
+            }
+            case LL -> {
+				switch(level) {
+					case 0: return loot1;
+					case 1: return loot2;
+					case 2: return loot3;
+					case 3: return loot4;
+					case 4: return loot5;
+					case 5: return loot6;
+					case 6: return loot7;
+				}
+            }
+            case SPECIAL -> {
+				return special;
+            }
+            case DISCS -> {
+				return discs;
+            }
+        }
+		return discs;
+	}
+
 	/**
 	 * Adds default loot for use if chest config cannot be found or created.
 	 * 

@@ -24,7 +24,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @author Jared Blackburn
  */
 public class LootList extends CopyOnWriteArrayList<LootItem> {
-    final ArrayList<LootItem> dummy = new ArrayList<LootItem>();
+    //final ArrayList<LootItem> dummy = new ArrayList<LootItem>();
 
     /**
      * Add the item, converting it to a LootItem.
@@ -57,19 +57,30 @@ public class LootList extends CopyOnWriteArrayList<LootItem> {
      * @return
      */
     public LootItem getLoot(RandomSource random) {
-        LootItem out;
+        //assert !isEmpty() : "*** DLD: ERROR!  LootList is empty! ***";
         if (isEmpty()) {
             return null;
         }
-        // Done with removal now to somewhat increase randomness
-        if (dummy.isEmpty() || random.nextInt(size()) > dummy.size()) {
-            dummy.clear();
-            dummy.addAll(this);
-        }
-        int which = random.nextInt(dummy.size());
-        out = dummy.get(which);
-        dummy.remove(which);
+        LootItem out = get(random.nextInt(size()));
+        assert out != null : "*** DLD: ERROR!  Output was NULL for LootList! ***";
         return out;
+    }
+
+
+    public void printOut() {
+        for(LootItem item : this) {
+            System.out.println(item);
+        }
+    }
+
+
+    public String toString() {
+        StringBuilder b = new StringBuilder(System.lineSeparator());
+        for(LootItem item : this) {
+            b.append(item).append(System.lineSeparator());
+        }
+        b.append(System.lineSeparator());
+        return b.toString();
     }
 
 }

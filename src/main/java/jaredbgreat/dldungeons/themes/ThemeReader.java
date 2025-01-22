@@ -167,13 +167,15 @@ public class ThemeReader {
                 String nbtmodid = tokens.nextToken().trim();
                 if(nbtmodid.equals(DLDungeons.MODID) && tokens.hasMoreTokens()) {
                     nbtKey = nbtmodid + ":" + tokens.nextToken().trim();
-                    System.out.println("DLD: Loot item " + item + " should have NBT string key " + nbtKey);
                 }
             }
             loot = new LootItem(item, min, max, level, nbtKey);
+            //assert loot != null : "DLD: ERROR!  LootItem is null in readLoot(); " + item;
+            //assert loot.getItem() != null : "DLD: ERROR!  Item is null in readLoot(); " + item;
             loots.addItem(loot, type, level);
         }
         loots.addDiscs();
+
     }
 
 
@@ -343,7 +345,6 @@ public class ThemeReader {
             theme.air = new int[]{RegisteredBlock.add("minecraft:air")};
         }
         theme.fixMobs();
-        theme.biomeRegister();
         if(theme.caveWalls.length < 1) {
             theme.caveWalls = theme.walls;
         }

@@ -26,7 +26,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static jaredbgreat.dldungeons.pieces.chests.LootListSet.LootListType.GL;
+import static jaredbgreat.dldungeons.pieces.chests.LootListSet.LootListType.HL;
 import static jaredbgreat.dldungeons.pieces.chests.LootType.*;
+import static jaredbgreat.dldungeons.pieces.chests.LootListSet.LootListType.*;
 
 
 /**
@@ -44,25 +47,24 @@ public class LootCategory {
     static {
         final LootListSet loot = new LootListSet();
         loot.addDefaultLoot();
-        PLACEHOLDER = new LootCategory(loot);
+        PLACEHOLDER = new LootCategory(loot, "PLACEHOLDER");
     }
+
+    public final String name;
 
     static final ConcurrentHashMap<String, String> NBT_MAP = new ConcurrentHashMap<>();
 
     public static final int LEVELS = 7;
     private final LootListSet lists;
-    public volatile LootList[] gear;
-    public volatile LootList[] heal;
-    public volatile LootList[] loot;
 
-    public LootCategory(LootListSet listset) {
+    public LootCategory(LootListSet listset, String name) {
+        this.name = name;
         lists = listset;
-        gear = new LootList[]{lists.gear1, lists.gear2,
-                lists.gear3, lists.gear4, lists.gear5, lists.gear6, lists.gear7};
-        heal = new LootList[]{lists.heal1, lists.heal2,
-                lists.heal3, lists.heal4, lists.heal5, lists.heal6, lists.heal7};
-        loot = new LootList[]{lists.loot1, lists.loot2,
-                lists.loot3, lists.loot4, lists.loot5, lists.loot6, lists.loot7};
+    }
+
+
+    public void printOut() {
+        System.out.println(lists);
     }
 
 
@@ -106,11 +108,11 @@ public class LootCategory {
                     return getEnchantedGear(level, random);
                 } else {
                     int l = Math.min(6, level);
-                    return enchantedLowerLevel(gear[Math.min(6, l)].getLoot(random), l, random);
+                    return enchantedLowerLevel(lists.getList(GL,Math.min(6, l)).getLoot(random), l, random);
                 }
             case HEAL:
                 int l = Math.min(6, level);
-                return new LootResult(heal[Math.min(6, l)].getLoot(random).getStack(random), l);
+                return new LootResult(lists.getList(HL, Math.min(6, l)).getLoot(random).getStack(random), l);
             case LOOT:
                 if (level > 6) {
                     if (/*level > random.nextInt(100)*/ true) {
@@ -122,7 +124,7 @@ public class LootCategory {
                 if (random.nextInt(10) == 0) {
                     return getEnchantedBook(level, random);
                 } else {
-                    return new LootResult(loot[level].getLoot(random).getStack(random), level);
+                    return new LootResult(lists.getList(LL, level).getLoot(random).getStack(random), level);
                 }
             case RANDOM:
             default:
@@ -148,14 +150,14 @@ public class LootCategory {
         ItemStack out;
         float portion = random.nextFloat() / 2f;
         int lootPart = Math.min(6, Math.max(0, (int) ((((float) lootLevel) * (1f - portion)) + 0.5f)));
-        LootItem item = gear[lootPart].getLoot(random);
+        LootItem item = lists.getList(GL, lootPart).getLoot(random);
         int diff = lootLevel - item.level + 1;
         int enchPart = Math.min((5 + (diff * (diff + 1) / 2) * 5), diff * 10);
         out = item.getStack(random);
         if (enchPart >= 1 && isEnchantable(out)) {
             out = EnchantmentHelper.enchantItem(random, out, enchPart, random.nextBoolean());
         } else {
-            return enchantedLowerLevel(gear[Math.min(6, lootLevel)].getLoot(random), lootLevel, random);
+            return enchantedLowerLevel(lists.getList(GL, Math.min(6, lootLevel)).getLoot(random), lootLevel, random);
         }
         return new LootResult(out, Math.min(lootLevel, 6));
     }

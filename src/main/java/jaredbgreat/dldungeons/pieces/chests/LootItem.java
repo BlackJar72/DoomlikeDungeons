@@ -4,6 +4,7 @@ package jaredbgreat.dldungeons.pieces.chests;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.TagParser;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
@@ -62,6 +63,9 @@ public class LootItem {
     public void addNBT(String nbtKey) {
         nbtData = nbtKey;
     }
+
+
+    public Item getItem() { return item; }
 
 
     /**
@@ -132,14 +136,21 @@ public class LootItem {
         }
         if((nbtData != null) && !nbtData.isEmpty() && LootCategory.NBT_MAP.containsKey(nbtData)) {
             try {
-                System.out.println("DLD: Applied nbt data " + nbtData + " -> " + LootCategory.NBT_MAP.get(nbtData));
-                out.setTag(NbtUtils.snbtToStructure(LootCategory.NBT_MAP.get(nbtData)));
+                out.setTag(TagParser.parseTag(LootCategory.NBT_MAP.get(nbtData)));
             } catch (CommandSyntaxException e) {
                 e.printStackTrace();
                 throw new RuntimeException(e);
             }
         }
         return out;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder b = new StringBuilder();
+        b.append("[").append(item.toString()).append(", ").append(min).append(", ").append(max)
+                .append(", ").append(level).append("; ").append(nbtData).append("]");
+        return b.toString();
     }
 
 
