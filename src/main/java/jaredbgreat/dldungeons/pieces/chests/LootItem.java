@@ -32,7 +32,7 @@ public class LootItem {
 
     Item item;
     int min, max, meta, level;
-    //ArrayList<ITag> nbtData;
+    String nbtData;
 
 
     private static class ItemPrototype {
@@ -73,12 +73,13 @@ public class LootItem {
      * @param min
      * @param max
      */
-    public LootItem(String id, int min, int max, int level) {
+    public LootItem(String id, int min, int max, int level, String nbtKey) {
         this.item = getItem(id);
         if (min > max) min = max;
         this.min = min;
         this.max = max;
         this.level = level;
+        this.nbtData = nbtKey;
         if (item == null) {
             String error = "[DLDUNGEONS] ERROR! Item read as \"" + id
                     + "\" was was not in registry (returned null).";
@@ -86,6 +87,11 @@ public class LootItem {
         } else {
             fixLevel();
         }
+    }
+
+
+    public void addNBT(String nbtKey) {
+        nbtData = nbtKey;
     }
 
 
@@ -181,16 +187,15 @@ public class LootItem {
     public ItemStack getStack(RandomSource random) {
         ItemStack out;
         if (max <= min) {
-            if (item instanceof Item) out = new ItemStack(item, max);
-            else out = new ItemStack(item, max);
+            out = new ItemStack(item, max);
         } else {
-            if (item instanceof Item)
-                out = new ItemStack(item, random.nextInt(max - min) + min + 1);
-            else
-                out = new ItemStack(item, random.nextInt(max - min) + min + 1);
+            out = new ItemStack(item, random.nextInt(max - min) + min + 1);
         }
         if (out.getItem() == null) {
             return null;
+        }
+        if((nbtData != null) && !nbtData.isEmpty() && LootCategory.NBT_MAP.containsKey(nbtData)) {
+            out.setTag(LootCategory.NBT_MAP.get(nbtData));
         }
         return out;
     }

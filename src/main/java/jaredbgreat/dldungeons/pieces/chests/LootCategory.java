@@ -6,6 +6,10 @@ package jaredbgreat.dldungeons.pieces.chests;
  * Copyright (c) 2014-2018 Jared Blackburn
  */
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BowItem;
@@ -14,6 +18,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraftforge.fml.Logging;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static jaredbgreat.dldungeons.pieces.chests.LootType.*;
 
@@ -36,6 +47,8 @@ public class LootCategory {
         PLACEHOLDER = new LootCategory(loot);
     }
 
+    static final ConcurrentHashMap<String, CompoundTag> NBT_MAP = new ConcurrentHashMap<>();
+
     public static final int LEVELS = 7;
     private final LootListSet lists;
     public LootList[] gear;
@@ -50,6 +63,24 @@ public class LootCategory {
                 lists.heal3, lists.heal4, lists.heal5, lists.heal6, lists.heal7};
         loot = new LootList[]{lists.loot1, lists.loot2,
                 lists.loot3, lists.loot4, lists.loot5, lists.loot6, lists.loot7};
+    }
+
+
+    public static void AddNBT(InputStream file, String name) {
+        StringBuilder builder = new StringBuilder();
+        try {
+            final BufferedReader instream = new BufferedReader(new InputStreamReader(file));
+            while(instream.ready()) {
+                builder.append(instream.readLine());
+            }
+            NBT_MAP.put(name, NbtUtils.snbtToStructure(builder.toString()));
+            //NBT_MAP.put(name, builder.toString());
+            instream.close();
+            System.out.println("DLD: Loaded NBT with key " + name.toString() );
+            System.out.println("     " + builder.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -122,8 +153,8 @@ public class LootCategory {
         LootItem item = gear[lootPart].getLoot(random);
         int diff = lootLevel - item.level + 1;
         int enchPart = Math.min((5 + (diff * (diff + 1) / 2) * 5), diff * 10);
-        if (enchPart >= 1 && isEnchantable(item)) {
-            out = item.getStack(random);
+        out = item.getStack(random);
+        if (enchPart >= 1 && isEnchantable(out)) {
             out = EnchantmentHelper.enchantItem(random, out, enchPart, random.nextBoolean());
         } else {
             return enchantedLowerLevel(gear[Math.min(6, lootLevel)].getLoot(random), lootLevel, random);
@@ -143,12 +174,10 @@ public class LootCategory {
     private LootResult enchantedLowerLevel(LootItem item, int level, RandomSource random) {
         ItemStack out;
         int diff = level - item.level;
-        if (isEnchantable(item) && (diff > random.nextInt(2))) {
+        out = item.getStack(random);
+        if (isEnchantable(out) && (diff > random.nextInt(2))) {
             int enchPart = Math.min((5 + (level * (level + 1) / 2) * 5), level * 10);
-            out = item.getStack(random);
             out = EnchantmentHelper.enchantItem(random, out, enchPart, random.nextBoolean());
-        } else {
-            out = item.getStack(random);
         }
         return new LootResult(out, level);
     }
@@ -161,11 +190,12 @@ public class LootCategory {
      * @param in
      * @return
      */
-    private boolean isEnchantable(LootItem in) {
-        Item item = (Item) in.item;
+    private boolean isEnchantable(ItemStack in) {
+        Item item = (Item) in.getItem();
         return (item instanceof TieredItem
                 || item instanceof ArmorItem
-                || item instanceof BowItem);
+                || item instanceof BowItem
+                || item.isEnchantable(in));
     }
 
 

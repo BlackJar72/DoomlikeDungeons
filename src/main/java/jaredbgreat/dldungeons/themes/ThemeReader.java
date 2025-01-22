@@ -17,6 +17,7 @@ import java.util.logging.Logger;
  */
 
 
+import com.github.xyroc.dldungeonspoc.DLDungeons;
 import jaredbgreat.dldungeons.builder.BlockFamily;
 import jaredbgreat.dldungeons.builder.RegisteredBlock;
 import jaredbgreat.dldungeons.pieces.chests.LootCategory;
@@ -137,6 +138,7 @@ public class ThemeReader {
         String modid;
         String name;
         LootItem loot;
+        String nbtKey;
         int min;
         int max;
 
@@ -160,13 +162,14 @@ public class ThemeReader {
             if(!tokens.hasMoreTokens() || (min < 1)) continue;
             max = intParser(tokens);
             item = modid + ":" + name;
-            loot = new LootItem(item, min, max, level);
+            loot = new LootItem(item, min, max, level, null);
             if(item != null && loot != null) {
-                //FIXME??? Re-Add custom NBT if possible (then the below can be uncommented)
-                /*while(tokens.hasMoreTokens()) {
-                    loot.addNbt(tokens.nextToken());
+                if(tokens.hasMoreTokens()) {
+                    String nbtmodid = tokens.nextToken().trim();
+                    if(nbtmodid.equals(DLDungeons.MODID) && tokens.hasMoreTokens()) {
+                        loot.addNBT(nbtmodid + ":" + tokens.nextToken().trim());
+                    }
                 }
-                loot.trimNbt();*/
                 loots.addItem(loot, type, level);
             }
         }

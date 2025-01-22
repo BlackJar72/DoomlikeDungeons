@@ -1,6 +1,7 @@
 package com.github.xyroc.dldungeonspoc.datapack;
 
 import com.github.xyroc.dldungeonspoc.DLDungeons;
+import jaredbgreat.dldungeons.pieces.chests.LootCategory;
 import jaredbgreat.dldungeons.themes.Theme;
 import jaredbgreat.dldungeons.themes.ThemeReader;
 import net.minecraft.resources.ResourceLocation;
@@ -28,18 +29,22 @@ public class ResourceReloadHandler implements PreparableReloadListener {
     private static final String THEMING_DIRECTORY = BASE_DIRECTORY + "/theming";
     private static final String BLOCK_FAMILIES_DIRECTORY = THEMING_DIRECTORY + "/block_families";
     private static final String SPECIAL_CHESTS_DIRECTORY = THEMING_DIRECTORY + "/special_chests";
+    private static final String NBT_DIRECTORY = THEMING_DIRECTORY + "/nbt";
     private static final String THEMES_DIRECTORY = THEMING_DIRECTORY + "/themes";
 
     private static final String CFG_FILE_ENDING = ".cfg";
     private static final String JSON_FILE_ENDING = ".json";
+    private static final String SNBT_FILE_ENDING = ".snbt";
 
     private static final Predicate<ResourceLocation> IS_CFG_FILE = location -> location.getPath().endsWith(CFG_FILE_ENDING);
     private static final Predicate<ResourceLocation> IS_JSON_FILE = location -> location.getPath().endsWith(JSON_FILE_ENDING);
+    private static final Predicate<ResourceLocation> IS_SNBT_FILE = location -> location.getPath().endsWith(SNBT_FILE_ENDING);
 
 
     @Override
     public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller profilerFiller, ProfilerFiller profilerFiller1, Executor backgroundExecutor, Executor gameExecutor) {
         return preparationBarrier.wait(Unit.INSTANCE).thenRunAsync(() -> {
+            loadSNBT(resourceManager);
             loadBlockFamilies(resourceManager);
             loadSpecialChests(resourceManager);
             loadThemes(resourceManager);
@@ -71,6 +76,14 @@ public class ResourceReloadHandler implements PreparableReloadListener {
             // Read file from input stream and insert into some data structure for later use.
             System.out.println("READING THEME " + key.toString() + " from locations " + file.toString());
             ThemeReader.openLoot(file, key.toString());
+        });
+    }
+
+    private void loadSNBT(ResourceManager resourceManager) {
+        loadFilesInDirectory(resourceManager, NBT_DIRECTORY, IS_SNBT_FILE, (location, file) -> {
+            final ResourceLocation key = keyFromLocation(location, NBT_DIRECTORY, SNBT_FILE_ENDING);
+            // Read file from input stream and insert into some data structure for later use.
+            LootCategory.AddNBT(file, key.toString());
         });
     }
 
