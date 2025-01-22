@@ -1,1 +1,1 @@
-{ench:[{lvl:4s,id:35s},{lvl:3s,id:32s},{lvl:3s,id:16s}],Unbreakable:1b,display:{Lore:["For dynamically cutting trees"],Name:"Axe of Iron Truth"}}
+{Damage:0,Enchantments:[{id:"minecraft:fortune",lvl:4s},{id:"minecraft:efficiency",lvl:3s},{id:"minecraft:sharpness",lvl:3s}],Unbreakable:1b,display:{Lore:['{"text":"For dynamically cutting trees"}'],Name:'{"text":"Axe of Iron Truth"}'}}

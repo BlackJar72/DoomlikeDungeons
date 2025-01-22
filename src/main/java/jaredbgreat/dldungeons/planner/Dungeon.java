@@ -6,6 +6,7 @@ import jaredbgreat.dldungeons.config.Config;
 import jaredbgreat.dldungeons.pieces.Spawner;
 import jaredbgreat.dldungeons.pieces.chests.Chest;
 import jaredbgreat.dldungeons.pieces.chests.LootCategory;
+import jaredbgreat.dldungeons.pieces.chests.LootHandler;
 import jaredbgreat.dldungeons.pieces.entrances.SimpleEntrance;
 import jaredbgreat.dldungeons.pieces.entrances.SpiralStair;
 import jaredbgreat.dldungeons.pieces.entrances.TopRoom;
@@ -77,8 +78,10 @@ public class Dungeon {
                             dungeon.cornerBlock,
                             dungeon.liquidBlock,
                             dungeon.caveBlock
-                    )))
-            .apply(instance, (map, size, degrees, rooms, blocks) -> {
+                    ))//,
+                    //Codec.INT.fieldOf("theme_id").forGetter(dungeon -> Theme.themes.indexOf(dungeon.theme))
+            )
+            .apply(instance, (map, size, degrees, rooms, blocks/*, theme_id*/) -> {
                 final Dungeon dungeon = new Dungeon(new Coords(map.chunkX, map.chunkZ, 0));
 
                 dungeon.theme = Theme.PLACEHOLDER_THEME;
@@ -114,6 +117,15 @@ public class Dungeon {
                 dungeon.cornerBlock = blocks.get(7);
                 dungeon.liquidBlock = blocks.get(8);
                 dungeon.caveBlock = blocks.get(9);
+
+                /*
+                dungeon.theme = Theme.themes.get(theme_id);
+
+                dungeon.lootCat     = LootHandler.getLootHandler().getCategory(dungeon.theme.lootCat);
+                if(dungeon.lootCat == null) {
+                    dungeon.lootCat = LootHandler.getLootHandler().getCategory("chest.cfg");
+                }
+                */
 
                 return dungeon;
             }));
@@ -295,6 +307,12 @@ public class Dungeon {
         fences = theme.fences.select(random);
         naturals = theme.naturals.select(random);
         baseHeight = random.nextInt(theme.maxY - theme.minY) + theme.minY;
+        /*
+        lootCat     = LootHandler.getLootHandler().getCategory(theme.lootCat);
+        if(lootCat == null) {
+            lootCat = LootHandler.getLootHandler().getCategory("chest.cfg");
+        }
+        */
         lootCat = LootCategory.PLACEHOLDER;
     }
 

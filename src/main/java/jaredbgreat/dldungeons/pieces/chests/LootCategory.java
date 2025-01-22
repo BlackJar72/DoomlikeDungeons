@@ -47,13 +47,13 @@ public class LootCategory {
         PLACEHOLDER = new LootCategory(loot);
     }
 
-    static final ConcurrentHashMap<String, CompoundTag> NBT_MAP = new ConcurrentHashMap<>();
+    static final ConcurrentHashMap<String, String> NBT_MAP = new ConcurrentHashMap<>();
 
     public static final int LEVELS = 7;
     private final LootListSet lists;
-    public LootList[] gear;
-    public LootList[] heal;
-    public LootList[] loot;
+    public volatile LootList[] gear;
+    public volatile LootList[] heal;
+    public volatile LootList[] loot;
 
     public LootCategory(LootListSet listset) {
         lists = listset;
@@ -73,11 +73,13 @@ public class LootCategory {
             while(instream.ready()) {
                 builder.append(instream.readLine());
             }
-            NBT_MAP.put(name, NbtUtils.snbtToStructure(builder.toString()));
+            NBT_MAP.put(name, builder.toString());
             //NBT_MAP.put(name, builder.toString());
             instream.close();
-            System.out.println("DLD: Loaded NBT with key " + name.toString() );
-            System.out.println("     " + builder.toString());
+            if(NBT_MAP.containsKey(name)) {
+                System.out.println("DLD: Loaded NBT with key " + name);
+                System.out.println("     " + NBT_MAP.get(name));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -111,7 +113,7 @@ public class LootCategory {
                 return new LootResult(heal[Math.min(6, l)].getLoot(random).getStack(random), l);
             case LOOT:
                 if (level > 6) {
-                    if (level > random.nextInt(100)) {
+                    if (/*level > random.nextInt(100)*/ true) {
                         return new LootResult(lists.special.getLoot(random).getStack(random), 7);
                     } else {
                         level = 6;
@@ -124,15 +126,11 @@ public class LootCategory {
                 }
             case RANDOM:
             default:
-                switch (random.nextInt(3)) {
-                    case 0:
-                        return getLoot(GEAR, level, random);
-                    case 1:
-                        return getLoot(HEAL, level, random);
-                    case 2:
-                    default:
-                        return getLoot(LOOT, level, random);
-                }
+                return switch (random.nextInt(3)) {
+                    case 0 -> getLoot(GEAR, level, random);
+                    case 1 -> getLoot(HEAL, level, random);
+                    default -> getLoot(LOOT, level, random);
+                };
         }
     }
 

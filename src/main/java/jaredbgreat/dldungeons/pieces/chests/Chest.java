@@ -43,7 +43,7 @@ public class Chest {
                 chest.mx = data.get(0);
                 chest.my = data.get(1);
                 chest.mz = data.get(2);
-                chest.level = data.get(2);
+                chest.level = data.get(3);
                 chest.type = type;
                 chest.withBoss = flags.get(0);
                 return chest;

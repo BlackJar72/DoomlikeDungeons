@@ -467,7 +467,7 @@ public class Room extends AbstractRoom {
             x = (int) realX;
             z = (int) realZ;
             y = dungeon.map.floorY[x][z];
-            chests.add(new Chest(x, y, z, lev, ChestType.TREASURE).setWithBoss(trueBoss));
+            chests.add(new Chest(x, y, z, lev + 1, ChestType.TREASURE).setWithBoss(trueBoss));
         }
     }
 

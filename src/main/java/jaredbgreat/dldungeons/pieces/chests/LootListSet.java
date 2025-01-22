@@ -17,29 +17,29 @@ import static jaredbgreat.dldungeons.pieces.chests.LootItem.*;
  */
 public class LootListSet {
 	
-	LootList gear1 = new LootList();
-	LootList gear2 = new LootList();
-	LootList gear3 = new LootList();
-	LootList gear4 = new LootList();
-	LootList gear5 = new LootList();
-	LootList gear6 = new LootList();
-	LootList gear7 = new LootList();
-	
-	LootList heal1 = new LootList();
-	LootList heal2 = new LootList();
-	LootList heal3 = new LootList();
-	LootList heal4 = new LootList();
-	LootList heal5 = new LootList();
-	LootList heal6 = new LootList();
-	LootList heal7 = new LootList();
-	
-	LootList loot1 = new LootList();
-	LootList loot2 = new LootList();
-	LootList loot3 = new LootList();
-	LootList loot4 = new LootList();
-	LootList loot5 = new LootList();
-	LootList loot6 = new LootList();
-	LootList loot7 = new LootList();
+	final LootList gear1 = new LootList();
+	final LootList gear2 = new LootList();
+	final LootList gear3 = new LootList();
+	final LootList gear4 = new LootList();
+	final LootList gear5 = new LootList();
+	final LootList gear6 = new LootList();
+	final LootList gear7 = new LootList();
+
+	final LootList heal1 = new LootList();
+	final LootList heal2 = new LootList();
+	final LootList heal3 = new LootList();
+	final LootList heal4 = new LootList();
+	final LootList heal5 = new LootList();
+	final LootList heal6 = new LootList();
+	final LootList heal7 = new LootList();
+
+	final LootList loot1 = new LootList();
+	final LootList loot2 = new LootList();
+	final LootList loot3 = new LootList();
+	final LootList loot4 = new LootList();
+	final LootList loot5 = new LootList();
+	final LootList loot6 = new LootList();
+	final LootList loot7 = new LootList();
 	
 	LootList discs = new LootList();
 	LootList special = new LootList();
@@ -102,6 +102,7 @@ public class LootListSet {
 		gear4.add(manyTorches);
 		
 		gear5.add(diamondSword);
+		gear5.add(diamondPick);
 		gear5.add(diamondHat);
 		gear5.add(diamondPants);
 		gear5.add(diamondBoots);
@@ -127,6 +128,7 @@ public class LootListSet {
 		gear7.add(diamondChest);
 		gear7.add(manyArrows);
 		gear7.add(manyTorches);
+		gear7.add(diamondPick);
 		
 		heal1.add(someBread);
 		
@@ -224,7 +226,8 @@ public class LootListSet {
 		loot7.add(emeralds);
 		loot7.add(eyeOfEnder);
 		loot7.add(goldApple);
-		
+
+		special.add(diamondPick);
 		special.add(discBlocks);
 		special.add(discChirp);
 		special.add(discFar);

@@ -12,6 +12,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
 import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 
 /**
@@ -21,8 +23,8 @@ import java.util.ArrayList;
  *
  * @author Jared Blackburn
  */
-public class LootList extends ArrayList<LootItem> {
-    ArrayList<LootItem> dummy = new ArrayList<LootItem>();
+public class LootList extends CopyOnWriteArrayList<LootItem> {
+    final ArrayList<LootItem> dummy = new ArrayList<LootItem>();
 
     /**
      * Add the item, converting it to a LootItem.
@@ -30,9 +32,8 @@ public class LootList extends ArrayList<LootItem> {
      * @param item
      * @param min
      * @param max
-     * @param prob
      */
-    public void add(Item item, int min, int max, int prob) {
+    public void add(Item item, int min, int max) {
         add(new LootItem(item, min, max));
     }
 
@@ -43,9 +44,8 @@ public class LootList extends ArrayList<LootItem> {
      * @param item
      * @param min
      * @param max
-     * @param prob
      */
-    public void add(Block item, int min, int max, int prob) {
+    public void add(Block item, int min, int max) {
         add(new LootItem(item, min, max));
     }
 

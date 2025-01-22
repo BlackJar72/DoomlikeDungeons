@@ -1,1 +1,1 @@
-{ench:[{lvl:10s,id:19s},{lvl:3s,id:16s},{lvl:3s,id:20s},{lvl:1s,id:7s}],display:{Lore:["Perhaps the world's greatest summoner ","was of the Lycan race. "],Name:"The Wolfman's First Wand"}}
+{Enchantments:[{id:"minecraft:knockback",lvl:10s},{id:"minecraft:sharpness",lvl:3s},{id:"minecraft:fire_aspect",lvl:3s},{id:"minecraft:thorns",lvl:1s}],display:{Lore:['{"text":"Perhaps the world\'s greatest summoner "}','{"text":"was of the Lycan race. "}'],Name:'{"text":"The Wolfman\'s First Wand"}'}}

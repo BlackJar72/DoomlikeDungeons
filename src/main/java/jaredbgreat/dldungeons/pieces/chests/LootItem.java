@@ -1,13 +1,16 @@
 package jaredbgreat.dldungeons.pieces.chests;
 
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.tags.ITag;
 
@@ -28,42 +31,10 @@ import java.util.NoSuchElementException;
  */
 public class LootItem {
     private static IForgeRegistry ItemRegistry;
-    private static Map<ItemPrototype, Integer> prototypes;
 
     Item item;
-    int min, max, meta, level;
+    int min, max, level;
     String nbtData;
-
-
-    private static class ItemPrototype {
-        public final Item item;
-        public final int meta;
-
-        public ItemPrototype(Item i, int m) {
-            item = i;
-            meta = m;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (!(obj instanceof ItemPrototype)) {
-                return false;
-            }
-            ItemPrototype p = (ItemPrototype) obj;
-            return (p.item == item) && (p.meta == meta);
-        }
-
-        @Override
-        public int hashCode() {
-            return item.hashCode() + (meta * 102181);
-        }
-    }
-
-
-    static {
-        prototypes = new HashMap<>();
-    }
-
 
     /**
      * Add the named item, where name is a string including the
@@ -84,8 +55,6 @@ public class LootItem {
             String error = "[DLDUNGEONS] ERROR! Item read as \"" + id
                     + "\" was was not in registry (returned null).";
             throw new NoSuchElementException(error);
-        } else {
-            fixLevel();
         }
     }
 
@@ -112,6 +81,17 @@ public class LootItem {
     }
 
 
+    public LootItem(Item item, int min, int max, String nbtData) {
+        this.item = item;
+        if (min > max) min = max;
+        this.min = min;
+        this.max = max;
+        // For these items, don't care about level
+        this.level = 6;
+        this.nbtData = nbtData;
+    }
+
+
     /**
      * Create a LootItem using a block
      *
@@ -129,53 +109,9 @@ public class LootItem {
     }
 
 
-    private void fixLevel() {
-        // Only set level on non-stacked items like tools / weapons
-        if (max == 1) {
-            ItemPrototype p = new ItemPrototype(item, meta);
-            if (prototypes.containsKey(p)) {
-                int l = prototypes.get(p);
-                if (l < level) {
-                    level = l;
-                }
-                if (l > level) {
-                    prototypes.put(p, level);
-                }
-            } else {
-                prototypes.put(p, level);
-            }
-        }
-    }
-
-
     private static Item getItem(String in) {
-        return BuiltInRegistries.ITEM.get(new ResourceLocation(in));
+        return ForgeRegistries.ITEMS.getValue(new ResourceLocation(in));
     }
-
-
-//    /**
-//     * This will parse an NBT tag from the chest.cfg and add it to the LootItem
-//     * as an NbtTag object for later use in adding the tag to actual item stacks
-//     * in chests.
-//     *
-//     * @param in
-//     */
-//    public void addNbt(String in) {
-//        if (nbtData == null) {
-//            nbtData = new ArrayList<ITag>();
-//        }
-//        // Ignore nbt for now.
-//    }
-//
-//
-//    /**
-//     * Make the items NBT data a small as possible.
-//     */
-//    public void trimNbt() {
-//        if (nbtData != null) {
-//            nbtData.trimToSize();
-//        }
-//    }
 
 
     /**
@@ -195,7 +131,13 @@ public class LootItem {
             return null;
         }
         if((nbtData != null) && !nbtData.isEmpty() && LootCategory.NBT_MAP.containsKey(nbtData)) {
-            out.setTag(LootCategory.NBT_MAP.get(nbtData));
+            try {
+                System.out.println("DLD: Applied nbt data " + nbtData + " -> " + LootCategory.NBT_MAP.get(nbtData));
+                out.setTag(NbtUtils.snbtToStructure(LootCategory.NBT_MAP.get(nbtData)));
+            } catch (CommandSyntaxException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
         }
         return out;
     }
@@ -209,9 +151,11 @@ public class LootItem {
     public static LootItem stoneSword
             = new LootItem(Items.STONE_SWORD, 1, 1);
     public static LootItem ironSword
-            = new LootItem(Items.IRON_SWORD, 1, 1);
+            = new LootItem(Items.IRON_SWORD, 1, 1, "dldungeonsjbg:ferrius");
     public static LootItem diamondSword
-            = new LootItem(Items.DIAMOND_SWORD, 1, 1);
+            = new LootItem(Items.DIAMOND_SWORD, 1, 1, "dldungeonsjbg:slicer");
+    public static LootItem diamondPick
+            = new LootItem(Items.DIAMOND_PICKAXE, 1, 1, "dldungeonsjbg:fortuna_major");
     public static LootItem bow
             = new LootItem(Items.BOW, 1, 1);
     public static LootItem fewArrows
@@ -241,7 +185,7 @@ public class LootItem {
     public static LootItem goldBoots
             = new LootItem(Items.GOLDEN_BOOTS, 1, 1);
     public static LootItem ironBoots
-            = new LootItem(Items.IRON_BOOTS, 1, 1);
+            = new LootItem(Items.IRON_BOOTS, 1, 1, "dldungeonsjbg:anon_pro");
     public static LootItem diamondBoots
             = new LootItem(Items.DIAMOND_BOOTS, 1, 1);
     public static LootItem leatherPants

@@ -1,1 +1,1 @@
-{ench:[{lvl:3s,id:16s},{lvl:1s,id:21s},{lvl:1s,id:33s}],display:{Name:"Clean Slicer"}}
+{Damage:0,Enchantments:[{id:"minecraft:sharpness",lvl:3s},{id:"minecraft:looting",lvl:1s},{id:"minecraft:silk_touch",lvl:1s}],display:{Name:'{"text":"Clean Slicer"}'}}

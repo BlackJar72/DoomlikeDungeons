@@ -162,16 +162,16 @@ public class ThemeReader {
             if(!tokens.hasMoreTokens() || (min < 1)) continue;
             max = intParser(tokens);
             item = modid + ":" + name;
-            loot = new LootItem(item, min, max, level, null);
-            if(item != null && loot != null) {
-                if(tokens.hasMoreTokens()) {
-                    String nbtmodid = tokens.nextToken().trim();
-                    if(nbtmodid.equals(DLDungeons.MODID) && tokens.hasMoreTokens()) {
-                        loot.addNBT(nbtmodid + ":" + tokens.nextToken().trim());
-                    }
+            nbtKey = null;
+            if(tokens.hasMoreTokens()) {
+                String nbtmodid = tokens.nextToken().trim();
+                if(nbtmodid.equals(DLDungeons.MODID) && tokens.hasMoreTokens()) {
+                    nbtKey = nbtmodid + ":" + tokens.nextToken().trim();
+                    System.out.println("DLD: Loot item " + item + " should have NBT string key " + nbtKey);
                 }
-                loots.addItem(loot, type, level);
             }
+            loot = new LootItem(item, min, max, level, nbtKey);
+            loots.addItem(loot, type, level);
         }
         loots.addDiscs();
     }
