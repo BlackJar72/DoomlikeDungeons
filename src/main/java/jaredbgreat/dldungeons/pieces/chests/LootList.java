@@ -67,13 +67,6 @@ public class LootList extends CopyOnWriteArrayList<LootItem> {
     }
 
 
-    public void printOut() {
-        for(LootItem item : this) {
-            System.out.println(item);
-        }
-    }
-
-
     public String toString() {
         StringBuilder b = new StringBuilder(System.lineSeparator());
         for(LootItem item : this) {

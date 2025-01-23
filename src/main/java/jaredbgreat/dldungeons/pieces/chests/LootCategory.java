@@ -64,7 +64,7 @@ public class LootCategory {
 
 
     public void printOut() {
-        System.out.println(lists);
+        //System.out.println(lists);
     }
 
 
@@ -76,12 +76,7 @@ public class LootCategory {
                 builder.append(instream.readLine());
             }
             NBT_MAP.put(name, builder.toString());
-            //NBT_MAP.put(name, builder.toString());
             instream.close();
-            if(NBT_MAP.containsKey(name)) {
-                System.out.println("DLD: Loaded NBT with key " + name);
-                System.out.println("     " + NBT_MAP.get(name));
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -33,7 +33,6 @@ public class LootHandler {
 		LootListSet listset = new LootListSet();
 		LootCategory category = new LootCategory(listset, name);
 		categories.put(name, category);
-		System.out.println("DLD: Created LootCategory " + name);
 		return category;
 	}
 	
