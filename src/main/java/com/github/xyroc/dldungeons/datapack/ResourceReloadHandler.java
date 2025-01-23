@@ -1,6 +1,6 @@
-package com.github.xyroc.dldungeonspoc.datapack;
+package com.github.xyroc.dldungeons.datapack;
 
-import com.github.xyroc.dldungeonspoc.DLDungeons;
+import com.github.xyroc.dldungeons.DLDungeons;
 import jaredbgreat.dldungeons.pieces.chests.LootCategory;
 import jaredbgreat.dldungeons.themes.Theme;
 import jaredbgreat.dldungeons.themes.ThemeReader;

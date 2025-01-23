@@ -1,7 +1,7 @@
-package com.github.xyroc.dldungeonspoc.structure.piece;
+package com.github.xyroc.dldungeons.structure.piece;
 
-import com.github.xyroc.dldungeonspoc.DLDungeons;
-import com.github.xyroc.dldungeonspoc.init.ModStructurePieceTypes;
+import com.github.xyroc.dldungeons.DLDungeons;
+import com.github.xyroc.dldungeons.init.ModStructurePieceTypes;
 import jaredbgreat.dldungeons.planner.Dungeon;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;

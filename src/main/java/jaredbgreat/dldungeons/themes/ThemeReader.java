@@ -14,7 +14,7 @@ import java.util.Set;;
  */
 
 
-import com.github.xyroc.dldungeonspoc.DLDungeons;
+import com.github.xyroc.dldungeons.DLDungeons;
 import jaredbgreat.dldungeons.builder.BlockFamily;
 import jaredbgreat.dldungeons.builder.RegisteredBlock;
 import jaredbgreat.dldungeons.pieces.chests.LootCategory;

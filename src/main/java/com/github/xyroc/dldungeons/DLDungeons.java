@@ -1,8 +1,8 @@
-package com.github.xyroc.dldungeonspoc;
+package com.github.xyroc.dldungeons;
 
-import com.github.xyroc.dldungeonspoc.datapack.ResourceReloadHandler;
-import com.github.xyroc.dldungeonspoc.init.ModStructurePieceTypes;
-import com.github.xyroc.dldungeonspoc.init.ModStructureTypes;
+import com.github.xyroc.dldungeons.datapack.ResourceReloadHandler;
+import com.github.xyroc.dldungeons.init.ModStructurePieceTypes;
+import com.github.xyroc.dldungeons.init.ModStructureTypes;
 import jaredbgreat.dldungeons.config.Config;
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;

@@ -1,8 +1,8 @@
-package com.github.xyroc.dldungeonspoc.structure;
+package com.github.xyroc.dldungeons.structure;
 
-import com.github.xyroc.dldungeonspoc.DLDungeons;
-import com.github.xyroc.dldungeonspoc.init.ModStructureTypes;
-import com.github.xyroc.dldungeonspoc.structure.piece.DLDungeonPiece;
+import com.github.xyroc.dldungeons.DLDungeons;
+import com.github.xyroc.dldungeons.init.ModStructureTypes;
+import com.github.xyroc.dldungeons.structure.piece.DLDungeonPiece;
 import com.mojang.serialization.Codec;
 import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.util.cache.Coords;

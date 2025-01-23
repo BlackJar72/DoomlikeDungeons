@@ -1,6 +1,6 @@
 package jaredbgreat.dldungeons.config;
 
-import com.github.xyroc.dldungeonspoc.DLDungeons;
+import com.github.xyroc.dldungeons.DLDungeons;
 import jaredbgreat.dldungeons.pieces.chests.Chest;
 import jaredbgreat.dldungeons.rooms.Room;
 import net.minecraftforge.common.ForgeConfigSpec;

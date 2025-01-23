@@ -1,6 +1,6 @@
 package jaredbgreat.dldungeons.builder;
 
-import com.github.xyroc.dldungeonspoc.DLDungeons;
+import com.github.xyroc.dldungeons.DLDungeons;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
