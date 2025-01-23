@@ -61,9 +61,7 @@ public class LootList extends CopyOnWriteArrayList<LootItem> {
         if (isEmpty()) {
             return null;
         }
-        LootItem out = get(random.nextInt(size()));
-        assert out != null : "*** DLD: ERROR!  Output was NULL for LootList! ***";
-        return out;
+        return get(random.nextInt(size()));
     }
 
 

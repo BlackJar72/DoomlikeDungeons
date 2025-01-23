@@ -434,7 +434,7 @@ public class Room extends AbstractRoom {
         } else if (dungeon.theme.flags.contains(ThemeFlags.EASY)) {
             lev--;
         }
-        lev += lootBonus + dungeon.random.nextInt(2);
+        lev += lootBonus;
         int x, y, z, tmp, num;
         if (!hasSpawners) {
             tmp = (endX - beginX - 3);
@@ -449,7 +449,7 @@ public class Room extends AbstractRoom {
             tmp = (endZ - beginZ - 3);
             z = dungeon.random.nextInt(tmp) + beginZ + 2;
             y = dungeon.map.floorY[x][z];
-            chests.add(new Chest(x, y, z, lev, ChestType.BASIC));
+            chests.add(new Chest(x, y, z, lev + dungeon.random.nextInt(2), ChestType.BASIC));
         } else {
             int ms = Math.max(n, 2);
             if (isNode) num = Math.min(ms, dungeon.random.nextInt(2 + (ms / 2)) + 2);
@@ -460,14 +460,15 @@ public class Room extends AbstractRoom {
                 tmp = (endZ - beginZ - 3);
                 z = dungeon.random.nextInt(tmp) + beginZ + 2;
                 y = dungeon.map.floorY[x][z];
-                chests.add(new Chest(x, y, z, lev, ChestType.BASIC));
+                chests.add(new Chest(x, y, z, lev + dungeon.random.nextInt(2), ChestType.BASIC));
             }
         }
         if (isNode && !hasEntrance) {
             x = (int) realX;
             z = (int) realZ;
             y = dungeon.map.floorY[x][z];
-            chests.add(new Chest(x, y, z, lev + 1, ChestType.TREASURE).setWithBoss(trueBoss));
+            chests.add(new Chest(x, y, z, lev + dungeon.random.nextInt(2), ChestType.TREASURE)
+                    .setWithBoss(trueBoss));
         }
     }
 

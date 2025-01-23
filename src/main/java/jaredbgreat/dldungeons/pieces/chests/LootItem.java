@@ -162,11 +162,11 @@ public class LootItem {
     public static LootItem stoneSword
             = new LootItem(Items.STONE_SWORD, 1, 1);
     public static LootItem ironSword
-            = new LootItem(Items.IRON_SWORD, 1, 1, "dldungeonsjbg:ferrius");
+            = new LootItem(Items.IRON_SWORD, 1, 1);
     public static LootItem diamondSword
-            = new LootItem(Items.DIAMOND_SWORD, 1, 1, "dldungeonsjbg:slicer");
+            = new LootItem(Items.DIAMOND_SWORD, 1, 1);
     public static LootItem diamondPick
-            = new LootItem(Items.DIAMOND_PICKAXE, 1, 1, "dldungeonsjbg:fortuna_major");
+            = new LootItem(Items.DIAMOND_PICKAXE, 1, 1);
     public static LootItem bow
             = new LootItem(Items.BOW, 1, 1);
     public static LootItem fewArrows
@@ -196,7 +196,7 @@ public class LootItem {
     public static LootItem goldBoots
             = new LootItem(Items.GOLDEN_BOOTS, 1, 1);
     public static LootItem ironBoots
-            = new LootItem(Items.IRON_BOOTS, 1, 1, "dldungeonsjbg:anon_pro");
+            = new LootItem(Items.IRON_BOOTS, 1, 1);
     public static LootItem diamondBoots
             = new LootItem(Items.DIAMOND_BOOTS, 1, 1);
     public static LootItem leatherPants

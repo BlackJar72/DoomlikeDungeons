@@ -95,8 +95,8 @@ public class LootCategory {
     public LootResult getLoot(LootType type, int level, RandomSource random) {
         if (level <= 6) {
             level = Math.min(6, (level + random.nextInt(2) - random.nextInt(2)));
-        }
-        if (level < 0) level = 0;
+        } 
+        level = Math.max(level, 0);
         switch (type) {
             case GEAR:
                 if (random.nextBoolean()) {
@@ -110,7 +110,7 @@ public class LootCategory {
                 return new LootResult(lists.getList(HL, Math.min(6, l)).getLoot(random).getStack(random), l);
             case LOOT:
                 if (level > 6) {
-                    if (/*level > random.nextInt(100)*/ true) {
+                    if (level > random.nextInt(100)) {
                         return new LootResult(lists.special.getLoot(random).getStack(random), 7);
                     } else {
                         level = 6;
