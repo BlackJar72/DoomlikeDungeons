@@ -44,6 +44,7 @@ public class ResourceReloadHandler implements PreparableReloadListener {
     @Override
     public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller profilerFiller, ProfilerFiller profilerFiller1, Executor backgroundExecutor, Executor gameExecutor) {
         return preparationBarrier.wait(Unit.INSTANCE).thenRunAsync(() -> {
+            Theme.purgeThemes();
             loadSNBT(resourceManager);
             loadBlockFamilies(resourceManager);
             loadSpecialChests(resourceManager);

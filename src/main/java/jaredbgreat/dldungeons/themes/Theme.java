@@ -193,6 +193,14 @@ public class Theme {
 		return output;
 	}
 
+
+	public static void purgeThemes() {
+		themes.clear();
+		overworldThemes.clear();
+		netherThemes.clear();
+		oceanicThemes.clear();
+	}
+
 	
 	/**
 	 * Add a mob to the list of mobs at the given difficulty level.

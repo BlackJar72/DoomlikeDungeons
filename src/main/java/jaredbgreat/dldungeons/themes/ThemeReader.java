@@ -2,14 +2,11 @@ package jaredbgreat.dldungeons.themes;
 
 
 import java.io.*;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Set;;
 
 /*
  * Doomlike Dungeons by is licensed the MIT License
@@ -26,8 +23,6 @@ import jaredbgreat.dldungeons.pieces.chests.LootItem;
 import jaredbgreat.dldungeons.pieces.chests.LootListSet;
 import jaredbgreat.dldungeons.util.parser.Tokenizer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BiomeTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -62,51 +57,11 @@ public class ThemeReader {
     }
 
 
-//    /**
-//     * Attempts to open chest.cfg, and if successful will call readLoot
-//     * to read it.
-//     */
-//    public static void openNBTConfig() {
-//        BufferedReader instream = null;
-//        File nbtconfig = new File(configDir.toString() + File.separator + "nbt.cfg");
-//        if(nbtconfig.exists()) try {
-//            instream = new BufferedReader(new
-//                    FileReader(nbtconfig.toString()));
-//            readNBT(instream);
-//            if(instream != null) instream.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } else {
-//            Logging.logInfo("File nbt.cfg is missing; will fallabck on default loot");
-//        }
-//    }
-//
-//
-//    /**
-//     * This will read the nbt.cfg file and populate BNT registry from
-//     * its data.
-//     *
-//     * @param instream
-//     * @throws IOException
-//     */
-//    public static void readNBT(BufferedReader instream) throws IOException {
-//        Logging.logInfo("Loading custom NBT tags (nbt.cfg)");
-//        Tokenizer tokens = null;
-//        String line = null;
-//        while((line = instream.readLine()) != null) {
-//            if(line.length() < 2) continue;
-//            if(line.charAt(0) == '#') continue;
-//            NBTHelper.parseNBTLine(line);
-//        }
-//    }
-
-
     /**
      * Attempts to open chest.cfg, and if successful will call readLoot
      * to read it.
      */
     public static void openLoot(InputStream file, String name) {
-        System.out.println("DLD: Loading Chest File: " + name);
         LootCategory cat = LootHandler.getLootHandler().createCategory(name);
         try {
             final BufferedReader instream = new BufferedReader(new InputStreamReader(file));
@@ -170,8 +125,6 @@ public class ThemeReader {
                 }
             }
             loot = new LootItem(item, min, max, level, nbtKey);
-            //assert loot != null : "DLD: ERROR!  LootItem is null in readLoot(); " + item;
-            //assert loot.getItem() != null : "DLD: ERROR!  Item is null in readLoot(); " + item;
             loots.addItem(loot, type, level);
         }
         loots.addDiscs();
@@ -186,7 +139,6 @@ public class ThemeReader {
      * @param file
      */
     public static void readTheme(InputStream file, String name) {
-        System.out.println("DLD: Loading Theme File: " + name);
         BufferedReader instream = null;
         try {
             instream = new BufferedReader(new InputStreamReader(file));
@@ -349,7 +301,6 @@ public class ThemeReader {
             theme.caveWalls = theme.walls;
         }
         Theme.themes.add(theme);
-        System.out.println("**** DLD: Loaded Theme " + theme.name);
     }
 
 
