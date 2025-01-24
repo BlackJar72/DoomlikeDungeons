@@ -136,7 +136,7 @@ public class Theme {
 	public Theme() {
 		minY = 10;
 		maxY = 50;
-		buildFoundation = false;
+		buildFoundation = true;
 		sizes = new SizeElement(2, 5, 10, 5, 1);	
 		outside = new Element(25,  0,  0,  0,  0,  0);
 		liquids = new Element(1,  30, 50, 20, 10,  0);
