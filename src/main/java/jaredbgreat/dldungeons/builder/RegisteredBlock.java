@@ -3,6 +3,7 @@ package jaredbgreat.dldungeons.builder;
 import com.github.xyroc.dldungeons.DLDungeons;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
@@ -14,17 +15,14 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import java.util.*;
 
 public final class RegisteredBlock extends AbstractBlock {
     private final String id;   // The name
@@ -324,14 +322,20 @@ public final class RegisteredBlock extends AbstractBlock {
      * @return
      */
     public static boolean isGroundBlock(WorldGenLevel world, int x, int y, int z) {
+        boolean output = false;
         BlockState bs = world.getBlockState(new BlockPos(x, y, z));
-        Material mat = bs.getMaterial();
-        return (mat == Material.GRASS)
-                || (mat == Material.METAL)
-                || (mat == Material.DIRT)
-                || (mat == Material.SAND)
-                || (mat == Material.STONE)
-                || (mat == Material.CLAY
+        // FIXME: This could probably be done better by creating my own tag holding the union of all thoes checked here!
+        return (bs.is(Tags.Blocks.GRAVEL)
+                || bs.is(Tags.Blocks.ORES)
+                || bs.is(Tags.Blocks.GRAVEL)
+                || bs.is(Tags.Blocks.COBBLESTONE)
+                || bs.is(Tags.Blocks.OBSIDIAN)
+                || bs.is(BlockTags.DIRT)
+                || bs.is(BlockTags.SAND)
+                || bs.is(Tags.Blocks.SAND)
+                || bs.is(Tags.Blocks.STONE)
+                || bs.is(Tags.Blocks.SANDSTONE)
+                || bs.is(BlockTags.TERRACOTTA)
                 // Failsafe, it can never go into the void, or become an infinite loop
                 || (y < 0));
     }
