@@ -187,43 +187,6 @@ public class Dungeon {
     int shiftZ;
 
 
-    /**
-     * De-links all referenced objects as a safety measure against memory leaks,
-     * which the complexity creates a risk for.  This might not be needed, as
-     * circular have been checked for.
-     */
-    public void preFinalize() {
-        if (theme != null) {
-            for (int i = 0; i < nodes.length; i++) nodes[i] = null;
-            for (Room room : rooms) {
-                room.preFinalize();
-                room = null;
-            }
-            rooms.clear();
-        }
-        rooms = null;
-        planter = grower = null;
-        nodes = null;
-        theme = null;
-        random = null;
-        biome = null;
-        map = null;
-        size = null;
-        outside = null;
-        liquids = null;
-        subrooms = null;
-        islands = null;
-        pillars = null;
-        symmetry = null;
-        variability = null;
-        degeneracy = null;
-        complexity = null;
-        verticle = null;
-        entrances = null;
-        bigRooms = null;
-        naturals = null;
-    }
-
     private Dungeon(Coords coords) {
         this.coords = coords;
     }
