@@ -32,7 +32,9 @@ public class Config {
 
     private static final ForgeConfigSpec.BooleanValue ALL_HUGE = BUILDER
             .comment(" If true all the dungeons will be in the huge size category.")
-            .define("All Huge", false);
+            .comment("(Note: There is a bug that creates empty spawners, which is more common with smaller dungeons ")
+            .comment("where the spawneer are packed more densely, so is is probably best to keep this as true.)")
+            .define("All Huge", true);
 
     private static final ForgeConfigSpec.BooleanValue BIG_HUBS = BUILDER
             .comment(" If true entrance and \"boss\" rooms will have extra high ceilings, good with tall mobs.")

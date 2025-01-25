@@ -4,7 +4,6 @@ import com.github.xyroc.dldungeons.DLDungeons;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -298,10 +297,8 @@ public final class RegisteredBlock extends AbstractBlock {
         if (!placeBlock(world, x, y, z, Blocks.SPAWNER)) return;
         final BlockEntity be = world.getBlockEntity(pos);
         if (be instanceof SpawnerBlockEntity spawner) {
-            EntityType mobtype = ForgeRegistries.ENTITY_TYPES.getValue(ResourceLocation.tryParse(mob));
+            EntityType<?> mobtype = ForgeRegistries.ENTITY_TYPES.getValue(ResourceLocation.tryParse(mob));
             spawner.setEntityId(mobtype, RandomSource.create());
-            // Set up spawner logic
-            // Ignore this for now.
         } else {
             String error = "ERROR! Spawner placed at \"" + x + " " + y + " " + z
                     + "\" is actually " + Objects.requireNonNullElse(be.getClass().getSimpleName(), "(None)");
