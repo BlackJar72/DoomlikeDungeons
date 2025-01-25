@@ -185,7 +185,7 @@ public class Dungeon {
 
     int shiftX;
     int shiftZ;
-    
+
 
     private Dungeon(Coords coords) {
         this.coords = coords;
