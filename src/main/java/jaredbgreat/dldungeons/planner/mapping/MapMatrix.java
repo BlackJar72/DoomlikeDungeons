@@ -328,7 +328,7 @@ public class MapMatrix {
                     }
 
                     // Liquids
-                    if (isLiquid(i, j) && (!isWall(i, j) || isDoor(i, j))
+                    if (isLiquid(i, j) && (!isWall(i, j) || isDoor(i, j)) && (floorY[i][j] < dungeon.baseHeight)
                             && !world.getBlockState(new BlockPos(shiftX + i, floorY[i][j] - 1, shiftZ + j)).isAir())
                         RegisteredBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, theRoom.liquidBlock);
                 }
