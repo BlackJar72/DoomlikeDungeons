@@ -320,6 +320,11 @@ public class MapMatrix {
                         RegisteredBlock.deleteBlock(world, shiftX + i, floorY[i][j], shiftZ + j, theRoom.airBlock);
                         RegisteredBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 1, shiftZ + j, theRoom.airBlock);
                         RegisteredBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 2, shiftZ + j, theRoom.airBlock);
+                        // This should make doors over liquids more even
+                        if(isLiquid(i, j)) {
+                            RegisteredBlock.deleteBlock(world, shiftX + i, dungeon.baseHeight + 1, shiftZ + j, theRoom.airBlock);
+                            RegisteredBlock.deleteBlock(world, shiftX + i, dungeon.baseHeight + 2, shiftZ + j, theRoom.airBlock);
+                        }
                     }
 
                     // Liquids

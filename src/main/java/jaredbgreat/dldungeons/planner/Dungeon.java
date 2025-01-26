@@ -80,9 +80,10 @@ public class Dungeon {
                             dungeon.liquidBlock,
                             dungeon.caveBlock
                     )),
-                    Codec.STRING.fieldOf("loot_cat").forGetter(dungeon -> dungeon.lootCat.name)
+                    Codec.STRING.fieldOf("loot_cat").forGetter(dungeon -> dungeon.lootCat.name),
+                    Codec.INT.fieldOf("height").forGetter(dungeon -> dungeon.baseHeight)
             )
-            .apply(instance, (map, size, degrees, rooms, blocks, loot_cat) -> {
+            .apply(instance, (map, size, degrees, rooms, blocks, loot_cat, height) -> {
                 final Dungeon dungeon = new Dungeon(new Coords(map.chunkX, map.chunkZ, 0));
 
                 dungeon.theme = Theme.PLACEHOLDER_THEME;
@@ -126,6 +127,8 @@ public class Dungeon {
                     System.err.println("DLD: Error! Chest file could not be found at world reload; did something change?");
                     dungeon.lootCat = LootCategory.PLACEHOLDER;
                 }
+
+                dungeon.baseHeight = height;
 
                 return dungeon;
             }));
