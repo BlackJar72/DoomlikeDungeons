@@ -23,7 +23,6 @@ import jaredbgreat.dldungeons.themes.ThemeFlags;
 import jaredbgreat.dldungeons.themes.ThemeType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -350,7 +349,7 @@ public class Room extends AbstractRoom {
                     z = dungeon.random.nextInt(tmp) + beginZ + 2;
                     if (dungeon.random.nextInt(4) == 0) y = dungeon.map.ceilY[x][z];
                     else y = dungeon.map.floorY[x][z];
-                    if(!occupiedBySpawner(x, y, z)) {
+                    if(notOccupiedBySpawner(x, y, z)) {
                         int lev = levAdjust(Difficulty.getDifficulty().moblevel(dungeon.random), dungeon);
                         if (lev >= 0) {
                             mob = dungeon.theme.allMobs[lev].get(dungeon.random.nextInt(dungeon.theme.allMobs[lev].size()));
@@ -456,7 +455,7 @@ public class Room extends AbstractRoom {
                 tmp = (endZ - beginZ - 3);
                 z = dungeon.random.nextInt(tmp) + beginZ + 2;
                 y = dungeon.map.floorY[x][z];
-                if(!occupiedBySpawner(x, y, z)) {
+                if(notOccupiedBySpawner(x, y, z) && notOccupiedByChest(x, y, z)) {
                     chests.add(new Chest(x, y, z, lev + dungeon.random.nextInt(2), ChestType.BASIC));
                     break;
                 }
@@ -473,7 +472,7 @@ public class Room extends AbstractRoom {
                     tmp = (endZ - beginZ - 3);
                     z = dungeon.random.nextInt(tmp) + beginZ + 2;
                     y = dungeon.map.floorY[x][z];
-                    if (!occupiedBySpawner(x, y, z)) {
+                    if (notOccupiedBySpawner(x, y, z) && notOccupiedByChest(x, y, z)) {
                         chests.add(new Chest(x, y, z, lev + dungeon.random.nextInt(2), ChestType.BASIC));
                         break;
                     }
@@ -490,11 +489,19 @@ public class Room extends AbstractRoom {
     }
 
 
-    private boolean occupiedBySpawner(int x, int y, int z) {
+    private boolean notOccupiedBySpawner(int x, int y, int z) {
         for(Spawner spawner : spawners) {
-            if(spawner.isLocation(x, y, z)) return true;
+            if(spawner.isLocation(x, y, z)) return false;
         }
-        return false;
+        return true;
+    }
+
+
+    private boolean notOccupiedByChest(int x, int y, int z) {
+        for(Chest chest : chests) {
+            if(chest.isLocation(x, y, z)) return false;
+        }
+        return true;
     }
 
 
