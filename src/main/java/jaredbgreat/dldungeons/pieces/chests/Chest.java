@@ -67,6 +67,20 @@ public class Chest {
     }
 
 
+    /**
+     * Test to see if the selected location is occupied by a spawner.
+     * Used to make sure chests are not assigned the same locations.
+     *
+     * @param ox other X
+     * @param oy other Y
+     * @param oz other Z
+     * @return
+     */
+    public boolean isLocation(int ox, int oy, int oz) {
+        return ((ox == mx) && (oy == my) && (oz == mz));
+    }
+
+
     static {
         initSlots();
     }

@@ -23,7 +23,6 @@ import jaredbgreat.dldungeons.themes.ThemeFlags;
 import jaredbgreat.dldungeons.themes.ThemeType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -343,18 +342,24 @@ public class Room extends AbstractRoom {
             tmp = Math.max((endX - beginX), (endZ - beginZ));
             num = dungeon.random.nextInt(2 + (tmp / 8)) + 1;
             for (int i = 0; i < num; i++) {
-                tmp = (endX - beginX - 3);
-                x = dungeon.random.nextInt(tmp) + beginX + 2;
-                tmp = (endZ - beginZ - 3);
-                z = dungeon.random.nextInt(tmp) + beginZ + 2;
-                if (dungeon.random.nextInt(4) == 0) y = dungeon.map.ceilY[x][z];
-                else y = dungeon.map.floorY[x][z];
-                int lev = levAdjust(Difficulty.getDifficulty().moblevel(dungeon.random), dungeon);
-                if (lev >= 0) {
-                    mob = dungeon.theme.allMobs[lev].get(dungeon.random.nextInt(dungeon.theme.allMobs[lev].size()));
-                    Spawner s = new Spawner(x, y, z, id, lev, mob);
-                    spawners.add(s);
-                    dungeon.spawners.addSpawner(s);
+                for(int j = 0; j < 10; j ++) {
+                    tmp = (endX - beginX - 3);
+                    x = dungeon.random.nextInt(tmp) + beginX + 2;
+                    tmp = (endZ - beginZ - 3);
+                    z = dungeon.random.nextInt(tmp) + beginZ + 2;
+                    if (dungeon.random.nextInt(4) == 0) y = dungeon.map.ceilY[x][z];
+                    else y = dungeon.map.floorY[x][z];
+                    if(notOccupiedBySpawner(x, y, z)) {
+                        int lev = levAdjust(Difficulty.getDifficulty().moblevel(dungeon.random), dungeon);
+                        if (lev >= 0) {
+                            mob = dungeon.theme.allMobs[lev].get(dungeon.random.nextInt(dungeon.theme.allMobs[lev].size()));
+                            Spawner s = new Spawner(x, y, z, id, lev, mob);
+                            spawners.add(s);
+                            dungeon.spawners.addSpawner(s);
+
+                            break;
+                        }
+                    }
                 }
             }
         } else {
@@ -444,23 +449,34 @@ public class Room extends AbstractRoom {
             y = dungeon.map.floorY[x][z];
             chests.add(new Chest(x, y, z, 0, ChestType.WEAK));
         } else if (dungeon.random.nextBoolean() && !isNode) {
-            tmp = (endX - beginX - 3);
-            x = dungeon.random.nextInt(tmp) + beginX + 2;
-            tmp = (endZ - beginZ - 3);
-            z = dungeon.random.nextInt(tmp) + beginZ + 2;
-            y = dungeon.map.floorY[x][z];
-            chests.add(new Chest(x, y, z, lev + dungeon.random.nextInt(2), ChestType.BASIC));
-        } else {
-            int ms = Math.max(n, 2);
-            if (isNode) num = Math.min(ms, dungeon.random.nextInt(2 + (ms / 2)) + 2);
-            else num = dungeon.random.nextInt(1 + (ms / 2)) + 1;
-            for (int i = 0; i < num; i++) {
+            for(int i = 0; i < 10; i++) {
                 tmp = (endX - beginX - 3);
                 x = dungeon.random.nextInt(tmp) + beginX + 2;
                 tmp = (endZ - beginZ - 3);
                 z = dungeon.random.nextInt(tmp) + beginZ + 2;
                 y = dungeon.map.floorY[x][z];
-                chests.add(new Chest(x, y, z, lev + dungeon.random.nextInt(2), ChestType.BASIC));
+                if(notOccupiedBySpawner(x, y, z) && notOccupiedByChest(x, y, z)) {
+                    chests.add(new Chest(x, y, z, lev + dungeon.random.nextInt(2), ChestType.BASIC));
+                    break;
+                }
+            }
+        } else {
+            int ms = Math.max(n, 2);
+            if (isNode) num = Math.min(ms, dungeon.random.nextInt(2 + (ms / 2)) + 2);
+            else num = dungeon.random.nextInt(1 + (ms / 2)) + 1;
+            //Try up to 10 times to place the chest, then give up
+            for (int i = 0; i < num; i++) {
+                for(int j = 0; j < 10; j++) {
+                    tmp = (endX - beginX - 3);
+                    x = dungeon.random.nextInt(tmp) + beginX + 2;
+                    tmp = (endZ - beginZ - 3);
+                    z = dungeon.random.nextInt(tmp) + beginZ + 2;
+                    y = dungeon.map.floorY[x][z];
+                    if (notOccupiedBySpawner(x, y, z) && notOccupiedByChest(x, y, z)) {
+                        chests.add(new Chest(x, y, z, lev + dungeon.random.nextInt(2), ChestType.BASIC));
+                        break;
+                    }
+                }
             }
         }
         if (isNode && !hasEntrance) {
@@ -470,6 +486,22 @@ public class Room extends AbstractRoom {
             chests.add(new Chest(x, y, z, lev + dungeon.random.nextInt(2), ChestType.TREASURE)
                     .setWithBoss(trueBoss));
         }
+    }
+
+
+    private boolean notOccupiedBySpawner(int x, int y, int z) {
+        for(Spawner spawner : spawners) {
+            if(spawner.isLocation(x, y, z)) return false;
+        }
+        return true;
+    }
+
+
+    private boolean notOccupiedByChest(int x, int y, int z) {
+        for(Chest chest : chests) {
+            if(chest.isLocation(x, y, z)) return false;
+        }
+        return true;
     }
 
 
