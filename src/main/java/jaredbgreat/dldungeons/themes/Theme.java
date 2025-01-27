@@ -190,10 +190,13 @@ public class Theme {
 	public static Theme getOverworldTheme(RandomSource random, Holder<Biome> biome) {
 		Theme output;
 		if(biome.is(BiomeTags.IS_NETHER)) {
+			if(netherThemes.isEmpty()) return null;
 			output = netherThemes.get(random.nextInt(netherThemes.size()));
 		} else if (biome.is(BiomeTags.IS_OCEAN) || biome.is(BiomeTags.IS_DEEP_OCEAN)) {
+			if(oceanicThemes.isEmpty()) return null;
 			output = oceanicThemes.get(random.nextInt(oceanicThemes.size()));
 		} else {
+			if(overworldThemes.isEmpty()) return PLACEHOLDER_THEME;
 			output = overworldThemes.get(random.nextInt(overworldThemes.size()));
 		}
 		if(output == null) output = PLACEHOLDER_THEME;
