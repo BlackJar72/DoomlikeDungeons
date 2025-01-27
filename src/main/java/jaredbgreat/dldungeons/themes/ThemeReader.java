@@ -175,10 +175,12 @@ public class ThemeReader {
         theme.name = name;
         theme.version = 2; // Don't assume old version now; that version can't work since MC1.8
         Tokenizer tokens = null;
+        int lines = 0;
         String line = null;
         String token;
         String delimeters = " ,;\t\n\r\f="; // Don't assume old version now; that version can't work since MC1.8
         while((line = instream.readLine()) != null) {
+            lines++;
             if(line.length() < 2) continue;
             if(line.charAt(0) == '#') continue;
             tokens = new Tokenizer(line, delimeters);
@@ -300,7 +302,8 @@ public class ThemeReader {
         if(theme.caveWalls.length < 1) {
             theme.caveWalls = theme.walls;
         }
-        Theme.themes.add(theme);
+        if(lines > 1) Theme.themeMap.put(theme.name, theme);
+        else Theme.themeMap.remove(theme.name);
     }
 
 
