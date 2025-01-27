@@ -55,6 +55,7 @@ public class Theme {
 	 */
 	public static final Theme PLACEHOLDER_THEME = new Theme();
 
+	public static final ConcurrentHashMap<String, Theme> themeMap = new ConcurrentHashMap<>();
 	public static final CopyOnWriteArrayList<Theme> themes = new CopyOnWriteArrayList<>();
 	public static final CopyOnWriteArrayList<Theme> overworldThemes = new CopyOnWriteArrayList<>();
 	public static final CopyOnWriteArrayList<Theme> oceanicThemes = new CopyOnWriteArrayList<>();
@@ -165,9 +166,15 @@ public class Theme {
 		fixMobs();
 	}
 
+
 	public static CompletableFuture<Void> SortThemes() {
+		themes.clear();
+		for(String key : themeMap.keySet()) {
+			themes.add(themeMap.get(key));
+		}
 		return CompletableFuture.runAsync(() -> {
 			for (Theme theme : themes) {
+				System.out.println("DLD: Sorting theme " + theme.name);
 				if (theme.flags.contains(ThemeFlags.OCEANIC)) {
 					oceanicThemes.add(theme);
 				} else if (theme.flags.contains(ThemeFlags.NETHER)) {
@@ -195,6 +202,7 @@ public class Theme {
 
 
 	public static void purgeThemes() {
+		themeMap.clear();
 		themes.clear();
 		overworldThemes.clear();
 		netherThemes.clear();
