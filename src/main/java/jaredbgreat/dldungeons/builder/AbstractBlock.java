@@ -10,13 +10,10 @@ public abstract class AbstractBlock implements IBlockPlacer {
 	 * spawner, or any part of the End portal.
 	 * 
 	 * @param world
-	 * @param x
-	 * @param y
-	 * @param z
+	 * @param pos
 	 * @return
 	 */
-	public static boolean isProtectedBlock(WorldGenLevel world, int x, int y, int z) {
-		final BlockPos pos = new BlockPos(x, y, z);
+	public static boolean isProtectedBlock(WorldGenLevel world, BlockPos pos) {
 		return world.getBlockState(pos).getDestroySpeed(world, pos) < 0; // Unbreakable block
 	}
 	

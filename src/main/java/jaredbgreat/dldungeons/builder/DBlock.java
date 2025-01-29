@@ -18,21 +18,11 @@ public class DBlock extends AbstractBlock {
 	DBlock(BlockState block) {
 		this.block = block;
 	}
-	
-	
-	@Override
-	@Deprecated
-	public void placeNoMeta(WorldGenLevel world, int x, int y, int z) {
-		if(isProtectedBlock(world, x, y, z)) return;
-		BlockPos pos = new BlockPos(x, y, z);
-		world.setBlock(pos, block, 2);
-	}
 
 	
 	@Override
-	public void place(WorldGenLevel world, int x, int y, int z) {
-		if(isProtectedBlock(world, x, y, z)) return;
-		BlockPos pos = new BlockPos(x, y, z);
+	public void place(WorldGenLevel world, BlockPos pos) {
+		if(isProtectedBlock(world, pos)) return;
 		world.setBlock(pos, block, 2);
 	}
 	

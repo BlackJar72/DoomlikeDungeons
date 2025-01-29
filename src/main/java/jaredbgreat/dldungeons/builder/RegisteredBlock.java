@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -117,8 +118,13 @@ public final class RegisteredBlock extends AbstractBlock {
      * @param block
      */
     public static void place(WorldGenLevel world, int x, int y, int z, int block) {
-        if (!isProtectedBlock(world, x, y, z))
-            registry.get(block).place(world, x, y, z);
+        BlockPos pos = new BlockPos(x, y, z);
+        if (!isProtectedBlock(world, pos))
+            registry.get(block).place(world, pos);
+        FluidState fluidState = world.getFluidState(new BlockPos(x, y, z));
+        if (!fluidState.isEmpty()) {
+            world.scheduleTick(pos, fluidState.getType(), 0);
+        }
     }
 
 
@@ -201,33 +207,17 @@ public final class RegisteredBlock extends AbstractBlock {
      * @param block
      */
     public static boolean placeBlock(WorldGenLevel world, int x, int y, int z, Block block) {
-        if (isProtectedBlock(world, x, y, z)) return false;
         BlockPos pos = new BlockPos(x, y, z);
+        if (isProtectedBlock(world, pos)) return false;
         world.setBlock(pos, block.defaultBlockState(), 2);
         return true;
     }
 
-
-    /**
-     * Purely a wrapper for block/state placing/setting methods typically found in world,
-     * allowing easier updating when block representation or method signature / location
-     * changes.
-     *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
-     * @param block
-     */
-    public static void placeBlock(WorldGenLevel world, int x, int y, int z, Block block, int a, int b) {
-        if (isProtectedBlock(world, x, y, z)) return;
-        world.setBlock(new BlockPos(x, y, z), block.defaultBlockState(), 2);
-    }
-
     
     public static void placeBlock(WorldGenLevel world, int x, int y, int z, BlockState block, int a, int b) {
-        if (isProtectedBlock(world, x, y, z)) return;
-        world.setBlock(new BlockPos(x, y, z), block, 2);
+        BlockPos pos = new BlockPos(x, y, z);
+        if (isProtectedBlock(world, pos)) return;
+        world.setBlock(pos, block, 2);
     }
 
 
@@ -240,31 +230,16 @@ public final class RegisteredBlock extends AbstractBlock {
      * @param z
      */
     public static void deleteBlock(WorldGenLevel world, int x, int y, int z) {
-        if (isProtectedBlock(world, x, y, z)) return;
-        world.setBlock(new BlockPos(x, y, z), Blocks.AIR.defaultBlockState(), 2);
-    }
-
-
-    /**
-     * Almost a wrapper for setting the block to air in world, but will alternately set
-     * blocks to water instead if a dungeons is flooded.
-     *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
-     * @param flooded
-     */
-    public static void deleteBlock(WorldGenLevel world, int x, int y, int z, boolean flooded) {
-        if (isProtectedBlock(world, x, y, z)) return;
-        if (flooded) placeBlock(world, x, y, z, water);
-        else world.setBlock(new BlockPos(x, y, z), Blocks.AIR.defaultBlockState(), 2);
+        BlockPos pos = new BlockPos(x, y, z);
+        if (isProtectedBlock(world, pos)) return;
+        world.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
     }
 
 
     public static void deleteBlock(WorldGenLevel world, int x, int y, int z, int block) {
-        if (isProtectedBlock(world, x, y, z)) return;
-        registry.get(block).place(world, x, y, z);
+        BlockPos pos = new BlockPos(x, y, z);
+        if (isProtectedBlock(world, pos)) return;
+        registry.get(block).place(world, pos);
     }
 
 
@@ -293,7 +268,7 @@ public final class RegisteredBlock extends AbstractBlock {
     public static void placeSpawner(WorldGenLevel world, int x, int y, int z, String mob) {
         // Place spawner block
         BlockPos pos = new BlockPos(x, y, z);
-        if (isProtectedBlock(world, x, y, z)) return;
+        if (isProtectedBlock(world, pos)) return;
         if (!placeBlock(world, x, y, z, Blocks.SPAWNER)) return;
         final BlockEntity be = world.getBlockEntity(pos);
         if (be instanceof SpawnerBlockEntity spawner) {
@@ -366,14 +341,8 @@ public final class RegisteredBlock extends AbstractBlock {
 
 
     @Override
-    public void placeNoMeta(WorldGenLevel world, int x, int y, int z) {
-        block.placeNoMeta(world, x, y, z);
-    }
-
-
-    @Override
-    public void place(WorldGenLevel world, int x, int y, int z) {
-        block.place(world, x, y, z);
+    public void place(WorldGenLevel world, BlockPos pos) {
+        block.place(world, pos);
     }
 
 
