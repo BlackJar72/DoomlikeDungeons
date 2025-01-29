@@ -3,6 +3,7 @@ package jaredbgreat.dldungeons.builder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 
@@ -40,14 +41,8 @@ public class BlockFamily implements IBlockPlacer {
 
 	
 	@Override
-	public void placeNoMeta(WorldGenLevel world, int x, int y, int z) {
-		blocks[random.nextInt(blocks.length)].placeNoMeta(world, x, y, z);
-	}
-
-	
-	@Override
-	public void place(WorldGenLevel world, int x, int y, int z) {
-		blocks[random.nextInt(blocks.length)].place(world, x, y, z);
+	public void place(WorldGenLevel world, BlockPos pos) {
+		blocks[random.nextInt(blocks.length)].place(world, pos);
 	}
 	
 	

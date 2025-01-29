@@ -1,19 +1,9 @@
 package jaredbgreat.dldungeons.builder;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.WorldGenLevel;
 
 public interface IBlockPlacer {
-
-	/**
-	 * This is the same as just place(), and will use the full block state.  It 
-	 * is maintained for compatibility, but no longer has a real purpose.
-	 * 
-	 * @param world
-	 * @param x
-	 * @param y
-	 * @param z
-	 */
-	public abstract void placeNoMeta(WorldGenLevel world, int x, int y, int z);
 
 	/**
 	 * Places the block in the world, including its correct meta-data.  This wrapping allow
@@ -21,11 +11,9 @@ public interface IBlockPlacer {
 	 * adapted and for meta-blocks to easily be used in dungeons. 
 	 * 
 	 * @param world
-	 * @param x
-	 * @param y
-	 * @param z
+	 * @param pos
 	 */
-	public abstract void place(WorldGenLevel world, int x, int y, int z);
+	public abstract void place(WorldGenLevel world, BlockPos pos);
 	
 	
 	public abstract Object getContents();
