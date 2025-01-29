@@ -123,6 +123,7 @@ public class ChunkFeatures {
 		//System.out.println("Might build and entrance...");
 		if((entrance != null) && (entrance.getType() != EntranceType.NONE)) {
 			AbstractEntrance wayIn = entrance.getType().factory.makeEntrance(entrance.getX(), entrance.getZ());
+			wayIn.avoidChunkEdges(shiftX, shiftZ);
 			wayIn.build(dungeon, world, shiftX, shiftZ);
 		}
 		//System.out.println(" \t ...Build and entrance!");
