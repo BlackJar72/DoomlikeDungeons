@@ -275,9 +275,15 @@ public final class RegisteredBlock extends AbstractBlock {
             EntityType<?> mobtype = ForgeRegistries.ENTITY_TYPES.getValue(ResourceLocation.tryParse(mob));
             spawner.setEntityId(mobtype, RandomSource.create());
         } else {
-            String error = "ERROR! Spawner placed at \"" + x + " " + y + " " + z
-                    + "\" is actually " + Objects.requireNonNullElse(be.getClass().getSimpleName(), "(None)");
-            DLDungeons.LOGGER.error(error);
+            if((be != null)) {
+                String error = "ERROR! Spawner placed at \"" + x + " " + y + " " + z
+                        + "\" is actually " + Objects.requireNonNullElse(be.getClass().getSimpleName(), "(None)");
+                DLDungeons.LOGGER.error(error);
+            } else {
+                String error = "ERROR! Spawner placed at \"" + x + " " + y + " " + z + " is actually NULL!!!"
+                        + "  Actual block was " + world.getBlockState(pos).getBlock().getName() + ".";
+                DLDungeons.LOGGER.error(error);
+            }
         }
     }
 
