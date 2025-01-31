@@ -314,7 +314,7 @@ public class MapMatrix {
                         if (noHighDegenerate(theRoom, shiftX + i, k, shiftZ + j, world))
                             RegisteredBlock.place(world, shiftX + i, k, shiftZ + j, theRoom.wallBlock1);
                     if (isFence(i, j))
-                        RegisteredBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, theRoom.fenceBlock);
+                        RegisteredBlock.placeFence(world, shiftX + i, floorY[i][j], shiftZ + j, theRoom.fenceBlock);
 
                     if (isDoor(i, j)) {
                         RegisteredBlock.deleteBlock(world, shiftX + i, floorY[i][j], shiftZ + j, theRoom.airBlock);
