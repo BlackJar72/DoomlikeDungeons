@@ -124,7 +124,27 @@ public final class RegisteredBlock extends AbstractBlock {
         FluidState fluidState = world.getFluidState(new BlockPos(x, y, z));
         if (!fluidState.isEmpty()) {
             world.scheduleTick(pos, fluidState.getType(), 0);
-        }
+        }/* else {
+            world.getChunk(pos).markPosForPostprocessing(pos);
+        }*/
+    }
+
+
+    /**
+     * This will place a fence/wall block (or other that needs post processing) from the DBlock registry into the world
+     * based on its internal ID (i.e., its registry index).
+     *
+     * @param world
+     * @param x
+     * @param y
+     * @param z
+     * @param block
+     */
+    public static void placeFence(WorldGenLevel world, int x, int y, int z, int block) {
+        BlockPos pos = new BlockPos(x, y, z);
+        if (!isProtectedBlock(world, pos))
+            registry.get(block).place(world, pos);
+        world.getChunk(pos).markPosForPostprocessing(pos);
     }
 
 
