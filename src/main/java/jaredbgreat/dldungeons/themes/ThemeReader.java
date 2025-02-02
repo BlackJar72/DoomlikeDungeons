@@ -53,7 +53,7 @@ public class ThemeReader {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        RegisteredBlock.add(BlockFamily.makeBlockFamily(json.toString()));
+        RegisteredBlock.add(BlockFamily.makeBlockFamily(json.toString()).name);
     }
 
 

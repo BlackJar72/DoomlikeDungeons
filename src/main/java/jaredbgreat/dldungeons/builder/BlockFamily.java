@@ -12,26 +12,27 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 
 public class BlockFamily implements IBlockPlacer {
-	private static final Map<String, BlockFamily> FAMILIES = new HashMap<>();	
+	private static final Map<String, BlockFamily> FAMILIES = new ConcurrentHashMap<>();
 	
-	private final String name;
+	public final String name;
 	private final IBlockPlacer[] blocks;
-	private	static Random random;
+	private	static RandomSource random;
 	
 	
 	private BlockFamily(String name, List<IBlockPlacer> theBlocks) {
 		this.name = name;
 		blocks = theBlocks.toArray(new IBlockPlacer[theBlocks.size()]);
-		random = new Random();
+		random = RandomSource.create();
 	}
 	
 	
 	public static void setRadnom(RandomSource r) {
-		random = new Random(r.nextLong());
+		random = RandomSource.create(r.nextLong());
 	}
 	
 	
@@ -93,6 +94,11 @@ public class BlockFamily implements IBlockPlacer {
 		BlockFamily out = new BlockFamily(name, blocks); 
 		FAMILIES.put(name, out);
 		return out;
+	}
+
+
+	public boolean isEmpty() {
+		return ((blocks == null) || blocks.length < 1);
 	}
 	
 	
