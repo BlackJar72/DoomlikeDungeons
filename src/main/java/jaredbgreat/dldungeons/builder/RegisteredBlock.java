@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public final class RegisteredBlock extends AbstractBlock {
     private final String id;   // The name
@@ -34,9 +35,9 @@ public final class RegisteredBlock extends AbstractBlock {
     public static final Block air = Blocks.AIR;
 
     // All blocks, complete with meta-data used by the mod
-    public static final ArrayList<RegisteredBlock> registry = new ArrayList<RegisteredBlock>();
+    public static final CopyOnWriteArrayList<RegisteredBlock> registry = new CopyOnWriteArrayList<>();
 
-    private static HashSet<String> names = new HashSet<>();
+    private final static HashSet<String> names = new HashSet<>();
 
     /**
      * Gets the item named by the string "in" -- hacky, but might work
