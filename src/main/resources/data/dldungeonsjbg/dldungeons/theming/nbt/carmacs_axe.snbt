@@ -1,1 +1,1 @@
-{Damage:0,Enchantments:[{id:"efficiency",lvl:5},{id:"sharpness",lvl:3},{id:"unbreaking",lvl:3}],RepairCost:12,display:{Lore:['["",{"text":"For when your friends are too busy slaying demons to leave their room","italic":false}]'],Name:'["",{"text":"Carmac\'s Axe","italic":false}]'}}
+{Damage:0,Enchantments:[{id:"efficiency",lvl:5},{id:"sharpness",lvl:3},{id:"unbreaking",lvl:3}],display:{Lore:['["",{"text":"For when your friends are too busy slaying demons to leave their room","italic":false}]'],Name:'["",{"text":"Carmac\'s Axe","italic":false}]'}}
