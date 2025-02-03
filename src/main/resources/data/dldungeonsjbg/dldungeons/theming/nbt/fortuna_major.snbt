@@ -1,1 +1,1 @@
-{Damage:0,Enchantments:[{id:"minecraft:fortune",lvl:3s},{id:"minecraft:efficiency",lvl:5s}],RepairCost:128,Unbreakable:1b,display:{Lore:['{"text":"Believe it or not, this comes from "}','{"text":"an ancient Vanilla World. "}'],Name:'{"text":"Fortuna Major"}'}}
+{Damage:0,Enchantments:[{id:"minecraft:fortune",lvl:3s},{id:"minecraft:efficiency",lvl:5s}],Unbreakable:1b,display:{Lore:['{"text":"Believe it or not, this comes from "}','{"text":"an ancient Vanilla World. "}'],Name:'{"text":"Fortuna Major"}'}}

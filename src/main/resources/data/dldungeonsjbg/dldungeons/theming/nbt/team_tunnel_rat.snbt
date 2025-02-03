@@ -1,1 +1,1 @@
-{Damage:0,Enchantments:[{id:"efficiency",lvl:6}{id:"unbreaking",lvl:3}],RepairCost:128,display:{Lore:['["",{"text":"When you just want to by-pass everyting","italic":false}]'],Name:'["",{"text":"Tunnel Rat\'s Tool","italic":false}]'}}
+{Damage:0,Enchantments:[{id:"efficiency",lvl:6},{id:"unbreaking",lvl:3}],RepairCost:128,display:{Lore:['["",{"text":"When you just want to bypass everyting","italic":false}]'],Name:'["",{"text":"Tunnel Rat\'s Tool","italic":false}]'}}
