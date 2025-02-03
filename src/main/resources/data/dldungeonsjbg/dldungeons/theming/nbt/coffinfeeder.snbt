@@ -1,1 +1,1 @@
-{Damage:0,Enchantments:[{id:"looting",lvl:3},{id:"sharpness",lvl:5},{id:"sweeping",lvl:3}],RepairCost:128,Unbreakable:1,display:{Lore:['["",{"text":"Possibly the creation of an ancient lich","italic":false}]'],Name:'["",{"text":"Coffinfeeder","italic":false}]'}}
+{Damage:0,Enchantments:[{id:"sharpness",lvl:5},{id:"sweeping",lvl:3},{id:"looting",lvl:3},{id:"unbreaking",lvl:4}],RepairCost:20,Unbreakable:1,display:{Lore:['["",{"text":"Possibly the creation of an ancient lich","italic":false}]'],Name:'["",{"text":"Coffinfeeder","italic":false}]'}}
