@@ -1,1 +1,1 @@
-{Damage:0,Enchantments:[{id:"minecraft:sharpness",lvl:3s},{id:"minecraft:looting",lvl:1s},{id:"minecraft:silk_touch",lvl:1s}],display:{Name:'{"text":"Clean Slicer"}'}}
+{Damage:0,Enchantments:[{id:"minecraft:sharpness",lvl:3s},{id:"minecraft:looting",lvl:1s},{id:"minecraft:silk_touch",lvl:1s}],RepairCost:12,display:{Name:'{"text":"Clean Slicer"}'}}
