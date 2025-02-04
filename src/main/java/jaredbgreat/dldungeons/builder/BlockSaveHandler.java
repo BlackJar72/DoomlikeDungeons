@@ -13,12 +13,18 @@ public final class BlockSaveHandler {
     // This seemed like a simple ides, but turned into a convoluted mess (c.f., BlockFamily codec)
     // So this is why its sometime said that all game code is spaghetti code (eventually it will become such)
 
-    private List<String> blocks = new ArrayList<>();
-    private List<BlockFamily> blockFamilies = new ArrayList<>();
-
-    public static void HandleSave() {
-        instance.blockFamilies = BlockFamily.getFamiliesAsList();
-        instance.blocks = RegisteredBlock.getRegisteredNames();
+    
+    public static void handleSave() {
+        List<BlockFamily> blockFamilies = BlockFamily.getFamiliesAsList();
+        List<String> blocks = RegisteredBlock.getRegisteredNames();
+        for(String block : blocks) {
+            RegisteredBlock.addOnLoad(block);
+        }
+        for(BlockFamily family : blockFamilies) {
+            if(family != null) {
+                BlockFamily.addFromLoad(family);
+            }
+        }
     }
 
 

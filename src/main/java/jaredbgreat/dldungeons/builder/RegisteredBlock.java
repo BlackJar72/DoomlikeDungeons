@@ -141,7 +141,7 @@ public final class RegisteredBlock extends AbstractBlock {
      * its not already present.  It will return the new DBlocks registry index for
      * use as an internal id.
      * <p>
-     * This is for use with mod versions newer that 1.7.
+     * This is for use with mod versions newer than 1.7.
      *
      * @param id
      * @return
@@ -150,6 +150,26 @@ public final class RegisteredBlock extends AbstractBlock {
     public static int add(String id) throws NoSuchElementException {
         if (id.startsWith("$")) {
             return add(BlockFamily.getBlockFamily(id));
+        }
+        RegisteredBlock block = new RegisteredBlock(id);
+        if (!registry.contains(block)) {
+            registry.add(block);
+        }
+        return registry.indexOf(block);
+    }
+
+
+    /**
+     * A version of add for loading from a saved data file.  It does not assume BlockFamilies exist, but
+     * instead creates them in a placeholder form that will later be turned into a proper form.
+     *
+     * @param id
+     * @return
+     * @throws NoSuchElementException
+     */
+    public static int addOnLoad(String id) throws NoSuchElementException {
+        if (id.startsWith("$")) {
+            return add(BlockFamily.loadBlockFamily(id));
         }
         RegisteredBlock block = new RegisteredBlock(id);
         if (!registry.contains(block)) {

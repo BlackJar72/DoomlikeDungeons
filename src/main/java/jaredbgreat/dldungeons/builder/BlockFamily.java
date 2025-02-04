@@ -89,6 +89,16 @@ public class BlockFamily implements IBlockPlacer {
 	private void setBlocks(List<IBlockPlacer> theBlocks) {
 		blocks = theBlocks.toArray(new IBlockPlacer[theBlocks.size()]);
 	}
+
+
+	/**
+	 * Use to set the blocks for a block family that has been loaded from a save.
+	 *
+	 * @param theBlocks
+	 */
+	private void setBlocks(IBlockPlacer[] theBlocks) {
+		blocks = theBlocks;
+	}
 	
 	
 	public static void setRadnom(RandomSource r) {
@@ -175,6 +185,16 @@ public class BlockFamily implements IBlockPlacer {
 
 	public boolean isEmpty() {
 		return ((blocks == null) || blocks.length < 1);
+	}
+
+
+	public static void addFromLoad(BlockFamily family) {
+		BlockFamily existing = FAMILIES.get(family.name);
+		if(existing ==  null) {
+			FAMILIES.put(family.name, family);
+		} else {
+			existing.setBlocks(family.blocks);
+		}
 	}
 	
 	
