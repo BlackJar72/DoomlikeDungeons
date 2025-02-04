@@ -1,6 +1,7 @@
 package com.github.xyroc.dldungeons.datapack;
 
 import com.github.xyroc.dldungeons.DLDungeons;
+import jaredbgreat.dldungeons.builder.RegisteredBlock;
 import jaredbgreat.dldungeons.pieces.chests.LootCategory;
 import jaredbgreat.dldungeons.themes.Theme;
 import jaredbgreat.dldungeons.themes.ThemeReader;
@@ -45,6 +46,7 @@ public class ResourceReloadHandler implements PreparableReloadListener {
     public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller profilerFiller, ProfilerFiller profilerFiller1, Executor backgroundExecutor, Executor gameExecutor) {
         return preparationBarrier.wait(Unit.INSTANCE).thenRunAsync(() -> {
             Theme.purgeThemes();
+            RegisteredBlock.clear();
             loadSNBT(resourceManager);
             loadBlockFamilies(resourceManager);
             loadSpecialChests(resourceManager);

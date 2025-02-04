@@ -3,22 +3,50 @@ package jaredbgreat.dldungeons.builder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import jaredbgreat.dldungeons.pieces.chests.LootCategory;
+import jaredbgreat.dldungeons.planner.Dungeon;
+import jaredbgreat.dldungeons.planner.mapping.ChunkFeatures;
+import jaredbgreat.dldungeons.planner.mapping.MapMatrix;
+import jaredbgreat.dldungeons.themes.Sizes;
+import jaredbgreat.dldungeons.themes.Theme;
+import jaredbgreat.dldungeons.util.cache.Coords;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 public class BlockFamily implements IBlockPlacer {
 	private static final Map<String, BlockFamily> FAMILIES = new ConcurrentHashMap<>();
-	
+
+
+	// FIXME! HELP!!! I need to reload the RegisteredBlocks first to preserve their order, but this to have the BlockFamilies to register!!!
+	public static final Codec<BlockFamily> CODEC = RecordCodecBuilder.create(instance -> instance
+			.group(
+					Codec.STRING.fieldOf("name").forGetter(family -> family.name),
+					Codec.STRING.listOf().fieldOf("blocks").forGetter((family
+							-> BlockSaveHandler.stringsToList(family.blocks)))
+			)
+			.apply(instance, (name, blocks) -> {
+				List<String> names = blocks;
+				final BlockFamily family = new BlockFamily(name, List.of(new IBlockPlacer[names.size()]));
+
+				for(int i = 0; i < family.blocks.length; i++) {
+					family.blocks[i] = RegisteredBlock.get(RegisteredBlock.add(names.get(i)));
+				}
+
+				return family;
+			}));
+
+
+
 	public final String name;
 	private final IBlockPlacer[] blocks;
 	private	static RandomSource random;
@@ -35,7 +63,8 @@ public class BlockFamily implements IBlockPlacer {
 		random = RandomSource.create(r.nextLong());
 	}
 	
-	
+
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -72,7 +101,7 @@ public class BlockFamily implements IBlockPlacer {
 	public static BlockFamily makeBlockFamily(String json) {
 		JsonObject data = JsonParser.parseString(json).getAsJsonObject();
 		String name;
-		List<IBlockPlacer> blocks = new LinkedList<>(); 
+		List<IBlockPlacer> blocks = new LinkedList<>();
 		if(data.has("name")) {
 			name = "$" + data.get("name").getAsString();
 		} else {
@@ -107,9 +136,10 @@ public class BlockFamily implements IBlockPlacer {
 	}
 
 
-	@Override
-	public Object getContents() {
-		return blocks;
+	public static List<BlockFamily> getFamiliesAsList() {
+		ArrayList<BlockFamily> output = new ArrayList<>(FAMILIES.size());
+        output.addAll(FAMILIES.values());
+		return output;
 	}
 
 }

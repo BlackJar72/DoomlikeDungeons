@@ -18,15 +18,11 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public final class RegisteredBlock extends AbstractBlock {
-    private final String id;   // The name
+    private final String name;   // The name
     private final IBlockPlacer block;
 
     public static final Block quartz = Blocks.QUARTZ_BLOCK;
@@ -37,17 +33,25 @@ public final class RegisteredBlock extends AbstractBlock {
     // All blocks, complete with meta-data used by the mod
     public static final CopyOnWriteArrayList<RegisteredBlock> registry = new CopyOnWriteArrayList<>();
 
-    private final static HashSet<String> names = new HashSet<>();
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
 
     /**
-     * Gets the item named by the string "in" -- hacky, but might work
-     * for now, hopefully....
+     * Clear everything in preparation for reload; this should only be done at the beginning of a data pack reload,
+     * to keep ids from different worlds, which may have different data packs, from scrambling each other's ids.  It
+     * should NOT be called any other time!
      *
-     * @param in
-     * @return
+     * This does NOT make it safe to change data packs on existing worlds, but does worlds with different data packs
+     * from scrambling each other if loaded into in different orders (and would me a necessary first step in persistent
+     * block data which might solve the problems associate with changing blocks within w world though it does not
+     * do that on its own).
      */
-    private static Item getItem(String in) {
-        return Items.AIR;
+    public static void clear() {
+        registry.clear();
     }
 
 
@@ -58,8 +62,7 @@ public final class RegisteredBlock extends AbstractBlock {
      * @param id
      */
     private RegisteredBlock(String id) throws NoSuchElementException {
-        names.add(id);
-        this.id = id;
+        this.name = id;
         block = DBlock.makeDBlock(id);
         if (block.toString().contains("minecraft:air")
                 && !id.contains("minecraft:air")) {
@@ -70,26 +73,12 @@ public final class RegisteredBlock extends AbstractBlock {
     }
 
 
-    public static void listDBlocks(File listsDir) {
-        ArrayList<String> namel = new ArrayList<>();
-        names.forEach((name) -> namel.add(name));
-        Collections.sort(namel);
-        File itemlist = new File(listsDir.toString() + File.separator + "DBlocks.txt");
-        if (itemlist.exists()) itemlist.delete();
-        try {
-            final BufferedWriter outstream
-                    = new BufferedWriter(new FileWriter(itemlist.toString()));
-
-            for (String name : namel) {
-                outstream.write(name);
-                outstream.newLine();
-            }
-
-            if (outstream != null) outstream.close();
-        } catch (IOException e) {
-            System.err.println("Error: Could not write file blocks.txt");
-            e.printStackTrace();
+    public static List<String> getRegisteredNames() {
+        List<String> output = new ArrayList<>(registry.size());
+        for(RegisteredBlock rb : registry) {
+            output.add(rb.name);
         }
+        return output;
     }
 
 
@@ -98,7 +87,7 @@ public final class RegisteredBlock extends AbstractBlock {
      * or newer.
      */
     private RegisteredBlock(BlockFamily family) throws NoSuchElementException {
-        this.id = family.getName();
+        this.name = family.getName();
         block = family;
     }
 
@@ -371,8 +360,4 @@ public final class RegisteredBlock extends AbstractBlock {
     }
 
 
-    @Override
-    public Object getContents() {
-        return block;
-    }
 }

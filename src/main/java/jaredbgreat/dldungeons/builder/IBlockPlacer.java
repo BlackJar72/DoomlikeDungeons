@@ -14,8 +14,8 @@ public interface IBlockPlacer {
 	 * @param pos
 	 */
 	public abstract void place(WorldGenLevel world, BlockPos pos);
-	
-	
-	public abstract Object getContents();
+
+	public abstract String getName();
+
 
 }
