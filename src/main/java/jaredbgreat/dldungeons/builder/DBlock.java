@@ -1,7 +1,6 @@
 package jaredbgreat.dldungeons.builder;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
@@ -13,10 +12,12 @@ import java.util.StringTokenizer;
 
 public class DBlock extends AbstractBlock {
 	protected BlockState block;
+	protected final String name;
 	
 	
-	DBlock(BlockState block) {
+	DBlock(BlockState block, String name) {
 		this.block = block;
+		this.name = name;
 	}
 
 	
@@ -25,8 +26,13 @@ public class DBlock extends AbstractBlock {
 		if(isProtectedBlock(world, pos)) return;
 		world.setBlock(pos, block, 2);
 	}
-	
-	
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+
 	/**
 	 * Returns true if the other object is a DBlock the holds the same block with 
 	 * the same meta-data. 
@@ -52,7 +58,6 @@ public class DBlock extends AbstractBlock {
 	public static DBlock makeDBlock(String id) {
 		try {
 			Block theBlock;
-			int meta;
 			StringTokenizer nums = new StringTokenizer(id, ":({[]})");
 			String modid = nums.nextToken();
 			ResourceLocation name = new ResourceLocation(modid
@@ -63,17 +68,12 @@ public class DBlock extends AbstractBlock {
 						+ "\" was was not in registry (returned null).";
 				throw new NoSuchElementException(error);
 			}
-			return new DBlock(theBlock.defaultBlockState());
+			return new DBlock(theBlock.defaultBlockState(), name.toString());
 		} catch (NoSuchElementException ex) {
 			throw new NoSuchElementException("Something was wrong with " + id 
 					+ "; could not find all elements.");
 		}
 	}
 
-
-	@Override
-	public Object getContents() {
-		return block;
-	}
 
 }
