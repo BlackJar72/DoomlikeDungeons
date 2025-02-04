@@ -8,16 +8,27 @@ import java.util.Arrays;
 import java.util.List;
 
 public final class BlockSaveHandler {
-    private static final BlockSaveHandler instance = new BlockSaveHandler();
 
     // This seemed like a simple ides, but turned into a convoluted mess (c.f., BlockFamily codec)
     // So this is why its sometime said that all game code is spaghetti code (eventually it will become such)
 
+    private List<String> blocks;
+    private List<BlockFamily> blockFamilies;
+
+    // TODO: Codec
 
     public static void handleLoad() {
-        // TODO: These need to be loaded from file, not get them from exist lists
-        List<BlockFamily> blockFamilies = BlockFamily.getFamiliesAsList();
-        List<String> blocks = RegisteredBlock.getRegisteredNames();
+        // Using this instance allows a single codec to handle all everythings, encoding the class instance
+        // and saving it into a file.
+        BlockSaveHandler handler = new BlockSaveHandler();
+        handler.handleLoadInstance();
+    }
+
+
+    private void handleLoadInstance() {
+        // TODO / FIXME: These need to be loaded from file, not get them from exist lists
+        blockFamilies = BlockFamily.getFamiliesAsList();
+        blocks = RegisteredBlock.getRegisteredNames();
         for(String block : blocks) {
             RegisteredBlock.addOnLoad(block);
         }
@@ -30,8 +41,16 @@ public final class BlockSaveHandler {
 
 
     public static void handleSave() {
-        List<BlockFamily> blockFamilies = BlockFamily.getFamiliesAsList();
-        List<String> blocks = RegisteredBlock.getRegisteredNames();
+        // Using this instance allows a single codec to handle all everythings, encoding the class instance
+        // and saving it into a file.
+        BlockSaveHandler handler = new BlockSaveHandler();
+        handler.handleSaveInstance();
+    }
+
+
+    public void handleSaveInstance() {
+        blockFamilies = BlockFamily.getFamiliesAsList();
+        blocks = RegisteredBlock.getRegisteredNames();
         // TODO: Write out to save
     }
 
