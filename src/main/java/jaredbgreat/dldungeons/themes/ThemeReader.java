@@ -27,6 +27,8 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import static jaredbgreat.dldungeons.builder.BlockFamily.makeBlockFamily;
+
 /**
  * This is the file IO class for reading theme files.
  *
@@ -53,7 +55,7 @@ public class ThemeReader {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        RegisteredBlock.add(BlockFamily.makeBlockFamily(json.toString()).name);
+        RegisteredBlock.add(makeBlockFamily(json.toString()).name);
     }
 
 

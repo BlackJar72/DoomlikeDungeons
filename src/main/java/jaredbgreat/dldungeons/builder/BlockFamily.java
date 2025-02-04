@@ -5,13 +5,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import jaredbgreat.dldungeons.pieces.chests.LootCategory;
-import jaredbgreat.dldungeons.planner.Dungeon;
-import jaredbgreat.dldungeons.planner.mapping.ChunkFeatures;
-import jaredbgreat.dldungeons.planner.mapping.MapMatrix;
-import jaredbgreat.dldungeons.themes.Sizes;
-import jaredbgreat.dldungeons.themes.Theme;
-import jaredbgreat.dldungeons.util.cache.Coords;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
@@ -19,8 +12,6 @@ import net.minecraft.world.level.WorldGenLevel;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 
 public class BlockFamily implements IBlockPlacer {
@@ -28,6 +19,10 @@ public class BlockFamily implements IBlockPlacer {
 
 
 	// FIXME! HELP!!! I need to reload the RegisteredBlocks first to preserve their order, but this to have the BlockFamilies to register!!!
+	// Plan: Load them
+	/**
+	 * For converting to and from NBT; the system for reading JSON is already in place.
+	 */
 	public static final Codec<BlockFamily> CODEC = RecordCodecBuilder.create(instance -> instance
 			.group(
 					Codec.STRING.fieldOf("name").forGetter(family -> family.name),
@@ -35,11 +30,19 @@ public class BlockFamily implements IBlockPlacer {
 							-> BlockSaveHandler.stringsToList(family.blocks)))
 			)
 			.apply(instance, (name, blocks) -> {
-				List<String> names = blocks;
-				final BlockFamily family = new BlockFamily(name, List.of(new IBlockPlacer[names.size()]));
-
-				for(int i = 0; i < family.blocks.length; i++) {
-					family.blocks[i] = RegisteredBlock.get(RegisteredBlock.add(names.get(i)));
+				List<String> blockNames = blocks;
+				BlockFamily family = FAMILIES.get(name);
+				if(family == null) { // This really should not happen, but handling it just in case
+					family = new BlockFamily(name, List.of(new IBlockPlacer[blockNames.size()]));
+					for (int i = 0; i < family.blocks.length; i++) {
+						family.blocks[i] = RegisteredBlock.get(RegisteredBlock.add(blockNames.get(i)));
+					}
+				} else {
+					IBlockPlacer[] familyBlocks = new IBlockPlacer[blockNames.size()];
+					for (int i = 0; i < family.blocks.length; i++) {
+						familyBlocks[i] = RegisteredBlock.get(RegisteredBlock.add(blockNames.get(i)));
+					}
+					family.blocks = familyBlocks;
 				}
 
 				return family;
@@ -48,14 +51,43 @@ public class BlockFamily implements IBlockPlacer {
 
 
 	public final String name;
-	private final IBlockPlacer[] blocks;
+	private volatile IBlockPlacer[] blocks;
 	private	static RandomSource random;
-	
-	
+
+
+	/**
+	 * This constructor is used to create new block families from the JSON files from data packs.
+	 *
+	 * @param name
+	 * @param theBlocks
+	 */
 	private BlockFamily(String name, List<IBlockPlacer> theBlocks) {
 		this.name = name;
 		blocks = theBlocks.toArray(new IBlockPlacer[theBlocks.size()]);
 		random = RandomSource.create();
+	}
+
+
+	/**
+	 * This is used to create empty block families that during loading from a save;
+	 * these can then be populated with blocks when reading the from a data pack.
+	 *
+	 * @param name
+	 */
+	private BlockFamily(String name) {
+		this.name = name;
+		blocks = new IBlockPlacer[0];
+		random = RandomSource.create();
+	}
+
+
+	/**
+	 * Use to set the blocks for a block family that has been loaded from a save.
+	 *
+	 * @param theBlocks
+	 */
+	private void setBlocks(List<IBlockPlacer> theBlocks) {
+		blocks = theBlocks.toArray(new IBlockPlacer[theBlocks.size()]);
 	}
 	
 	
@@ -119,10 +151,25 @@ public class BlockFamily implements IBlockPlacer {
 		}
 		if(blocks.isEmpty()) {
 			throw new RuntimeException("tried to load BlockFamily empty block list!");
-		}		
-		BlockFamily out = new BlockFamily(name, blocks); 
-		FAMILIES.put(name, out);
+		}
+		BlockFamily out = FAMILIES.get(name);
+		if(out == null) {
+			out = new BlockFamily(name, blocks);
+			FAMILIES.put(name, out);
+		} else {
+			out.setBlocks(blocks);
+		}
 		return out;
+	}
+
+
+	public static BlockFamily loadBlockFamily(String name) {
+		BlockFamily family = FAMILIES.get(name);
+		if(family == null) {
+			family = new BlockFamily(name);
+			FAMILIES.put(name, family);
+		}
+		return family;
 	}
 
 
