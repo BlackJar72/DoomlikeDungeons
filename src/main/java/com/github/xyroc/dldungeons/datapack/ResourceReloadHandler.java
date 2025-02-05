@@ -1,6 +1,7 @@
 package com.github.xyroc.dldungeons.datapack;
 
 import com.github.xyroc.dldungeons.DLDungeons;
+import jaredbgreat.dldungeons.builder.BlockSaveHandler;
 import jaredbgreat.dldungeons.builder.RegisteredBlock;
 import jaredbgreat.dldungeons.pieces.chests.LootCategory;
 import jaredbgreat.dldungeons.themes.Theme;
