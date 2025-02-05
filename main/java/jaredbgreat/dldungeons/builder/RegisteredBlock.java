@@ -314,7 +314,7 @@ private RegisteredBlock(BlockFamily family) throws NoSuchElementException {
 		TileEntityMobSpawner theSpawner = (TileEntityMobSpawner)world.getTileEntity(pos);
 		
 		// Set up spawner logic
-		MobSpawnerBaseLogic logic = theSpawner.getSpawnerBaseLogic();		
+		MobSpawnerBaseLogic logic = theSpawner.getSpawnerBaseLogic();
 		NBTTagCompound spawnData = new NBTTagCompound();
 	    spawnData.setString("id", mob);
 	    logic.setNextSpawnData(new WeightedSpawnerEntity(1, spawnData));

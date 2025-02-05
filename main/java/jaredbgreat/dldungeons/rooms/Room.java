@@ -213,7 +213,7 @@ public class Room extends AbstractRoom {
 	/**
 	 * This will added a physical entrance to all entrance nodes.
 	 * 
-	 * @param room
+	 * @param dungeon
 	 */
 	public void addEntrance(Dungeon dungeon) {
 		int type;
@@ -306,61 +306,71 @@ public class Room extends AbstractRoom {
 			}
 		}
 	}
-	
-	
+
+
 	/**
-	 * Adds spawners, taking into consideration the mods difficulty setting 
+	 * Adds spawners, taking into consideration the mods difficulty setting
 	 * and whether the room is an entrance, a destination, or an ordinary room.
-	 * 
+	 *
 	 * @param dungeon
 	 */
 	protected void addSpawners(Dungeon dungeon) {
-		if(ConfigHandler.difficulty == Difficulty.NONE ||
-				(!isNode && !ConfigHandler.difficulty.addmob(dungeon.random)) 
-				|| (hasEntrance && !ConfigHandler.difficulty.entrancemobs)) return;
+		Difficulty difficulty = ConfigHandler.difficulty;
+		if(difficulty == Difficulty.NONE ||
+				(!isNode && !difficulty.addmob(dungeon.random))
+				|| (hasEntrance && !difficulty.entrancemobs)) return;
 		boolean multibonus = false;
 		int x, y, z, tmp, num;
-		String mob;		
-		if(!hasEntrance && (ConfigHandler.difficulty.multimob(dungeon.random) || isNode)) {
-			tmp = (endX - beginX) > (endZ - beginZ) ? (endX - beginX) : (endZ - beginZ);  
+		String mob;
+		if (!hasEntrance && (dungeon.random.nextInt(2) == 0 || isNode)) {
+			tmp = Math.max((endX - beginX), (endZ - beginZ));
 			num = dungeon.random.nextInt(2 + (tmp / 8)) + 1;
-			for(int i = 0; i < num; i++) {
-				tmp = (endX - beginX - 3);
-				x = dungeon.random.nextInt(tmp) + beginX + 2;
-				tmp = (endZ - beginZ - 3);
-				z = dungeon.random.nextInt(tmp) + beginZ + 2;
-				if(dungeon.random.nextInt(4) == 0) y = dungeon.map.ceilY[x][z];
-				else y = dungeon.map.floorY[x][z];
-				int lev = levAdjust(ConfigHandler.difficulty.moblevel(dungeon.random), dungeon);
-				if(lev >= 0) {
-					mob = dungeon.theme.allMobs[lev].get(dungeon.random.nextInt(dungeon.theme.allMobs[lev].size()));
-					Spawner s = new Spawner(x, y, z, id, lev, mob);
-					spawners.add(s);
-					dungeon.spawners.addSpawner(s);
+			for (int i = 0; i < num; i++) {
+				for(int j = 0; j < 10; j ++) {
+					tmp = (endX - beginX - 3);
+					x = dungeon.random.nextInt(tmp) + beginX + 2;
+					tmp = (endZ - beginZ - 3);
+					z = dungeon.random.nextInt(tmp) + beginZ + 2;
+					if (dungeon.random.nextInt(4) == 0) y = dungeon.map.ceilY[x][z];
+					else y = dungeon.map.floorY[x][z];
+					if(notOccupiedBySpawner(x, y, z)) {
+						int lev = levAdjust(difficulty.moblevel(dungeon.random), dungeon);
+						if (lev >= 0) {
+							mob = dungeon.theme.allMobs[lev].get(dungeon.random.nextInt(dungeon.theme.allMobs[lev].size()));
+							Spawner s = new Spawner(x, y, z, id, lev, mob);
+							spawners.add(s);
+							dungeon.spawners.addSpawner(s);
+
+							break;
+						}
+					}
 				}
 			}
-		} else  {
+		} else {
 			tmp = (endX - beginX) / 2;
-			x = dungeon.random.nextInt(tmp) + beginX + (tmp /2);
+			x = dungeon.random.nextInt(tmp) + beginX + (tmp / 2);
 			tmp = (endZ - beginZ) / 2;
-			z = dungeon.random.nextInt(tmp) + beginZ + (tmp /2);
-			if(dungeon.random.nextInt(4) == 0) y = dungeon.map.floorY[x][z];
+			z = dungeon.random.nextInt(tmp) + beginZ + (tmp / 2);
+			if (dungeon.random.nextInt(4) == 0) y = dungeon.map.floorY[x][z];
 			else y = dungeon.map.ceilY[x][z];
-			int lev = levAdjust(ConfigHandler.difficulty.moblevel(dungeon.random), dungeon);
-			if(lev >= 0) {
+			int lev = levAdjust(difficulty.moblevel(dungeon.random), dungeon);
+			if (lev >= 0) {
 				mob = dungeon.theme.allMobs[lev].get(dungeon.random.nextInt(dungeon.theme.allMobs[lev].size()));
 				Spawner s = new Spawner(x, y, z, id, lev, mob);
 				spawners.add(s);
 				dungeon.spawners.addSpawner(s);
 			}
 		}
-		if(isNode && !hasEntrance) {
-			x = (int)realX;
-			z = (int)realZ;
-			if(dungeon.map.hasLiquid[x][z]) {y = dungeon.map.ceilY[x][z];}
-			else {y = dungeon.map.floorY[x][z] - 1;} 
-			int lev = levAdjust(ConfigHandler.difficulty.nodelevel(dungeon.random), dungeon);
-			if(lev >= 0) {
+		if (isNode && !hasEntrance) {
+			x = (int) realX;
+			z = (int) realZ;
+			if(dungeon.map.hasLiquid[x][z]) {
+				y = dungeon.map.ceilY[x][z];
+			} else {
+				y = dungeon.map.floorY[x][z] - 1;
+			}
+			int lev = levAdjust(difficulty.nodelevel(dungeon.random), dungeon);
+			if (lev >= 0) {
 				mob = dungeon.theme.allMobs[lev].get(dungeon.random.nextInt(dungeon.theme.allMobs[lev].size()));
 				spawners.add(new Spawner(x, y, z, id, lev, mob));
 			}
@@ -383,71 +393,98 @@ public class Room extends AbstractRoom {
 		}
 		return lev;
 	}
-	
-	
+
+
 	/**
-	 * Adds chests, taking into consideration the rooms difficulty and 
+	 * Adds chests, taking into consideration the rooms difficulty and
 	 * whether its a destination or ordinary room.  No chests will be
 	 * added to entrance rooms.
-	 * 
+	 *
 	 * @param dungeon
 	 */
-	public void addChests(Dungeon dungeon) {		
-		if((ConfigHandler.difficulty == Difficulty.NONE) || 
-				hasEntrance) return;
+	public void addChests(Dungeon dungeon) {
+		if (hasEntrance) return;
 		hasSpawners = spawners.size() > 0;
-		if((!hasSpawners && (dungeon.random.nextInt(5) > 0))) return;
+		if ((!hasSpawners && (dungeon.random.nextInt(5) > 0))) return;
 		int lev = 0;
 		int n = spawners.size();
-		for(int i = 0; i < n; i++) {
+		for (int i = 0; i < n; i++) {
 			lev = Math.max(lev, spawners.get(i).getLevel());
 		}
 		boolean trueBoss = lev > 3;
-		if(n > 1) {
-			lev++;			
-		}
-		if(isNode && !hasEntrance) {
+		if (n > 1) {
 			lev++;
 		}
-		if(dungeon.theme.flags.contains(ThemeFlags.HARD)) {
+		if (isNode && !hasEntrance) {
 			lev++;
-		} else if(dungeon.theme.flags.contains(ThemeFlags.EASY)) {
+		}
+		if (dungeon.theme.flags.contains(ThemeFlags.HARD)) {
+			lev++;
+		} else if (dungeon.theme.flags.contains(ThemeFlags.EASY)) {
 			lev--;
 		}
-		lev += lootBonus + dungeon.random.nextInt(1);
+		lev += lootBonus;
 		int x, y, z, tmp, num;
-		if(!hasSpawners) {
+		if (!hasSpawners) {
 			tmp = (endX - beginX - 3);
 			x = dungeon.random.nextInt(tmp) + beginX + 2;
 			tmp = (endZ - beginZ - 3);
 			z = dungeon.random.nextInt(tmp) + beginZ + 2;
 			y = dungeon.map.floorY[x][z];
 			chests.add(new WeakChest(x, y, z, dungeon.lootCat));
-		} else if(dungeon.random.nextBoolean() && !isNode) {
-			tmp = (endX - beginX - 3);
-			x = dungeon.random.nextInt(tmp) + beginX + 2;
-			tmp = (endZ - beginZ - 3);
-			z = dungeon.random.nextInt(tmp) + beginZ + 2;
-			y = dungeon.map.floorY[x][z];
-			chests.add(new BasicChest(x, y, z, lev, dungeon.lootCat));
-		} else {
-			int ms = Math.max(n, 2);
-			if(isNode)num = Math.min(ms, dungeon.random.nextInt(2 + (ms / 2)) + 2);
-			else      num = dungeon.random.nextInt(1 + (ms / 2)) + 1;
-			for(int i = 0; i < num; i++) {
+		} else if (dungeon.random.nextBoolean() && !isNode) {
+			for(int i = 0; i < 10; i++) {
 				tmp = (endX - beginX - 3);
 				x = dungeon.random.nextInt(tmp) + beginX + 2;
 				tmp = (endZ - beginZ - 3);
 				z = dungeon.random.nextInt(tmp) + beginZ + 2;
 				y = dungeon.map.floorY[x][z];
-				chests.add(new BasicChest(x, y, z, lev, dungeon.lootCat));
+				if(notOccupiedBySpawner(x, y, z) && notOccupiedByChest(x, y, z)) {
+					chests.add(new BasicChest(x, y, z, lev + dungeon.random.nextInt(2), dungeon.lootCat));
+					break;
+				}
 			}
-		} if(isNode && !hasEntrance) {
-			x = (int)realX;
-			z = (int)realZ;
-			y = dungeon.map.floorY[x][z]; 
-			chests.add(new TreasureChest(x, y, z, lev, dungeon.lootCat).setWithBoss(trueBoss));
+		} else {
+			int ms = Math.max(n, 2);
+			if (isNode) num = Math.min(ms, dungeon.random.nextInt(2 + (ms / 2)) + 2);
+			else num = dungeon.random.nextInt(1 + (ms / 2)) + 1;
+			//Try up to 10 times to place the chest, then give up
+			for (int i = 0; i < num; i++) {
+				for(int j = 0; j < 10; j++) {
+					tmp = (endX - beginX - 3);
+					x = dungeon.random.nextInt(tmp) + beginX + 2;
+					tmp = (endZ - beginZ - 3);
+					z = dungeon.random.nextInt(tmp) + beginZ + 2;
+					y = dungeon.map.floorY[x][z];
+					if (notOccupiedBySpawner(x, y, z) && notOccupiedByChest(x, y, z)) {
+						chests.add(new BasicChest(x, y, z, lev + dungeon.random.nextInt(2), dungeon.lootCat));
+						break;
+					}
+				}
+			}
 		}
+		if (isNode && !hasEntrance) {
+			x = (int) realX;
+			z = (int) realZ;
+			y = dungeon.map.floorY[x][z];
+			chests.add(new TreasureChest(x, y, z, lev + dungeon.random.nextInt(2), dungeon.lootCat).setWithBoss(trueBoss));
+		}
+	}
+
+
+	private boolean notOccupiedBySpawner(int x, int y, int z) {
+		for(Spawner spawner : spawners) {
+			if(spawner.isLocation(x, y, z)) return false;
+		}
+		return true;
+	}
+
+
+	private boolean notOccupiedByChest(int x, int y, int z) {
+		for(BasicChest chest : chests) {
+			if(chest.isLocation(x, y, z)) return false;
+		}
+		return true;
 	}
 	
 	

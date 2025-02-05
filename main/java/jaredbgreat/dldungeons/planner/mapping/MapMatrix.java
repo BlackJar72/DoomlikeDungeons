@@ -225,10 +225,14 @@ public class MapMatrix implements IHaveCoords {
 						 RegisteredBlock.deleteBlock(world, shiftX + i, floorY[i][j],     shiftZ + j, flooded);
 						 RegisteredBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 1, shiftZ + j, flooded);
 						 RegisteredBlock.deleteBlock(world, shiftX + i, floorY[i][j] + 2, shiftZ + j, flooded);
+						 if(hasLiquid[i][j]) {
+							 RegisteredBlock.deleteBlock(world, shiftX + i, dungeon.baseHeight + 1, shiftZ + j, theRoom.airBlock);
+							 RegisteredBlock.deleteBlock(world, shiftX + i, dungeon.baseHeight + 2, shiftZ + j, theRoom.airBlock);
+						 }
 					 }
 					 
 					 // Liquids
-					 if(hasLiquid[i][j] && (!isWall[i][j] && !isDoor[i][j])
+					 if(hasLiquid[i][j] && (!isWall[i][j] || isDoor[i][j])  && (floorY[i][j] < dungeon.baseHeight)
 							 && !world.isAirBlock(new BlockPos(shiftX + i, floorY[i][j] - 1, shiftZ + j))) 
 						 RegisteredBlock.place(world, shiftX + i, floorY[i][j], shiftZ + j, theRoom.liquidBlock);					 
 				}

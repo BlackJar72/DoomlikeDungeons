@@ -321,7 +321,7 @@ public final class ConfigHandler {
 							+ System.lineSeparator()
 					+ "like indestructable god picks) but don't want too many of them around.");
 		TreasureChest.setBasicLootNumbers(a, b, c, nerf);
-		Room.setLootBonus(config.getInt("Loot Bonus", "Loot", 1, -9, 9, 
+		Room.setLootBonus(config.getInt("Loot Bonus", "Loot", 0, -9, 9,
 				"This modifies the value of the loot, in case you think default is "
 					+ System.lineSeparator() + "too generous or too stingy."));
 		
