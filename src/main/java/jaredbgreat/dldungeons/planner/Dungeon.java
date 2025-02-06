@@ -25,7 +25,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraftforge.fml.Logging;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -6,14 +6,13 @@ import com.github.xyroc.dldungeons.init.ModStructureTypes;
 import jaredbgreat.dldungeons.config.Config;
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.AddReloadListenerEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -22,14 +21,12 @@ public class DLDungeons {
     public static final String MODID = "dldungeonsjbg";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public DLDungeons() {
-        FMLJavaModLoadingContext context = FMLJavaModLoadingContext.get();
-        IEventBus modEventBus = context.getModEventBus();
+    public DLDungeons(IEventBus modEventBus) {
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
-        IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
+        IEventBus forgeEventBus = NeoForge.EVENT_BUS;
 
         // Register ourselves for server and other game events we are interested in
         forgeEventBus.addListener(this::onAddReloadListener);

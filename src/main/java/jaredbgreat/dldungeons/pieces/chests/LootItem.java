@@ -2,6 +2,7 @@ package jaredbgreat.dldungeons.pieces.chests;
 
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
@@ -9,8 +10,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.IForgeRegistry;
 import java.util.NoSuchElementException;
 
 
@@ -24,7 +23,6 @@ import java.util.NoSuchElementException;
  * @author Jared Blackburn
  */
 public class LootItem {
-    private static IForgeRegistry ItemRegistry;
 
     Item item;
     int min, max, level;
@@ -107,7 +105,7 @@ public class LootItem {
 
 
     private static Item getItem(String in) {
-        return ForgeRegistries.ITEMS.getValue(new ResourceLocation(in));
+        return BuiltInRegistries.ITEM.get(new ResourceLocation(in));
     }
 
 

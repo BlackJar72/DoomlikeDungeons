@@ -22,10 +22,11 @@ import jaredbgreat.dldungeons.pieces.chests.LootHandler;
 import jaredbgreat.dldungeons.pieces.chests.LootItem;
 import jaredbgreat.dldungeons.pieces.chests.LootListSet;
 import jaredbgreat.dldungeons.util.parser.Tokenizer;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import static jaredbgreat.dldungeons.builder.BlockFamily.makeBlockFamily;
 
@@ -549,21 +550,6 @@ public class ThemeReader {
             else if(name.equalsIgnoreCase("PARADISE")) types.add(ThemeType.PARADISE);
         }
         return types;
-    }
-
-    /**
-     * This will parse a resource locations into Biomes and resturn
-     * a Set of all listed Biomes.
-     *
-     * @param tokens
-     * @return
-     */
-    private static Set<Biome> specificBiomeParser(Tokenizer tokens) {
-        Set<Biome> biomes = new HashSet<>();
-        while(tokens.hasMoreTokens()) {
-            biomes.add(ForgeRegistries.BIOMES.getValue(new ResourceLocation(tokens.nextToken())));
-        }
-        return biomes;
     }
 
 

@@ -1,11 +1,11 @@
 package jaredbgreat.dldungeons.builder;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
@@ -62,7 +62,7 @@ public class DBlock extends AbstractBlock {
 			String modid = nums.nextToken();
 			ResourceLocation name = new ResourceLocation(modid
 					+ ":" + nums.nextToken());
-			theBlock = ForgeRegistries.BLOCKS.getValue(name);
+			theBlock = BuiltInRegistries.BLOCK.get(name);
 			if(theBlock == null) {
 				String error = "[DLDUNGEONS] ERROR! Block read as \"" + id 
 						+ "\" was was not in registry (returned null).";

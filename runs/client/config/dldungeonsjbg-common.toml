@@ -1,0 +1,56 @@
+# DIFFICULTY: How hard do you want your dungeons? This is about spawner placement, not related to game difficulty: 
+# NONE = No spawners.
+# BABY = Baby mode.  I'm too young to die!
+# NOOB = Not too hard, not to rough.
+# NORM = Normal difficulty. Hurt me plenty! 
+# HARD = Super violent! Some might even say ultraviolence
+# NUTS = NIGHTMARE!!! Insane horror!
+# The default (NORM for normal) is probably good for most players.
+# Nightmare (NUTS) if for those who want wither boss and warden spanwers!
+#Allowed Values: NONE, BABY, NOOB, NORM, HARD, NUTS
+Difficulty = "NORM"
+# If true all the dungeons will be in the huge size category.
+#(Note: There is a bug that creates empty spawners, which is more common with smaller dungeons 
+#where the spawneer are packed more densely, so is is probably best to keep this as true.)
+"All Huge" = true
+# If true entrance and "boss" rooms will have extra high ceilings, good with tall mobs.
+"Big Hubs" = false
+# If true all dungeons will have at least one entrance from the surface 
+# and entrances will have a small building or ruin on top.
+"Easy Find" = true
+# If true all have exactly one entrance.
+"Only Single Entrance" = false
+#If true this will limit the amount of level 8 loot found with anything less than a true boss
+#(This includes epic, sometimes somewhat cheaty items,)
+"Nerf Epic Loot" = false
+#Modifies the value of loot, incase you think its too stingy.
+#Range: -9 ~ 9
+"Loot Bonus" = 0
+#Part of the formula for determine how many items go in basic chests.
+#Formula for number of loot items: number of items = random.NextIt(A1 + (Room Difficulty / B1)) + C1
+#Range: 0 ~ 9
+"Common Chest A1" = 3
+#Part of the formula for determine how many items go in basic chests.
+#Formula for number of loot items: number of items = random.NextIt(A1 + (Room Difficulty / B1)) + C1
+#Range: 0 ~ 9
+"Common Chest B1" = 1
+#Part of the formula for determine how many items go in basic chests.
+#Formula for number of loot items: number of items = random.NextIt(A1 + (Room Difficulty / B1)) + C1
+#Range: 0 ~ 9
+"Common Chest C1" = 3
+#Part of the formula for determine how many items of each category go in "boss room" treasure chests.
+#Formula for number of loot items: number of items = random.NextIt(A2 + (Room Difficulty / B2)) + C2
+#The categories for these items are healing, gear, and loot.
+#Range: 0 ~ 9
+"Common Chest A2" = 1
+#Part of the formula for determine how many items of each category go in "boss room" treasure chests.
+#Formula for number of loot items: number of items = random.NextIt(A2 + (Room Difficulty / B2)) + C2
+#The categories for these items are healing, gear, and loot.
+#Range: 0 ~ 9
+"Common Chest B2" = 1
+#Part of the formula for determine how many items of each category go in "boss room" treasure chests.
+#Formula for number of loot items: number of items = random.NextIt(A2 + (Room Difficulty / B2)) + C2
+#The categories for these items are healing, gear, and loot.
+#Range: 0 ~ 9
+"Common Chest C2" = 1
+

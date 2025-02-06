@@ -114,8 +114,6 @@ public class Tokenizer {
 	 * 
 	 * Also not that the quotation character itself in not included; to used 
 	 * these are part of a string its required to include and escaped version.
-	 * 
-	 * @param basis 
 	 */
 	private void readQuote() {
 		onTokens = true;

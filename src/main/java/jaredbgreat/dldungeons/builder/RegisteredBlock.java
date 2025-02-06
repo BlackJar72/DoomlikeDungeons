@@ -2,12 +2,11 @@ package jaredbgreat.dldungeons.builder;
 
 import com.github.xyroc.dldungeons.DLDungeons;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -15,8 +14,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.Tags;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -300,7 +298,7 @@ public final class RegisteredBlock extends AbstractBlock {
         if (!placeBlock(world, x, y, z, Blocks.SPAWNER)) return;
         final BlockEntity be = world.getBlockEntity(pos);
         if (be instanceof SpawnerBlockEntity spawner) {
-            EntityType<?> mobtype = ForgeRegistries.ENTITY_TYPES.getValue(ResourceLocation.tryParse(mob));
+            EntityType<?> mobtype = BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.tryParse(mob));
             spawner.setEntityId(mobtype, RandomSource.create());
         } else {
             if((be != null)) {
