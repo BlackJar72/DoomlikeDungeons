@@ -4,6 +4,7 @@ import com.github.xyroc.dldungeons.DLDungeons;
 import com.github.xyroc.dldungeons.init.ModStructurePieceTypes;
 import jaredbgreat.dldungeons.planner.Dungeon;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.util.RandomSource;
@@ -14,11 +15,27 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
+import static net.neoforged.neoforge.internal.versions.neoforge.NeoForgeVersion.MOD_ID;
 
 public class DLDungeonPiece extends StructurePiece {
     private static final String NBT_KEY_DUNGEON = "Dungeon";
 
+
+    public static final DeferredRegister<StructurePieceType> STRUCTURE_PIECE_TYPE
+                = DeferredRegister.create(Registries.STRUCTURE_PIECE, DLDungeons.MODID);
+
+
+    public static final DeferredHolder<StructurePieceType, ?> DLDUNGEON_PIECE
+                = STRUCTURE_PIECE_TYPE.register("dldungeonpiece", ()
+                    -> (StructurePieceType.ContextlessType) DLDungeonPiece::new);
+
+
     private final Dungeon dungeon;
+
 
     public DLDungeonPiece(BoundingBox boundingBox, Dungeon dungeon) {
         super(ModStructurePieceTypes.DLDUNGEON_PIECE, 0, boundingBox);// The second argument is only used for jigsaw structures. Ignore it.

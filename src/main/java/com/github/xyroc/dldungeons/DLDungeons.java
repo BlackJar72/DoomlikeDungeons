@@ -21,6 +21,7 @@ public class DLDungeons {
     public static final String MODID = "dldungeonsjbg";
     public static final Logger LOGGER = LogUtils.getLogger();
 
+
     public DLDungeons(IEventBus modEventBus) {
 
         // Register the commonSetup method for modloading
@@ -33,19 +34,19 @@ public class DLDungeons {
 
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+
+        modEventBus.register(ModStructureTypes.DLDUNGEON);
+        modEventBus.register(ModStructurePieceTypes.DLDUNGEON_PIECE);
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event) {
-        // Register structure types.
-        ModStructureTypes.init();
-        // Register structure piece types.
-        ModStructurePieceTypes.init();
 
-    }
+    private void commonSetup(final FMLCommonSetupEvent event) {}
+
 
     private void onAddReloadListener(final AddReloadListenerEvent event) {
         event.addListener(new ResourceReloadHandler());
     }
+
 
     public static ResourceLocation resource(String path) {
         return new ResourceLocation(MODID, path);

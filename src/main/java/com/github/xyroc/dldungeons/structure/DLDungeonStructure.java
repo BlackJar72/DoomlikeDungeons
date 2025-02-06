@@ -9,18 +9,27 @@ import jaredbgreat.dldungeons.util.cache.Coords;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.QuartPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.Optional;
 
 public class DLDungeonStructure extends Structure {
 
-    // Basic codec without any extra information
     public static final Codec<Structure> CODEC = simpleCodec(DLDungeonStructure::new);
+
+    public static final DeferredRegister<StructureType<?>> STRUCTURE_TYPE
+                = DeferredRegister.create(Registries.STRUCTURE_TYPE, DLDungeons.MODID);
+
+    public static final DeferredHolder<StructureType<?>, ?> DLDUNGEON
+                = STRUCTURE_TYPE.register("dldunngeon", () -> () -> DLDungeonStructure.CODEC);
+
 
     private DLDungeonStructure(StructureSettings settings) {
         super(settings);
