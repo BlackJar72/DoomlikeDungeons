@@ -56,7 +56,7 @@ public class Config {
 
     private static final ForgeConfigSpec.IntValue LOOT_BONUS = BUILDER
             .comment("Modifies the value of loot, incase you think its too stingy.")
-            .defineInRange("Loot Bonus", 0, 0, 9);
+            .defineInRange("Loot Bonus", 0, -9, 9);
 
     private static final ForgeConfigSpec.IntValue A1 = BUILDER
             .comment("Part of the formula for determine how many items go in basic chests.")
