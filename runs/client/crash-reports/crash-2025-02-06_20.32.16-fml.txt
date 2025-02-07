@@ -1,0 +1,124 @@
+---- Minecraft Crash Report ----
+// Sorry :(
+
+Time: 2025-02-06 20:32:16
+Description: Mod loading error has occurred
+
+java.lang.Exception: Mod Loading has failed
+	at net.neoforged.neoforge.logging.CrashReportExtender.dumpModLoadingCrashReport(CrashReportExtender.java:55) ~[neoforge-20.4.239.jar:?] {re:classloading}
+	at net.neoforged.neoforge.client.loading.ClientModLoader.completeModLoading(ClientModLoader.java:125) ~[neoforge-20.4.239.jar:?] {re:classloading,pl:runtimedistcleaner:A}
+	at net.minecraft.client.Minecraft.buildInitialScreens(Minecraft.java:685) ~[neoforge-20.4.239.jar:?] {re:classloading,pl:accesstransformer:B,pl:runtimedistcleaner:A}
+	at net.minecraft.client.Minecraft.onGameLoadFinished(Minecraft.java:658) ~[neoforge-20.4.239.jar:?] {re:classloading,pl:accesstransformer:B,pl:runtimedistcleaner:A}
+	at net.minecraft.client.Minecraft.onResourceLoadFinished(Minecraft.java:653) ~[neoforge-20.4.239.jar:?] {re:classloading,pl:accesstransformer:B,pl:runtimedistcleaner:A}
+	at net.minecraft.client.Minecraft.lambda$new$6(Minecraft.java:641) ~[neoforge-20.4.239.jar:?] {re:classloading,pl:accesstransformer:B,pl:runtimedistcleaner:A}
+	at net.minecraft.Util.ifElse(Util.java:428) ~[neoforge-20.4.239.jar:?] {re:classloading}
+	at net.minecraft.client.Minecraft.lambda$new$7(Minecraft.java:635) ~[neoforge-20.4.239.jar:?] {re:classloading,pl:accesstransformer:B,pl:runtimedistcleaner:A}
+	at net.neoforged.neoforge.client.loading.NeoForgeLoadingOverlay.render(NeoForgeLoadingOverlay.java:146) ~[neoforge-20.4.239.jar:?] {re:classloading}
+	at net.minecraft.client.renderer.GameRenderer.render(GameRenderer.java:1140) ~[neoforge-20.4.239.jar:?] {re:classloading,pl:accesstransformer:B,pl:runtimedistcleaner:A}
+	at net.minecraft.client.Minecraft.runTick(Minecraft.java:1284) ~[neoforge-20.4.239.jar:?] {re:classloading,pl:accesstransformer:B,pl:runtimedistcleaner:A}
+	at net.minecraft.client.Minecraft.run(Minecraft.java:824) ~[neoforge-20.4.239.jar:?] {re:classloading,pl:accesstransformer:B,pl:runtimedistcleaner:A}
+	at net.minecraft.client.main.Main.main(Main.java:244) ~[neoforge-20.4.239.jar:?] {re:classloading,pl:runtimedistcleaner:A}
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?] {}
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[?:?] {}
+	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?] {}
+	at java.lang.reflect.Method.invoke(Method.java:568) ~[?:?] {}
+	at net.neoforged.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:136) ~[loader-2.0.17.jar:2.0] {}
+	at net.neoforged.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:124) ~[loader-2.0.17.jar:2.0] {}
+	at net.neoforged.fml.loading.targets.ForgeClientUserdevLaunchHandler.runService(ForgeClientUserdevLaunchHandler.java:19) ~[loader-2.0.17.jar:2.0] {}
+	at net.neoforged.fml.loading.targets.CommonLaunchHandler.lambda$launchService$4(CommonLaunchHandler.java:118) ~[loader-2.0.17.jar:2.0] {}
+	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.Launcher.run(Launcher.java:108) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.Launcher.main(Launcher.java:78) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141) ~[bootstraplauncher-1.1.2.jar:?] {}
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Thread: Render thread
+Stacktrace:
+	at java.util.concurrent.ConcurrentHashMap.get(ConcurrentHashMap.java:936) ~[?:?] {}
+-- MOD dldungeonsjbg --
+Details:
+	Mod File: /home/jared/Documents/src/MCMods/1.20.4/DoomlikeDungeons-Neo/build/resources/main/
+	Failure message: Doomlike Dungeons (dldungeonsjbg) has failed to load correctly
+		java.lang.NullPointerException: Cannot invoke "Object.hashCode()" because "key" is null
+	Mod Version: 2.0.11-MC1.20.1
+	Mod Issue URL: NOT PROVIDED
+	Exception message: java.lang.NullPointerException: Cannot invoke "Object.hashCode()" because "key" is null
+Stacktrace:
+	at java.util.concurrent.ConcurrentHashMap.get(ConcurrentHashMap.java:936) ~[?:?] {}
+	at java.util.concurrent.ConcurrentHashMap.containsKey(ConcurrentHashMap.java:964) ~[?:?] {}
+	at net.neoforged.bus.EventBus.register(EventBus.java:74) ~[bus-7.2.0.jar%23165!/:?] {}
+	at com.github.xyroc.dldungeons.DLDungeons.<init>(DLDungeons.java:43) ~[%23183!/:?] {re:classloading}
+	at jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[?:?] {}
+	at jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77) ~[?:?] {}
+	at jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[?:?] {}
+	at java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499) ~[?:?] {}
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:480) ~[?:?] {}
+	at net.neoforged.fml.javafmlmod.FMLModContainer.constructMod(FMLModContainer.java:111) ~[loader-2.0.17.jar%23133!/:2.0] {}
+	at net.neoforged.fml.ModContainer.lambda$buildTransitionHandler$10(ModContainer.java:129) ~[loader-2.0.17.jar%23133!/:2.0] {}
+	at java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804) ~[?:?] {}
+	at java.util.concurrent.CompletableFuture$AsyncRun.exec(CompletableFuture.java:1796) ~[?:?] {}
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373) ~[?:?] {}
+	at java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182) ~[?:?] {}
+	at java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655) ~[?:?] {}
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622) ~[?:?] {}
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165) ~[?:?] {}
+
+
+-- System Details --
+Details:
+	Minecraft Version: 1.20.4
+	Minecraft Version ID: 1.20.4
+	Operating System: Linux (amd64) version 5.15.0-131-generic
+	Java Version: 17.0.2, Eclipse Adoptium
+	Java VM Version: OpenJDK 64-Bit Server VM (mixed mode, sharing), Eclipse Adoptium
+	Memory: 341059240 bytes (325 MiB) / 956301312 bytes (912 MiB) up to 16835936256 bytes (16056 MiB)
+	CPUs: 24
+	Processor Vendor: AuthenticAMD
+	Processor Name: AMD Ryzen 9 3900X 12-Core Processor
+	Identifier: AuthenticAMD Family 23 Model 113 Stepping 0
+	Microarchitecture: Zen 2
+	Frequency (GHz): 3.90
+	Number of physical packages: 1
+	Number of physical CPUs: 12
+	Number of logical CPUs: 24
+	Graphics card #0 name: TU106 [GeForce RTX 2060 SUPER]
+	Graphics card #0 vendor: NVIDIA Corporation (0x10de)
+	Graphics card #0 VRAM (MB): 288.00
+	Graphics card #0 deviceId: 0x1f06
+	Graphics card #0 versionInfo: unknown
+	Virtual memory max (MB): 163175.06
+	Virtual memory used (MB): 10501.61
+	Swap memory total (MB): 131072.00
+	Swap memory used (MB): 0.00
+	JVM Flags: 0 total; 
+	ModLauncher: 10.0.9+10.0.9+main.dcd20f30
+	ModLauncher launch target: forgeclientuserdev
+	ModLauncher naming: mcp
+	ModLauncher services: 
+		sponge-mixin-0.13.1+mixin.0.8.5.jar mixin PLUGINSERVICE 
+		loader-2.0.17.jar slf4jfixer PLUGINSERVICE 
+		loader-2.0.17.jar runtime_enum_extender PLUGINSERVICE 
+		at-modlauncher-10.0.1.jar accesstransformer PLUGINSERVICE 
+		loader-2.0.17.jar runtimedistcleaner PLUGINSERVICE 
+		modlauncher-10.0.9.jar mixin TRANSFORMATIONSERVICE 
+		modlauncher-10.0.9.jar mixin-synthetic-package TRANSFORMATIONSERVICE 
+		modlauncher-10.0.9.jar fml TRANSFORMATIONSERVICE 
+	FML Language Providers: 
+		javafml@2.0
+		lowcodefml@2.0
+		minecraft@2.0
+	Mod List: 
+		neoforge-20.4.239.jar                             |Minecraft                     |minecraft                     |1.20.4              |COMMON_SET|Manifest: a1:d4:5e:04:4f:d3:d6:e0:7b:37:97:cf:77:b0:de:ad:4a:47:ce:8c:96:49:5f:0a:cf:8c:ae:b2:6d:4b:8a:3f
+		main                                              |Doomlike Dungeons             |dldungeonsjbg                 |2.0.11-MC1.20.1     |ERROR     |Manifest: NOSIGNATURE
+		                                                  |NeoForge                      |neoforge                      |20.4.239            |COMMON_SET|Manifest: NOSIGNATURE
+	Crash Report UUID: 04335c28-f6ca-4af7-908b-9dc2f563255d
+	FML: 20.4
+	NeoForge: net.neoforged:20.4.239
