@@ -74,22 +74,6 @@ public class MapMatrix {
     }
 
     /**
-     * Convert a 2d array of booleans to a list of lists.
-     */
-    private static List<List<Boolean>> booleansToList(boolean[][] array) {
-        return Arrays.stream(array).toList()
-                .stream()
-                .map(arr -> {
-                    List<Boolean> list = new ArrayList<>();
-                    for (boolean b : arr) {
-                        list.add(b);
-                    }
-                    return list;
-                })
-                .collect(Collectors.toList());
-    }
-
-    /**
      * Convert a 2d chunk features to lists.
      */
     private List<List<ChunkFeatures>> featuresToList() {

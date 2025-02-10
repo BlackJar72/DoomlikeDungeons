@@ -68,41 +68,14 @@ public abstract class AbstractRoom /*extends Shape*/ {
 			liquidBlock  = previous.liquidBlock;
 			caveBlock    = previous.caveBlock;
 		} else if(dungeon.variability.use(dungeon.random)) {
-			if(dungeon.variability.use(dungeon.random)) {
-				airBlock   = dungeon.theme.air[dungeon.random.nextInt(dungeon.theme.air.length)];
-				wallBlock1 = dungeon.theme.walls[dungeon.random.nextInt(dungeon.theme.walls.length)];
-				floorBlock = dungeon.theme.floors[dungeon.random.nextInt(dungeon.theme.floors.length)];
-				cielingBlock = dungeon.theme.ceilings[dungeon.random.nextInt(dungeon.theme.ceilings.length)];
-				fenceBlock = dungeon.theme.fencing[dungeon.random.nextInt(dungeon.theme.fencing.length)];
-				pillarBlock = dungeon.theme.pillarBlock[dungeon.random.nextInt(dungeon.theme.pillarBlock.length)];
-				liquidBlock = dungeon.theme.liquid[dungeon.random.nextInt(dungeon.theme.liquid.length)];
-				caveBlock   = dungeon.theme.caveWalls[dungeon.random.nextInt(dungeon.theme.caveWalls.length)];
-			} else {
-				if(!dungeon.variability.use(dungeon.random)) 
-					airBlock = dungeon.airBlock;
-				else airBlock = dungeon.theme.air[dungeon.random.nextInt(dungeon.theme.air.length)];
-				if(!dungeon.variability.use(dungeon.random)) 
-					wallBlock1 = dungeon.wallBlock1;
-				else wallBlock1 = dungeon.theme.walls[dungeon.random.nextInt(dungeon.theme.walls.length)];
-				if(!dungeon.variability.use(dungeon.random)) 
-					floorBlock = dungeon.floorBlock;
-				else floorBlock = dungeon.theme.floors[dungeon.random.nextInt(dungeon.theme.floors.length)];
-				if(!dungeon.variability.use(dungeon.random)) 
-					cielingBlock = dungeon.cielingBlock;
-				else cielingBlock = dungeon.theme.ceilings[dungeon.random.nextInt(dungeon.theme.ceilings.length)];
-				if(!dungeon.variability.use(dungeon.random)) 
-					fenceBlock = dungeon.fenceBlock;
-				else fenceBlock = dungeon.theme.fencing[dungeon.random.nextInt(dungeon.theme.fencing.length)];
-				if(!dungeon.variability.use(dungeon.random)) 
-					pillarBlock = dungeon.cornerBlock;
-				else pillarBlock = dungeon.theme.pillarBlock[dungeon.random.nextInt(dungeon.theme.pillarBlock.length)];
-				if(!dungeon.variability.use(dungeon.random)) 
-					liquidBlock = dungeon.liquidBlock;
-				else liquidBlock = dungeon.theme.liquid[dungeon.random.nextInt(dungeon.theme.liquid.length)];
-				if(!dungeon.variability.use(dungeon.random)) 
-					caveBlock = dungeon.caveBlock;
-				else caveBlock = dungeon.theme.caveWalls[dungeon.random.nextInt(dungeon.theme.caveWalls.length)];
-			}
+			airBlock   = dungeon.theme.air[dungeon.random.nextInt(dungeon.theme.air.length)];
+			wallBlock1 = dungeon.theme.walls[dungeon.random.nextInt(dungeon.theme.walls.length)];
+			floorBlock = dungeon.theme.floors[dungeon.random.nextInt(dungeon.theme.floors.length)];
+			cielingBlock = dungeon.theme.ceilings[dungeon.random.nextInt(dungeon.theme.ceilings.length)];
+			fenceBlock = dungeon.theme.fencing[dungeon.random.nextInt(dungeon.theme.fencing.length)];
+			pillarBlock = dungeon.theme.pillarBlock[dungeon.random.nextInt(dungeon.theme.pillarBlock.length)];
+			liquidBlock = dungeon.theme.liquid[dungeon.random.nextInt(dungeon.theme.liquid.length)];
+			caveBlock   = dungeon.theme.caveWalls[dungeon.random.nextInt(dungeon.theme.caveWalls.length)];
 		} else {
 			airBlock     = dungeon.airBlock;
 			wallBlock1   = dungeon.wallBlock1;
