@@ -8,10 +8,8 @@ package jaredbgreat.dldungeons.themes;
 
 import jaredbgreat.dldungeons.builder.RegisteredBlock;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.data.tags.BiomeTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
-import net.minecraft.data.worldgen.biome.BiomeData;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;

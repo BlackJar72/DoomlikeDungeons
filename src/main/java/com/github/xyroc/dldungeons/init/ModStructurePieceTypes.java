@@ -3,7 +3,6 @@ package com.github.xyroc.dldungeons.init;
 import com.github.xyroc.dldungeons.DLDungeons;
 import com.github.xyroc.dldungeons.structure.piece.DLDungeonPiece;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 
 public class ModStructurePieceTypes {
@@ -17,7 +16,7 @@ public class ModStructurePieceTypes {
     }
 
     private static StructurePieceType register(String name, StructurePieceType.ContextlessType type) {
-        return Registry.register(BuiltInRegistries.STRUCTURE_PIECE, DLDungeons.resource(name), type);
+        return Registry.register(Registry.STRUCTURE_PIECE, DLDungeons.resource(name), type);
     }
 
 }

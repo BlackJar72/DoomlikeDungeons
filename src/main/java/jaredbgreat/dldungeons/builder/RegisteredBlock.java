@@ -281,7 +281,7 @@ public final class RegisteredBlock extends AbstractBlock {
         final BlockEntity be = world.getBlockEntity(pos);
         if (be instanceof SpawnerBlockEntity spawner) {
             EntityType<?> mobtype = ForgeRegistries.ENTITY_TYPES.getValue(ResourceLocation.tryParse(mob));
-            spawner.setEntityId(mobtype, RandomSource.create());
+            spawner.getSpawner().setEntityId(mobtype);
         } else {
             if((be != null)) {
                 String error = "ERROR! Spawner placed at \"" + x + " " + y + " " + z

@@ -14,6 +14,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
@@ -27,7 +28,7 @@ public class DLDungeonStructure extends Structure {
     }
 
     @Override
-    protected Optional<GenerationStub> findGenerationPoint(GenerationContext context) {
+    public @NotNull Optional<GenerationStub> findGenerationPoint(GenerationContext context) {
         // Here the game gives us a potential generation spot (= a chunk position), and we must decide on whether we want to use it or not.
         // For example, we can check if all biomes in a radius around this spot are suitable.
         // However, there is no need to check the biome at the exact spot. Minecraft does that for us.
