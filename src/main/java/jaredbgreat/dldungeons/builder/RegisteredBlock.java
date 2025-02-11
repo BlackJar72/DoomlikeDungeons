@@ -19,7 +19,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public final class RegisteredBlock extends AbstractBlock implements IMapBlock {
+public final class RegisteredBlock extends AbstractBlock {
     private final String name;   // The name
     private final IBlockPlacer block;
 
