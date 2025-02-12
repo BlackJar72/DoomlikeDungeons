@@ -2,11 +2,8 @@ package jaredbgreat.dldungeons.themes;
 
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.NoSuchElementException;
-import java.util.Set;;
+import java.util.*;
+;
 
 /*
  * Doomlike Dungeons by is licensed the MIT License
@@ -26,6 +23,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import static jaredbgreat.dldungeons.builder.BlockFamily.makeBlockFamily;
+import static jaredbgreat.dldungeons.themes.Theme.BlockCats.*;
 
 /**
  * This is the file IO class for reading theme files.
@@ -53,7 +53,7 @@ public class ThemeReader {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        RegisteredBlock.add(BlockFamily.makeBlockFamily(json.toString()).name);
+        RegisteredBlock.add(makeBlockFamily(json.toString()).name);
     }
 
 
@@ -173,7 +173,7 @@ public class ThemeReader {
         //DoomlikeDungeons.profiler.startTask("Parsing theme " + name);
         Theme theme = new Theme();
         theme.name = name;
-        theme.version = 2; // Don't assume old version now; that version can't work since MC1.8
+        theme.version = 3; // Don't assume old version now
         Tokenizer tokens = null;
         int lines = 0;
         String line = null;
@@ -197,9 +197,6 @@ public class ThemeReader {
                 continue;
             } if(token.equalsIgnoreCase("sizes")) {
                 theme.sizes = sizeParser(theme.sizes, tokens);
-                continue;
-            } if(token.equalsIgnoreCase("dimensionwhitelist")) {
-                theme.dimensionWhitelist = dimensionParser(tokens);
                 continue;
             } if(token.equalsIgnoreCase("outside")) {
                 theme.outside = elementParser(theme.outside, tokens);
@@ -307,6 +304,143 @@ public class ThemeReader {
     }
 
 
+
+
+    /**
+     * This will attempt to open a theme append file, and if successful will call
+     * parseThemeAppend read the data.
+     *
+     * @param file
+     */
+    public static void appendTheme(InputStream file, String name) {
+        BufferedReader instream = null;
+        try {
+            instream = new BufferedReader(new InputStreamReader(file));
+            parseThemeAppend(instream, name);
+            if(instream != null) instream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NoSuchElementException e) {
+            if(instream != null) {
+                try {
+                    instream.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * This will read theme appends files and append them to listed themes
+     *
+     * @param instream
+     * @param name
+     * @throws IOException
+     * @throws NoSuchElementException
+     */
+    public static void parseThemeAppend(BufferedReader instream, String name)
+            throws IOException, NoSuchElementException {
+        //DoomlikeDungeons.profiler.startTask("Parsing theme " + name);
+        Tokenizer tokens = null;
+        String line = null;
+        String token;
+        String delimeters = " ,;\t\n\r\f="; // Don't assume old version now; that version can't work since MC1.8
+        List<Theme> themeList = new ArrayList<>();
+        while ((line = instream.readLine()) != null) {
+            if(line.length() < 2) continue;
+            if(line.charAt(0) == '#') continue;
+            line = line.toLowerCase();
+            tokens = new Tokenizer(line, delimeters);
+            if(!tokens.hasMoreTokens()) continue;
+            if(!line.startsWith("themes")) break;
+            tokens = new Tokenizer(line, delimeters);
+            while(tokens.hasMoreTokens()) {
+                Theme theTheme = null;
+                token = tokens.nextToken().trim();
+                if(token.endsWith(".cfg")) token = token.substring(0, token.length() - 3);
+                if(!tokens.equals("themes")) {
+                    if (token.contains(":")) {
+                        theTheme = Theme.themeMap.get(token);
+                    } else {
+                        theTheme = Theme.themeMap.get(DLDungeons.MODID + ":" + token);
+                    }
+                }
+                if(theTheme != null) {
+                    themeList.add(theTheme);
+                }
+            }
+        }
+        while ((line = instream.readLine()) != null) {
+            if(line.length() < 2) continue;
+            if(line.charAt(0) == '#') continue;
+            tokens = new Tokenizer(line, delimeters);
+            if(!tokens.hasMoreTokens()) continue;
+            token = tokens.nextToken().toLowerCase();
+            if (token.equalsIgnoreCase("air")) {
+                blockParser(themeList, AIR, tokens);
+                continue;
+            }
+            if (token.equalsIgnoreCase("walls")) {
+                blockParser(themeList, WALLS, tokens);
+                continue;
+            }
+            if (token.equalsIgnoreCase("caveblock")) {
+                blockParser(themeList, CAVEWALLS, tokens);
+                continue;
+            }
+            if (token.equalsIgnoreCase("floors")) {
+                blockParser(themeList, FLOORS, tokens);
+                continue;
+            }
+            if (token.equalsIgnoreCase("ceilings")) {
+                blockParser(themeList, CEILINGS, tokens);
+                continue;
+            }
+            if (token.equalsIgnoreCase("fencing")) {
+                blockParser(themeList, FENCING, tokens);
+                continue;
+            }
+            if (token.equalsIgnoreCase("liquid")) {
+                blockParser(themeList, LIQUIDS, tokens);
+                continue;
+            }
+            if (token.equalsIgnoreCase("pillarblock")) {
+                blockParser(themeList, PILLARBLOCK, tokens);
+                continue;
+            }
+            if (token.equalsIgnoreCase("commonmobs")) {
+                parseMobs(themeList, 0, tokens);
+                continue;
+            }
+            if (token.equalsIgnoreCase("hardmobs")) {
+                parseMobs(themeList, 1, tokens);
+                continue;
+            }
+            if (token.equalsIgnoreCase("brutemobs")) {
+                parseMobs(themeList, 2, tokens);
+                continue;
+            }
+            if (token.equalsIgnoreCase("elitemobs")) {
+                parseMobs(themeList, 3, tokens);
+                continue;
+            }
+            if (token.equalsIgnoreCase("bossmobs")) {
+                parseMobs(themeList, 4, tokens);
+                continue;
+            }
+            if (token.equalsIgnoreCase("chestsfile")) {
+                parseMobs(themeList, 5, tokens);
+            }
+        }
+        for(Theme theme : themeList) {
+            theme.fixMobs();
+            Theme.themeMap.put(theme.name, theme);
+        }
+    }
+
+
     /**
      * Read a Degree Element tag's data.
      *
@@ -348,21 +482,6 @@ public class ThemeReader {
         }
         if(valid) return new SizeElement(values[0], values[1], values[2], values[3], values[4]);
         else return el;
-    }
-
-    /**
-     * Read a DimensionList tag's data.
-     * @param tokens Tokenizer
-     * @return Dimension id array
-     */
-    private static int[] dimensionParser(Tokenizer tokens) {
-        if (tokens.getToken(1) == null || tokens.getToken(1).equalsIgnoreCase("all"))
-            return new int[0];
-        int[] rtn = new int[tokens.countTokens()-1];
-        int i = 0;
-        while (tokens.hasMoreTokens())
-            rtn[i++] = Integer.parseInt(tokens.nextToken());
-        return rtn;
     }
 
 
@@ -491,6 +610,29 @@ public class ThemeReader {
     }
 
 
+    private static void blockParser(List<Theme> themes, Theme.BlockCats cat, Tokenizer tokens) throws NoSuchElementException {
+        ArrayList<String> values = new ArrayList<>();
+        String blockName;
+        while (tokens.hasMoreTokens()) {
+            blockName = tokens.nextToken();
+            for (Theme theme : themes) {
+                values.add(String.valueOf(RegisteredBlock.add(blockName)));
+            }
+            for (Theme theme : themes) {
+                int[] el = theme.getBlockType(cat);
+                int[] blocks = new int[values.size() + el.length];
+                for (int i = 0; i < el.length; i++) {
+                    blocks[i] = el[i];
+                }
+                for (int i = 0; i < values.size(); i++) {
+                    blocks[i + el.length] = Integer.parseInt(values.get(i));
+                }
+                theme.setBlockType(cat, blocks);
+            }
+        }
+    }
+
+
     /**
      * This will turn tokens read from the them file to be added to the list
      * of mobs names to use for creating spawners.
@@ -511,6 +653,17 @@ public class ThemeReader {
             mobs.add(nextMob);
         }
         return mobs;
+    }
+
+
+    private static void parseMobs(List<Theme> themes, int level, Tokenizer tokens) {
+        ArrayList<String> mobs;
+        while(tokens.hasMoreTokens()) {
+            String nextMob = tokens.nextToken();
+            for(Theme theme : themes) {
+                theme.allMobs[level].add(nextMob);
+            }
+        }
     }
 
 

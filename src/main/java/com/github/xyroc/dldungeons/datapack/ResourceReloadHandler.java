@@ -32,6 +32,7 @@ public class ResourceReloadHandler implements PreparableReloadListener {
     private static final String SPECIAL_CHESTS_DIRECTORY = THEMING_DIRECTORY + "/special_chests";
     private static final String NBT_DIRECTORY = THEMING_DIRECTORY + "/nbt";
     private static final String THEMES_DIRECTORY = THEMING_DIRECTORY + "/themes";
+    private static final String THEMES_APPENDS_DIRECTORY = THEMING_DIRECTORY + "/theme_appends";
 
     private static final String CFG_FILE_ENDING = ".cfg";
     private static final String JSON_FILE_ENDING = ".json";
@@ -51,6 +52,7 @@ public class ResourceReloadHandler implements PreparableReloadListener {
             loadBlockFamilies(resourceManager);
             loadSpecialChests(resourceManager);
             loadThemes(resourceManager);
+            loadThemeAppends(resourceManager);
             Theme.SortThemes();
         }, gameExecutor);
     }
@@ -70,6 +72,14 @@ public class ResourceReloadHandler implements PreparableReloadListener {
             final ResourceLocation key = keyFromLocation(location, THEMES_DIRECTORY, CFG_FILE_ENDING);
             // Read file from input stream and insert into some data structure for later use.
             ThemeReader.readTheme(file, key.toString());
+        });
+    }
+
+    private void loadThemeAppends(ResourceManager resourceManager) {
+        loadFilesInDirectory(resourceManager, THEMES_APPENDS_DIRECTORY, IS_CFG_FILE, (location, file) -> {
+            final ResourceLocation key = keyFromLocation(location, THEMES_APPENDS_DIRECTORY, CFG_FILE_ENDING);
+            // Read file from input stream and insert into some data structure for later use.
+            ThemeReader.appendTheme(file, key.toString());
         });
     }
 

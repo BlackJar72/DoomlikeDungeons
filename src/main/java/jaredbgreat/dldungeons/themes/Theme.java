@@ -8,20 +8,9 @@ package jaredbgreat.dldungeons.themes;
 
 import jaredbgreat.dldungeons.builder.RegisteredBlock;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.data.tags.BiomeTagsProvider;
-import net.minecraft.data.tags.TagsProvider;
-import net.minecraft.data.worldgen.biome.BiomeData;
 import net.minecraft.tags.BiomeTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.Biomes;
-import net.minecraftforge.common.BiomeManager;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.world.ModifiableBiomeInfo;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -49,6 +38,21 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class Theme {
 
+	public enum BlockCats {
+		AIR (0),
+		WALLS (1),
+		CAVEWALLS (2),
+		FLOORS (3),
+		CEILINGS (4),
+		FENCING (5),
+		LIQUIDS (6),
+		PILLARBLOCK (7);
+
+		int index;
+
+		BlockCats(int i) { index = 1; }
+	}
+
 	/**
 	 * Default theme used for every dungeon, because it's simpler.
 	 * After all, this is just a Proof of Concept!
@@ -70,7 +74,6 @@ public class Theme {
 		PLACEHOLDER_THEME.fencing = makeBlockList(new String[] {"minecraft:air"});
 		PLACEHOLDER_THEME.liquid = makeBlockList(new String[] {"minecraft:water"});
 		PLACEHOLDER_THEME.pillarBlock = makeBlockList(new String[] {"minecraft:oak_planks"});
-		PLACEHOLDER_THEME.dimensionWhitelist = new int[] {0};
 
 		// No, these will not all be default themes -- though probably all will appear in at least one
 		PLACEHOLDER_THEME.commonMobs.add("minecraft:zombie");
@@ -122,7 +125,6 @@ public class Theme {
 	public int[] fencing;
 	public int[] liquid;
 	public int[] pillarBlock;
-	public int[] dimensionWhitelist;
 
 	public ArrayList<String> commonMobs = new ArrayList<String>();
 	public ArrayList<String> hardMobs = new ArrayList<String>();
@@ -160,11 +162,65 @@ public class Theme {
 		fencing = makeBlockList(new String[]{});
 		liquid = makeBlockList(new String[]{});
 		pillarBlock = makeBlockList(new String[]{});
-		dimensionWhitelist = new int[0];
 		lootCat = "dldungeonsjbg:chest";
 		
 		fixMobs();
 	}
+
+
+	public int[] getBlockType(BlockCats category) {
+        switch (category) {
+			case AIR:
+				return air;
+			case WALLS:
+				return walls;
+			case CAVEWALLS:
+				return  caveWalls;
+			case FLOORS:
+				return  floors;
+			case CEILINGS:
+				return ceilings;
+			case FENCING:
+				return fencing;
+			case LIQUIDS:
+				return liquid;
+			case PILLARBLOCK:
+				return pillarBlock;
+			default: return null;
+        }
+	}
+
+
+	public int[] setBlockType(BlockCats category, int[] data) {
+		switch (category) {
+			case AIR:
+				air = data;
+				return air;
+			case WALLS:
+				walls = data;
+				return walls;
+			case CAVEWALLS:
+				caveWalls = data;
+				return  caveWalls;
+			case FLOORS:
+				floors = data;
+				return  floors;
+			case CEILINGS:
+				ceilings = data;
+				return ceilings;
+			case FENCING:
+				fencing = data;
+				return fencing;
+			case LIQUIDS:
+				liquid = data;
+				return liquid;
+			case PILLARBLOCK:
+				pillarBlock = data;
+				return pillarBlock;
+			default: return null;
+		}
+	}
+
 
 
 	public static CompletableFuture<Void> SortThemes() {
