@@ -29,3 +29,6 @@ forge*changelog.txt
 ExampleMod
 tmp
 
+# KDE Advanced Text Editor (Kate)
+*.kate-swp
+
