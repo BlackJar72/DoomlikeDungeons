@@ -2,11 +2,8 @@ package jaredbgreat.dldungeons.themes;
 
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.NoSuchElementException;
-import java.util.Set;;
+import java.util.*;
+;
 
 /*
  * Doomlike Dungeons by is licensed the MIT License
@@ -175,7 +172,7 @@ public class ThemeReader {
         //DoomlikeDungeons.profiler.startTask("Parsing theme " + name);
         Theme theme = new Theme();
         theme.name = name;
-        theme.version = 2; // Don't assume old version now; that version can't work since MC1.8
+        theme.version = 3; // Don't assume old version now
         Tokenizer tokens = null;
         int lines = 0;
         String line = null;
@@ -306,6 +303,161 @@ public class ThemeReader {
         }
         if(lines > 1) Theme.themeMap.put(theme.name, theme);
         else Theme.themeMap.remove(theme.name);
+    }
+
+
+
+
+    /**
+     * This will attempt to open a theme append file, and if successful will call
+     * parseThemeAppend read the data.
+     *
+     * @param file
+     */
+    public static void appendTheme(InputStream file, String name) {
+        BufferedReader instream = null;
+        try {
+            instream = new BufferedReader(new InputStreamReader(file));
+            parseThemeAppend(instream, name);
+            if(instream != null) instream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NoSuchElementException e) {
+            if(instream != null) {
+                try {
+                    instream.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * This will read theme appends files and append them to listed themes
+     *
+     * @param instream
+     * @param name
+     * @throws IOException
+     * @throws NoSuchElementException
+     */
+    public static void parseThemeAppend(BufferedReader instream, String name)
+            throws IOException, NoSuchElementException {
+        //DoomlikeDungeons.profiler.startTask("Parsing theme " + name);
+        Tokenizer tokens = null;
+        int lines = 0;
+        String line = null;
+        String token;
+        String delimeters = " ,;\t\n\r\f="; // Don't assume old version now; that version can't work since MC1.8
+        List<Theme> themeList = new ArrayList<>();
+        while ((line = instream.readLine()) != null) {
+            if(line.length() < 2) continue;
+            if(line.charAt(0) == '#') continue;
+            tokens = new Tokenizer(line, delimeters);
+            if(!tokens.hasMoreTokens()) continue;
+            line = line.toLowerCase();
+            if(!line.startsWith("themes:")) break;
+            tokens = new Tokenizer(line, delimeters);
+            while(tokens.hasMoreTokens()) {
+                Theme theTheme = null;
+                token = tokens.nextToken().trim();
+                if(token.endsWith(".cfg")) token = token.substring(0, token.length() - 3);
+                if(!tokens.equals("themes")) {
+                    if (token.contains(":")) {
+                        theTheme = Theme.themeMap.get(token);
+                    } else {
+                        theTheme = Theme.themeMap.get(DLDungeons.MODID + ":" + token);
+                    }
+                }
+                if(theTheme != null) {
+                    themeList.add(theTheme);
+                }
+            }
+        }
+        for(Theme theme : themeList) {
+            while ((line = instream.readLine()) != null) {
+                if(line.length() < 2) continue;
+                if(line.charAt(0) == '#') continue;
+                tokens = new Tokenizer(line, delimeters);
+                if(!tokens.hasMoreTokens()) continue;
+                token = tokens.nextToken().toLowerCase();
+                if (token.equalsIgnoreCase("air")) {
+                    theme.air = blockParser(theme.air, tokens, theme.version);
+                    continue;
+                }
+                if (token.equalsIgnoreCase("walls")) {
+                    theme.walls = blockParser(theme.walls, tokens, theme.version);
+                    continue;
+                }
+                if (token.equalsIgnoreCase("caveblock")) {
+                    theme.caveWalls = blockParser(theme.caveWalls, tokens, theme.version);
+                    continue;
+                }
+                if (token.equalsIgnoreCase("floors")) {
+                    theme.floors = blockParser(theme.floors, tokens, theme.version);
+                    continue;
+                }
+                if (token.equalsIgnoreCase("ceilings")) {
+                    theme.ceilings = blockParser(theme.ceilings, tokens, theme.version);
+                    continue;
+                }
+                if (token.equalsIgnoreCase("fencing")) {
+                    theme.fencing = blockParser(theme.fencing, tokens, theme.version);
+                    continue;
+                }
+                if (token.equalsIgnoreCase("liquid")) {
+                    theme.liquid = blockParser(theme.liquid, tokens, theme.version);
+                    continue;
+                }
+                if (token.equalsIgnoreCase("pillarblock")) {
+                    theme.pillarBlock = blockParser(theme.pillarBlock, tokens, theme.version);
+                    continue;
+                }
+                if (token.equalsIgnoreCase("commonmobs")) {
+                    theme.commonMobs = parseMobs(theme.commonMobs, tokens);
+                    continue;
+                }
+                if (token.equalsIgnoreCase("hardmobs")) {
+                    theme.hardMobs = parseMobs(theme.hardMobs, tokens);
+                    continue;
+                }
+                if (token.equalsIgnoreCase("brutemobs")) {
+                    theme.bruteMobs = parseMobs(theme.bruteMobs, tokens);
+                    continue;
+                }
+                if (token.equalsIgnoreCase("elitemobs")) {
+                    theme.eliteMobs = parseMobs(theme.eliteMobs, tokens);
+                    continue;
+                }
+                if (token.equalsIgnoreCase("bossmobs")) {
+                    theme.bossMobs = parseMobs(theme.bossMobs, tokens);
+                    continue;
+                }
+                if (token.equalsIgnoreCase("chestsfile")) {
+                    theme.lootCat = tokens.nextToken();
+                    continue;
+                }
+                if (token.equalsIgnoreCase("type")) {
+                    theme.type = typeParser(tokens);
+                    for (ThemeType type : theme.type) {
+                        type.addThemeToType(theme, type);
+                    }
+                    if (theme.type.contains(ThemeType.WATER))
+                        theme.air = new int[]{RegisteredBlock.add("minecraft:water")};
+                    if (theme.type.contains(ThemeType.SWAMP)) theme.flags.add(ThemeFlags.SWAMPY);
+                    continue;
+                }
+                if (token.equalsIgnoreCase("flags")) {
+                    theme.flags = flagParser(tokens);
+                    continue;
+                }
+                if (token.equalsIgnoreCase("version")) {
+                    theme.version = (int) floatParser(theme.version, tokens);
+                }
+            }
+            theme.fixMobs();
+        }
     }
 
 
