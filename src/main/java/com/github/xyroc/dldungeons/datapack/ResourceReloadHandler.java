@@ -53,6 +53,7 @@ public class ResourceReloadHandler implements PreparableReloadListener {
             loadBlockFamilies(resourceManager);
             loadSpecialChests(resourceManager);
             loadThemes(resourceManager);
+            loadThemeAppends(resourceManager);
             Theme.SortThemes();
         }, gameExecutor);
     }

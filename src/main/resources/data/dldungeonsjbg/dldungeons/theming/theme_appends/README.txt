@@ -29,7 +29,7 @@ EXAMPLE BELOW -- files in this folder should look like this; you can include any
                  The contents below would be place in a file called something like cool_mod_stuff.cfg
 ************************************************************************************************************************
 
-themes: dldungeonsjbg:common, dlddungeonsjbg:urban
+themes = dldungeonsjbg:common, dlddungeonsjbg:urban
 
 commonMobs =  cool_mod:cool_mob
 bossMobs = cool_mod:cool_boss

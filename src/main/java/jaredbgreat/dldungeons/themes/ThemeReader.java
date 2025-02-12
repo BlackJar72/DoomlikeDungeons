@@ -25,6 +25,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import static jaredbgreat.dldungeons.builder.BlockFamily.makeBlockFamily;
+import static jaredbgreat.dldungeons.themes.Theme.BlockCats.*;
 
 /**
  * This is the file IO class for reading theme files.
@@ -197,9 +198,6 @@ public class ThemeReader {
             } if(token.equalsIgnoreCase("sizes")) {
                 theme.sizes = sizeParser(theme.sizes, tokens);
                 continue;
-            } if(token.equalsIgnoreCase("dimensionwhitelist")) {
-                theme.dimensionWhitelist = dimensionParser(tokens);
-                continue;
             } if(token.equalsIgnoreCase("outside")) {
                 theme.outside = elementParser(theme.outside, tokens);
                 continue;
@@ -346,7 +344,6 @@ public class ThemeReader {
             throws IOException, NoSuchElementException {
         //DoomlikeDungeons.profiler.startTask("Parsing theme " + name);
         Tokenizer tokens = null;
-        int lines = 0;
         String line = null;
         String token;
         String delimeters = " ,;\t\n\r\f="; // Don't assume old version now; that version can't work since MC1.8
@@ -354,10 +351,10 @@ public class ThemeReader {
         while ((line = instream.readLine()) != null) {
             if(line.length() < 2) continue;
             if(line.charAt(0) == '#') continue;
+            line = line.toLowerCase();
             tokens = new Tokenizer(line, delimeters);
             if(!tokens.hasMoreTokens()) continue;
-            line = line.toLowerCase();
-            if(!line.startsWith("themes:")) break;
+            if(!line.startsWith("themes")) break;
             tokens = new Tokenizer(line, delimeters);
             while(tokens.hasMoreTokens()) {
                 Theme theTheme = null;
@@ -375,88 +372,71 @@ public class ThemeReader {
                 }
             }
         }
-        for(Theme theme : themeList) {
-            while ((line = instream.readLine()) != null) {
-                if(line.length() < 2) continue;
-                if(line.charAt(0) == '#') continue;
-                tokens = new Tokenizer(line, delimeters);
-                if(!tokens.hasMoreTokens()) continue;
-                token = tokens.nextToken().toLowerCase();
-                if (token.equalsIgnoreCase("air")) {
-                    theme.air = blockParser(theme.air, tokens, theme.version);
-                    continue;
-                }
-                if (token.equalsIgnoreCase("walls")) {
-                    theme.walls = blockParser(theme.walls, tokens, theme.version);
-                    continue;
-                }
-                if (token.equalsIgnoreCase("caveblock")) {
-                    theme.caveWalls = blockParser(theme.caveWalls, tokens, theme.version);
-                    continue;
-                }
-                if (token.equalsIgnoreCase("floors")) {
-                    theme.floors = blockParser(theme.floors, tokens, theme.version);
-                    continue;
-                }
-                if (token.equalsIgnoreCase("ceilings")) {
-                    theme.ceilings = blockParser(theme.ceilings, tokens, theme.version);
-                    continue;
-                }
-                if (token.equalsIgnoreCase("fencing")) {
-                    theme.fencing = blockParser(theme.fencing, tokens, theme.version);
-                    continue;
-                }
-                if (token.equalsIgnoreCase("liquid")) {
-                    theme.liquid = blockParser(theme.liquid, tokens, theme.version);
-                    continue;
-                }
-                if (token.equalsIgnoreCase("pillarblock")) {
-                    theme.pillarBlock = blockParser(theme.pillarBlock, tokens, theme.version);
-                    continue;
-                }
-                if (token.equalsIgnoreCase("commonmobs")) {
-                    theme.commonMobs = parseMobs(theme.commonMobs, tokens);
-                    continue;
-                }
-                if (token.equalsIgnoreCase("hardmobs")) {
-                    theme.hardMobs = parseMobs(theme.hardMobs, tokens);
-                    continue;
-                }
-                if (token.equalsIgnoreCase("brutemobs")) {
-                    theme.bruteMobs = parseMobs(theme.bruteMobs, tokens);
-                    continue;
-                }
-                if (token.equalsIgnoreCase("elitemobs")) {
-                    theme.eliteMobs = parseMobs(theme.eliteMobs, tokens);
-                    continue;
-                }
-                if (token.equalsIgnoreCase("bossmobs")) {
-                    theme.bossMobs = parseMobs(theme.bossMobs, tokens);
-                    continue;
-                }
-                if (token.equalsIgnoreCase("chestsfile")) {
-                    theme.lootCat = tokens.nextToken();
-                    continue;
-                }
-                if (token.equalsIgnoreCase("type")) {
-                    theme.type = typeParser(tokens);
-                    for (ThemeType type : theme.type) {
-                        type.addThemeToType(theme, type);
-                    }
-                    if (theme.type.contains(ThemeType.WATER))
-                        theme.air = new int[]{RegisteredBlock.add("minecraft:water")};
-                    if (theme.type.contains(ThemeType.SWAMP)) theme.flags.add(ThemeFlags.SWAMPY);
-                    continue;
-                }
-                if (token.equalsIgnoreCase("flags")) {
-                    theme.flags = flagParser(tokens);
-                    continue;
-                }
-                if (token.equalsIgnoreCase("version")) {
-                    theme.version = (int) floatParser(theme.version, tokens);
-                }
+        while ((line = instream.readLine()) != null) {
+            if(line.length() < 2) continue;
+            if(line.charAt(0) == '#') continue;
+            tokens = new Tokenizer(line, delimeters);
+            if(!tokens.hasMoreTokens()) continue;
+            token = tokens.nextToken().toLowerCase();
+            if (token.equalsIgnoreCase("air")) {
+                blockParser(themeList, AIR, tokens);
+                continue;
             }
+            if (token.equalsIgnoreCase("walls")) {
+                blockParser(themeList, WALLS, tokens);
+                continue;
+            }
+            if (token.equalsIgnoreCase("caveblock")) {
+                blockParser(themeList, CAVEWALLS, tokens);
+                continue;
+            }
+            if (token.equalsIgnoreCase("floors")) {
+                blockParser(themeList, FLOORS, tokens);
+                continue;
+            }
+            if (token.equalsIgnoreCase("ceilings")) {
+                blockParser(themeList, CEILINGS, tokens);
+                continue;
+            }
+            if (token.equalsIgnoreCase("fencing")) {
+                blockParser(themeList, FENCING, tokens);
+                continue;
+            }
+            if (token.equalsIgnoreCase("liquid")) {
+                blockParser(themeList, LIQUIDS, tokens);
+                continue;
+            }
+            if (token.equalsIgnoreCase("pillarblock")) {
+                blockParser(themeList, PILLARBLOCK, tokens);
+                continue;
+            }
+            if (token.equalsIgnoreCase("commonmobs")) {
+                parseMobs(themeList, 0, tokens);
+                continue;
+            }
+            if (token.equalsIgnoreCase("hardmobs")) {
+                parseMobs(themeList, 1, tokens);
+                continue;
+            }
+            if (token.equalsIgnoreCase("brutemobs")) {
+                parseMobs(themeList, 2, tokens);
+                continue;
+            }
+            if (token.equalsIgnoreCase("elitemobs")) {
+                parseMobs(themeList, 3, tokens);
+                continue;
+            }
+            if (token.equalsIgnoreCase("bossmobs")) {
+                parseMobs(themeList, 4, tokens);
+                continue;
+            }
+            if (token.equalsIgnoreCase("chestsfile")) {
+                parseMobs(themeList, 5, tokens);
+            }
+        }
+        for(Theme theme : themeList) {
             theme.fixMobs();
+            Theme.themeMap.put(theme.name, theme);
         }
     }
 
@@ -502,21 +482,6 @@ public class ThemeReader {
         }
         if(valid) return new SizeElement(values[0], values[1], values[2], values[3], values[4]);
         else return el;
-    }
-
-    /**
-     * Read a DimensionList tag's data.
-     * @param tokens Tokenizer
-     * @return Dimension id array
-     */
-    private static int[] dimensionParser(Tokenizer tokens) {
-        if (tokens.getToken(1) == null || tokens.getToken(1).equalsIgnoreCase("all"))
-            return new int[0];
-        int[] rtn = new int[tokens.countTokens()-1];
-        int i = 0;
-        while (tokens.hasMoreTokens())
-            rtn[i++] = Integer.parseInt(tokens.nextToken());
-        return rtn;
     }
 
 
@@ -645,6 +610,29 @@ public class ThemeReader {
     }
 
 
+    private static void blockParser(List<Theme> themes, Theme.BlockCats cat, Tokenizer tokens) throws NoSuchElementException {
+        ArrayList<String> values = new ArrayList<>();
+        String blockName;
+        while (tokens.hasMoreTokens()) {
+            blockName = tokens.nextToken();
+            for (Theme theme : themes) {
+                values.add(String.valueOf(RegisteredBlock.add(blockName)));
+            }
+            for (Theme theme : themes) {
+                int[] el = theme.getBlockType(cat);
+                int[] blocks = new int[values.size() + el.length];
+                for (int i = 0; i < el.length; i++) {
+                    blocks[i] = el[i];
+                }
+                for (int i = 0; i < values.size(); i++) {
+                    blocks[i + el.length] = Integer.parseInt(values.get(i));
+                }
+                theme.setBlockType(cat, blocks);
+            }
+        }
+    }
+
+
     /**
      * This will turn tokens read from the them file to be added to the list
      * of mobs names to use for creating spawners.
@@ -665,6 +653,17 @@ public class ThemeReader {
             mobs.add(nextMob);
         }
         return mobs;
+    }
+
+
+    private static void parseMobs(List<Theme> themes, int level, Tokenizer tokens) {
+        ArrayList<String> mobs;
+        while(tokens.hasMoreTokens()) {
+            String nextMob = tokens.nextToken();
+            for(Theme theme : themes) {
+                theme.allMobs[level].add(nextMob);
+            }
+        }
     }
 
 
