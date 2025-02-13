@@ -116,7 +116,7 @@ public abstract class AbstractRoom /*extends Shape*/ {
 		}
 		if(dungeon.outside.value > 0)
 			sky = dungeon.outside.use(dungeon.random);
-		if((dungeon.degeneracy.value > 0) && !Config.neverDegenerate) {
+		if((dungeon.degeneracy.value > 0) && Config.allowDegeneration) {
 			degenerate = dungeon.degeneracy.use(dungeon.random);
 			degenerateFloors =
 					(degenerate && dungeon.degeneracy.use(dungeon.random) && dungeon.random.nextBoolean());
