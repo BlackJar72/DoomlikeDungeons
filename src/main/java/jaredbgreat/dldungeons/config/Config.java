@@ -49,6 +49,10 @@ public class Config {
             .comment(" If true all have exactly one entrance.")
             .define("Only Single Entrance", false);
 
+    private static final ForgeConfigSpec.BooleanValue NEVER_DEGENERATE = BUILDER
+            .comment(" If true all walls and floor will always be built; dungeons will not try to merge with cages.")
+            .define("Never Degenerate", false);
+
     private static final ForgeConfigSpec.BooleanValue NERF_LOOT = BUILDER
             .comment("If true this will limit the amount of level 8 loot found with anything less than a true boss")
             .comment("(This includes epic, sometimes somewhat cheaty items,)")
@@ -102,6 +106,7 @@ public class Config {
     public static boolean bigHubs;
     public static boolean easyFind;
     public static boolean singleEntrance;
+    public static boolean neverDegenerate;
 
 
     @SubscribeEvent
@@ -112,6 +117,7 @@ public class Config {
         bigHubs = BIG_HUBS.get();
         easyFind = EASY_FIND.get();
         singleEntrance = SINGLE_ENTRANCE.get();
+        neverDegenerate = NEVER_DEGENERATE.get();
         Room.setLootBonus(LOOT_BONUS.get());
         Chest.setBasicLootNumbers(A1.get(), B1.get(), C1.get(), NERF_LOOT.get());
         Chest.setTreasureLootNumbers(A2.get(), B2.get(), C2.get());

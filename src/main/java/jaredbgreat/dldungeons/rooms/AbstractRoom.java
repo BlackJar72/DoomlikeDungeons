@@ -6,6 +6,7 @@ package jaredbgreat.dldungeons.rooms;
  */
 
 
+import jaredbgreat.dldungeons.config.Config;
 import jaredbgreat.dldungeons.planner.Dungeon;
 
 /**
@@ -115,7 +116,7 @@ public abstract class AbstractRoom /*extends Shape*/ {
 		}
 		if(dungeon.outside.value > 0)
 			sky = dungeon.outside.use(dungeon.random);
-		if(dungeon.degeneracy.value > 0) {
+		if((dungeon.degeneracy.value > 0) && !Config.neverDegenerate) {
 			degenerate = dungeon.degeneracy.use(dungeon.random);
 			degenerateFloors =
 					(degenerate && dungeon.degeneracy.use(dungeon.random) && dungeon.random.nextBoolean());

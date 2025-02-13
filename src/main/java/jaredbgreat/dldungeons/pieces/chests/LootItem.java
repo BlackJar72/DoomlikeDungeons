@@ -1,6 +1,7 @@
 package jaredbgreat.dldungeons.pieces.chests;
 
 
+import com.github.xyroc.dldungeons.DLDungeons;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.resources.ResourceLocation;

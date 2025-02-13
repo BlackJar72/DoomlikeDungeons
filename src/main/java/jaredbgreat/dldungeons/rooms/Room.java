@@ -116,23 +116,6 @@ public class Room extends AbstractRoom {
     }
 
 
-    /**
-     * A safety method to ensure there are no circular references
-     * to create a memory leak.  Note that none should exist, this
-     * is included as a safety measure do to the general complexity
-     * of the relationship between dungeons, rooms, and related rooms.
-     */
-    public void preFinalize() {
-        childSeeds.clear();
-        childSeeds = null;
-        spawners.clear();
-        chests.clear();
-        spawners = null;
-        chests = null;
-        doors = null;
-    }
-
-
     public Room(int beginX, int endX, int beginZ, int endZ, int floorY, int ceilY,
                 Dungeon dungeon, Room parent, Room previous) {
         super(dungeon, previous);
