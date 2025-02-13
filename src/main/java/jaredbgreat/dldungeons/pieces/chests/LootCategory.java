@@ -109,6 +109,7 @@ public class LootCategory {
                 int l = Math.min(6, level);
                 return new LootResult(lists.getList(HL, Math.min(6, l)).getLoot(random).getStack(random), l);
             case LOOT:
+                //if(level > 6) level -= random.nextInt(3);
                 if (level > 6) {
                     if (level > random.nextInt(100)) {
                         return new LootResult(lists.special.getLoot(random).getStack(random), 7);
