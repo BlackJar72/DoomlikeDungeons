@@ -1,6 +1,9 @@
 package jaredbgreat.dldungeons.util.math;
 
-public class ModMath {
+import java.util.ArrayList;
+
+public final class ModMath {
+
 
     /**
      * This will produce an always positive modulus,
@@ -68,5 +71,7 @@ public class ModMath {
             return start + (rate / (n - start + 1));
         return n;
     }
+
+
 
 }

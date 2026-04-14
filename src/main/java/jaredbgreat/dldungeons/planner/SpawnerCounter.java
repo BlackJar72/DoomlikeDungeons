@@ -6,6 +6,7 @@ package jaredbgreat.dldungeons.planner;
  */	
 
 
+import jaredbgreat.dldungeons.config.Difficulty;
 import jaredbgreat.dldungeons.pieces.Spawner;
 import net.minecraft.util.RandomSource;
 
@@ -35,9 +36,9 @@ public class SpawnerCounter {
 	
 	
 	public void fixSpawners(Dungeon dungeon, RandomSource random) {
-		int targetNum = dungeonSize / 10;
-		targetNum += (int) ((targetNum *
-                        Math.max(5, Math.min(0, (random.nextGaussian() + 2)))) / 10);
+		int targetNum = dungeonSize / Difficulty.getDifficulty().blocksPerSpawner;
+		targetNum += (int) (((float)targetNum *
+				(1.0f + Math.max(0.5f, Math.min(0.0f, (random.nextGaussian() + 2.0f)))) / 10.0f));
 		int existing = list.size();
 		if(existing <= targetNum) {
 			return;

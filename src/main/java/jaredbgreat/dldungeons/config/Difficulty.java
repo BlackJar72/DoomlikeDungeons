@@ -27,15 +27,15 @@ public enum Difficulty {
 
     NONE  (0, 0, 0, 0, 0,  -1, false,
             "No spawners."),
-    BABY  (3, 0, 0, 0, 0, 884, false,
+    BABY  (3, 0, 0, 0, 0, 371, false,
             "Baby mode.  I'm too young to die!"),
-    NOOB  (4, 1, 1, 1, 1, 590, false,
+    NOOB  (4, 1, 1, 1, 1, 248, false,
             "Not too hard, not to rough."),
-    NORM  (5, 2, 1, 1, 2, 427, false,
+    NORM  (5, 2, 1, 1, 2, 180, false,
             "Normal difficulty. Hurt me plenty! "),
-    HARD  (6, 3, 2, 2, 3, 323, true,
+    HARD  (6, 3, 2, 2, 3, 136, true,
             "Super violent! Some might even say ultraviolence"),
-    NUTS  (7, 5, 2, 2, 4, 100, true,
+    NUTS  (7, 5, 2, 2, 4, 50, true,
             "NIGHTMARE!!! Insane horror!");
 
 

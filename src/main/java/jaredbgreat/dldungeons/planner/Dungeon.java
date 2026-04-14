@@ -241,7 +241,7 @@ public class Dungeon {
                 && (Config.easyFind || Config.singleEntrance)) addAnEntrance();
         connectNodes();
         growthCycle();
-        spawners.fixSpawners(this, random);
+        if(Config.cullSpawners) spawners.fixSpawners(this, random);
         for (Room room : rooms) {
             room.addChests(this);
         }

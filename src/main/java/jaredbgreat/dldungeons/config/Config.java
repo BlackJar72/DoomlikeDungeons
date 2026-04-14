@@ -30,6 +30,12 @@ public class Config {
             .comment(" Nightmare (NUTS) if for those who want wither boss and warden spanwers!")
             .defineEnum("Difficulty", Difficulty.NORM);
 
+    private static final ForgeConfigSpec.BooleanValue CULL_SPAWNRS = BUILDER
+            .comment(" If true dungeons will remove some spanwers from smaller dungeons.")
+            .comment("This will try to give all dungeons a spawner density no greater than that typical ")
+            .comment("of a size Large dungeon.  This mostly effects Small and Tiny dungeons.)")
+            .define("Cull Spawners", true);
+
     private static final ForgeConfigSpec.BooleanValue ALL_HUGE = BUILDER
             .comment(" If true all the dungeons will be in the huge size category.")
             .comment("(Note: There is a bug that creates empty spawners, which is more common with smaller dungeons ")
@@ -102,7 +108,7 @@ public class Config {
 
     public static final ForgeConfigSpec SPEC = BUILDER.build();
 
-
+    public static boolean cullSpawners;
     public static boolean allHuge;
     public static boolean bigHubs;
     public static boolean easyFind;
@@ -114,6 +120,7 @@ public class Config {
     static void onLoad(final ModConfigEvent event) {
         DLDungeons.LOGGER.info("Loading config!");
         Difficulty.setDifficulty(DIFFICULTY.get());
+        cullSpawners = CULL_SPAWNRS.get();
         allHuge = ALL_HUGE.get();
         bigHubs = BIG_HUBS.get();
         easyFind = EASY_FIND.get();
