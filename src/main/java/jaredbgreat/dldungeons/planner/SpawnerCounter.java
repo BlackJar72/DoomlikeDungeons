@@ -38,8 +38,10 @@ public class SpawnerCounter {
 	public void fixSpawners(Dungeon dungeon, RandomSource random) {
 		int targetNum = dungeonSize / Difficulty.getDifficulty().blocksPerSpawner;
 		targetNum = (int) (((float)targetNum *
-				(1.0f + (Math.max(2f, Math.min(-2f, (random.nextGaussian()))) / 10.0f))));
+				(1.0f + (Math.max(-2f, Math.min(2f, (random.nextGaussian()))) / 10.0f))));
 		int existing = list.size();
+		//System.out.println("DLD: Dungeon Size = " +dungeon.size + "; Culling " + Math.max(0, existing - targetNum)
+		//	+ " spawners (" + ((int)(((float)(Math.max(0, (existing - targetNum)) / (float)existing)) * 100.0f)) + "%)");
 		if(existing <= targetNum) {
 			return;
 		}
