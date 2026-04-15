@@ -35,13 +35,13 @@ public class SpawnerCounter {
 	
 	public void fixSpawners(Dungeon dungeon, Random random) {
 		int targetNum = dungeonSize / ConfigHandler.difficulty.blocksPerSpawner;
-		targetNum += (targetNum * 
-				Math.max(5, Math.min(0, (random.nextGaussian() + 2)))) / 10;
+		targetNum = (int) (((float)targetNum *
+				(1.0f + (Math.max(2f, Math.min(-2f, (random.nextGaussian()))) / 10.0f))));
 		int existing = list.size();
 		if(existing <= targetNum) {
 			return;
 		}
-		Collections.shuffle(list, random);
+		Collections.shuffle(list, new Random(random.nextLong()));
 		for(int i = targetNum; i < existing; i++) {
 			Spawner s = list.get(i);
 			dungeon.rooms.get(s.getRoom()).spawners.remove(s);
