@@ -36,7 +36,7 @@ public class SpawnerCounter {
 	public void fixSpawners(Dungeon dungeon, Random random) {
 		int targetNum = dungeonSize / ConfigHandler.difficulty.blocksPerSpawner;
 		targetNum = (int) (((float)targetNum *
-				(1.0f + (Math.max(2f, Math.min(-2f, (random.nextGaussian()))) / 10.0f))));
+				(1.0f + (Math.max(-2f, Math.min(2f, (random.nextGaussian()))) / 10.0f))));
 		int existing = list.size();
 		if(existing <= targetNum) {
 			return;
