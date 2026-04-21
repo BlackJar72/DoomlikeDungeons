@@ -9,6 +9,10 @@ Binaries and general information can be found here:
 
 http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/1293843-doomlike-dungeons
 
+A deep dive into how the mod works can be found on Youtube here:
+
+https://youtu.be/ixX3j-wXgFw
+
 Doomlike Dungeons by is now licensed the MIT License:
 MIT License
 
