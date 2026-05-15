@@ -212,12 +212,14 @@ public class DLDEvent extends Event {
 		protected final int shiftX;
 		protected final int shiftZ;
 		protected final boolean flooded;
+        protected final Dungeon dungeon;
 
-		public BeforeBuild(MapMatrix mapMatrix, int shiftX, int shiftZ, boolean flooded) {
+		public BeforeBuild(MapMatrix mapMatrix, int shiftX, int shiftZ, boolean flooded, Dungeon dungeon) {
 			this.mapMatrix = mapMatrix;
 			this.shiftX = shiftX;
 			this.shiftZ = shiftZ;
 			this.flooded = flooded;
+            this.dungeon = dungeon;
 		}
 
 		public MapMatrix getMapMatrix() {
@@ -236,11 +238,13 @@ public class DLDEvent extends Event {
 			return flooded;
 		}
 
+        public Dungeon getDungeon() {return dungeon;}
+
 	}
 
 	public static class AfterBuild extends BeforeBuild {
-		public AfterBuild(MapMatrix mapMatrix, int shiftX, int shiftZ, boolean flooded) {
-			super(mapMatrix, shiftX, shiftZ, flooded);
+		public AfterBuild(MapMatrix mapMatrix, int shiftX, int shiftZ, boolean flooded, Dungeon dungeon) {
+			super(mapMatrix, shiftX, shiftZ, flooded, dungeon);
 		}
 	}
 

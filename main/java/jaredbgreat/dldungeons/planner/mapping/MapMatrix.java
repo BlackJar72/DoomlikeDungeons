@@ -21,7 +21,6 @@ import jaredbgreat.dldungeons.themes.Sizes;
 import jaredbgreat.dldungeons.themes.ThemeFlags;
 import jaredbgreat.dldungeons.util.cache.Coords;
 import jaredbgreat.dldungeons.util.cache.IHaveCoords;
-import jaredbgreat.dldungeons.util.debug.DebugOut;
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -150,7 +149,7 @@ public class MapMatrix implements IHaveCoords {
 		BlockFamily.setRadnom(dungeon.random);
 		int below;
 		boolean flooded = dungeon.theme.flags.contains(ThemeFlags.WATER);
-		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.BeforeBuild(this, shiftX, shiftZ, flooded));
+		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.BeforeBuild(this, shiftX, shiftZ, flooded, dungeon));
 		
 		int sx = (cx0 - lowCX) * 16, ex = sx + 16;
 		int sz = (cz0 - lowCZ) * 16, ez = sz + 16;
@@ -238,7 +237,7 @@ public class MapMatrix implements IHaveCoords {
 				}
 			}	
 		
-		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.AfterBuild(this, shiftX, shiftZ, flooded));
+		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.AfterBuild(this, shiftX, shiftZ, flooded, dungeon));
 		DoomlikeDungeons.profiler.endTask("Building Dungeon architecture");
 		features[cx1][cz1].buildFeatures(dungeon, this, shiftX, shiftZ, world);
 		DoomlikeDungeons.profiler.endTask("Building Dungeon in Chunk");
