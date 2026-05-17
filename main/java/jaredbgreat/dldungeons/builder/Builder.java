@@ -52,22 +52,18 @@ public class Builder {
 								world, chunkX, chunkZ);
 		buildDungeon(dungeon);
 		dungeon.preFinalize();
-		dungeon = null;
 		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceDungeonFinish(chunkX, chunkZ, world, dungeon));
-		DoomlikeDungeons.profiler.endTask("Create Dungeons");
+        DoomlikeDungeons.profiler.endTask("Create Dungeons");
 	}
 	
 	
 	/**
 	 * This will place a dungeon into the world, and is called by the Generation handler to 
 	 * create the dungeon object (which plans the dungeon) and have the dungeon built.
-	 * 
-	 * @param random
+	 *
 	 * @param chunkX
 	 * @param chunkZ
 	 * @param world
-	 * @param chunkGenerator
-	 * @param chunkProvider
 	 * @throws Throwable
 	 */
 	public static void placeDungeon(int chunkX, int chunkZ, World world) throws Throwable {	
@@ -85,7 +81,6 @@ public class Builder {
 			buildDungeon(dungeon);
 		}
 		dungeon.preFinalize();
-		dungeon = null;
 		MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.PlaceDungeonFinish(chunkX, chunkZ, world, dungeon));
 		DoomlikeDungeons.profiler.endTask("Create Dungeons");
 	}

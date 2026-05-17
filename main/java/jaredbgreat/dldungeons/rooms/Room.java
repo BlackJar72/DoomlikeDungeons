@@ -220,8 +220,9 @@ public class Room extends AbstractRoom {
 		if(dungeon.variability.use(dungeon.random)) type = dungeon.random.nextInt(3);
 		else type = dungeon.entrancePref; 
 		if(ConfigHandler.easyFind) type = 1;
-		
-		switch (type) {
+        if(MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.AddEntrance(dungeon, this))) return;
+
+        switch (type) {
 		case 0:
 			//DoomlikeDungeons.profiler.startTask("Adding Sriral Stair");
 			entrance = new SpiralStair((int)realX, (int)realZ);
