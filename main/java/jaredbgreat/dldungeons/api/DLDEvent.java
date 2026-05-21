@@ -103,6 +103,10 @@ public class DLDEvent extends Event {
 
 	}
 
+    /**
+     * The AddChestBlocksToRoom event is never called, as the method it is in is unused.
+     */
+
 	@Cancelable
 	public static class AddChestBlocksToRoom extends DungeonRoom {
 		public AddChestBlocksToRoom(Dungeon dungeon, Room room) {
@@ -193,6 +197,10 @@ public class DLDEvent extends Event {
 
 	}
 
+    /**
+     * The AddTileEntitiesToRoom event is never called, as the method it is in is unused.
+     */
+
 	@Cancelable
 	public static class AddTileEntitiesToRoom extends DungeonRoom {
 		public AddTileEntitiesToRoom(Dungeon dungeon, Room room) {
@@ -207,17 +215,26 @@ public class DLDEvent extends Event {
 		}
 	}
 
-	public static class BeforeBuild extends DLDEvent {
+
+    /**
+     * BeforeBuild and AfterBuild are events called before and after a dungeon is built into the world.
+     * Instead of being used for confirmation or canceling of the dungeon generation,
+     * these events should mostly be used for gathering info on the dungeon, like the coordinates of the rooms.
+     */
+
+    public static class BeforeBuild extends DLDEvent {
 		protected final MapMatrix mapMatrix;
 		protected final int shiftX;
 		protected final int shiftZ;
 		protected final boolean flooded;
+        protected final Dungeon dungeon;
 
-		public BeforeBuild(MapMatrix mapMatrix, int shiftX, int shiftZ, boolean flooded) {
+		public BeforeBuild(MapMatrix mapMatrix, int shiftX, int shiftZ, boolean flooded, Dungeon dungeon) {
 			this.mapMatrix = mapMatrix;
 			this.shiftX = shiftX;
 			this.shiftZ = shiftZ;
 			this.flooded = flooded;
+            this.dungeon = dungeon;
 		}
 
 		public MapMatrix getMapMatrix() {
@@ -236,11 +253,13 @@ public class DLDEvent extends Event {
 			return flooded;
 		}
 
+        public Dungeon getDungeon() {return dungeon;}
+
 	}
 
 	public static class AfterBuild extends BeforeBuild {
-		public AfterBuild(MapMatrix mapMatrix, int shiftX, int shiftZ, boolean flooded) {
-			super(mapMatrix, shiftX, shiftZ, flooded);
+		public AfterBuild(MapMatrix mapMatrix, int shiftX, int shiftZ, boolean flooded, Dungeon dungeon) {
+			super(mapMatrix, shiftX, shiftZ, flooded, dungeon);
 		}
 	}
 
@@ -271,7 +290,15 @@ public class DLDEvent extends Event {
 
 	}
 
-	@Cancelable
+
+    /**
+     * PlaceDungeonBegin and PlaceDungeonFinish are events called before and after a dungeon is considered for generated.
+     * Should be used mostly for confirmation and canceling the generation of a dungeon.
+     * However, the dungeon parameter in placeDungeonFinish is always an empty shell. For info on the dungeon,
+     * use the BeforeBuild and AfterBuild events.
+     */
+
+    @Cancelable
 	public static class PlaceDungeonBegin extends PlaceDungeon {
 		public PlaceDungeonBegin(int chunkX, int chunkZ, World world) {
 			super(chunkX, chunkZ, world);

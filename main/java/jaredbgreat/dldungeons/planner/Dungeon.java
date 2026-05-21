@@ -442,7 +442,8 @@ public class Dungeon implements IHaveCoords {
 	/**
 	 * Places the chest blocks; this is done in advance to decrease the chance of 
 	 * absent chests resulting from concurrent optimization in the main game.
-	 * 
+	 *
+     * This method is currently unused.
 	 * @param room
 	 */
 	public void addChestBlocks(Room room) {
@@ -469,6 +470,8 @@ public class Dungeon implements IHaveCoords {
 	/**
 	 * This cycles through all the rooms and add chests and spawners 
 	 * by calling addTileEntitiesToRoom on each.
+     *
+     * This method is currently unused.
 	 */
 	public void addTileEntities() {
 		for(Room room : rooms) {
@@ -479,14 +482,15 @@ public class Dungeon implements IHaveCoords {
 	
 	/**
 	 * This add all the chest and spawners to the room. 
-	 * 
+	 *
+     * This method is currently unused.
 	 * @param room
 	 */
 	private void addTileEntitesToRoom(Room room) {
 		if(MinecraftForge.TERRAIN_GEN_BUS.post(new DLDEvent.AddTileEntitiesToRoom(this, room))) return;
 			for(Spawner  spawner : room.spawners) {
 					RegisteredBlock.placeSpawner(map.world, 
-										shiftX + spawner.getX(), 
+										shiftX + spawner.getX(),
 										spawner.getY(), 
 										shiftZ + spawner.getZ(), 
 										spawner.getMob());
@@ -501,6 +505,8 @@ public class Dungeon implements IHaveCoords {
 	 * This cycles through all nodes and calls addEntrance on each; 
 	 * entrances will only be added to entrance nodes, but that is 
 	 * checked by addEntrance, not here.
+     *
+     * This method is currently unused.
 	 */
 	public void addEntrances() {
 		for(int i = 0; i < nodes.length; i++) {
@@ -511,7 +517,9 @@ public class Dungeon implements IHaveCoords {
 	
 	/**
 	 * This will added a physical entrance to all entrance nodes.
-	 * 
+	 *
+     * This method is currently unused. Entrances are added in the Room class.
+     * For the used AddEntrance event, see Room.addEntrance.
 	 * @param room
 	 */
 	private void addEntrance(Room room) {		
