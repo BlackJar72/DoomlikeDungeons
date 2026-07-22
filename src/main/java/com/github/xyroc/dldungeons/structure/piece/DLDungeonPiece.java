@@ -6,6 +6,7 @@ import jaredbgreat.dldungeons.planner.Dungeon;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
@@ -20,6 +21,8 @@ public class DLDungeonPiece extends StructurePiece {
 
     private final Dungeon dungeon;
 
+    private volatile Tag cachedTag;
+
     public DLDungeonPiece(BoundingBox boundingBox, Dungeon dungeon) {
         super(ModStructurePieceTypes.DLDUNGEON_PIECE, 0, boundingBox);// The second argument is only used for jigsaw structures. Ignore it.
         this.dungeon = dungeon;
@@ -27,9 +30,11 @@ public class DLDungeonPiece extends StructurePiece {
 
     public DLDungeonPiece(CompoundTag nbt) {
         super(ModStructurePieceTypes.DLDUNGEON_PIECE, nbt);
-        this.dungeon = Dungeon.CODEC.parse(NbtOps.INSTANCE, nbt.get(NBT_KEY_DUNGEON)).getOrThrow(false, error -> {
+        Tag dungeonTag = nbt.get(NBT_KEY_DUNGEON);
+        this.dungeon = Dungeon.CODEC.parse(NbtOps.INSTANCE, dungeonTag).getOrThrow(false, error -> {
             throw new RuntimeException("Error decoding dungeon: " + error);
         });
+        this.cachedTag = dungeonTag;
     }
 
     @Override
@@ -41,12 +46,15 @@ public class DLDungeonPiece extends StructurePiece {
 
     @Override
     protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tag) {
-        DLDungeons.LOGGER.info("Saving dungeon at chunk {},{}", dungeon.map.chunkX, dungeon.map.chunkZ);
-        // Save dungeon plan to nbt here. Using a codec to do this because it's nice and clean, but you can do it the old-fashioned way as well.
-        // The same goes for the constructor of this class which reads from nbt.
-        tag.put(NBT_KEY_DUNGEON, Dungeon.CODEC.encodeStart(NbtOps.INSTANCE, dungeon).getOrThrow(false, (error) -> {
-            throw new RuntimeException("Error saving dungeon: " + error);
-        }));
+        Tag encoded = cachedTag;
+        if (encoded == null) {
+            DLDungeons.LOGGER.debug("Encoding dungeon at chunk {},{}", dungeon.map.chunkX, dungeon.map.chunkZ);
+            encoded = Dungeon.CODEC.encodeStart(NbtOps.INSTANCE, dungeon).getOrThrow(false, (error) -> {
+                throw new RuntimeException("Error saving dungeon: " + error);
+            });
+            cachedTag = encoded;
+        }
+        tag.put(NBT_KEY_DUNGEON, encoded);
     }
 
 }
