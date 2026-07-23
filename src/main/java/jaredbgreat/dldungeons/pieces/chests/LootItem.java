@@ -123,7 +123,7 @@ public class LootItem {
         if (max <= min) {
             out = new ItemStack(item, max);
         } else {
-            out = new ItemStack(item, random.nextInt(max - min) + min + 1);
+            out = new ItemStack(item, random.nextInt(max - min + 1) + min);
         }
         if (out.getItem() == null) {
             return null;
@@ -246,7 +246,7 @@ public class LootItem {
     public static LootItem moreIron
             = new LootItem(Items.IRON_INGOT, 3, 12);
     public static LootItem oneDiamond
-            = new LootItem(Items.IRON_INGOT, 1, 1);
+            = new LootItem(Items.DIAMOND, 1, 1);
     public static LootItem diamonds
             = new LootItem(Items.DIAMOND, 1, 4);
     public static LootItem manyDiamonds
