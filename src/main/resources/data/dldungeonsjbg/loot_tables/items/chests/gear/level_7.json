@@ -1,0 +1,66 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:netherite_sword"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:netherite_pickaxe"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:netherite_helmet"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:netherite_leggings"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:netherite_boots"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:netherite_chestplate"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:trident"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:arrow",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 16,
+                "max": 48
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:torch",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 32,
+                "max": 64
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

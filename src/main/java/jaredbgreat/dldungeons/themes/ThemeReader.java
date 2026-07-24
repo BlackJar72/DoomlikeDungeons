@@ -14,14 +14,9 @@ import java.util.*;
 import com.github.xyroc.dldungeons.DLDungeons;
 import jaredbgreat.dldungeons.builder.BlockFamily;
 import jaredbgreat.dldungeons.builder.RegisteredBlock;
-import jaredbgreat.dldungeons.pieces.chests.LootCategory;
-import jaredbgreat.dldungeons.pieces.chests.LootHandler;
-import jaredbgreat.dldungeons.pieces.chests.LootItem;
-import jaredbgreat.dldungeons.pieces.chests.LootListSet;
 import jaredbgreat.dldungeons.util.parser.Tokenizer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import static jaredbgreat.dldungeons.builder.BlockFamily.makeBlockFamily;
@@ -57,79 +52,6 @@ public class ThemeReader {
     }
 
 
-    /**
-     * Attempts to open chest.cfg, and if successful will call readLoot
-     * to read it.
-     */
-    public static void openLoot(InputStream file, String name) {
-        LootCategory cat = LootHandler.getLootHandler().createCategory(name);
-        try {
-            final BufferedReader instream = new BufferedReader(new InputStreamReader(file));
-            readLoot(instream, cat.getLists());
-            instream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    /**
-     * This will read the chests.cfg file and populate the loots list from
-     * its data.
-     *
-     * @param instream
-     * @throws IOException
-     */
-    public static void readLoot(final BufferedReader instream, final LootListSet loots) throws IOException {
-        Tokenizer tokens = null;
-        String line = null;
-        String token;
-        int itemid;
-        String item;
-        Block block;
-
-        String type;
-        int level;
-        String modid;
-        String name;
-        LootItem loot;
-        String nbtKey;
-        int min;
-        int max;
-
-        while((line = instream.readLine()) != null) {
-            if(line.length() < 2) continue;
-            if(line.charAt(0) == '#') continue;
-            tokens = new Tokenizer(line, " ,;:\t\n\r\f=");
-            if(!tokens.hasMoreTokens()) continue;
-            type = tokens.nextToken().toLowerCase();
-            if(!tokens.hasMoreTokens()) continue;
-            level = intParser(tokens);
-            if(!tokens.hasMoreTokens() || (level == 0)) continue;
-            modid = tokens.nextToken();
-            if(modid.toLowerCase().equalsIgnoreCase("item")
-                    || modid.toLowerCase().equalsIgnoreCase("block"))
-                modid = "minecraft";
-            if(!tokens.hasMoreTokens()) continue;
-            name = tokens.nextToken();
-            if(!tokens.hasMoreTokens()) continue;
-            min = intParser(tokens);
-            if(!tokens.hasMoreTokens() || (min < 1)) continue;
-            max = intParser(tokens);
-            item = modid + ":" + name;
-            nbtKey = null;
-            if(tokens.hasMoreTokens()) {
-                String nbtmodid = tokens.nextToken().trim();
-                if(nbtmodid.equals(DLDungeons.MODID) && tokens.hasMoreTokens()) {
-                    nbtKey = nbtmodid + ":" + tokens.nextToken().trim();
-                }
-            }
-            loot = new LootItem(item, min, max, level, nbtKey);
-            loots.addItem(loot, type, level);
-        }
-        loots.addDiscs();
-
-    }
 
 
     /**
@@ -530,30 +452,6 @@ public class ThemeReader {
             }
         } catch(Exception e) {
             return el;
-        }
-        return value;
-    }
-
-
-    /**
-     * This will read integer data, converting it from a String format
-     * to an int.  This is the method that should be used for reading
-     * general int data.  If the token passed in is not a valid integer
-     * the method return -1.
-     *
-     * @param tokens
-     * @return
-     */
-    private static int intParser(Tokenizer tokens) {
-        int value = 0;
-        String num;
-        try {
-            if(tokens.hasMoreTokens()) {
-                num = tokens.nextToken().trim();
-                value = Integer.parseInt(num);
-            }
-        } catch(Exception e) {
-            return -1;
         }
         return value;
     }

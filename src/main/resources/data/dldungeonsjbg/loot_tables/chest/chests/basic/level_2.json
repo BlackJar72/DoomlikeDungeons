@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "dldungeonsjbg:dungeon_chest",
+          "category": "chests",
+          "chest_type": 1,
+          "level": 1,
+          "boss": false
+        }
+      ]
+    }
+  ]
+}

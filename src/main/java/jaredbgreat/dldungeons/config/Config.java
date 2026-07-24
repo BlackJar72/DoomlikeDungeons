@@ -2,6 +2,8 @@ package jaredbgreat.dldungeons.config;
 
 import com.github.xyroc.dldungeons.DLDungeons;
 import jaredbgreat.dldungeons.pieces.chests.Chest;
+import jaredbgreat.dldungeons.pieces.chests.ChestLootStyle;
+import jaredbgreat.dldungeons.pieces.chests.DungeonLoot;
 import jaredbgreat.dldungeons.rooms.Room;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -69,6 +71,11 @@ public class Config {
             .comment("Modifies the value of loot, incase you think its too stingy.")
             .defineInRange("Loot Bonus", 0, -9, 9);
 
+    private static final ForgeConfigSpec.EnumValue<ChestLootStyle> LOOT_STYLE = BUILDER
+            .comment("Mixed: Chests have mixed loot tables.")
+            .comment("Original: Uses original 1/3 random-mixed third loot.")
+            .defineEnum("Chest Loot Style", ChestLootStyle.ORIGINAL);
+
     private static final ForgeConfigSpec.IntValue A1 = BUILDER
             .comment("Part of the formula for determine how many items go in basic chests.")
             .comment("Formula for number of loot items: number of items = random.NextIt(A1 + (Room Difficulty / B1)) + C1")
@@ -127,8 +134,9 @@ public class Config {
         singleEntrance = SINGLE_ENTRANCE.get();
         allowDegeneration = ALLOW_DEGENERATION.get();
         Room.setLootBonus(LOOT_BONUS.get());
-        Chest.setBasicLootNumbers(A1.get(), B1.get(), C1.get(), NERF_LOOT.get());
-        Chest.setTreasureLootNumbers(A2.get(), B2.get(), C2.get());
+        Chest.setNerf(NERF_LOOT.get());
+        DungeonLoot.setNumbers(A1.get(), B1.get(), C1.get(), A2.get(), B2.get(), C2.get());
+        DungeonLoot.setStyle(LOOT_STYLE.get());
     }
 
 

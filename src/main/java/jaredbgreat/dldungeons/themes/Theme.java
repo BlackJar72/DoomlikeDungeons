@@ -173,7 +173,7 @@ public class Theme {
 		fencing = makeBlockList(new String[]{});
 		liquid = makeBlockList(new String[]{});
 		pillarBlock = makeBlockList(new String[]{});
-		lootCat = "dldungeonsjbg:chest";
+		lootCat = "dldungeonsjbg:chests";
 		
 		fixMobs();
 	}

@@ -2,19 +2,18 @@ package jaredbgreat.dldungeons.pieces.chests;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Chest {
 
     // Static variables are now volatile to deal with concurrent use.
-    static volatile int A1 = 2, B1 = 1, C1 = 2;
-    static volatile int A2 = 3, B2 = 2, C2 = 2;
     static volatile boolean NERF;
+
+    public static final int LEVELS = 7;
 
     // Anything thing not public is not package protected;
     // Nothing can be final as that would interfere with deserialization via codec.
@@ -22,10 +21,6 @@ public class Chest {
     protected int level;
     ChestType type;
     boolean withBoss;
-
-    // These are used during placement and do not need to be serialized
-    static ArrayList<Integer> slots = new ArrayList();
-    int slot;
 
 
     public static final Codec<Chest> CODEC = RecordCodecBuilder.create(builder -> builder
@@ -62,8 +57,8 @@ public class Chest {
     }
 
 
-    public void place(WorldGenLevel world, int x, int y, int z, RandomSource random, LootCategory category) {
-        type.processor.place(this, world, x, y, z, random, category);
+    public void place(WorldGenLevel world, int x, int y, int z, RandomSource random, ResourceLocation lootCategory) {
+        type.place(this, world, x, y, z, random, lootCategory);
     }
 
 
@@ -81,17 +76,6 @@ public class Chest {
     }
 
 
-    static {
-        initSlots();
-    }
-
-
-    public static void initSlots() {
-        slots.clear();
-        for(int i = 0; i < 27; i++) Chest.slots.add(i);
-    }
-
-
     public int getMX() { return mx; }
     public int getMY() { return my; }
     public int getMZ() { return mz; }
@@ -102,23 +86,8 @@ public class Chest {
     //****************************************************************************************************************//
 
 
-    public static void setBasicLootNumbers(int a, int b, int c) {
-        A1 = a;
-        B1 = b;
-        C1 = c;
-    }
-
-
-    public static void setBasicLootNumbers(int a, int b, int c, boolean nerf) {
-        setBasicLootNumbers(a, b, c);
+    public static void setNerf(boolean nerf) {
         NERF = nerf;
-    }
-
-
-    public static void setTreasureLootNumbers(int a, int b, int c) {
-        A2 = a;
-        B2 = b;
-        C2 = c;
     }
 
 
