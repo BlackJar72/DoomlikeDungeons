@@ -5,8 +5,7 @@ import jaredbgreat.dldungeons.builder.RegisteredBlock;
 import jaredbgreat.dldungeons.config.Config;
 import jaredbgreat.dldungeons.pieces.Spawner;
 import jaredbgreat.dldungeons.pieces.chests.Chest;
-import jaredbgreat.dldungeons.pieces.chests.LootCategory;
-import jaredbgreat.dldungeons.pieces.chests.LootHandler;
+import net.minecraft.resources.ResourceLocation;
 import jaredbgreat.dldungeons.pieces.entrances.SimpleEntrance;
 import jaredbgreat.dldungeons.pieces.entrances.SpiralStair;
 import jaredbgreat.dldungeons.pieces.entrances.TopRoom;
@@ -45,6 +44,8 @@ import java.util.Random;
  */
 public class Dungeon {
 
+    public static final ResourceLocation DEFAULT_LOOT_CAT = new ResourceLocation("dldungeonsjbg", "chests");
+
     /**
      * A minimal codec to save (most of the) information relevant for the actual world generation.
      */
@@ -80,7 +81,7 @@ public class Dungeon {
                             dungeon.liquidBlock,
                             dungeon.caveBlock
                     )),
-                    Codec.STRING.fieldOf("loot_cat").forGetter(dungeon -> dungeon.lootCat.name),
+                    Codec.STRING.fieldOf("loot_cat").forGetter(dungeon -> dungeon.lootCat.toString()),
                     Codec.INT.fieldOf("height").forGetter(dungeon -> dungeon.baseHeight)
             )
             .apply(instance, (map, size, degrees, rooms, blocks, loot_cat, height) -> {
@@ -90,7 +91,7 @@ public class Dungeon {
                 dungeon.map = map;
                 dungeon.size = size;
                 dungeon.rooms = rooms;
-                dungeon.lootCat = LootCategory.PLACEHOLDER;
+                dungeon.lootCat = DEFAULT_LOOT_CAT;
 
                 dungeon.shiftX = (map.chunkX * 16) - (map.room.length / 2) + 8;
                 dungeon.shiftZ = (map.chunkZ * 16) - (map.room.length / 2) + 8;
@@ -120,13 +121,7 @@ public class Dungeon {
                 dungeon.liquidBlock = blocks.get(8);
                 dungeon.caveBlock = blocks.get(9);
 
-                dungeon.lootCat     = LootHandler.getLootHandler().getCategory(loot_cat);
-                if(dungeon.lootCat == null) {
-                    dungeon.lootCat = LootHandler.getLootHandler().getCategory("dldungeonsjbg:chest");
-                }if (dungeon.lootCat == null) {
-                    System.err.println("DLD: Error! Chest file could not be found at world reload; did something change?");
-                    dungeon.lootCat = LootCategory.PLACEHOLDER;
-                }
+                dungeon.lootCat = parseLootCat(loot_cat);
 
                 dungeon.baseHeight = height;
 
@@ -184,7 +179,12 @@ public class Dungeon {
     public int liquidBlock;
     public int caveBlock;
 
-    public LootCategory lootCat;
+    public ResourceLocation lootCat;
+
+    private static ResourceLocation parseLootCat(String s) {
+        ResourceLocation rl = (s == null) ? null : ResourceLocation.tryParse(s);
+        return (rl == null) ? DEFAULT_LOOT_CAT : rl;
+    }
 
     int shiftX;
     int shiftZ;
@@ -274,14 +274,7 @@ public class Dungeon {
         naturals = theme.naturals.select(random);
         baseHeight = random.nextInt(theme.maxY - theme.minY) + theme.minY;
 
-        lootCat     = LootHandler.getLootHandler().getCategory(theme.lootCat);
-        if(lootCat == null) {
-            lootCat = LootHandler.getLootHandler().getCategory("dldungeonsjbg:chest");
-        } if (lootCat == null) {
-            System.err.println("DLD: Error! Failed to load loot list (chests file) for "
-                    + theme.lootCat + "; was the name wrong? or does it not exist?");
-            lootCat = LootCategory.PLACEHOLDER;
-        }
+        lootCat = parseLootCat(theme.lootCat);
     }
 
 

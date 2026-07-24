@@ -3,7 +3,6 @@ package com.github.xyroc.dldungeons.datapack;
 import com.github.xyroc.dldungeons.DLDungeons;
 import jaredbgreat.dldungeons.builder.BlockSaveHandler;
 import jaredbgreat.dldungeons.builder.RegisteredBlock;
-import jaredbgreat.dldungeons.pieces.chests.LootCategory;
 import jaredbgreat.dldungeons.themes.Theme;
 import jaredbgreat.dldungeons.themes.ThemeReader;
 import net.minecraft.resources.ResourceLocation;
@@ -30,18 +29,14 @@ public class ResourceReloadHandler implements PreparableReloadListener {
     private static final String BASE_DIRECTORY = "dldungeons";
     private static final String THEMING_DIRECTORY = BASE_DIRECTORY + "/theming";
     private static final String BLOCK_FAMILIES_DIRECTORY = THEMING_DIRECTORY + "/block_families";
-    private static final String SPECIAL_CHESTS_DIRECTORY = THEMING_DIRECTORY + "/special_chests";
-    private static final String NBT_DIRECTORY = THEMING_DIRECTORY + "/nbt";
     private static final String THEMES_DIRECTORY = THEMING_DIRECTORY + "/themes";
     private static final String THEMES_APPENDS_DIRECTORY = THEMING_DIRECTORY + "/theme_appends";
 
     private static final String CFG_FILE_ENDING = ".cfg";
     private static final String JSON_FILE_ENDING = ".json";
-    private static final String SNBT_FILE_ENDING = ".snbt";
 
     private static final Predicate<ResourceLocation> IS_CFG_FILE = location -> location.getPath().endsWith(CFG_FILE_ENDING);
     private static final Predicate<ResourceLocation> IS_JSON_FILE = location -> location.getPath().endsWith(JSON_FILE_ENDING);
-    private static final Predicate<ResourceLocation> IS_SNBT_FILE = location -> location.getPath().endsWith(SNBT_FILE_ENDING);
 
 
     @Override
@@ -49,9 +44,7 @@ public class ResourceReloadHandler implements PreparableReloadListener {
         return preparationBarrier.wait(Unit.INSTANCE).thenRunAsync(() -> {
             Theme.purgeThemes();
             RegisteredBlock.clear();
-            loadSNBT(resourceManager);
             loadBlockFamilies(resourceManager);
-            loadSpecialChests(resourceManager);
             loadThemes(resourceManager);
             loadThemeAppends(resourceManager);
             Theme.SortThemes();
@@ -84,21 +77,6 @@ public class ResourceReloadHandler implements PreparableReloadListener {
         });
     }
 
-    private void loadSpecialChests(ResourceManager resourceManager) {
-        loadFilesInDirectory(resourceManager, SPECIAL_CHESTS_DIRECTORY, IS_CFG_FILE, (location, file) -> {
-            final ResourceLocation key = keyFromLocation(location, SPECIAL_CHESTS_DIRECTORY, CFG_FILE_ENDING);
-            // Read file from input stream and insert into some data structure for later use.
-            ThemeReader.openLoot(file, key.toString());
-        });
-    }
-
-    private void loadSNBT(ResourceManager resourceManager) {
-        loadFilesInDirectory(resourceManager, NBT_DIRECTORY, IS_SNBT_FILE, (location, file) -> {
-            final ResourceLocation key = keyFromLocation(location, NBT_DIRECTORY, SNBT_FILE_ENDING);
-            // Read file from input stream and insert into some data structure for later use.
-            LootCategory.AddNBT(file, key.toString());
-        });
-    }
 
     /**
      * Load an individual file within the data pack.

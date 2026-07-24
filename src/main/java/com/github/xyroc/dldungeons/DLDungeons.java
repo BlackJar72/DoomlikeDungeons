@@ -4,6 +4,7 @@ import com.github.xyroc.dldungeons.datapack.ResourceReloadHandler;
 import com.github.xyroc.dldungeons.init.ModStructurePieceTypes;
 import com.github.xyroc.dldungeons.init.ModStructureTypes;
 import jaredbgreat.dldungeons.config.Config;
+import jaredbgreat.dldungeons.pieces.chests.ModLoot;
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -28,6 +29,7 @@ public class DLDungeons {
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
+        ModLoot.LOOT_ENTRIES.register(modEventBus);
 
         IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
 
