@@ -16,7 +16,6 @@ import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraft.world.level.storage.LevelResource;
-import net.minecraftforge.common.MinecraftForge;
 
 import java.io.*;
 import java.nio.file.Path;

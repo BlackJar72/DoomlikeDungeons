@@ -3,7 +3,6 @@ package jaredbgreat.dldungeons.themes;
 
 import java.io.*;
 import java.util.*;
-;
 
 /*
  * Doomlike Dungeons by is licensed the MIT License
@@ -16,8 +15,7 @@ import jaredbgreat.dldungeons.builder.BlockFamily;
 import jaredbgreat.dldungeons.builder.RegisteredBlock;
 import jaredbgreat.dldungeons.util.parser.Tokenizer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import static jaredbgreat.dldungeons.builder.BlockFamily.makeBlockFamily;
 import static jaredbgreat.dldungeons.themes.Theme.BlockCats.*;
@@ -599,22 +597,6 @@ public class ThemeReader {
         }
         return types;
     }
-
-    /**
-     * This will parse a resource locations into Biomes and resturn
-     * a Set of all listed Biomes.
-     *
-     * @param tokens
-     * @return
-     */
-    private static Set<Biome> specificBiomeParser(Tokenizer tokens) {
-        Set<Biome> biomes = new HashSet<>();
-        while(tokens.hasMoreTokens()) {
-            biomes.add(ForgeRegistries.BIOMES.getValue(new ResourceLocation(tokens.nextToken())));
-        }
-        return biomes;
-    }
-
 
     /**
      * This will convert tokens in string format to a set of ThemeFlags.

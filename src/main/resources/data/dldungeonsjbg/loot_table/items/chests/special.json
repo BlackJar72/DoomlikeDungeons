@@ -1,0 +1,348 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:nether_star"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond_block",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 3,
+                "max": 12
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:emerald_block",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 3,
+                "max": 12
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond_pickaxe",
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:damage": 0,
+                "minecraft:enchantments": {
+                  "levels": {
+                    "minecraft:fortune": 3,
+                    "minecraft:efficiency": 5
+                  }
+                },
+                "minecraft:unbreakable": {},
+                "minecraft:custom_name": "{\"text\":\"Fortuna Major\"}",
+                "minecraft:lore": [
+                  "{\"text\":\"Believe it or not, this comes from \"}",
+                  "{\"text\":\"an ancient Vanilla World. \"}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:netherite_sword",
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:attribute_modifiers": {
+                  "modifiers": [
+                    {
+                      "type": "minecraft:generic.luck",
+                      "id": "dldungeonsjbg:netherite_sword_2/0",
+                      "amount": -1,
+                      "operation": "add_value",
+                      "slot": "mainhand"
+                    },
+                    {
+                      "type": "minecraft:zombie.spawn_reinforcements",
+                      "id": "dldungeonsjbg:netherite_sword_2/1",
+                      "amount": 0.666,
+                      "operation": "add_value",
+                      "slot": "mainhand"
+                    },
+                    {
+                      "type": "minecraft:generic.attack_damage",
+                      "id": "dldungeonsjbg:netherite_sword_2/2",
+                      "amount": 8,
+                      "operation": "add_value",
+                      "slot": "mainhand"
+                    },
+                    {
+                      "type": "minecraft:generic.attack_speed",
+                      "id": "dldungeonsjbg:netherite_sword_2/3",
+                      "amount": -2.2,
+                      "operation": "add_value",
+                      "slot": "mainhand"
+                    }
+                  ]
+                },
+                "minecraft:damage": 0,
+                "minecraft:enchantments": {
+                  "levels": {
+                    "minecraft:sharpness": 5,
+                    "minecraft:smite": 1,
+                    "minecraft:bane_of_arthropods": 1,
+                    "minecraft:sweeping_edge": 3,
+                    "minecraft:mending": 1,
+                    "minecraft:vanishing_curse": 1
+                  }
+                },
+                "minecraft:repair_cost": 128,
+                "minecraft:custom_name": "[\"\",{\"text\":\"Daikatana\",\"italic\":false}]",
+                "minecraft:lore": [
+                  "[\"\",{\"text\":\"Its an awesome odachi, but is it worth the end of the world?\",\"italic\":false}]"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond_sword",
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:attribute_modifiers": {
+                  "modifiers": [
+                    {
+                      "type": "minecraft:generic.armor_toughness",
+                      "id": "dldungeonsjbg:diamond_sword_3/0",
+                      "amount": 2,
+                      "operation": "add_value",
+                      "slot": "mainhand"
+                    },
+                    {
+                      "type": "minecraft:generic.attack_damage",
+                      "id": "dldungeonsjbg:diamond_sword_3/1",
+                      "amount": 8,
+                      "operation": "add_value",
+                      "slot": "mainhand"
+                    },
+                    {
+                      "type": "minecraft:generic.attack_speed",
+                      "id": "dldungeonsjbg:diamond_sword_3/2",
+                      "amount": -2.4,
+                      "operation": "add_value",
+                      "slot": "mainhand"
+                    }
+                  ]
+                },
+                "minecraft:damage": 0,
+                "minecraft:enchantments": {
+                  "levels": {
+                    "minecraft:sharpness": 4,
+                    "minecraft:smite": 3,
+                    "minecraft:knockback": 2,
+                    "minecraft:protection": 2,
+                    "minecraft:unbreaking": 3,
+                    "minecraft:mending": 1
+                  }
+                },
+                "minecraft:repair_cost": 128,
+                "minecraft:custom_name": "[\"\",{\"text\":\"Moonlight Straight Sword\",\"italic\":false}]",
+                "minecraft:lore": [
+                  "[\"\",{\"text\":\"Perfect for souls exploring the lands of the undead\",\"italic\":false}]"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:golden_axe",
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:attribute_modifiers": {
+                  "modifiers": [
+                    {
+                      "type": "minecraft:generic.attack_damage",
+                      "id": "dldungeonsjbg:golden_axe_4/0",
+                      "amount": 10,
+                      "operation": "add_value",
+                      "slot": "mainhand"
+                    },
+                    {
+                      "type": "minecraft:generic.attack_speed",
+                      "id": "dldungeonsjbg:golden_axe_4/1",
+                      "amount": -2.8,
+                      "operation": "add_value",
+                      "slot": "mainhand"
+                    },
+                    {
+                      "type": "minecraft:generic.luck",
+                      "id": "dldungeonsjbg:golden_axe_4/2",
+                      "amount": 1,
+                      "operation": "add_value",
+                      "slot": "mainhand"
+                    }
+                  ]
+                },
+                "minecraft:damage": 0,
+                "minecraft:enchantments": {
+                  "levels": {
+                    "minecraft:sharpness": 5,
+                    "minecraft:smite": 2
+                  }
+                },
+                "minecraft:repair_cost": 128,
+                "minecraft:unbreakable": {},
+                "minecraft:custom_name": "[\"\",{\"text\":\"The Golden Axe\",\"italic\":false}]",
+                "minecraft:lore": [
+                  "[\"\",{\"text\":\"Heroes have quested for this since ancient times -- what a lucky find!\",\"italic\":false}]"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_boots",
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:damage": 0,
+                "minecraft:enchantments": {
+                  "levels": {
+                    "minecraft:feather_falling": 4,
+                    "minecraft:depth_strider": 3,
+                    "minecraft:protection": 4,
+                    "minecraft:unbreaking": 3
+                  }
+                },
+                "minecraft:repair_cost": 1,
+                "minecraft:unbreakable": {},
+                "minecraft:custom_name": "{\"text\":\"Galactic Hiking Boots\"}",
+                "minecraft:lore": [
+                  "{\"text\":\"Carefully forged on an anvil\"}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_axe",
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:damage": 0,
+                "minecraft:enchantments": {
+                  "levels": {
+                    "minecraft:fortune": 4,
+                    "minecraft:efficiency": 3,
+                    "minecraft:sharpness": 3
+                  }
+                },
+                "minecraft:unbreakable": {},
+                "minecraft:custom_name": "{\"text\":\"Axe of Iron Truth\"}",
+                "minecraft:lore": [
+                  "{\"text\":\"For dynamically cutting trees\"}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:blaze_rod",
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:enchantments": {
+                  "levels": {
+                    "minecraft:knockback": 10,
+                    "minecraft:sharpness": 3,
+                    "minecraft:fire_aspect": 3,
+                    "minecraft:thorns": 1
+                  }
+                },
+                "minecraft:custom_name": "{\"text\":\"The Wolfman's First Wand\"}",
+                "minecraft:lore": [
+                  "{\"text\":\"Perhaps the world's greatest summoner \"}",
+                  "{\"text\":\"was of the Lycan race. \"}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:enchanted_book",
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:attribute_modifiers": {
+                  "modifiers": [
+                    {
+                      "type": "minecraft:generic.luck",
+                      "id": "dldungeonsjbg:enchanted_book_8/0",
+                      "amount": 3,
+                      "operation": "add_value",
+                      "slot": "offhand"
+                    },
+                    {
+                      "type": "minecraft:generic.armor_toughness",
+                      "id": "dldungeonsjbg:enchanted_book_8/1",
+                      "amount": 3,
+                      "operation": "add_value",
+                      "slot": "offhand"
+                    },
+                    {
+                      "type": "minecraft:generic.luck",
+                      "id": "dldungeonsjbg:enchanted_book_8/2",
+                      "amount": 3,
+                      "operation": "add_value",
+                      "slot": "mainhand"
+                    },
+                    {
+                      "type": "minecraft:generic.armor_toughness",
+                      "id": "dldungeonsjbg:enchanted_book_8/3",
+                      "amount": 3,
+                      "operation": "add_value",
+                      "slot": "mainhand"
+                    }
+                  ]
+                },
+                "minecraft:unbreakable": {},
+                "minecraft:custom_name": "[\"\",{\"text\":\"Elderscroll\",\"italic\":false}]",
+                "minecraft:lore": [
+                  "[\"\",{\"text\":\"It just works!\",\"italic\":false}]"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

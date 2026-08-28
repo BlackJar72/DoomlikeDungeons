@@ -123,6 +123,6 @@ public class ResourceReloadHandler implements PreparableReloadListener {
      */
     private static ResourceLocation keyFromLocation(ResourceLocation location, String baseDirectory, String fileEnding) {
         final String path = location.getPath();
-        return new ResourceLocation(location.getNamespace(), path.substring(baseDirectory.length() + 1, path.length() - fileEnding.length()));
+        return ResourceLocation.fromNamespaceAndPath(location.getNamespace(), path.substring(baseDirectory.length() + 1, path.length() - fileEnding.length()));
     }
 }

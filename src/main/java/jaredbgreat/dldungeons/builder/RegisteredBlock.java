@@ -13,8 +13,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.Tags;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -298,7 +298,7 @@ public final class RegisteredBlock extends AbstractBlock {
         if (!placeBlock(world, x, y, z, Blocks.SPAWNER)) return;
         final BlockEntity be = world.getBlockEntity(pos);
         if (be instanceof SpawnerBlockEntity spawner) {
-            EntityType<?> mobtype = ForgeRegistries.ENTITY_TYPES.getValue(ResourceLocation.tryParse(mob));
+            EntityType<?> mobtype = BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.tryParse(mob));
             spawner.setEntityId(mobtype, RandomSource.create());
         } else {
             if((be != null)) {
@@ -329,16 +329,16 @@ public final class RegisteredBlock extends AbstractBlock {
         boolean output = false;
         BlockState bs = world.getBlockState(new BlockPos(x, y, z));
         // FIXME: This could probably be done better by creating my own tag holding the union of all thoes checked here!
-        return (bs.is(Tags.Blocks.GRAVEL)
+        return (bs.is(Tags.Blocks.GRAVELS)
                 || bs.is(Tags.Blocks.ORES)
-                || bs.is(Tags.Blocks.GRAVEL)
-                || bs.is(Tags.Blocks.COBBLESTONE)
-                || bs.is(Tags.Blocks.OBSIDIAN)
+                || bs.is(Tags.Blocks.GRAVELS)
+                || bs.is(Tags.Blocks.COBBLESTONES)
+                || bs.is(Tags.Blocks.OBSIDIANS)
                 || bs.is(BlockTags.DIRT)
                 || bs.is(BlockTags.SAND)
-                || bs.is(Tags.Blocks.SAND)
-                || bs.is(Tags.Blocks.STONE)
-                || bs.is(Tags.Blocks.SANDSTONE)
+                || bs.is(Tags.Blocks.SANDS)
+                || bs.is(Tags.Blocks.STONES)
+                || bs.is(Tags.Blocks.SANDSTONE_BLOCKS)
                 || bs.is(BlockTags.TERRACOTTA)
                 // Failsafe, it can never go into the void, or become an infinite loop
                 || (y < 0));

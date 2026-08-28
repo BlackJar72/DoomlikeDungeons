@@ -24,16 +24,15 @@ public class DLDungeonPiece extends StructurePiece {
     private volatile Tag cachedTag;
 
     public DLDungeonPiece(BoundingBox boundingBox, Dungeon dungeon) {
-        super(ModStructurePieceTypes.DLDUNGEON_PIECE, 0, boundingBox);// The second argument is only used for jigsaw structures. Ignore it.
+        super(ModStructurePieceTypes.DLDUNGEON_PIECE.get(), 0, boundingBox);// The second argument is only used for jigsaw structures. Ignore it.
         this.dungeon = dungeon;
     }
 
     public DLDungeonPiece(CompoundTag nbt) {
-        super(ModStructurePieceTypes.DLDUNGEON_PIECE, nbt);
+        super(ModStructurePieceTypes.DLDUNGEON_PIECE.get(), nbt);
         Tag dungeonTag = nbt.get(NBT_KEY_DUNGEON);
-        this.dungeon = Dungeon.CODEC.parse(NbtOps.INSTANCE, dungeonTag).getOrThrow(false, error -> {
-            throw new RuntimeException("Error decoding dungeon: " + error);
-        });
+        this.dungeon = Dungeon.CODEC.parse(NbtOps.INSTANCE, dungeonTag)
+                .getOrThrow(error -> new RuntimeException("Error decoding dungeon: " + error));
         this.cachedTag = dungeonTag;
     }
 
@@ -49,9 +48,8 @@ public class DLDungeonPiece extends StructurePiece {
         Tag encoded = cachedTag;
         if (encoded == null) {
             DLDungeons.LOGGER.debug("Encoding dungeon at chunk {},{}", dungeon.map.chunkX, dungeon.map.chunkZ);
-            encoded = Dungeon.CODEC.encodeStart(NbtOps.INSTANCE, dungeon).getOrThrow(false, (error) -> {
-                throw new RuntimeException("Error saving dungeon: " + error);
-            });
+            encoded = Dungeon.CODEC.encodeStart(NbtOps.INSTANCE, dungeon)
+                    .getOrThrow((error) -> new RuntimeException("Error saving dungeon: " + error));
             cachedTag = encoded;
         }
         tag.put(NBT_KEY_DUNGEON, encoded);

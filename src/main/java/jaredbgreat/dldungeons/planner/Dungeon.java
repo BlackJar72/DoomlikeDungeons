@@ -24,7 +24,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraftforge.fml.Logging;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,7 +43,7 @@ import java.util.Random;
  */
 public class Dungeon {
 
-    public static final ResourceLocation DEFAULT_LOOT_CAT = new ResourceLocation("dldungeonsjbg", "chests");
+    public static final ResourceLocation DEFAULT_LOOT_CAT = ResourceLocation.fromNamespaceAndPath("dldungeonsjbg", "chests");
 
     /**
      * A minimal codec to save (most of the) information relevant for the actual world generation.

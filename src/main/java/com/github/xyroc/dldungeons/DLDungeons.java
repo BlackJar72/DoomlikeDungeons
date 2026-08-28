@@ -7,45 +7,39 @@ import jaredbgreat.dldungeons.config.Config;
 import jaredbgreat.dldungeons.pieces.chests.ModLoot;
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.AddReloadListenerEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import org.slf4j.Logger;
 
-// The value here should match an entry in the META-INF/mods.toml file
+// The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(DLDungeons.MODID)
 public class DLDungeons {
     public static final String MODID = "dldungeonsjbg";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public DLDungeons() {
-        FMLJavaModLoadingContext context = FMLJavaModLoadingContext.get();
-        IEventBus modEventBus = context.getModEventBus();
-
+    public DLDungeons(IEventBus modEventBus, ModContainer modContainer) {
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
+
+        ModStructureTypes.STRUCTURE_TYPES.register(modEventBus);
+        ModStructurePieceTypes.STRUCTURE_PIECE_TYPES.register(modEventBus);
         ModLoot.LOOT_ENTRIES.register(modEventBus);
 
-        IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
+        IEventBus forgeEventBus = NeoForge.EVENT_BUS;
 
         // Register ourselves for server and other game events we are interested in
         forgeEventBus.addListener(this::onAddReloadListener);
 
-        // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        // Register our mod's ModConfigSpec so that NeoForge can create and load the config file for us
+        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-        // Register structure types.
-        ModStructureTypes.init();
-        // Register structure piece types.
-        ModStructurePieceTypes.init();
-
     }
 
     private void onAddReloadListener(final AddReloadListenerEvent event) {
@@ -53,6 +47,6 @@ public class DLDungeons {
     }
 
     public static ResourceLocation resource(String path) {
-        return new ResourceLocation(MODID, path);
+        return ResourceLocation.fromNamespaceAndPath(MODID, path);
     }
 }

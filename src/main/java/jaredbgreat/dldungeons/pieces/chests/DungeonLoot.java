@@ -1,8 +1,15 @@
 package jaredbgreat.dldungeons.pieces.chests;
 
 import com.github.xyroc.dldungeons.DLDungeons;
+import net.minecraft.core.Holder;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.Item;
@@ -15,6 +22,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 public class DungeonLoot {
@@ -148,7 +156,7 @@ public class DungeonLoot {
                     }
                 }
                 if (r.nextInt(10) == 0) {
-                    return new Result(enchantedBook(level, r), Math.min(level, 6));
+                    return new Result(enchantedBook(level, r, ctx), Math.min(level, 6));
                 } else {
                     return new Result(pick(cat, "loot", level, ctx), level);
                 }
@@ -169,16 +177,24 @@ public class DungeonLoot {
         int diff = lootLevel - lootPart;
         int enchPart = Math.min(5 + (diff * (diff + 1) / 2) * 5, diff * 10);
         if (enchPart >= 1 && isEnchantable(stack)) {
-            stack = EnchantmentHelper.enchantItem(r, stack, enchPart, r.nextBoolean());
+            stack = enchant(r, stack, enchPart, ctx, r.nextBoolean());
             return new Result(stack, Math.min(lootLevel, 6));
         } else {
             return new Result(pick(cat, "gear", Math.min(6, lootLevel), ctx), Math.min(lootLevel, 6));
         }
     }
 
-    private static ItemStack enchantedBook(int level, RandomSource r) {
+    private static ItemStack enchantedBook(int level, RandomSource r, LootContext ctx) {
         ItemStack book = new ItemStack(Items.BOOK, 1);
-        return EnchantmentHelper.enchantItem(r, book, Math.min(30, (int) (level * 7.5)), true);
+        return enchant(r, book, Math.min(30, (int) (level * 7.5)), ctx, true);
+    }
+
+    private static ItemStack enchant(RandomSource r, ItemStack stack, int levels, LootContext ctx, boolean allowTreasure) {
+        RegistryAccess registries = ctx.getLevel().registryAccess();
+        Optional<? extends HolderSet<Enchantment>> allowed = allowTreasure
+                ? Optional.empty()
+                : registries.lookupOrThrow(Registries.ENCHANTMENT).get(EnchantmentTags.NON_TREASURE);
+        return EnchantmentHelper.enchantItem(r, stack, levels, registries, allowed);
     }
 
     private static boolean isEnchantable(ItemStack in) {
@@ -192,12 +208,16 @@ public class DungeonLoot {
     private static ItemStack pick(String cat, String type, int level, LootContext ctx) {
         ResourceLocation rl;
         if (type.equals("special") || type.equals("discs")) {
-            rl = new ResourceLocation(DLDungeons.MODID, "items/" + cat + "/" + type);
+            rl = ResourceLocation.fromNamespaceAndPath(DLDungeons.MODID, "items/" + cat + "/" + type);
         } else {
             int n = Math.max(0, Math.min(6, level)) + 1;
-            rl = new ResourceLocation(DLDungeons.MODID, "items/" + cat + "/" + type + "/level_" + n);
+            rl = ResourceLocation.fromNamespaceAndPath(DLDungeons.MODID, "items/" + cat + "/" + type + "/level_" + n);
         }
-        LootTable table = ctx.getResolver().getLootTable(rl);
+        ResourceKey<LootTable> key = ResourceKey.create(Registries.LOOT_TABLE, rl);
+        LootTable table = ctx.getResolver()
+                .get(Registries.LOOT_TABLE, key)
+                .map(Holder::value)
+                .orElse(LootTable.EMPTY);
         List<ItemStack> items = new ArrayList<>();
         table.getRandomItems(ctx, items::add);
         return items.isEmpty() ? ItemStack.EMPTY : items.get(0);

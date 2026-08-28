@@ -1,0 +1,163 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond_sword"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond_pickaxe"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond_axe"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond_helmet"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond_leggings"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond_boots"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond_chestplate"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:leather_chestplate",
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:attribute_modifiers": {
+                  "modifiers": [
+                    {
+                      "type": "minecraft:generic.attack_damage",
+                      "id": "dldungeonsjbg:leather_chestplate_1/0",
+                      "amount": 4,
+                      "operation": "add_value",
+                      "slot": "chest"
+                    },
+                    {
+                      "type": "minecraft:generic.armor",
+                      "id": "dldungeonsjbg:leather_chestplate_1/1",
+                      "amount": 0,
+                      "operation": "add_value",
+                      "slot": "chest"
+                    }
+                  ]
+                },
+                "minecraft:damage": 0,
+                "minecraft:repair_cost": 128,
+                "minecraft:unbreakable": {},
+                "minecraft:custom_name": "[\"\",{\"text\":\"Vest of Giant Strength\",\"italic\":false}]",
+                "minecraft:lore": [
+                  "[\"\",{\"text\":\"For the true barbarian, this open vest provides no protection but sure lets you hit hard.\",\"italic\":false}]"
+                ],
+                "minecraft:enchantment_glint_override": true
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:shield",
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:attribute_modifiers": {
+                  "modifiers": [
+                    {
+                      "type": "minecraft:generic.armor",
+                      "id": "dldungeonsjbg:shield_2/0",
+                      "amount": 1,
+                      "operation": "add_value",
+                      "slot": "offhand"
+                    },
+                    {
+                      "type": "minecraft:generic.armor_toughness",
+                      "id": "dldungeonsjbg:shield_2/1",
+                      "amount": 2,
+                      "operation": "add_value",
+                      "slot": "offhand"
+                    },
+                    {
+                      "type": "minecraft:generic.knockback_resistance",
+                      "id": "dldungeonsjbg:shield_2/2",
+                      "amount": 0.2,
+                      "operation": "add_value",
+                      "slot": "offhand"
+                    },
+                    {
+                      "type": "minecraft:generic.movement_speed",
+                      "id": "dldungeonsjbg:shield_2/3",
+                      "amount": -0.03,
+                      "operation": "add_value",
+                      "slot": "offhand"
+                    }
+                  ]
+                },
+                "minecraft:damage": 0,
+                "minecraft:custom_name": "[\"\",{\"text\":\"Scutum\",\"italic\":false}]"
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:arrow",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 8,
+                "max": 16
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:potion",
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:potion_contents": {
+                  "potion": "minecraft:long_water_breathing"
+                }
+              }
+            }
+          ],
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:potion",
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:potion_contents": {
+                  "potion": "minecraft:long_night_vision"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

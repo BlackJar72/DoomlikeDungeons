@@ -3,7 +3,7 @@ package com.github.xyroc.dldungeons.structure;
 import com.github.xyroc.dldungeons.DLDungeons;
 import com.github.xyroc.dldungeons.init.ModStructureTypes;
 import com.github.xyroc.dldungeons.structure.piece.DLDungeonPiece;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import jaredbgreat.dldungeons.planner.Dungeon;
 import jaredbgreat.dldungeons.util.cache.Coords;
 import net.minecraft.core.BlockPos;
@@ -20,7 +20,7 @@ import java.util.Optional;
 public class DLDungeonStructure extends Structure {
 
     // Basic codec without any extra information
-    public static final Codec<Structure> CODEC = simpleCodec(DLDungeonStructure::new);
+    public static final MapCodec<DLDungeonStructure> CODEC = simpleCodec(DLDungeonStructure::new);
 
     private DLDungeonStructure(StructureSettings settings) {
         super(settings);
@@ -69,7 +69,7 @@ public class DLDungeonStructure extends Structure {
 
     @Override
     public StructureType<?> type() {
-        return ModStructureTypes.DLDUNGEON;
+        return ModStructureTypes.DLDUNGEON.get();
     }
 
 }

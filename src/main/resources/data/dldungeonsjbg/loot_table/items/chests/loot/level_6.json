@@ -1,0 +1,291 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:book",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 3,
+                "max": 18
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:ender_eye",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 3
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:ender_pearl",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 9
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:golden_apple",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 3
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_ingot",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 3,
+                "max": 12
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:gold_ingot",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 3,
+                "max": 8
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 6
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:emerald",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 12
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:saddle"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:name_tag",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 3
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond_horse_armor"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:shulker_box"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_axe",
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:damage": 0,
+                "minecraft:enchantments": {
+                  "levels": {
+                    "minecraft:efficiency": 5,
+                    "minecraft:sharpness": 3,
+                    "minecraft:unbreaking": 3
+                  }
+                },
+                "minecraft:custom_name": "[\"\",{\"text\":\"Carmac's Axe\",\"italic\":false}]",
+                "minecraft:lore": [
+                  "[\"\",{\"text\":\"For when your friends are too busy slaying demons to leave their room\",\"italic\":false}]"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:golden_pickaxe",
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:damage": 0,
+                "minecraft:enchantments": {
+                  "levels": {
+                    "minecraft:efficiency": 6,
+                    "minecraft:unbreaking": 3
+                  }
+                },
+                "minecraft:repair_cost": 128,
+                "minecraft:custom_name": "[\"\",{\"text\":\"Tunnel Rat's Tool\",\"italic\":false}]",
+                "minecraft:lore": [
+                  "[\"\",{\"text\":\"When you just want to bypass everyting\",\"italic\":false}]"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond_pickaxe",
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:damage": 0,
+                "minecraft:enchantments": {
+                  "levels": {
+                    "minecraft:efficiency": 5,
+                    "minecraft:silk_touch": 1,
+                    "minecraft:unbreaking": 3
+                  }
+                },
+                "minecraft:custom_name": "[\"\",{\"text\":\"Acquisito\",\"italic\":false}]",
+                "minecraft:lore": [
+                  "[\"\",{\"text\":\"Perfect for acquiring all the blocks of a Vanilla World\",\"italic\":false}]"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_hoe",
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:damage": 0,
+                "minecraft:enchantments": {
+                  "levels": {
+                    "minecraft:efficiency": 3,
+                    "minecraft:fortune": 3,
+                    "minecraft:sweeping_edge": 3
+                  }
+                },
+                "minecraft:repair_cost": 128,
+                "minecraft:unbreakable": {},
+                "minecraft:custom_name": "[\"\",{\"text\":\"Iridium Hoe\",\"italic\":false}]",
+                "minecraft:lore": [
+                  "[\"\",{\"text\":\"A curious tool made by a concerned ape\",\"italic\":false}]"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_shovel",
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:damage": 0,
+                "minecraft:enchantments": {
+                  "levels": {
+                    "minecraft:efficiency": 3,
+                    "minecraft:sharpness": 2,
+                    "minecraft:silk_touch": 1
+                  }
+                },
+                "minecraft:repair_cost": 128,
+                "minecraft:unbreakable": {},
+                "minecraft:custom_name": "[\"\",{\"text\":\"Dug's Digger\",\"italic\":false}]",
+                "minecraft:lore": [
+                  "[\"\",{\"text\":\"Breaking blocks since before they were blocks!\",\"italic\":false}]"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_sword",
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:damage": 0,
+                "minecraft:enchantments": {
+                  "levels": {
+                    "minecraft:sharpness": 5,
+                    "minecraft:looting": 3,
+                    "minecraft:sweeping_edge": 3,
+                    "minecraft:unbreaking": 4
+                  }
+                },
+                "minecraft:custom_name": "[\"\",{\"text\":\"Coffinfeeder\",\"italic\":false}]",
+                "minecraft:lore": [
+                  "[\"\",{\"text\":\"Possibly the creation of an ancient lich\",\"italic\":false}]"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

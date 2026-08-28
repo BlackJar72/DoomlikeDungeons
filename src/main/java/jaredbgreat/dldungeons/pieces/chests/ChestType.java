@@ -3,10 +3,13 @@ package jaredbgreat.dldungeons.pieces.chests;
 import com.github.xyroc.dldungeons.DLDungeons;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.world.level.storage.loot.LootTable;
 
 public enum ChestType {
 
@@ -39,8 +42,9 @@ public enum ChestType {
             return;
         }
         String kind2 = (this == TREASURE && owner.withBoss) ? "treasure_boss" : kind;
-        ResourceLocation table = new ResourceLocation(category.getNamespace(),
-                "chest/" + category.getPath() + "/" + kind2 + "/level_" + (level + 1));
+        ResourceKey<LootTable> table = ResourceKey.create(Registries.LOOT_TABLE,
+                ResourceLocation.fromNamespaceAndPath(category.getNamespace(),
+                        "chest/" + category.getPath() + "/" + kind2 + "/level_" + (level + 1)));
         chest.setLootTable(table, random.nextLong());
     }
 }
