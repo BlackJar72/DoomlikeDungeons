@@ -6,7 +6,6 @@ package jaredbgreat.dldungeons.planner.mapping;
  * Copyright (c) 2014-2018 Jared Blackburn
  */
 
-import jaredbgreat.dldungeons.builder.BlockFamily;
 import jaredbgreat.dldungeons.builder.RegisteredBlock;
 import jaredbgreat.dldungeons.pieces.Spawner;
 import jaredbgreat.dldungeons.pieces.chests.Chest;
@@ -223,7 +222,6 @@ public class MapMatrix {
             return;
         }
 
-        BlockFamily.setRadnom(world.getRandom());
         int below;
 
         int airBlock, wallBlock1, floorBlock, cielingBlock, fenceBlock, pillarBlock, liquidBlock, caveBlock;
