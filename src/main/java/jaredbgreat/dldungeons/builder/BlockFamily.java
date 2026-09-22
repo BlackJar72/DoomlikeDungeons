@@ -6,7 +6,6 @@ import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 
 import java.util.*;
@@ -52,7 +51,6 @@ public class BlockFamily implements IBlockPlacer {
 
 	public final String name;
 	private volatile IBlockPlacer[] blocks;
-	private	static RandomSource random;
 
 
 	/**
@@ -64,7 +62,6 @@ public class BlockFamily implements IBlockPlacer {
 	private BlockFamily(String name, List<IBlockPlacer> theBlocks) {
 		this.name = name;
 		blocks = theBlocks.toArray(new IBlockPlacer[theBlocks.size()]);
-		random = RandomSource.create();
 	}
 
 
@@ -77,7 +74,6 @@ public class BlockFamily implements IBlockPlacer {
 	private BlockFamily(String name) {
 		this.name = name;
 		blocks = new IBlockPlacer[0];
-		random = RandomSource.create();
 	}
 
 
@@ -101,11 +97,6 @@ public class BlockFamily implements IBlockPlacer {
 	}
 	
 	
-	public static void setRadnom(RandomSource r) {
-		random = RandomSource.create(r.nextLong());
-	}
-	
-
 	@Override
 	public String getName() {
 		return name;
@@ -114,7 +105,7 @@ public class BlockFamily implements IBlockPlacer {
 	
 	@Override
 	public void place(WorldGenLevel world, BlockPos pos) {
-		blocks[random.nextInt(blocks.length)].place(world, pos);
+		blocks[world.getRandom().nextInt(blocks.length)].place(world, pos);
 	}
 	
 	
