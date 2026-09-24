@@ -95,31 +95,31 @@ public class BlockFamily implements IBlockPlacer {
 	private void setBlocks(IBlockPlacer[] theBlocks) {
 		blocks = theBlocks;
 	}
-	
-	
+
+
 	@Override
 	public String getName() {
 		return name;
 	}
 
-	
+
 	@Override
 	public void place(WorldGenLevel world, BlockPos pos) {
 		blocks[world.getRandom().nextInt(blocks.length)].place(world, pos);
 	}
-	
-	
+
+
 	/**
 	 * Returns true if the other object is a DBlock the holds the same block with 
 	 * the same meta-data. 
 	 */
 	@Override
 	public boolean equals(Object other) {
-		if(!(other instanceof BlockFamily)) return false; 
+		if(!(other instanceof BlockFamily)) return false;
 		return (name.equals(((BlockFamily)other).name));
 	}
-	
-	
+
+
 	/**
 	 * Returns a hash code derived from the block id and meta data; it will only produce 
 	 * the same hash code if these are both equal, that is, equal hash codes implies equals() 
@@ -129,8 +129,8 @@ public class BlockFamily implements IBlockPlacer {
 	public int hashCode() {
 		return name.hashCode();
 	}
-	
-	
+
+
 	public static BlockFamily makeBlockFamily(String json) {
 		JsonObject data = JsonParser.parseString(json).getAsJsonObject();
 		String name;
@@ -187,8 +187,8 @@ public class BlockFamily implements IBlockPlacer {
 			existing.setBlocks(family.blocks);
 		}
 	}
-	
-	
+
+
 	public static BlockFamily getBlockFamily(String name) {
 		return FAMILIES.get(name);
 	}
@@ -196,7 +196,7 @@ public class BlockFamily implements IBlockPlacer {
 
 	public static List<BlockFamily> getFamiliesAsList() {
 		ArrayList<BlockFamily> output = new ArrayList<>(FAMILIES.size());
-        output.addAll(FAMILIES.values());
+		output.addAll(FAMILIES.values());
 		return output;
 	}
 
